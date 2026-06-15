@@ -1,0 +1,11 @@
+#!/bin/sh
+# stdin lines: <local ref> <local sha> <remote ref> <remote sha>
+while read -r _local _lsha remote _rsha; do
+    case "$remote" in
+        refs/heads/main)
+            echo "✋ Push blocked: pushing to 'main' is not allowed."
+            exit 1
+            ;;
+    esac
+done
+exit 0
