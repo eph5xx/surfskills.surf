@@ -17,7 +17,7 @@ const isCurrent = (href: string) =>
 
 <header class="sticky top-0 z-50 pt-3">
   <nav class="navbar rounded-box border border-base-300 bg-base-100/80 px-3 shadow-md backdrop-blur">
-    <div class="navbar-start gap-1">
+    <div class="navbar-start shrink-0 gap-1">
       <div class="dropdown md:hidden">
         <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Open navigation menu">
           <svg
@@ -53,7 +53,7 @@ const isCurrent = (href: string) =>
       <Logo href={onHome ? "#top" : "/"} />
     </div>
 
-    <div class="navbar-end items-center gap-6">
+    <div class="navbar-end min-w-0 items-center gap-6">
       <nav class="hidden items-center gap-6 text-[15px] font-semibold md:flex">
         {
           navLinks.map((link) => (
