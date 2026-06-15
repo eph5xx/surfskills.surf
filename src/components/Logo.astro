@@ -7,6 +7,6 @@ interface Props {
 const { href = "#top", class: className = "" } = Astro.props;
 ---
 
-<a href={href} class:list={["inline-flex items-center", className]}>
-  <img src="/logo.png" alt="surfskills.surf" class="h-10 w-auto" />
+<a href={href} class:list={["inline-flex shrink-0 items-center", className]}>
+  <img src="/logo.png" alt="surfskills.surf" class="h-10 w-[120px] object-contain object-left" />
 </a>

@@ -10,7 +10,7 @@
 
 // The AI tools a skill runs in — real supportedTools. Shown as a label-free logo
 // wall, so Claude Code is omitted: its mark is byte-identical to Claude's and would
-// read as a duplicate without text. 12 distinct brand marks → clean 4×3 grid.
+// read as a duplicate without text. 12 distinct brand marks → 3×4 mobile / 4×3 desktop.
 const tools = [
   { name: "Claude", src: "/logos/claude.svg" },
   { name: "ChatGPT", src: "/logos/openai.svg" },
@@ -133,7 +133,7 @@ const steps = [
 
         <!-- label-free logo wall: light tiles so the marks (some near-black) stay
              legible on teal; names live in alt/title for a11y + hover -->
-        <ul class="mt-auto grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <ul class="mt-auto grid grid-cols-3 gap-2 sm:grid-cols-4">
           {
             tools.map((t) => (
               <li
