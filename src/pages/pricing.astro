@@ -1,0 +1,19 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Pricing from "@/components/Pricing.astro";
+import FAQ from "@/components/FAQ.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<BaseLayout
+  title="Pricing — one pass, every wave | surfskills.surf"
+  description="Start free, no card required. $9/month or $60/year unlocks every skill in the library. Cancel anytime."
+>
+  <div id="top" class="mx-auto max-w-[1200px] px-8">
+    <Header />
+    <Pricing />
+    <FAQ />
+    <Footer />
+  </div>
+</BaseLayout>

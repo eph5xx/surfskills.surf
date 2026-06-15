@@ -1,0 +1,33 @@
+---
+import SkillSpotlight from "./SkillSpotlight.astro";
+import { skills } from "@/data/skills";
+
+// Discover shows skills that are live now and have a demo clip for the spotlight.
+const spotlights = skills.filter((s) => s.available && s.video);
+---
+
+<!-- Sits on a solid surface band (full-bleed) so the sand reads as "outside". -->
+<section
+  id="skills"
+  class="relative scroll-mt-24 py-16 before:absolute before:inset-y-0 before:left-1/2 before:-z-10 before:w-screen before:-translate-x-1/2 before:bg-base-100"
+>
+  {
+    spotlights.length > 0 ? (
+      <div class="mx-auto flex max-w-[820px] flex-col gap-[26px]">
+        {spotlights.map((s) => (
+          <SkillSpotlight
+            title={s.title}
+            blurb={s.blurb}
+            video={s.video!}
+            ctaLabel="Install free"
+            ctaHref={`/skills/${s.slug}/`}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="py-12 text-center text-[16px] text-base-content/60">
+        New skills land here soon — check back.
+      </p>
+    )
+  }
+</section>

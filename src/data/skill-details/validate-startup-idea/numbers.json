@@ -1,0 +1,332 @@
+{
+  "weighted_total": 3.5,
+  "potential_total": 3.9,
+  "verdict_bucket": "PIVOT",
+  "verdict_label": "PIVOT — Promising, address weak areas",
+  "rankings": [
+    {
+      "dim": "Pain Intensity",
+      "slug": "pain-intensity",
+      "weight": 0.12,
+      "score": 4,
+      "potential": 4,
+      "weighted_score": 0.48,
+      "evidence_strength": {
+        "both_confirmed": 2,
+        "research_only": 4,
+        "founder_only": 0,
+        "assumed": 3,
+        "grade": "B"
+      }
+    },
+    {
+      "dim": "Willingness to Pay",
+      "slug": "willingness-to-pay",
+      "weight": 0.12,
+      "score": 3,
+      "potential": 4,
+      "weighted_score": 0.36,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 5,
+        "founder_only": 2,
+        "assumed": 2,
+        "grade": "B"
+      }
+    },
+    {
+      "dim": "Solution Gap",
+      "slug": "solution-gap",
+      "weight": 0.12,
+      "score": 5,
+      "potential": 5,
+      "weighted_score": 0.6,
+      "evidence_strength": {
+        "both_confirmed": 4,
+        "research_only": 5,
+        "founder_only": 0,
+        "assumed": 0,
+        "grade": "A"
+      }
+    },
+    {
+      "dim": "Founder-Market Fit",
+      "slug": "founder-market-fit",
+      "weight": 0.12,
+      "score": 4,
+      "potential": 4,
+      "weighted_score": 0.48,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 0,
+        "founder_only": 5,
+        "assumed": 0,
+        "grade": "D"
+      }
+    },
+    {
+      "dim": "Urgency",
+      "slug": "urgency",
+      "weight": 0.08,
+      "score": 3,
+      "potential": 3,
+      "weighted_score": 0.24,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 6,
+        "founder_only": 0,
+        "assumed": 4,
+        "grade": "B"
+      }
+    },
+    {
+      "dim": "Frequency",
+      "slug": "frequency",
+      "weight": 0.08,
+      "score": 2,
+      "potential": 3,
+      "weighted_score": 0.16,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 0,
+        "founder_only": 2,
+        "assumed": 2,
+        "grade": "F"
+      }
+    },
+    {
+      "dim": "Market Size",
+      "slug": "market-size",
+      "weight": 0.08,
+      "score": 3,
+      "potential": 4,
+      "weighted_score": 0.24,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 3,
+        "founder_only": 1,
+        "assumed": 1,
+        "grade": "C"
+      }
+    },
+    {
+      "dim": "Defensibility",
+      "slug": "defensibility",
+      "weight": 0.08,
+      "score": 3,
+      "potential": 4,
+      "weighted_score": 0.24,
+      "evidence_strength": {
+        "both_confirmed": 3,
+        "research_only": 0,
+        "founder_only": 2,
+        "assumed": 1,
+        "grade": "B-"
+      }
+    },
+    {
+      "dim": "Market Growth",
+      "slug": "market-growth",
+      "weight": 0.04,
+      "score": 5,
+      "potential": 5,
+      "weighted_score": 0.2,
+      "evidence_strength": {
+        "both_confirmed": 1,
+        "research_only": 4,
+        "founder_only": 0,
+        "assumed": 0,
+        "grade": "B-"
+      }
+    },
+    {
+      "dim": "Scalability",
+      "slug": "scalability",
+      "weight": 0.04,
+      "score": 4,
+      "potential": 5,
+      "weighted_score": 0.16,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 0,
+        "founder_only": 4,
+        "assumed": 5,
+        "grade": "D"
+      }
+    },
+    {
+      "dim": "Clarity of Target Customer",
+      "slug": "clarity-of-target-customer",
+      "weight": 0.04,
+      "score": 3,
+      "potential": 3,
+      "weighted_score": 0.12,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 0,
+        "founder_only": 3,
+        "assumed": 5,
+        "grade": "D"
+      }
+    },
+    {
+      "dim": "Behavior Change Required",
+      "slug": "behavior-change-required",
+      "weight": 0.04,
+      "score": 4,
+      "potential": 4,
+      "weighted_score": 0.16,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 1,
+        "founder_only": 0,
+        "assumed": 4,
+        "grade": "F"
+      }
+    },
+    {
+      "dim": "Mandatory Nature",
+      "slug": "mandatory-nature",
+      "weight": 0.02,
+      "score": 1,
+      "potential": 1,
+      "weighted_score": 0.02,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 1,
+        "founder_only": 0,
+        "assumed": 4,
+        "grade": "F"
+      }
+    },
+    {
+      "dim": "Incumbent Indifference",
+      "slug": "incumbent-indifference",
+      "weight": 0.02,
+      "score": 1,
+      "potential": 2,
+      "weighted_score": 0.02,
+      "evidence_strength": {
+        "both_confirmed": 0,
+        "research_only": 5,
+        "founder_only": 0,
+        "assumed": 0,
+        "grade": "B-"
+      }
+    }
+  ],
+  "overall_grade": "C",
+  "assumption_impact_math": [
+    {
+      "assumption_text": "Users will pay a subscription fee to unlock the full verified skill library after experiencing free demos",
+      "dim": "Willingness to Pay",
+      "score_delta": 1,
+      "weighted_uplift": 0.12
+    },
+    {
+      "assumption_text": "Solo founders are the right wedge segment with acute pain around decks, landing pages, and launch assets where before/after demos resonate viscerally",
+      "dim": "Willingness to Pay",
+      "score_delta": 1,
+      "weighted_uplift": 0.12
+    },
+    {
+      "assumption_text": "Solo founders encounter the skill-discovery problem (for decks, landing pages, launch assets) on a weekly basis due to their ongoing content creation cadence",
+      "dim": "Frequency",
+      "score_delta": 1,
+      "weighted_uplift": 0.08
+    },
+    {
+      "assumption_text": "The verified AI skills curation niche (SurfSkills' actual SAM) is large enough within the broader $1.94B AI prompt marketplace to support a $10M+ initial segment revenue target.",
+      "dim": "Market Size",
+      "score_delta": 1,
+      "weighted_uplift": 0.08
+    },
+    {
+      "assumption_text": "Incumbent platform owners (Anthropic, OpenAI) will not launch their own verified skill quality layer with security review and live demos before SurfSkills accumulates its flywheel advantage",
+      "dim": "Defensibility",
+      "score_delta": 1,
+      "weighted_uplift": 0.08
+    },
+    {
+      "assumption_text": "Programmatic SEO where every demo doubles as a landing page will generate enough organic distribution to grow the library without paid acquisition, creating a self-reinforcing acquisition mechanism that reduces marginal CAC as the user base grows.",
+      "dim": "Scalability",
+      "score_delta": 1,
+      "weighted_uplift": 0.04
+    },
+    {
+      "assumption_text": "Anthropic will expand its official Skills Marketplace to include before/after output demos and deep security scanning, closing the differentiation gap SurfSkills is targeting",
+      "dim": "Incumbent Indifference",
+      "score_delta": 1,
+      "weighted_uplift": 0.02
+    }
+  ],
+  "evidence_totals": {
+    "both_confirmed": 10,
+    "research_only": 34,
+    "founder_only": 19,
+    "assumed": 31
+  },
+  "reach_potential_blocks": [
+    {
+      "dim": "Willingness to Pay",
+      "slug": "willingness-to-pay",
+      "from": 3,
+      "to": 4,
+      "weighted_uplift": 0.12,
+      "assumption_texts": [
+        "Users will pay a subscription fee to unlock the full verified skill library after experiencing free demos",
+        "Solo founders are the right wedge segment with acute pain around decks, landing pages, and launch assets where before/after demos resonate viscerally"
+      ]
+    },
+    {
+      "dim": "Frequency",
+      "slug": "frequency",
+      "from": 2,
+      "to": 3,
+      "weighted_uplift": 0.08,
+      "assumption_texts": [
+        "Solo founders encounter the skill-discovery problem (for decks, landing pages, launch assets) on a weekly basis due to their ongoing content creation cadence"
+      ]
+    },
+    {
+      "dim": "Market Size",
+      "slug": "market-size",
+      "from": 3,
+      "to": 4,
+      "weighted_uplift": 0.08,
+      "assumption_texts": [
+        "The verified AI skills curation niche (SurfSkills' actual SAM) is large enough within the broader $1.94B AI prompt marketplace to support a $10M+ initial segment revenue target."
+      ]
+    },
+    {
+      "dim": "Defensibility",
+      "slug": "defensibility",
+      "from": 3,
+      "to": 4,
+      "weighted_uplift": 0.08,
+      "assumption_texts": [
+        "Incumbent platform owners (Anthropic, OpenAI) will not launch their own verified skill quality layer with security review and live demos before SurfSkills accumulates its flywheel advantage"
+      ]
+    },
+    {
+      "dim": "Scalability",
+      "slug": "scalability",
+      "from": 4,
+      "to": 5,
+      "weighted_uplift": 0.04,
+      "assumption_texts": [
+        "Programmatic SEO where every demo doubles as a landing page will generate enough organic distribution to grow the library without paid acquisition, creating a self-reinforcing acquisition mechanism that reduces marginal CAC as the user base grows."
+      ]
+    },
+    {
+      "dim": "Incumbent Indifference",
+      "slug": "incumbent-indifference",
+      "from": 1,
+      "to": 2,
+      "weighted_uplift": 0.02,
+      "assumption_texts": [
+        "Anthropic will expand its official Skills Marketplace to include before/after output demos and deep security scanning, closing the differentiation gap SurfSkills is targeting"
+      ]
+    }
+  ]
+}

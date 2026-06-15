@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-label="Curl favicon">
+  <rect width="64" height="64" rx="14" fill="#0E1B26"/>
+  <g fill="none" stroke="#0FAEBA" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 45.5 C6 29 18.5 16.5 35 16.5 C46.2 16.5 53.5 25 53.5 34 C53.5 42 47.6 46.6 40.6 46.6 C34.6 46.6 30.4 42.4 30.4 37 C30.4 32.4 33.8 29.6 37.9 30.7" stroke-width="5.2"/>
+    <path d="M9 53.5 C20 56.4 33 56.4 46 52.4" stroke-width="3.2"/>
+  </g>
+</svg>

@@ -1,0 +1,73 @@
+---
+import LegalLayout from "@/layouts/LegalLayout.astro";
+
+const cookies = [
+  ["Authentication / session", "Supabase", "Keeps you signed in to your account.", "Essential", "Session – ~1 week"],
+  ["Security", "Cloudflare", "Protects the site from abuse and keeps it available.", "Essential", "Up to 1 year"],
+  ["Preferences", "Surf Skills", "Remembers choices such as your settings.", "Functional", "Persistent"],
+  ["Analytics", "PostHog", "Measures how the site is used so we can improve it.", "Analytics", "Up to 1 year"],
+];
+---
+
+<LegalLayout
+  title="Cookies Policy — surfskills.surf"
+  description="What cookies Surf Skills uses, what each one is for, and how to control them."
+  heading="Cookies Policy"
+  lastUpdated="15 June 2026"
+>
+  <p>
+    This policy explains how Surf Skills uses cookies and similar technologies on
+    <a href="https://surfskills.surf">surfskills.surf</a> (the <strong>"Service"</strong>). For
+    how we handle personal data more broadly, see our <a href="/privacy">Privacy Policy</a>.
+  </p>
+
+  <h2>What cookies are</h2>
+  <p>
+    Cookies are small text files stored in your browser when you visit a site. They let the site
+    remember things between page loads — like keeping you signed in — and help us understand how
+    the Service is used. Some are set by us ("first-party") and some by the providers we use
+    ("third-party").
+  </p>
+
+  <h2>Cookies we use</h2>
+  <div class="mt-6 overflow-x-auto">
+    <table class="table text-[15px]">
+      <thead>
+        <tr>
+          <th>Purpose</th>
+          <th>Set by</th>
+          <th>What it does</th>
+          <th>Type</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          cookies.map(([purpose, setBy, does, type, duration]) => (
+            <tr>
+              <td class="font-medium">{purpose}</td>
+              <td>{setBy}</td>
+              <td class="text-base-content/80">{does}</td>
+              <td>{type}</td>
+              <td class="whitespace-nowrap">{duration}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Managing cookies</h2>
+  <p>
+    You can clear or block cookies in your browser settings at any time. Essential cookies are
+    required for the Service to work — if you block them, sign-in and some features may break.
+    Blocking analytics cookies won't affect how the Service works for you.
+  </p>
+
+  <h2>Changes and contact</h2>
+  <p>
+    We may update this policy as the Service changes; we'll update the "last updated" date above
+    when we do. Questions? Email
+    <a href="mailto:ephemeralsad@gmail.com">ephemeralsad@gmail.com</a>.
+  </p>
+</LegalLayout>

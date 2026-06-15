@@ -1,0 +1,34 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  lastUpdated: string;
+}
+
+const { title, description, heading, lastUpdated } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div id="top" class="mx-auto max-w-[1200px] px-8">
+    <Header />
+
+    <header class="pt-12">
+      <h1 class="mt-6 text-[42px] leading-[1.08]">{heading}</h1>
+      <p class="mt-4 text-[14px] text-base-content/60">Last updated: {lastUpdated}</p>
+    </header>
+
+    <!-- Reads as "paper" on a base-100 card, matching the blog. -->
+    <article
+      class="mt-10 mb-12 rounded-box bg-base-100 px-7 py-10 shadow-sm sm:px-16 sm:py-14 [&_h2]:mt-12 [&_h2]:text-[26px] [&_h2:first-child]:mt-0 [&_h3]:mt-6 [&_h3]:text-[18px] [&_p]:mt-4 [&_p]:max-w-[70ch] [&_p]:text-[16.5px] [&_p]:leading-[1.75] [&_p]:text-base-content/80 [&_ul]:mt-4 [&_ul]:max-w-[70ch] [&_ul]:list-disc [&_ul]:pl-6 [&_li]:mt-2 [&_li]:text-[16.5px] [&_li]:leading-[1.7] [&_li]:text-base-content/80 [&_strong]:text-base-content [&_a]:link [&_a]:link-primary"
+    >
+      <slot />
+    </article>
+
+    <Footer />
+  </div>
+</BaseLayout>

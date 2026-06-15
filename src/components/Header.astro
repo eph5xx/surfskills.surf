@@ -1,0 +1,82 @@
+---
+import Logo from "./Logo.astro";
+
+const onHome = Astro.url.pathname === "/";
+
+const navLinks = [
+  { label: "Discover", href: "/discover" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Blog", href: "/blog" },
+];
+
+// Server-rendered active state.
+const path = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  path === href || path.startsWith(href + "/") || (href === "/discover" && path.startsWith("/skills"));
+---
+
+<header class="sticky top-0 z-50 pt-3">
+  <nav class="navbar rounded-box border border-base-300 bg-base-100/80 px-3 shadow-md backdrop-blur">
+    <div class="navbar-start gap-1">
+      <div class="dropdown md:hidden">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-square" aria-label="Open navigation menu">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </div>
+        <ul
+          tabindex="0"
+          class="menu menu-sm dropdown-content z-50 mt-3 w-52 rounded-box bg-base-100 p-2 shadow-md"
+        >
+          {
+            navLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  aria-current={isCurrent(link.href) ? "true" : undefined}
+                  class:list={[isCurrent(link.href) && "font-semibold text-primary"]}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <Logo href={onHome ? "#top" : "/"} />
+    </div>
+
+    <div class="navbar-end items-center gap-6">
+      <nav class="hidden items-center gap-6 text-[15px] font-semibold md:flex">
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              aria-current={isCurrent(link.href) ? "true" : undefined}
+              class:list={["hover:text-primary", isCurrent(link.href) && "font-semibold text-primary"]}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+      {/* Auth CTA. Both states ship statically; the pre-paint script in
+          BaseLayout toggles `is-authed` on <html> so CSS picks one, no flash. */}
+      <a href="/account" class="auth-authed btn btn-sm rounded-full">Account</a>
+      <a
+        href="/login"
+        class="auth-anon link link-hover hidden text-[15px] font-semibold hover:text-primary sm:inline"
+      >
+        Log in
+      </a>
+      <a href="/login" class="auth-anon btn btn-primary btn-sm rounded-full">Join for free</a>
+    </div>
+  </nav>
+</header>

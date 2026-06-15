@@ -1,0 +1,196 @@
+---
+import { type Skill } from "@/data/skills";
+import type { SkillDetail } from "@/data/skill-details/types";
+
+// Video-hero product card. The demo video is the proof and the focal point;
+// a calm action rail (install loud, everything else quiet) sits beside it.
+// A single thin strip below reads input → in between → output — carrying only
+// what the clip can't (the access facts and the mid-run questions). One screen.
+interface Props {
+  skill: Skill;
+  detail: SkillDetail;
+  /** One URL for every state — the endpoint routes to login/checkout/file. */
+  downloadHref: string;
+}
+
+const { skill, detail, downloadHref } = Astro.props;
+
+const githubUrl = detail.source.githubUrl || detail.upstream.repoUrl;
+const worksWith = detail.compatibility.filter((c) => c.supported).map((c) => c.tool);
+const io = detail.io;
+const runCmd = detail.triggers[0]?.command ?? "";
+const upstreamInitial = detail.upstream.name.charAt(0).toUpperCase();
+---
+
+<section class="pb-4 pt-10">
+  <div class="breadcrumbs mb-5 text-[13.5px] font-semibold">
+    <ul>
+      <li><a href="/discover" class="text-secondary hover:text-primary">All skills</a></li>
+      <li>{skill.title}</li>
+    </ul>
+  </div>
+
+  <h1 class="text-[38px] leading-[1.05] md:text-[44px]">{skill.title}</h1>
+  <p class="mt-3 max-w-[640px] text-[16px] leading-[1.5] text-base-content/70">
+    {detail.subtitle}
+  </p>
+
+  <!-- Hero: the demo video (the proof) dominates; calm action rail beside it. -->
+  <div class="mt-7 grid grid-cols-1 items-start gap-6 md:grid-cols-[63fr_37fr]">
+    {
+      skill.video ? (
+        <video
+          class="aspect-video w-full rounded-box border border-base-300 bg-base-100"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster={skill.image}
+        >
+          <source src={skill.video} type="video/mp4" />
+        </video>
+      ) : (
+        <img
+          src={skill.image}
+          alt={skill.imageAlt}
+          class="aspect-video w-full rounded-box border border-base-300 object-cover"
+        />
+      )
+    }
+
+    <!-- Action rail: install is the only loud thing; the rest recedes. -->
+    <div class="flex flex-col gap-3.5">
+      <div class="card bg-base-100 card-border p-5 shadow-sm">
+        <a href={downloadHref} class="btn btn-primary btn-lg btn-block">
+          {skill.free ? "Install — free" : "Install skill"}
+        </a>
+        <a
+          href={githubUrl}
+          target="_blank"
+          rel="noopener"
+          class="btn btn-ghost btn-block mt-2 gap-2 text-base-content/70"
+        >
+          <svg viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true">
+            <path
+              d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.21-3.37-1.21-.46-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.56-1.14-4.56-5.05 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.92-2.34 4.78-4.57 5.04.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.03 10.03 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"
+            ></path>
+          </svg>
+          View on GitHub ↗
+        </a>
+        <div class="mt-4 border-t border-base-300 pt-3.5 text-[13px]">
+          <p>
+            <span class="text-base-content/55">Works with</span>
+            <span class="font-semibold"> {worksWith.join(", ")}</span>
+          </p>
+          <p class="mt-1 text-base-content/55">No MCP servers · No API keys · No config</p>
+        </div>
+      </div>
+
+      <a
+        href={detail.upstream.repoUrl}
+        target="_blank"
+        rel="noopener"
+        class="flex items-center gap-2.5 px-1 text-[13px] hover:text-primary"
+      >
+        <span class="avatar avatar-placeholder shrink-0" aria-hidden="true">
+          <span class="grid size-7 place-items-center rounded-full bg-secondary font-display text-[13px] text-secondary-content">
+            {upstreamInitial}
+          </span>
+        </span>
+        <span>
+          Built by <span class="font-semibold">{detail.upstream.name}</span>
+          <span class="text-base-content/55"> · {detail.upstream.repoLabel} ↗</span>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Thin flow strip: in → in between → out, the part a short clip glosses. -->
+  {
+    io && (
+      <div class="mt-6 overflow-hidden rounded-box border border-base-300 bg-base-100">
+        <div class="grid grid-cols-1 divide-y divide-base-300 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          <div class="p-4">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-base-content/45">
+              Input
+            </p>
+            <p class="mt-1.5 text-[13.5px] leading-[1.45]">{io.input}</p>
+          </div>
+          <div class="p-4">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-base-content/45">
+              In between
+            </p>
+            <p class="mt-1.5 text-[13.5px] leading-[1.45]">{io.between}</p>
+          </div>
+          <div class="p-4">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-base-content/45">
+              Output
+            </p>
+            <p class="mt-1.5 text-[13.5px] leading-[1.45]">{io.output}</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  <!-- Run it: one copyable command stands in for all three trigger forms. -->
+  {
+    runCmd && (
+      <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[13px]">
+        <span class="shrink-0 text-base-content/55">Run it</span>
+        <div class="join">
+          <code class="join-item border border-base-300 bg-base-200 px-3 py-1.5 font-mono text-[12.5px]">
+            {runCmd}
+          </code>
+          <button
+            type="button"
+            data-copy-cmd
+            data-copy={runCmd}
+            aria-label="Copy command"
+            class="btn btn-square btn-sm join-item swap h-auto min-h-0 border-base-300"
+          >
+            <svg
+              class="swap-off size-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="9" y="9" width="11" height="11" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            <svg class="swap-on size-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="3" />
+            </svg>
+          </button>
+        </div>
+        <span class="text-base-content/45">or point it at a file, or run it bare to be interviewed</span>
+      </div>
+    )
+  }
+</section>
+
+<script>
+  // Copy the run command. Bound via [data-copy-cmd] so it's independent of any
+  // other copy UI; the DaisyUI swap flips the icon to a check while "copied".
+  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-copy-cmd]")) {
+    btn.addEventListener("click", async () => {
+      const text = btn.getAttribute("data-copy");
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        return;
+      }
+      btn.classList.add("swap-active", "btn-accent");
+      window.clearTimeout(Number(btn.dataset.copyTimer));
+      btn.dataset.copyTimer = String(
+        window.setTimeout(() => btn.classList.remove("swap-active", "btn-accent"), 1500),
+      );
+    });
+  }
+</script>

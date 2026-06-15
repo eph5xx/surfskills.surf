@@ -1,0 +1,55 @@
+import { createServerClient, parseCookieHeader } from "@supabase/ssr";
+import { defineMiddleware } from "astro:middleware";
+
+export const onRequest = defineMiddleware(async (context, next) => {
+  // Middleware also runs while prerendering static pages at build time, where
+  // there is no live request or Cloudflare runtime — skip entirely.
+  if (context.isPrerendered) return next();
+
+  // Astro's internal image endpoint proxies static assets; it needs no
+  // session and returns a fetch() passthrough whose headers are immutable.
+  if (context.url.pathname.startsWith("/_image")) return next();
+
+  const supabase = createServerClient(
+    import.meta.env.PUBLIC_SUPABASE_URL,
+    import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    {
+      cookies: {
+        getAll() {
+          return parseCookieHeader(context.request.headers.get("Cookie") ?? "").map(
+            ({ name, value }) => ({ name, value: value ?? "" }),
+          );
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            context.cookies.set(name, value, options),
+          );
+        },
+      },
+    },
+  );
+
+  context.locals.supabase = supabase;
+
+  const { data, error } = await supabase.auth.getClaims();
+  context.locals.user =
+    !error && data?.claims
+      ? {
+          id: data.claims.sub,
+          email: typeof data.claims.email === "string" ? data.claims.email : null,
+        }
+      : null;
+
+  const response = await next();
+  // Session-dependent HTML must never land in a shared or browser cache.
+  // Passthrough responses (e.g. proxied fetches) carry immutable headers —
+  // re-wrap those instead of crashing the request.
+  try {
+    response.headers.set("Cache-Control", "private, no-store");
+    return response;
+  } catch {
+    const rewrapped = new Response(response.body, response);
+    rewrapped.headers.set("Cache-Control", "private, no-store");
+    return rewrapped;
+  }
+});

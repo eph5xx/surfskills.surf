@@ -1,0 +1,38 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import SkillHero from "@/components/skill/SkillHero.astro";
+import RelatedSkills from "@/components/skill/RelatedSkills.astro";
+import { skills } from "@/data/skills";
+import { skillDetails } from "@/data/skill-details";
+
+// Dynamic route, no getStaticPaths — rendered on demand.
+export const prerender = false;
+
+const { slug } = Astro.params;
+const detail = skillDetails[slug!];
+const skill = skills.find((s) => s.slug === slug);
+if (!detail || !skill) return Astro.rewrite("/404");
+
+// One URL for every state — the download endpoint re-checks entitlement
+// server-side, so the page itself renders the same for everyone.
+const downloadHref = `/api/skills/${slug}/download`;
+
+const title = `${skill.title} — verified AI skill, shown working | surfskills.surf`;
+---
+
+<BaseLayout title={title} description={detail.subtitle}>
+  <div id="top" class="mx-auto max-w-[1200px] px-8">
+    <Header />
+
+    <!-- The whole skill card, one screen -->
+    <SkillHero skill={skill} detail={detail} downloadHref={downloadHref} />
+
+    <!-- Screen two: recommendations -->
+    <RelatedSkills slugs={detail.relatedSlugs} />
+
+    <div class="divider mt-16"></div>
+    <Footer />
+  </div>
+</BaseLayout>

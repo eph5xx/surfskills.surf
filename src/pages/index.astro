@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Hero from "@/components/Hero.astro";
+import WhatIsIt from "@/components/WhatIsIt.astro";
+import SkillShowcase from "@/components/SkillShowcase.astro";
+import JoinBanner from "@/components/JoinBanner.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<BaseLayout>
+  <div id="top" class="relative isolate mx-auto max-w-[1200px] px-8">
+    <div
+      class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[min(840px,92vh)] w-screen -translate-x-1/2 overflow-hidden"
+      aria-hidden="true"
+    >
+      <video class="h-full w-full object-cover" autoplay muted loop playsinline preload="auto">
+        <source src="/background-hero.mp4" type="video/mp4" />
+      </video>
+      <!-- light scrim: keeps the footage bright while lifting dark text legibility -->
+      <div class="absolute inset-0 bg-gradient-to-b from-base-100/40 via-base-100/25 to-base-200"></div>
+    </div>
+
+    <Header />
+    <Hero />
+    <WhatIsIt />
+    <SkillShowcase />
+    <JoinBanner />
+    <div class="divider mt-16"></div>
+    <Footer />
+  </div>
+</BaseLayout>

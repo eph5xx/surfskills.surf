@@ -1,0 +1,57 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { author } from "@/data/skills";
+
+// One entry per post. Add to the top as new field notes land.
+const posts = [
+  {
+    href: "/blog/tweak-idea",
+    title: "Tweak Idea: score a startup idea across 14 dimensions",
+    blurb:
+      "An open-source Claude Code skillset that runs a rough startup idea through a multi-agent pipeline and hands back a weighted scorecard with ranked next steps.",
+    date: "Jun 2026",
+  },
+];
+---
+
+<BaseLayout
+  title="Blog — field notes from the lineup | surfskills.surf"
+  description="How the skills work and how they get tested — field notes from surfskills.surf."
+>
+  <div id="top" class="mx-auto max-w-[1200px] px-8">
+    <Header />
+
+    <section class="py-12">
+      <h1 class="text-[44px] leading-[1.05]">Blog</h1>
+
+      <div class="mt-8 grid grid-cols-1 gap-[26px] md:grid-cols-3">
+        {
+          posts.map((post) => (
+            <article class="card h-full bg-base-100 card-border shadow-sm transition-shadow hover:shadow-md">
+              <a href={post.href} class="card-body gap-3 p-6">
+                <h2 class="card-title font-normal text-[22px] leading-[1.2]">{post.title}</h2>
+              <p class="text-[14.5px] leading-[1.5] text-base-content/70">{post.blurb}</p>
+              <div class="mt-auto flex items-center justify-between pt-3 text-[13px] text-base-content/60">
+                <span class="flex items-center gap-2">
+                  <span
+                    class="flex size-[26px] items-center justify-center rounded-full font-display text-[12px] text-neutral-content"
+                    style={`background:${author.avatarBg}`}
+                  >
+                    {author.initial}
+                  </span>
+                  {author.name}
+                </span>
+                <span>{post.date}</span>
+              </div>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+</BaseLayout>

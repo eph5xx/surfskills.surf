@@ -1,0 +1,302 @@
+---
+// "What it is / how it works" — B+C hybrid bento.
+// Row 1: a wide dark panel that DEFINES an agent skill (grounded in Anthropic's
+// docs, with an outbound link) + a light tile showing the AI tools it runs in
+// with real brand logos. Row 2: the 3-step workflow as a light pipeline.
+//
+// No floating heading/paragraph above the grid — the tiles carry the meaning.
+// Stays on the page's base-200 sand (NO full-bleed band) so it reads as a
+// distinct block from SkillShowcase below, which uses a full-bleed bg-base-100.
+
+// The AI tools a skill runs in — real supportedTools. Shown as a label-free logo
+// wall, so Claude Code is omitted: its mark is byte-identical to Claude's and would
+// read as a duplicate without text. 12 distinct brand marks → clean 4×3 grid.
+const tools = [
+  { name: "Claude", src: "/logos/claude.svg" },
+  { name: "ChatGPT", src: "/logos/openai.svg" },
+  { name: "Cursor", src: "/logos/cursor.svg" },
+  { name: "Gemini", src: "/logos/gemini.svg" },
+  { name: "GitHub Copilot", src: "/logos/copilot.svg" },
+  { name: "Replit", src: "/logos/replit.svg" },
+  { name: "Windsurf", src: "/logos/windsurf.svg" },
+  { name: "Lovable", src: "/logos/lovable.svg" },
+  { name: "VS Code", src: "/logos/vscode.svg" },
+  { name: "Factory", src: "/logos/factory.svg" },
+  { name: "Zed", src: "/logos/zed.svg" },
+  { name: "Tabnine", src: "/logos/tabnine.svg" },
+];
+
+// Each step shows a tiny artifact (mock) instead of a paragraph, so the workflow
+// is visible at a glance. Captions trimmed to one line; mock markup is authored
+// per step below (not data — three steps don't need an abstraction).
+const steps = [
+  {
+    n: "1",
+    title: "Find the right skill",
+    caption: "Search for capabilities that solve your bottleneck.",
+    mock: "catalog",
+  },
+  {
+    n: "2",
+    title: "Turn it on instantly",
+    caption: "Add validate-startup-idea to your workspace in one click.",
+    mock: "result",
+  },
+  {
+    n: "3",
+    title: "Get the result",
+    caption: "Your input goes in, and a clear, ready-to-use outcome comes back.",
+    mock: "io",
+  },
+];
+---
+
+<section id="how" data-wii class="mt-28 scroll-mt-24 md:mt-40">
+  <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+    <!-- ============ TILE 1 — what an agent skill is (dark anchor, 2 cols) ============ -->
+    <article
+      class="reveal card card-border border-base-300 bg-neutral text-neutral-content shadow-lg md:col-span-2"
+      style="--i:0"
+    >
+      <div class="card-body gap-6 p-7 md:p-8">
+        <div>
+          <h2 class="text-[28px] leading-tight md:text-[31px]">What is a skill?</h2>
+          <p class="mt-3 max-w-[560px] text-[15px] leading-[1.6] text-neutral-content/70">
+            An <a
+              href="https://agentskills.io/home"
+              target="_blank"
+              rel="noopener"
+              class="font-semibold text-accent underline decoration-accent/40 underline-offset-2 transition hover:decoration-accent"
+              >agent skill</a
+            > is a lightweight way for extending an AI agent. At its core it's just a
+            <span class="font-semibold text-neutral-content/90">folder with files</span> — everything
+            for one job, in one place.
+          </p>
+        </div>
+
+        <!-- a skill is just a folder: one required file, the rest optional -->
+        <div class="overflow-hidden rounded-field border border-neutral-content/10 bg-neutral-content/[0.03]">
+          <div class="flex items-center gap-2.5 border-b border-neutral-content/10 bg-neutral-content/[0.05] px-3.5 py-2.5">
+            <span class="flex gap-1.5" aria-hidden="true">
+              <span class="size-2.5 rounded-full bg-primary"></span>
+              <span class="size-2.5 rounded-full bg-accent"></span>
+              <span class="size-2.5 rounded-full bg-secondary"></span>
+            </span>
+            <span class="font-mono text-[12px] tracking-wide text-neutral-content/55">my-skill/</span>
+          </div>
+          <div
+            class="overflow-x-auto px-4 py-3.5 font-mono text-[12.5px] leading-[1.9]"
+            role="img"
+            aria-label="Folder layout of an agent skill: my-skill slash containing SKILL.md (required: metadata and instructions), and optional scripts, references, and assets folders."
+          >
+            <div class="min-w-max">
+              <div class="flex gap-3">
+                <span class="w-[7.5rem] whitespace-pre"><span class="text-neutral-content/25">├──</span> <span class="font-bold text-accent">SKILL.md</span></span>
+                <span class="text-accent/70"># Required · metadata + instructions</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="w-[7.5rem] whitespace-pre"><span class="text-neutral-content/25">├──</span> <span class="font-semibold text-neutral-content/90">scripts/</span></span>
+                <span class="text-neutral-content/45"># Optional · executable code</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="w-[7.5rem] whitespace-pre"><span class="text-neutral-content/25">├──</span> <span class="font-semibold text-neutral-content/90">references/</span></span>
+                <span class="text-neutral-content/45"># Optional · documentation</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="w-[7.5rem] whitespace-pre"><span class="text-neutral-content/25">├──</span> <span class="font-semibold text-neutral-content/90">assets/</span></span>
+                <span class="text-neutral-content/45"># Optional · templates, resources</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="w-[7.5rem] whitespace-pre"><span class="text-neutral-content/25">└──</span> <span class="text-neutral-content/40">…</span></span>
+                <span class="text-neutral-content/45"># Anything else the job needs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ============ TILE 2 — runs in the AI you already use (light, 1 col) ============ -->
+    <article
+      class="reveal card card-border border-secondary-content/15 bg-secondary text-secondary-content shadow-sm"
+      style="--i:1"
+    >
+      <div class="card-body gap-5 p-7 md:p-8">
+        <div>
+          <h2 class="text-[28px] leading-tight md:text-[31px]">Use the AI you have</h2>
+          <p class="mt-3 text-[15px] leading-[1.6] text-secondary-content/75">
+            Skills plug into the tools you already pay for — no new app, no migration.
+            Install once and they just work.
+          </p>
+        </div>
+
+        <!-- label-free logo wall: light tiles so the marks (some near-black) stay
+             legible on teal; names live in alt/title for a11y + hover -->
+        <ul class="mt-auto grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {
+            tools.map((t) => (
+              <li
+                title={t.name}
+                class="grid aspect-[5/3] place-items-center rounded-field border border-base-300 bg-base-100"
+              >
+                <img src={t.src} alt={t.name} loading="lazy" class="h-6 w-auto" />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </article>
+
+    <!-- ============ ROW 2 — three-step pipeline (light cards, each shows its artifact) ============ -->
+    {
+      steps.map((step, i) => (
+        <article
+          class:list={[
+            "reveal step-card card card-border relative border-base-300 bg-base-100 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md",
+            i > 0 &&
+              "md:before:pointer-events-none md:before:absolute md:before:-left-[10px] md:before:top-1/2 md:before:-translate-x-1/2 md:before:-translate-y-1/2 md:before:text-[20px] md:before:font-semibold md:before:leading-none md:before:text-base-content/30 md:before:content-['→']",
+          ]}
+          style={`--i:${i + 2}`}
+        >
+          <div class="card-body gap-3 p-6 md:p-7">
+            <div class="flex items-center gap-3">
+              <span class="grid size-8 shrink-0 place-items-center rounded-field bg-primary font-display text-[18px] leading-none text-primary-content">
+                {step.n}
+              </span>
+              <h3 class="text-[19px] leading-snug">{step.title}</h3>
+            </div>
+
+            {/* the artifact — decorative, screen readers get title + caption */}
+            <div
+              class="rounded-field border border-base-300 bg-base-200/60 p-3 text-[12.5px]"
+              aria-hidden="true"
+            >
+              {step.mock === "catalog" && (
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center gap-2 rounded-field border border-base-300 bg-base-100 px-2.5 py-1.5 text-base-content/55">
+                    <span aria-hidden="true">🔍</span>
+                    <span class="text-base-content/70">refine idea</span>
+                  </div>
+                  <div class="rounded-field border border-base-300 bg-base-100 px-2.5 py-2">
+                    <div class="flex items-center justify-between gap-2">
+                      <div class="flex min-w-0 items-center gap-2">
+                        <span
+                          class="size-6 shrink-0 rounded-full border border-base-300 bg-transparent"
+                          aria-hidden="true"
+                        ></span>
+                        <div class="min-w-0">
+                          <div class="truncate font-mono text-[12px] text-base-content/85">
+                            validate-startup-idea
+                          </div>
+                          <div class="truncate text-[11px] text-base-content/55">Product strategy</div>
+                        </div>
+                      </div>
+                      <span class="rounded-field bg-accent/15 px-1.5 py-0.5 text-[11px] font-semibold text-accent">
+                        Match
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {step.mock === "result" && (
+                <div class="flex flex-col gap-2">
+                  <div class="rounded-field border border-base-300 bg-base-100 px-2.5 py-2">
+                    <div class="text-[11px] text-base-content/50">Workspace integrations</div>
+                    <div class="mt-1.5 flex items-center justify-between gap-2">
+                      <span class="font-mono text-[12px] text-base-content/85">validate-startup-idea</span>
+                      <span class="badge badge-accent badge-xs border-0">ON</span>
+                    </div>
+                  </div>
+                  <div class="rounded-field bg-base-100 px-2.5 py-2">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-[11px] font-medium text-base-content/70">Workspace</span>
+                      <button class="btn btn-accent btn-xs h-6 min-h-6">Add to Workspace</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {step.mock === "io" && (
+                <div class="flex flex-col gap-2">
+                  <div class="grid grid-cols-2 gap-2">
+                    <div class="rounded-field bg-base-100 px-2 py-2">
+                      <div class="text-[10px] uppercase tracking-wide text-base-content/45">Before</div>
+                      <div class="mt-1 text-[11px] leading-[1.35] text-base-content/70">
+                        Thinking about a new AI B2C app for personalized fitness coaching...
+                      </div>
+                    </div>
+                    <div class="rounded-field bg-base-100 px-2 py-2">
+                      <div class="text-[10px] uppercase tracking-wide text-base-content/45">After</div>
+                      <div class="mt-1 space-y-1 text-[11px]">
+                        <div class="rounded-field bg-base-200 px-1.5 py-1 text-base-content/75">Risks & Assumptions</div>
+                        <div class="rounded-field bg-base-200 px-1.5 py-1 text-base-content/75">Dimensions research</div>
+                        <div class="rounded-field bg-base-200 px-1.5 py-1 text-base-content/75">Next steps</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between rounded-field bg-base-100 px-2.5 py-2">
+                    <span class="font-medium text-base-content/80">Validation report ready</span>
+                    <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-accent">✓ ready</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <p class="text-[13.5px] leading-[1.45] text-base-content/65">{step.caption}</p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  /* Scroll-in reveal: tiles fade + rise, staggered by --i. JS toggles .is-in on
+     the [data-wii] root; mirrors the SkillShowcase IntersectionObserver. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.55s ease,
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .is-in .reveal {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.07s * var(--i, 0));
+  }
+  /* keep the hover-lift independent of the reveal transition */
+  .step-card {
+    transition-property: transform, box-shadow;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .step-card {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Scoped to the unique [data-wii] root.
+  const root = document.querySelector("[data-wii]");
+  if (root) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(root);
+  }
+</script>

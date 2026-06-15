@@ -1,0 +1,40 @@
+---
+import "@/styles/globals.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "surfskills.surf — Bring the mess. Catch the finished thing.",
+  description = "Curated AI skills you install in one click and run in your own AI — Claude, ChatGPT, Cursor and friends. Bring the messy input, take home the finished thing. No code needed.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <!-- Pre-paint auth check: pick the header CTA before first paint, no flash.
+         ponytail: cookie-presence is a heuristic, not a validated session;
+         upgrade path = SSR the page if the header ever needs exact session. -->
+    <script is:inline>
+      if (document.cookie.includes("-auth-token"))
+        document.documentElement.classList.add("is-authed");
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Onest:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

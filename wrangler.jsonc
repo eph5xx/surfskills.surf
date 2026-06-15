@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "surfskills",
+  "main": "./dist/_worker.js/index.js",
+  "compatibility_date": "2026-06-01",
+  // nodejs_compat is required by @polar-sh/sdk/webhooks (standardwebhooks → Buffer).
+  "compatibility_flags": ["nodejs_compat"],
+  // The adapter compiles Astro sessions in expecting a "SESSION" KV binding.
+  // Nothing uses Astro.session today, so none is declared — but the first
+  // future use of Astro.session will throw "Invalid binding SESSION" at
+  // runtime until a kv_namespaces entry with binding "SESSION" is added here.
+  "assets": { "binding": "ASSETS", "directory": "./dist" },
+  "observability": { "enabled": true },
+  // Non-secret runtime config. Secrets (SUPABASE_SECRET_KEY, POLAR_ACCESS_TOKEN,
+  // POLAR_WEBHOOK_SECRET) come from .dev.vars locally and `wrangler secret put`
+  // in production — never from here.
+  "vars": {
+    "POLAR_SERVER": "sandbox",
+    "POLAR_PRODUCT_ID_MONTHLY": "24b75a20-a91d-494a-bf8c-75e3d3729d5d",
+    "POLAR_PRODUCT_ID_YEARLY": "9715ab88-5d69-4571-a1a7-f7b8676e6af6"
+  }
+}

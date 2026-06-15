@@ -1,0 +1,26 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import TrendingWaves from "@/components/TrendingWaves.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<BaseLayout
+  title="Discover skills — the full lineup | surfskills.surf"
+  description="Browse every curated AI skill. Install in one click, run in Claude, ChatGPT, Cursor, Lovable or Gemini — bring messy input, take home the finished thing."
+>
+  <div id="top" class="mx-auto max-w-[1200px] px-8">
+    <Header />
+
+    <section class="pb-2 pt-12">
+      <h1 class="text-[44px] leading-[1.05]">Skills available now</h1>
+      <p class="mt-3 max-w-[560px] text-[16px] leading-[1.6] text-base-content/70">
+        Every skill below is live and tested — install it and run it today. Bring
+        the messy input, take home the finished thing. More land each week.
+      </p>
+    </section>
+
+    <TrendingWaves />
+    <Footer />
+  </div>
+</BaseLayout>

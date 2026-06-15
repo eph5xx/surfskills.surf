@@ -1,0 +1,35 @@
+---
+const faqs = [
+  {
+    q: "Do I need to know how to code?",
+    a: "Nope. Every skill installs in one click and runs inside the AI tool you already use. No setup, no prompt-craft.",
+  },
+  {
+    q: "Which AI tools do skills work with?",
+    a: "Claude, ChatGPT, Cursor, Lovable, Gemini and friends. Each skill card tells you exactly which ones it runs in.",
+  },
+  {
+    q: "What's free vs paid?",
+    a: "A starter set of skills is free forever, no card required. $9/mo (or $60/yr) unlocks the full library plus every new skill we ship.",
+  },
+];
+---
+
+<section id="faq" class="mt-[72px] scroll-mt-24">
+  <div class="mx-auto max-w-[760px]">
+    <h2 class="mb-4 text-[30px]">Questions</h2>
+    <div class="join join-vertical w-full">
+      {
+        faqs.map((faq, i) => (
+          <div class="collapse collapse-arrow join-item border border-base-300 bg-base-100">
+            <input type="radio" name="faq-accordion" checked={i === 0} />
+            <div class="collapse-title font-display text-[19px]">{faq.q}</div>
+            <div class="collapse-content text-[15px] leading-[1.55] text-base-content/70">
+              {faq.a}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

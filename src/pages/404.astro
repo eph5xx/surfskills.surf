@@ -1,0 +1,28 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+
+// Rendered on demand so SSR pages can rewrite here (and so unmatched
+// routes get a styled 404 from the worker).
+export const prerender = false;
+---
+
+<BaseLayout title="Lost at sea — surfskills.surf" description="That page drifted away.">
+  <div class="mx-auto max-w-[1200px] px-8">
+    <Header />
+
+    <main class="flex justify-center py-24 text-center">
+      <div class="max-w-[480px]">
+        <span class="font-display text-[88px] leading-none">404</span>
+        <h1 class="mt-4 text-[28px]">Wiped out</h1>
+        <p class="mt-3 text-[15.5px] leading-[1.6] text-base-content/70">
+          That page drifted out past the lineup. The skills are all back on shore.
+        </p>
+        <a href="/discover" class="btn btn-primary btn-lg mt-8">Browse skills</a>
+      </div>
+    </main>
+
+    <Footer />
+  </div>
+</BaseLayout>

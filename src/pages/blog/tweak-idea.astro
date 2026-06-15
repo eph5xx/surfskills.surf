@@ -1,0 +1,192 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { author } from "@/data/skills";
+
+const dimensions = [
+  "Pain intensity",
+  "Willingness to pay",
+  "Solution gap",
+  "Founder–market fit",
+  "Urgency",
+  "Frequency",
+  "Market size",
+  "Defensibility",
+  "Market growth",
+  "Scalability",
+  "Target-customer clarity",
+  "Behavior-change difficulty",
+  "Mandatory nature",
+  "Incumbent indifference",
+];
+
+const steps = [
+  {
+    name: "Capture",
+    body: "Records the problem and proposed solution, and confirms founder–market fit so the evaluation is anchored to who's building it.",
+  },
+  {
+    name: "Extract hypotheses",
+    body: "Pulls the testable claims out of your pitch and asks you to confirm which ones you can back up. Unsupported claims don't get to inflate the score.",
+  },
+  {
+    name: "Research",
+    body: "Searches the market — competitors, demand signals, comparable products — to build shared evidence for the scoring stage.",
+  },
+  {
+    name: "Score",
+    body: "Fourteen isolated agents each evaluate a single dimension, drawing on the shared research or running their own targeted searches. Isolation stops one strong dimension from coloring the others.",
+  },
+  {
+    name: "Synthesize",
+    body: "A final agent combines the dimension scores into a weighted scorecard — actual score, potential score, strengths, weaknesses, and next steps ranked by impact.",
+  },
+];
+
+const commands = [
+  ["list", "see every idea you've evaluated"],
+  ["show", "reopen a past report without re-running it"],
+  ["compare", "diff two iterations side by side to see what moved"],
+  ["improve", "get concrete tweaks for the weakest dimensions"],
+  ["browse-hn", "surface fresh idea candidates from technology shifts"],
+];
+---
+
+<BaseLayout
+  title="Tweak Idea — score a startup idea across 14 dimensions | surfskills.surf"
+  description="Tweak Idea is an open-source Claude Code skillset that evaluates a startup idea across 14 weighted dimensions and returns a scored report with ranked next steps."
+>
+  <div id="top" class="mx-auto max-w-[1200px] px-8">
+    <Header />
+
+    <!-- Hero -->
+    <header class="pt-12">
+      <a href="/blog" class="text-[13.5px] text-base-content/60 hover:text-base-content">← Blog</a>
+      <h1 class="mt-6 text-[42px] leading-[1.08]">
+        Tweak Idea: score a startup idea across 14 dimensions
+      </h1>
+      <p class="mt-4 text-[18px] leading-[1.6] text-base-content/70">
+        An open-source Claude Code skillset that takes a rough startup idea, runs it through
+        a structured multi-agent pipeline, and hands back a weighted scorecard with the next
+        things worth validating.
+      </p>
+      <div class="mt-6 flex items-center gap-2 text-[13.5px] text-base-content/60">
+        <span
+          class="flex size-[28px] items-center justify-center rounded-full font-display text-[12px] text-neutral-content"
+          style={`background:${author.avatarBg}`}
+        >
+          {author.initial}
+        </span>
+        {author.name} · Jun 2026
+      </div>
+    </header>
+
+    <!-- Body: reads as "paper" on a base-100 card. -->
+    <article
+      class="mt-10 mb-12 rounded-box bg-base-100 px-7 py-10 shadow-sm sm:px-16 sm:py-14 [&_h2]:mt-12 [&_h2]:text-[26px] [&_h2:first-child]:mt-0 [&_p]:mt-4 [&_p]:text-[16.5px] [&_p]:leading-[1.75] [&_p]:text-base-content/80"
+    >
+      <h2>What it is</h2>
+      <p>
+        Tweak Idea is an
+        <a href="https://github.com/eph5xx/tweakidea" target="_blank" rel="noopener" class="link link-primary">open-source skillset</a>
+        for Claude Code. You give it a startup concept,
+        and it evaluates that concept across 14 weighted dimensions — pain, willingness to pay,
+        market size, defensibility and more — then synthesizes the results into a scored report
+        you can act on. The goal is a fast, repeatable read on whether an idea is worth pursuing,
+        without spending days on a manual deep dive.
+      </p>
+
+      <h2>The problem it solves</h2>
+      <p>
+        Judging an idea usually means answering hard questions one at a time. Is there a real
+        market? Will customers actually pay? Do incumbents already own the space? Each one is
+        its own research project, so most ideas get judged on intuition instead. Tweak Idea runs
+        those questions in parallel and grounds the answer in evidence rather than gut feel.
+      </p>
+
+      <h2>How it works</h2>
+      <p>The pipeline moves an idea through a few bounded stages:</p>
+      <ol class="mt-6 space-y-5">
+        {
+          steps.map((step, i) => (
+            <li class="flex gap-4">
+              <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent font-display text-[15px] text-accent-content">
+                {i + 1}
+              </span>
+              <div>
+                <h3 class="text-[18px] leading-tight">{step.name}</h3>
+                <p class="mt-1.5 text-[16px] leading-[1.65] text-base-content/80">{step.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <p>
+        Most of the repetitive work runs as deterministic Python scripts with fixed JSON schemas,
+        and the LLM is reserved for the judgment calls. That split keeps runs fast and the output
+        consistent from one idea to the next — a full evaluation lands in roughly ten minutes.
+      </p>
+
+      <h2>The 14 dimensions</h2>
+      <p>Every idea is scored on the same set of weighted dimensions:</p>
+      <ul class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+        {
+          dimensions.map((d) => (
+            <li class="flex items-center gap-2.5 text-[15.5px] text-base-content/80">
+              <span class="size-1.5 shrink-0 rounded-full bg-primary" />
+              {d}
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2>Using it</h2>
+      <p>
+        You submit an idea with a command and get back a scored report with ranked validation
+        priorities. A handful of supporting commands round out the workflow:
+      </p>
+      <ul class="mt-6 divide-y divide-base-300 border-y border-base-300">
+        {
+          commands.map(([cmd, desc]) => (
+            <li class="flex flex-col gap-1 py-3 sm:flex-row sm:items-baseline sm:gap-4">
+              <code class="shrink-0 font-mono text-[14px] font-semibold text-secondary">{cmd}</code>
+              <span class="text-[15.5px] text-base-content/80">{desc}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2>Why it's built this way</h2>
+      <p>
+        The design bet is reliability: give the model small, bounded jobs and let plain code
+        handle everything repeatable. That keeps results reproducible, makes runs fast, and means
+        the scorecard you get is consistent enough to trust when you compare one idea against
+        another.
+      </p>
+
+      <h2>Try it</h2>
+      <p>
+        Tweak Idea is open source. See a real run on the skill page, or read the code and
+        install it from GitHub.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/skills/validate-startup-idea/" class="btn btn-primary btn-sm">See it run →</a>
+        <a
+          href="https://github.com/eph5xx/tweakidea"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-sm"
+        >
+          View on GitHub
+        </a>
+      </div>
+    </article>
+
+    <p class="mb-16 text-[14px] text-base-content/60">
+      <a href="/blog" class="hover:text-base-content">← Back to the blog</a>
+    </p>
+
+    <Footer />
+  </div>
+</BaseLayout>

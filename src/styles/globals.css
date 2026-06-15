@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* ============================================================
+   Golden Hour palette mapped onto DaisyUI semantic slots.
+   Gold (accent) stays the brand "verified / pass / free" color;
+   success (sage) is reserved for true semantic success states.
+   ============================================================ */
+@plugin "daisyui/theme" {
+  name: "goldenhour";
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: #fcf9f5; /* Bleached Sand — surfaces/cards */
+  --color-base-200: #f4eae1; /* Sand Dollar Beige — page background */
+  --color-base-300: #e7d9c8; /* darker sand — borders/hairlines */
+  --color-base-content: #2a2c41; /* Wetsuit Black */
+  --color-primary: #dd6b4d; /* Burnt Sienna */
+  --color-primary-content: #fcf9f5;
+  --color-secondary: #3d5a80; /* Vintage Teal */
+  --color-secondary-content: #fcf9f5;
+  --color-accent: #f2b134; /* Sunlit Gold */
+  --color-accent-content: #2a2c41;
+  --color-neutral: #2a2c41;
+  --color-neutral-content: #fcf9f5;
+  --color-info: #4f7396;
+  --color-info-content: #fcf9f5;
+  --color-success: #6f8f4f;
+  --color-success-content: #fcf9f5;
+  --color-warning: #f2b134;
+  --color-warning-content: #2a2c41;
+  --color-error: #b8442f;
+  --color-error-content: #fcf9f5;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@theme {
+  --font-sans: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Header auth CTA toggle — `.is-authed` is set pre-paint in BaseLayout.
+   Unlayered on purpose: must beat DaisyUI's `.btn` and Tailwind's `hidden`/
+   `sm:inline` (any @layer loses to unlayered rules). */
+html:not(.is-authed) .auth-authed {
+  display: none;
+}
+html.is-authed .auth-anon {
+  display: none;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    /* DaisyUI paints :root with base-100; the page sits one step down on sand. */
+    background-color: var(--color-base-200);
+    /* Full-bleed hero video uses w-screen (100vw); clip the scrollbar-width overflow. */
+    overflow-x: clip;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+}

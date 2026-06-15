@@ -1,0 +1,44 @@
+---
+// The "live card": video → headline → description → CTA. Shared source of truth
+// for the landing showcase and the Discover page so they can't drift.
+interface Props {
+  title: string;
+  blurb: string;
+  /** mp4 path under /public. */
+  video: string;
+  ctaLabel: string;
+  ctaHref: string;
+  /** Layout placement from the parent (e.g. bento span on landing). */
+  class?: string;
+}
+
+const { title, blurb, video, ctaLabel, ctaHref, class: className } = Astro.props;
+---
+
+<article
+  class:list={[
+    "card card-border border-base-300 bg-neutral text-neutral-content shadow-lg",
+    className,
+  ]}
+>
+  <div class="card-body gap-6 p-7 md:p-8">
+    <video
+      class="aspect-video w-full rounded-box border border-neutral-content/15"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+    >
+      <source src={video} type="video/mp4" />
+    </video>
+
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div>
+        <h3 class="font-display text-[24px] leading-tight md:text-[28px]">{title}</h3>
+        <p class="mt-1.5 max-w-md text-[14.5px] leading-[1.5] text-neutral-content/75">{blurb}</p>
+      </div>
+      <a href={ctaHref} class="btn btn-accent shrink-0">{ctaLabel}</a>
+    </div>
+  </div>
+</article>

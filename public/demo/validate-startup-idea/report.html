@@ -1,0 +1,2250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TweakIdea — Lifeguard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>  :root {
+    --bg-soft: #FBFBFA;
+    --ink: #1F2328;
+    --ink-strong: #191919;
+    --ink-muted: #787774;
+    --ink-faint: #9B9A97;
+    --hairline: #E5E5E5;
+
+    /* Muted Notion palette */
+    --blue-bg:   #E7F0F7; --blue-fg:   #1F4B73;
+    --green-bg:  #E8F0E3; --green-fg:  #2E5B2A;
+    --orange-bg: #FBEFE2; --orange-fg: #7A4A1A;
+    --red-bg:    #F9E4E0; --red-fg:    #7A2E20;
+    --yellow-bg: #F9F0D9; --yellow-fg: #6B561A;
+    --purple-bg: #EEE7F4; --purple-fg: #4E2E70;
+    --gray-bg:   #EEEEED; --gray-fg:   #4A4A48;
+
+    --grade-a: #2E7D32;
+    --grade-b: #6FA14B;
+    --grade-c: #C39211;
+    --grade-d: #C4682D;
+    --grade-f: #A23626;
+
+    --topbar-bg: rgba(251, 251, 250, 0.92);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--bg-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Sticky top bar ---------- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--topbar-bg);
+    backdrop-filter: saturate(180%) blur(8px);
+    border-bottom: 1px solid var(--hairline);
+    height: 50px;
+  }
+  .topbar-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    height: 100%;
+  }
+  .topbar-title {
+    font-weight: 500;
+    color: var(--ink-strong);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+  .topbar-title .emoji { font-size: 14px; }
+  .topbar-title .chev { color: var(--ink-faint); margin: 0 4px; }
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    border-radius: 4px;
+    color: var(--ink-muted);
+    cursor: pointer;
+    padding: 0;
+    transition: background 120ms, color 120ms;
+  }
+  .theme-toggle:hover { background: var(--gray-bg); color: var(--ink-strong); }
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--blue-fg);
+    outline-offset: 1px;
+  }
+  .theme-toggle svg {
+    width: 16px; height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .theme-toggle .icon-sun { display: none; }
+  .theme-toggle .icon-moon { display: block; }
+  [data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+  [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+  /* ---------- Page layout ---------- */
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 24px 120px;
+  }
+
+  /* ---------- Doc header ----------
+     Vertical rhythm (8px grid):
+     icon → 16 → codename → 8 → title → 16 → subtitle → 32 → props
+  */
+  .doc-icon {
+    font-size: 48px;
+    line-height: 1;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .doc-codename {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--ink-strong);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin: 0 0 16px;
+  }
+  .doc-subtitle {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-muted);
+    margin: 0 0 32px;
+    text-wrap: pretty;
+  }
+
+  /* ---------- Properties grid (2-col dense, uniform rhythm) ---------- */
+  .props {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr) 150px minmax(0, 1fr);
+    column-gap: 20px;
+    padding: 12px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 48px;
+  }
+  .props .k {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-muted);
+    padding: 6px 0;
+    font-size: 13px;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .props .k svg {
+    width: 14px; height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.75;
+    flex-shrink: 0;
+  }
+  /* Values use plain inline flow (not flex) so children sit on one line
+     when they fit and wrap naturally when they don't — no forced truncation. */
+  .props .v {
+    padding: 6px 0;
+    color: var(--ink-strong);
+    font-weight: 500;
+    font-size: 13.5px;
+    line-height: 22px;
+    min-width: 0;
+    word-break: break-word;
+  }
+  .props .v .sub { color: var(--ink-muted); font-weight: 400; }
+  .props .v .pill,
+  .props .v .grade { vertical-align: middle; }
+
+  /* ---------- Pills ---------- */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+  .pill.blue   { background: var(--blue-bg);   color: var(--blue-fg); }
+  .pill.green  { background: var(--green-bg);  color: var(--green-fg); }
+  .pill.orange { background: var(--orange-bg); color: var(--orange-fg); }
+  .pill.red    { background: var(--red-bg);    color: var(--red-fg); }
+  .pill.yellow { background: var(--yellow-bg); color: var(--yellow-fg); }
+  .pill.purple { background: var(--purple-bg); color: var(--purple-fg); }
+  .pill.gray   { background: var(--gray-bg);   color: var(--gray-fg); }
+
+  .grade {
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+  }
+  .grade.a, .grade-big.a { color: var(--grade-a); }
+  .grade.b, .grade-big.b { color: var(--grade-b); }
+  .grade.c, .grade-big.c { color: var(--grade-c); }
+  .grade.d, .grade-big.d { color: var(--grade-d); }
+  .grade.f, .grade-big.f { color: var(--grade-f); }
+
+  /* Shared small glyph used inline in scores, jumps, and next-step contexts. */
+  .arrow { color: var(--ink-faint); font-weight: 400; margin: 0 2px; }
+
+  .score-pot {
+    color: var(--grade-b);
+    font-weight: 600;
+  }
+
+  /* ---------- On this page ---------- */
+  .toc {
+    background: var(--gray-bg);
+    border-radius: 6px;
+    padding: 16px 20px 18px;
+    margin-bottom: 48px;
+  }
+  .toc-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: column;
+    column-gap: 24px;
+  }
+  .toc-link {
+    display: block;
+    padding: 5px 0;
+    font-size: 14px;
+    color: var(--ink-strong);
+    text-decoration: none;
+    transition: color 120ms;
+  }
+  .toc-link:hover {
+    color: var(--blue-fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .toc-link:focus-visible {
+    outline: 2px solid var(--blue-fg);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* ---------- Idea section ---------- */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink-strong);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    margin: 8px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--hairline);
+    scroll-margin-top: 70px;
+  }
+  .idea {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .idea-field { min-width: 0; }
+  .idea-field-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink-strong);
+    letter-spacing: -0.005em;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .idea-field-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  /* ---------- Summary: hero stats ---------- */
+  .section-heading + .hero-stats { margin-top: 4px; }
+  h2.section-heading { margin-top: 56px; }
+  main.page > h2.section-heading:first-of-type { margin-top: 8px; }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
+    margin-bottom: 40px;
+  }
+  .stat { display: flex; flex-direction: column; min-width: 0; }
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .stat-num {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--ink-strong);
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+  .stat-denom { font-size: 14px; color: var(--ink-muted); font-weight: 500; }
+  .stat-bar {
+    position: relative;
+    height: 4px;
+    background: var(--hairline);
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+  .stat-bar-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    border-radius: 2px;
+  }
+  .stat-bar-fill.weighted { background: var(--grade-c); }
+  .stat-bar-fill.potential { background: var(--grade-b); }
+  .stat-bar-ghost {
+    position: absolute;
+    top: 0; bottom: 0;
+    background: var(--grade-b);
+    opacity: 0.28;
+    border-radius: 0 2px 2px 0;
+  }
+  .stat-meta {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+  .verdict-word { font-weight: 700; }
+  .verdict-word.go    { color: var(--green-fg); }
+  .verdict-word.pivot { color: var(--yellow-fg); }
+  .verdict-word.stop  { color: var(--red-fg); }
+  .grade-big {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  /* Evidence tier bar (4-segment stacked) */
+  .evidence-bar {
+    display: flex;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    background: var(--hairline);
+  }
+  .evidence-seg { height: 100%; }
+  .ev-verified { background: var(--grade-a); }
+  .ev-research { background: var(--grade-b); }
+  .ev-founder  { background: var(--grade-c); }
+  .ev-assumed  { background: var(--grade-d); }
+
+  .evidence-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+    row-gap: 4px;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .evidence-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    color: var(--ink-strong);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .evidence-legend-item .label { flex: 1; }
+  .evidence-legend-item b {
+    color: var(--ink-strong);
+    font-weight: 600;
+  }
+  .ev-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Summary: subheadings (section subtitles) ---------- */
+  .sub-heading {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink-strong);
+    letter-spacing: -0.005em;
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .dim-grid + .sub-heading,
+  .hero-stats + .sub-heading { margin-top: 8px; }
+
+  /* ---------- Summary: dimensions overview ---------- */
+  .dim-grid {
+    margin-bottom: 44px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, auto);
+    column-gap: 36px;
+    row-gap: 14px;
+  }
+  .dim-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 112px;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin: -2px -4px;
+    transition: background 120ms;
+  }
+  .dim-row:hover { background: var(--gray-bg); }
+  .dim-row:hover .dim-name { color: var(--ink-strong); }
+  .dim-row:focus-visible {
+    outline: 2px solid var(--blue-fg);
+    outline-offset: 1px;
+  }
+  .dim-name {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+  .dim-name .w {
+    color: var(--ink-faint);
+    font-weight: 400;
+    font-size: 11px;
+    margin-left: 6px;
+  }
+  /* Score color ramp (shared) */
+  .sc-5 { background: var(--grade-a); }
+  .sc-4 { background: var(--grade-b); }
+  .sc-3 { background: var(--grade-c); }
+  .sc-2 { background: var(--grade-d); }
+  .sc-1 { background: var(--grade-f); }
+
+  /* --- Dim bars --- */
+  .dim-bar {
+    position: relative;
+    height: 6px;
+    background: var(--hairline);
+    border-radius: 3px;
+  }
+  .dim-bar-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    border-radius: 3px;
+  }
+  .dim-bar-ghost {
+    position: absolute;
+    top: 0; bottom: 0;
+    opacity: 0.28;
+    border-radius: 0 3px 3px 0;
+  }
+
+  /* ---------- Summary: risk callouts ---------- */
+  .risks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .risk-card {
+    padding: 16px 18px 18px;
+    border-radius: 4px;
+    border-left: 3px solid;
+  }
+  .risk-card--strength {
+    background: var(--green-bg);
+    border-left-color: var(--green-fg);
+  }
+  .risk-card--weakness {
+    background: var(--red-bg);
+    border-left-color: var(--red-fg);
+  }
+  .risk-kind {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-bottom: 6px;
+  }
+  .risk-card--strength .risk-kind { color: var(--green-fg); }
+  .risk-card--weakness .risk-kind { color: var(--red-fg); }
+  .risk-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .risk-dim {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink-strong);
+    letter-spacing: -0.005em;
+  }
+  .risk-score {
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .risk-body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  /* ---------- Assumptions: grouped list ---------- */
+  .sub-heading-count {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    margin-left: 6px;
+    letter-spacing: 0;
+  }
+  .a-group { margin-bottom: 28px; }
+  .a-group:last-child { margin-bottom: 0; }
+
+  /* Shared grid-row base for assumptions, research highlights, next steps. */
+  .a-row, .rh-a-row, .ns-row {
+    display: grid;
+    column-gap: 16px;
+    align-items: start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .a-row:last-child,
+  .rh-a-row:last-child,
+  .ns-row:last-child { border-bottom: none; }
+  .a-row { grid-template-columns: 10px minmax(0, 1fr) 180px; }
+  .a-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-top: 7px;
+  }
+  .a-dot.confirmed { background: var(--green-fg); }
+  .a-dot.unconfirmed {
+    background: transparent;
+    border: 1.5px solid var(--orange-fg);
+  }
+  .a-text {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.55;
+    text-wrap: pretty;
+    min-width: 0;
+  }
+  .a-dim-tag {
+    font-size: 11px;
+    color: var(--ink-muted);
+    font-weight: 500;
+    white-space: nowrap;
+    justify-self: start;
+    align-self: start;
+    margin-top: 4px;
+  }
+
+  /* ---------- Research highlights: row (compact list + domain chip) ---------- */
+  .rh-a-row { grid-template-columns: 10px minmax(0, 1fr) auto; }
+  .rh-a-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+    margin: 10px 3px 0 3px;
+  }
+  .rh-a-text {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.55;
+    text-wrap: pretty;
+    min-width: 0;
+  }
+  .rh-a-text code {
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .rh-a-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--blue-fg);
+    font-weight: 500;
+    text-decoration: none;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--blue-bg);
+    white-space: nowrap;
+    margin-top: 3px;
+    transition: filter 120ms;
+  }
+  .rh-a-source:hover { filter: brightness(0.94); }
+  .rh-a-source svg {
+    width: 9px; height: 9px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round;
+  }
+  /* Non-link variant: synthesis marker on rows with no single source. */
+  .rh-synth-chip {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--gray-bg);
+    color: var(--ink-muted);
+    white-space: nowrap;
+    margin-top: 3px;
+  }
+
+  /* ---------- Research: tabs (CSS-only, radio-driven) ---------- */
+  .rh-tabs > input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0; height: 0;
+  }
+  .rh-tab-bar {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 8px;
+  }
+  .rh-tab-bar label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 120ms, border-color 120ms;
+    user-select: none;
+  }
+  .rh-tab-bar label:hover { color: var(--ink-strong); }
+  .rh-tab-bar label .rh-tab-count {
+    font-size: 11px;
+    color: var(--ink-faint);
+    font-weight: 500;
+  }
+  .rh-tabs > .rh-tab-panel { display: none; }
+  .rh-tabs > input#rh-tab-user:checked ~ .rh-tab-bar label[for="rh-tab-user"],
+  .rh-tabs > input#rh-tab-comp:checked ~ .rh-tab-bar label[for="rh-tab-comp"],
+  .rh-tabs > input#rh-tab-mkt:checked  ~ .rh-tab-bar label[for="rh-tab-mkt"] {
+    color: var(--ink-strong);
+    border-bottom-color: var(--ink-strong);
+  }
+  .rh-tabs > input#rh-tab-user:checked ~ .rh-tab-panel[data-panel="user"],
+  .rh-tabs > input#rh-tab-comp:checked ~ .rh-tab-panel[data-panel="comp"],
+  .rh-tabs > input#rh-tab-mkt:checked  ~ .rh-tab-panel[data-panel="mkt"] { display: block; }
+  .rh-tabs > input#rh-tab-user:focus-visible ~ .rh-tab-bar label[for="rh-tab-user"],
+  .rh-tabs > input#rh-tab-comp:focus-visible ~ .rh-tab-bar label[for="rh-tab-comp"],
+  .rh-tabs > input#rh-tab-mkt:focus-visible  ~ .rh-tab-bar label[for="rh-tab-mkt"] {
+    outline: 2px solid var(--blue-fg);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* ---------- Dimensions: collapsible rows ---------- */
+  .dim-rows {
+    border-top: 1px solid var(--hairline);
+    margin-bottom: 8px;
+  }
+  .dim-item {
+    border-bottom: 1px solid var(--hairline);
+    scroll-margin-top: 70px;
+  }
+  .dim-item > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 14px 6px;
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr) 46px 140px;
+    column-gap: 18px;
+    align-items: center;
+    user-select: none;
+    transition: background 120ms;
+  }
+  .dim-item > summary::-webkit-details-marker { display: none; }
+  .dim-item > summary::marker { content: ""; }
+  .dim-item > summary:hover { background: var(--gray-bg); }
+  .dim-item > summary:focus-visible {
+    outline: 2px solid var(--blue-fg);
+    outline-offset: -2px;
+    border-radius: 2px;
+  }
+  .dim-chev {
+    width: 10px; height: 10px;
+    stroke: var(--ink-faint);
+    fill: none;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 140ms;
+  }
+  .dim-item[open] .dim-chev { transform: rotate(90deg); }
+  .dim-row-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-strong);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+  .dim-row-name .w {
+    color: var(--ink-faint);
+    font-weight: 400;
+    font-size: 11px;
+    margin-left: 8px;
+  }
+  .dim-row-score {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-strong);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .dim-item-body {
+    padding: 4px 6px 22px 34px;
+    max-width: 680px;
+  }
+  .dim-body-kf {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-strong);
+    line-height: 1.6;
+    margin: 10px 0 8px;
+    text-wrap: pretty;
+  }
+  .dim-body-exp {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.65;
+    margin-bottom: 16px;
+    text-wrap: pretty;
+  }
+
+  .dim-body-ev {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    padding-top: 14px;
+    border-top: 1px dashed var(--hairline);
+  }
+  .dim-body-ev-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .dim-body-ev-label {
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+  }
+  .dim-body-ev-letter {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .dim-body-ev-tiers {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .dim-body-ev-tiers .tier {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dim-body-ev-tiers .tier b {
+    color: var(--ink-strong);
+  }
+
+  /* ---------- Reach potential: headline callout + two-point bar ---------- */
+  .rp-callout { margin: 4px 0 14px; }
+  .rp-headline {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .rp-headline-from {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--ink-muted);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .rp-headline-arrow {
+    font-size: 24px;
+    color: var(--ink-faint);
+    line-height: 1;
+  }
+  .rp-headline-to {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--ink-strong);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .rp-headline-delta {
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green-fg);
+    background: var(--green-bg);
+    border-radius: 999px;
+    align-self: center;
+  }
+  .rp-bar-wrap {
+    margin: 22px 8px 34px;
+    padding-top: 26px;
+  }
+  .rp-track {
+    position: relative;
+    height: 6px;
+    background: var(--hairline);
+    border-radius: 3px;
+  }
+  .rp-delta {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: var(--green-bg);
+    border-radius: 3px;
+  }
+  .rp-marker {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .rp-marker-current {
+    background: var(--ink-strong);
+  }
+  .rp-marker-potential {
+    background: var(--bg-soft);
+    border: 2px solid var(--green-fg);
+  }
+  .rp-marker-label {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-strong);
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .rp-marker-potential .rp-marker-label {
+    color: var(--green-fg);
+  }
+
+  /* Reach potential: dimension blocks */
+  .rp-blocks {
+    border-top: 1px solid var(--hairline);
+  }
+  .rp-block {
+    padding: 18px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .rp-block:last-child { border-bottom: none; }
+  .rp-block-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .rp-block-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink-strong);
+    letter-spacing: -0.005em;
+  }
+  .rp-block-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .rp-block-jump {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-strong);
+  }
+  .rp-block-uplift {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green-fg);
+  }
+  .rp-block-hint {
+    font-size: 12px;
+    color: var(--ink-muted);
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .rp-block-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .rp-block-list li {
+    position: relative;
+    padding: 4px 0 4px 16px;
+    font-size: 13px;
+    text-wrap: pretty;
+  }
+  .rp-block-list li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+  }
+
+  /* ---------- Next steps: numbered rows ---------- */
+  .ns-list { border-top: 1px solid var(--hairline); }
+  .ns-row {
+    grid-template-columns: 28px minmax(0, 1fr) 56px;
+    padding: 14px 0;
+  }
+  .ns-num {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-faint);
+    text-align: right;
+    padding-top: 1px;
+  }
+  .ns-main { min-width: 0; }
+  .ns-text {
+    font-size: 13px;
+    text-wrap: pretty;
+  }
+  .ns-context {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .ns-dim {
+    font-size: 11px;
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+  .ns-sep {
+    font-size: 11px;
+    color: var(--ink-faint);
+    line-height: 1;
+  }
+  .ns-jump {
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+  .ns-uplift {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green-fg);
+    text-align: right;
+    white-space: nowrap;
+    padding-top: 1px;
+  }
+
+  /* ---------- Dark mode ----------
+     Applied via [data-theme="dark"] on <html>. Initial value is set by the
+     inline script at the top of <body> from localStorage or prefers-color-scheme.
+  */
+  [data-theme="dark"] {
+    --bg-soft: #191919;
+    --ink: #E6E6E5;
+    --ink-strong: #F1F1EF;
+    --ink-muted: #9B9A97;
+    --ink-faint: #6F6E69;
+    --hairline: #2F2F2E;
+
+    --blue-bg:   rgba(51, 126, 169, 0.35);  --blue-fg:   #9EC8E8;
+    --green-bg:  rgba(68, 131, 97, 0.35);   --green-fg:  #9DD7A8;
+    --orange-bg: rgba(203, 145, 47, 0.35);  --orange-fg: #F5CD8B;
+    --red-bg:    rgba(192, 86, 67, 0.35);   --red-fg:    #FFB1A1;
+    --yellow-bg: rgba(203, 145, 47, 0.30);  --yellow-fg: #F5D78B;
+    --purple-bg: rgba(144, 101, 176, 0.35); --purple-fg: #D0B5E3;
+    --gray-bg:   rgba(120, 119, 116, 0.30); --gray-fg:   #D4D4D2;
+  }
+  [data-theme="dark"] { --topbar-bg: rgba(25, 25, 25, 0.92); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 720px) {
+    .page { padding: 40px 18px 80px; }
+    .doc-title { font-size: 28px; }
+    .doc-subtitle { font-size: 14px; margin-bottom: 24px; }
+    .topbar-title { font-size: 12px; }
+
+    /* Single column; keys size to widest label so there's no arbitrary
+       gap between label and value, and labels still align to each other. */
+    .props {
+      grid-template-columns: max-content minmax(0, 1fr);
+      column-gap: 14px;
+      margin-bottom: 36px;
+    }
+    .props .k { padding: 5px 0; }
+    .props .v { padding: 5px 0; }
+
+    .section-heading { font-size: 22px; }
+    .idea { grid-template-columns: 1fr; gap: 28px; }
+
+    .toc { padding: 14px 16px; margin-bottom: 32px; }
+    .toc-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+      grid-auto-flow: row;
+    }
+
+    .hero-stats { grid-template-columns: 1fr; gap: 20px; margin-bottom: 32px; }
+    .stat-num { font-size: 32px; }
+    .grade-big { font-size: 34px; }
+
+    .dim-grid {
+      grid-template-columns: 1fr;
+      grid-auto-flow: row;
+      grid-template-rows: none;
+      row-gap: 12px;
+    }
+    .dim-row { grid-template-columns: minmax(0, 1fr) 100px; }
+
+    .risks { grid-template-columns: 1fr; gap: 14px; }
+    .a-row { grid-template-columns: 10px minmax(0, 1fr); row-gap: 4px; }
+    .a-row .a-dim-tag { grid-column: 2; margin-top: 0; }
+
+    .rh-a-row { grid-template-columns: 10px minmax(0, 1fr); row-gap: 6px; }
+    .rh-a-row .rh-a-source { grid-column: 2; justify-self: start; }
+
+    .rh-tab-bar { overflow-x: auto; flex-wrap: nowrap; }
+    .rh-tab-bar label { padding: 10px; white-space: nowrap; }
+
+    .dim-item > summary {
+      grid-template-columns: 14px minmax(0, 1fr) 46px;
+      column-gap: 12px;
+    }
+    .dim-row-bar { display: none; }
+    .dim-item-body { padding-left: 6px; }
+    .dim-body-ev { gap: 14px; }
+    .dim-body-ev-tiers { gap: 12px; }
+
+    .rp-headline { gap: 10px; }
+    .rp-headline-from, .rp-headline-to { font-size: 28px; }
+    .rp-headline-arrow { font-size: 20px; }
+    .rp-block-head { flex-wrap: wrap; gap: 8px; }
+    .rp-block-meta { gap: 10px; }
+
+    .ns-row {
+      grid-template-columns: 24px minmax(0, 1fr) 52px;
+      column-gap: 10px;
+    }
+    .ns-context { flex-wrap: wrap; gap: 4px 8px; }
+  }
+</style>
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('ti-theme');
+      var prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = stored || (prefers ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  })();
+</script>
+</head>
+<body>
+
+<!-- SVG icon sprite (hidden). Reused via <use href="#i-ext"> for external-link and up-right arrow glyphs. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ext" viewBox="0 0 24 24">
+    <path d="M7 17 17 7"/>
+    <path d="M7 7h10v10"/>
+  </symbol>
+</svg>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-title">
+      <span class="emoji">🛡️</span>
+      TweakIdea
+      <span class="chev">/</span>
+      Runs
+      <span class="chev">/</span>
+      Lifeguard
+    </div>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+    </button>
+  </div>
+</div>
+<script>
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('ti-theme', next); } catch (e) {}
+  });
+</script>
+
+<main class="page">
+  <div class="doc-icon" aria-hidden="true">🛡️</div>
+  <div class="doc-codename">Lifeguard</div>
+  <h1 class="doc-title">Lifeguard</h1>
+  <p class="doc-subtitle">The trusted library of AI skills — verified, security-audited, and shown working before you install.</p>
+
+  <div class="props">
+    <div class="k">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+      Verdict
+    </div>
+    <div class="v"><span class="pill yellow">PIVOT</span></div>
+
+    <div class="k">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6z"/></svg>
+      Evidence grade
+    </div>
+    <div class="v"><span class="grade c">C</span></div>
+
+    <div class="k">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      Weighted score
+    </div>
+    <div class="v">3.5 <span class="sub">/ 5.0</span></div>
+
+    <div class="k">
+      <svg aria-hidden="true"><use href="#i-ext"/></svg>
+      Potential score
+    </div>
+    <div class="v"><span class="score-pot">3.9</span> <span class="sub">/ 5.0</span></div>
+
+    <div class="k">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M3 9h18"/></svg>
+      Dimensions
+    </div>
+    <div class="v">14 <span class="sub">/ 14 evaluated</span></div>
+
+    <div class="k">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+      Created at
+    </div>
+    <div class="v">2026-06-10 08:56 UTC</div>
+
+    <div class="k">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="m16.24 16.24 2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="m16.24 7.76 2.83-2.83"/></svg>
+      TweakIdea version
+    </div>
+    <div class="v">v2.1.1</div>
+  </div>
+
+  <nav class="toc" aria-label="On this page">
+    <div class="toc-label">On this page</div>
+    <div class="toc-grid">
+      <a class="toc-link" href="#idea">Idea</a>
+      <a class="toc-link" href="#summary">Summary</a>
+      <a class="toc-link" href="#assumptions">Assumptions</a>
+<a class="toc-link" href="#research-highlights">Research highlights</a>      <a class="toc-link" href="#dimensions">Dimensions</a>
+<a class="toc-link" href="#reach-potential">Reach potential</a>      <a class="toc-link" href="#next-steps">Next steps</a>
+    </div>
+  </nav>
+
+  <h2 class="section-heading" id="idea">Idea</h2>
+  <div class="idea">
+    <div class="idea-field">
+      <div class="idea-field-label">Problem</div>
+      <p class="idea-field-body">AI output is mediocre by default, and people can&#39;t judge skill quality before wasting hours. Skills promise the fix but are black boxes — no visible result before install, no provenance, and real security risk. SKILL.md just standardized the format across Claude and Gemini, one-click install shipped, and supply exploded on GitHub with no quality layer on top.</p>
+    </div>
+    <div class="idea-field">
+      <div class="idea-field-label">Solution</div>
+      <p class="idea-field-body">SurfSkills — the trusted library of AI skills (&#34;Mobbin for AI skills&#34;). Extract working skills and demand signal from GitHub, verify each through a pipeline (sandboxed run, security audit, live before/after demo — only verified skills hosted, the demo is the product page), and distribute via programmatic SEO where every demo doubles as a landing page. Wedge: solo founders (decks, landing pages, launch assets). Demos free; subscription unlocks the library.</p>
+    </div>
+  </div>
+
+  <h2 class="section-heading" id="summary">Summary</h2>
+
+  <!-- Hero stats -->
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-label">Weighted score</div>
+      <div class="stat-value"><span class="stat-num">3.5</span><span class="stat-denom">/ 5.0</span></div>
+      <div class="stat-bar">
+        <div class="stat-bar-fill weighted" style="width: 70.0%;"></div>
+        <div class="stat-bar-ghost" style="left: 70.0%; width: 8.0%;"></div>
+      </div>
+      <div class="stat-meta"><strong class="verdict-word pivot">PIVOT</strong> — Promising, address weak areas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Potential score</div>
+      <div class="stat-value"><span class="stat-num">3.9</span><span class="stat-denom">/ 5.0</span></div>
+      <div class="stat-bar">
+        <div class="stat-bar-fill potential" style="width: 78.0%;"></div>
+      </div>
+      <div class="stat-meta">+0.4 uplift if 5 unconfirmed assumptions confirm.</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Evidence grade</div>
+      <div class="stat-value"><span class="grade-big c">C</span></div>
+      <div class="evidence-bar">
+        <div class="evidence-seg ev-verified" style="width: 10.6%;"></div>
+        <div class="evidence-seg ev-research" style="width: 36.2%;"></div>
+        <div class="evidence-seg ev-founder"  style="width: 20.2%;"></div>
+        <div class="evidence-seg ev-assumed"  style="width: 33.0%;"></div>
+      </div>
+      <div class="evidence-legend">
+        <span class="evidence-legend-item">
+          <span class="ev-dot ev-verified"></span>
+          <span class="label">Verified</span>
+          <b>10</b>
+        </span>
+        <span class="evidence-legend-item">
+          <span class="ev-dot ev-research"></span>
+          <span class="label">Research</span>
+          <b>34</b>
+        </span>
+        <span class="evidence-legend-item">
+          <span class="ev-dot ev-founder"></span>
+          <span class="label">Founder</span>
+          <b>19</b>
+        </span>
+        <span class="evidence-legend-item">
+          <span class="ev-dot ev-assumed"></span>
+          <span class="label">Assumed</span>
+          <b>31</b>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dimensions overview -->
+  <h3 class="sub-heading">Dimensions overview</h3>
+  <div class="dim-grid">
+    <div class="dim-row">
+      <div class="dim-name">Pain Intensity<span class="w">12%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-4" style="width: 80%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Willingness to Pay<span class="w">12%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+        <div class="dim-bar-ghost sc-3" style="left: 60%; width: 20%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Solution Gap<span class="w">12%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-5" style="width: 100%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Founder-Market Fit<span class="w">12%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-4" style="width: 80%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Urgency<span class="w">8%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Frequency<span class="w">8%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-2" style="width: 40%;"></div>
+        <div class="dim-bar-ghost sc-2" style="left: 40%; width: 20%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Market Size<span class="w">8%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+        <div class="dim-bar-ghost sc-3" style="left: 60%; width: 20%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Defensibility<span class="w">8%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+        <div class="dim-bar-ghost sc-3" style="left: 60%; width: 20%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Market Growth<span class="w">4%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-5" style="width: 100%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Scalability<span class="w">4%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-4" style="width: 80%;"></div>
+        <div class="dim-bar-ghost sc-4" style="left: 80%; width: 20%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Clarity of Target Customer<span class="w">4%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Behavior Change Required<span class="w">4%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-4" style="width: 80%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Mandatory Nature<span class="w">2%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-1" style="width: 20%;"></div>
+      </div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Incumbent Indifference<span class="w">2%</span></div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill sc-1" style="width: 20%;"></div>
+        <div class="dim-bar-ghost sc-1" style="left: 20%; width: 20%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk callouts -->
+  <h3 class="sub-heading">Lowest &amp; highest risk</h3>
+  <div class="risks">
+    <div class="risk-card risk-card--strength">
+      <span class="risk-kind">Lowest risk · biggest strength</span>
+      <div class="risk-head">
+        <div class="risk-dim">Solution Gap</div>
+        <div class="risk-score">5 / 5</div>
+      </div>
+      <p class="risk-body">The SKILL.md ecosystem formed only in December 2025 and exploded from one registry to eight marketplaces in five months, all positioned on catalog volume with zero before/after demos. SurfSkills owns a structurally timed gap — verified quality plus live demos for non-technical users is genuinely unoccupied territory, with no well-funded team having tried and failed at this positioning.</p>
+    </div>
+    <div class="risk-card risk-card--weakness">
+      <span class="risk-kind">Highest risk · biggest weakness</span>
+      <div class="risk-head">
+        <div class="risk-dim">Mandatory Nature</div>
+        <div class="risk-score">1 / 5</div>
+      </div>
+      <p class="risk-body">No regulatory, contractual, operational, or professional forcing function compels anyone to adopt a verified skill library — research confirms the entire AI skills ecosystem is voluntary and convenience-driven, like browser extensions. Solo founders can ignore the problem indefinitely with zero penalty, capping this dimension at purely optional with no path to lift it.</p>
+    </div>
+  </div>
+
+  <h2 class="section-heading" id="assumptions">Assumptions</h2>
+
+  <div class="a-group">
+    <h3 class="sub-heading">Unconfirmed <span class="sub-heading-count">5</span></h3>
+    <div class="a-row">
+      <span class="a-dot unconfirmed"></span>
+      <span class="a-text">Users currently waste hours installing AI skills only to discover they are low quality or don&#39;t work as expected</span>
+      <span class="a-dim-tag">Pain Intensity</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot unconfirmed"></span>
+      <span class="a-text">Solo founders are the right wedge segment — they have acute pain around decks, landing pages, and launch assets, and before/after demos will resonate viscerally with them</span>
+      <span class="a-dim-tag">Target Segment</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot unconfirmed"></span>
+      <span class="a-text">Users will pay a subscription fee to unlock the full verified skill library after experiencing free demos</span>
+      <span class="a-dim-tag">Willingness to Pay</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot unconfirmed"></span>
+      <span class="a-text">Programmatic SEO where every demo doubles as a landing page will generate enough organic distribution to grow the library without paid acquisition</span>
+      <span class="a-dim-tag">Channel Viability</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot unconfirmed"></span>
+      <span class="a-text">Usage data collected from skill installs and runs is sufficient to feed extraction and evaluation pipelines that improve skill recommendations over time</span>
+      <span class="a-dim-tag">Business Model</span>
+    </div>
+  </div>
+
+  <div class="a-group">
+    <h3 class="sub-heading">Confirmed <span class="sub-heading-count">7</span></h3>
+    <div class="a-row">
+      <span class="a-dot confirmed"></span>
+      <span class="a-text">AI output quality is meaningfully worse without skills, and users recognize this gap as a significant pain point worth solving</span>
+      <span class="a-dim-tag">Pain Intensity</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot confirmed"></span>
+      <span class="a-text">Existing AI skill directories lack quality verification, security auditing, and live demos — creating a meaningful solution gap</span>
+      <span class="a-dim-tag">Solution Gap</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot confirmed"></span>
+      <span class="a-text">A sandboxed run + security audit + live before/after demo pipeline is technically feasible to build and operate at scale</span>
+      <span class="a-dim-tag">Technical Feasibility</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot confirmed"></span>
+      <span class="a-text">GitHub contains sufficient supply of AI skills with enough demand signal to bootstrap extraction and curation</span>
+      <span class="a-dim-tag">Market Size</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot confirmed"></span>
+      <span class="a-text">The demo library and usage data create a compounding flywheel moat that competitors cannot easily replicate even if they clone individual skills</span>
+      <span class="a-dim-tag">Defensibility</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot confirmed"></span>
+      <span class="a-text">SKILL.md standardization across Claude and Gemini has meaningfully accelerated skill supply on GitHub, creating a timely market opportunity</span>
+      <span class="a-dim-tag">Market Timing</span>
+    </div>
+    <div class="a-row">
+      <span class="a-dot confirmed"></span>
+      <span class="a-text">A trusted brand for AI skill quality is achievable and will become a durable competitive advantage — akin to what Mobbin is for mobile UI patterns</span>
+      <span class="a-dim-tag">Defensibility</span>
+    </div>
+  </div>
+
+  <h2 class="section-heading" id="research-highlights">Research highlights</h2>
+
+  <div class="rh-tabs">
+    <input type="radio" name="rh-tab" id="rh-tab-user" checked>
+    <input type="radio" name="rh-tab" id="rh-tab-comp">
+    <input type="radio" name="rh-tab" id="rh-tab-mkt">
+    <div class="rh-tab-bar">
+      <label for="rh-tab-user">Users <span class="rh-tab-count">6</span></label>
+      <label for="rh-tab-comp">Competitive <span class="rh-tab-count">6</span></label>
+      <label for="rh-tab-mkt">Market <span class="rh-tab-count">5</span></label>
+    </div>
+
+    <div class="rh-tab-panel" data-panel="user">
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">Top user complaint (34% of 500 analyzed) is context loss — AI forgets everything each session; solo founders lose ~91 hrs/year re-explaining.</span>
+        <a href="https://www.indiehackers.com/post/i-analyzed-500-reddit-complaints-about-ai-tools-the-1-frustration-isnt-hallucination-0066da0b1c" class="rh-a-source" target="_blank" rel="noopener">
+          indiehackers.com <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">Inconsistent output quality (15% of complaints) — users can&#39;t predict when AI will produce good vs. mediocre results without trying.</span>
+        <a href="https://www.indiehackers.com/post/i-analyzed-500-reddit-complaints-about-ai-tools-the-1-frustration-isnt-hallucination-0066da0b1c" class="rh-a-source" target="_blank" rel="noopener">
+          indiehackers.com <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">Solo founders pay $200–$500/month on AI tool subscriptions; willingness to pay is established but value proof is required before purchase.</span>
+        <a href="https://indieis.land/blog/indie-hacker-tools-trends-2026" class="rh-a-source" target="_blank" rel="noopener">
+          indieis.land <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">33% of consumers report negative brand perception when they identify AI-generated content — quality signal matters acutely for founder assets.</span>
+        <a href="https://startup.info/the-solo-founders-content-stack/" class="rh-a-source" target="_blank" rel="noopener">
+          startup.info <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">Most AI landing page generators hit a paywall at publish — users invest time before discovering cost, creating anger and churn.</span>
+        <a href="https://manus.im/blog/best-landing-page-generator" class="rh-a-source" target="_blank" rel="noopener">
+          manus.im <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">GitHub hosts 2,500+ Claude Code skill registries with quality ranging from excellent (Trail of Bits, Vercel Labs) to abandoned — no signal for non-experts.</span>
+        <a href="https://www.agensi.io/learn/best-ai-agent-skills-marketplaces-2026" class="rh-a-source" target="_blank" rel="noopener">
+          agensi.io <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="rh-tab-panel" data-panel="comp">
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">SkillsMP indexes 800,000+ skills scraped from GitHub with only a 2-star filter and zero security review.</span>
+        <a href="https://www.agensi.io/learn/ai-agent-skills-marketplace-comparison-2026" class="rh-a-source" target="_blank" rel="noopener">
+          agensi.io <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">Security audit of 22,511 skills found 140,963 issues (6.3/skill avg); 36% of skills contained prompt injection vulnerabilities.</span>
+        <a href="https://www.agensi.io/learn/best-ai-agent-skills-marketplaces-2026" class="rh-a-source" target="_blank" rel="noopener">
+          agensi.io <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">Agensi is the only marketplace with an 8-point automated security scan and 80/20 creator revenue split; catalog is only 200+ skills.</span>
+        <a href="https://www.agensi.io/learn/ai-agent-skills-marketplace-comparison-2026" class="rh-a-source" target="_blank" rel="noopener">
+          agensi.io <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">ClaudeSkills.info has 658 free community-vetted skills but no security review, no paid tier, and no before/after demos.</span>
+        <a href="https://www.agensi.io/learn/best-ai-agent-skills-marketplaces-2026" class="rh-a-source" target="_blank" rel="noopener">
+          agensi.io <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">Agent skills ecosystem grew from one registry in Dec 2025 to eight major marketplaces by Q2 2026 — all positioned on volume, not verified quality.</span>
+        <a href="https://market.us/report/ai-prompt-marketplace-market/" class="rh-a-source" target="_blank" rel="noopener">
+          market.us <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">PromptBase has 220,000+ prompts at $1.99–$9.99 with 80% creator split but is prompt-only, not agentic SKILL.md packages with sandboxed demos.</span>
+        <a href="https://aihungry.com/tools/promptbase/pricing" class="rh-a-source" target="_blank" rel="noopener">
+          aihungry.com <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="rh-tab-panel" data-panel="mkt">
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">AI prompt marketplace will grow from $1.94B in 2025 to $2.51B in 2026 at 29.5% CAGR, reaching $7.01B by 2030.</span>
+        <a href="https://www.thebusinessresearchcompany.com/report/artificial-intelligence-ai-prompt-marketplace-market-report" class="rh-a-source" target="_blank" rel="noopener">
+          thebusinessresearchcompany.com <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">AI code tools market will grow from $7.65B in 2025 to $9.46B in 2026 at 23.7% CAGR, reaching $22.2B by 2030.</span>
+        <a href="https://www.researchandmarkets.com/reports/6225896/ai-code-tools-market-report" class="rh-a-source" target="_blank" rel="noopener">
+          researchandmarkets.com <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">Over 4.3 million AI-related repositories exist on GitHub as of 2025, a 178% YoY jump in LLM-focused projects.</span>
+        <a href="https://blog.bytebytego.com/p/top-ai-github-repositories-in-2026" class="rh-a-source" target="_blank" rel="noopener">
+          blog.bytebytego.com <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">AI skills on Upwork grew 109% YoY; AI video/editing skills up 329%, AI integration up 178% — demand signal is broad.</span>
+        <a href="https://investors.upwork.com/news-releases/news-release-details/upworks-demand-skills-2026-demand-top-ai-skills-more-doubles-ai" class="rh-a-source" target="_blank" rel="noopener">
+          investors.upwork.com <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+      <div class="rh-a-row">
+        <span class="rh-a-dot"></span>
+        <span class="rh-a-text">SKILL.md format introduced Oct 2025, open-sourced Dec 2025; now supported by Claude Code, Gemini CLI, Codex, Cursor, Windsurf.</span>
+        <a href="https://github.com/anthropics/skills" class="rh-a-source" target="_blank" rel="noopener">
+          github.com <svg aria-hidden="true"><use href="#i-ext"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-heading" id="dimensions">Dimensions</h2>
+
+  <div class="dim-rows">
+    <details class="dim-item" id="dim-pain-intensity">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Pain Intensity<span class="w">12%</span></div>
+        <div class="dim-row-score">4</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-4" style="width: 80%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">Pain is significant and well-documented at Score 4: mediocre AI output quality causes real productivity loss for high-frequency solo founder users and all skill marketplaces demonstrably lack quality verification — but the pain does not reach extreme/painkiller intensity because no financial loss or existential threat affects the target segment and functional workarounds exist.</p>
+        <p class="dim-body-exp">Score 4 is supported by confirmed evidence of meaningful productivity impact (91 hrs/year lost to AI quality issues for solo founders, $200-500/month spend establishing stakes) and demonstrably inadequate alternatives (all six major competitors lack live demos and quality verification). Score 5 is not reached because the target solo founder segment faces no documented financial loss, regulatory risk, or existential threat from skill quality issues — the security risk is real but primarily affects technical developers. Score 3 would understate the pain given multiple independent research sources (Snyk, IndieHackers, Stack Overflow) confirming both the quality gap and the absence of trustworthy alternatives.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade b">B</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>2</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>4</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>3</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-willingness-to-pay">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Willingness to Pay<span class="w">12%</span></div>
+        <div class="dim-row-score">3 <span class="arrow">→</span> 4</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+          <div class="dim-bar-ghost sc-3" style="left: 60%; width: 20%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">Solo founders have established AI tool payment behavior ($200-500/month) and emotional investment in output quality, but the WTP for verified skill curation specifically is unconfirmed and faces a strong headwind from a market default of $0 for skill access across all major competitors.</p>
+        <p class="dim-body-exp">Score 3 reflects credible research evidence that solo founders already pay for AI productivity tools (category payment behavior) and that the problem affects high-value activities they invest in — both Score 3 criteria pass on research-only evidence. Score 4 is not reached because no evidence shows customers currently spending on skill curation specifically (all competitors are free) and the revenue/cost tie to skill verification specifically is unconfirmed. Score 2 is not the floor because the payment signal goes well beyond &#39;I&#39;d use it if free&#39; — actual monthly AI tool spend is documented for the target segment.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade b">B</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>5</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>2</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>2</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-solution-gap">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Solution Gap<span class="w">12%</span></div>
+        <div class="dim-row-score">5</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-5" style="width: 100%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">The SKILL.md ecosystem formed in December 2025 and all eight resulting marketplaces are volume-first with no before/after demo layer, giving SurfSkills a clear structural gap with verified timing rather than &#39;nobody thought of it&#39; as justification.</p>
+        <p class="dim-body-exp">Score 5 is warranted because all three criteria are met with research-backed evidence: the gap is structurally caused by a newly-formed ecosystem (SKILL.md origin December 2025), there is no dominant incumbent addressing verified quality plus demo distribution to non-technical users, and no credible evidence exists of well-funded teams attempting and failing at this specific solution. The score is not lower because the gap is not incremental — it is a fundamental missing layer (trust and quality preview) that no competitor has built. The score could theoretically be pressured downward if Agensi aggressively expanded its catalog and added a demo layer, but as of Q2 2026 that has not occurred.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade a">A</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>4</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>5</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>0</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-founder-market-fit">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Founder-Market Fit<span class="w">12%</span></div>
+        <div class="dim-row-score">4</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-4" style="width: 80%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">Strong technical fit (infra/search/AI background, solo builder) earns Score 4, but missing the visceral personal pain and unproven SEO execution capability prevent Score 5 — the founder can build the product but the passion and distribution fit are weaker than ideal.</p>
+        <p class="dim-body-exp">Score 4 is earned because all three criteria at that level clearly pass: professional domain experience at Yandex/Databricks, demonstrated technical build capability as a full-stack solo builder, and at least one credible early-customer channel via the founder community. Score 5 is blocked by three explicit fails: the founder&#39;s own statement that the pain &#39;wasn&#39;t a defining pain,&#39; a thin network (10-25 warm contacts) insufficient for Score 5&#39;s direct customer access standard, and no articulated unfair advantage that others with infra backgrounds lack. With all Score 5 criteria based on confirmed founder statements rather than unconfirmed hypotheses, there is no uplift path and potential equals score.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade d">D</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>5</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>0</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-urgency">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Urgency<span class="w">8%</span></div>
+        <div class="dim-row-score">3</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">The AI skills quality and security problem is active and worsening (Score 3), but no external forcing function, regulatory deadline, or operational failure creates Score 4+ urgency for solo founders who can delay adopting SurfSkills without serious immediate consequences.</p>
+        <p class="dim-body-exp">Score 3 is warranted because the problem is definitively active and worsening — 800k+ unvetted skills, documented security vulnerabilities, and compounding productivity loss — and a 6-month delay incurs noticeable cost. Score 4 is not warranted because no time-sensitive trigger (approaching deadline, imminent competitive threat, system degradation creating crisis) was found, and users are not actively seeking solutions in an emergency mode. Score 2 was considered but rejected because the rate of ecosystem deterioration means delay is not consequence-free — security exposure and productivity waste are real and growing, even if not catastrophic.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade b">B</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>6</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>4</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-frequency">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Frequency<span class="w">8%</span></div>
+        <div class="dim-row-score">2 <span class="arrow">→</span> 3</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-2" style="width: 40%;"></div>
+          <div class="dim-bar-ghost sc-2" style="left: 40%; width: 20%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">Skill discovery for AI tools is episodic and monthly for active AI users — not daily — because browsing for better skills is a meta-behavior triggered by frustration, not embedded in the daily AI workflow itself.</p>
+        <p class="dim-body-exp">Score 2 is assigned because active AI users (82% use tools daily or weekly per Stack Overflow 2025) will periodically experience the subpar-output pain and seek better skills at least monthly, with confirmed founder evidence that the quality gap is real. Score 3 is not reached because the weekly recurrence for the target segment (solo founders) is an unconfirmed hypothesis — the specific cadence of their skill-discovery behavior has not been validated. Score 4 and 5 are ruled out because installing and evaluating AI skills is an episodic, not daily, behavior even among the heaviest AI tool users.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade f">F</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>2</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>2</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-market-size">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Market Size<span class="w">8%</span></div>
+        <div class="dim-row-score">3 <span class="arrow">→</span> 4</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+          <div class="dim-bar-ghost sc-3" style="left: 60%; width: 20%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">The broader AI prompt marketplace ($1.94B, 2025) gives SurfSkills a credible market container above $100M, but the actual SAM for a verified-skills curation layer is unsized, and no bottom-up calculation links the solo-founder beachhead to a $10M+ revenue opportunity.</p>
+        <p class="dim-body-exp">Score 3 is assigned because credible third-party data (thebusinessresearchcompany.com, researchandmarkets.com) confirms the parent market well exceeds the $100M threshold, satisfying both Score 3 criteria. Score 4 is not reached because no SAM/SOM breakdown exists for the verified-skills-curation niche specifically, and no evidence establishes that the solo-founder beachhead can generate $10M+ revenue — the subscriber count and ARPU are both unconfirmed. Potential reaches 4 because if the founder provides a credible bottom-up sizing showing the initial segment supports $10M+, that criterion would PASS.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade c">C</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>3</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>1</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>1</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-defensibility">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Defensibility<span class="w">8%</span></div>
+        <div class="dim-row-score">3 <span class="arrow">→</span> 4</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+          <div class="dim-bar-ghost sc-3" style="left: 60%; width: 20%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">SurfSkills has confirmed moat-building mechanisms (demo flywheel + brand trust + SEO compounding) in a currently unoccupied competitive position, but fails the Incumbent Test given Anthropic&#39;s live marketplace, yielding Score 3 with Score 4 potential gated on incumbents not acting before the flywheel accumulates.</p>
+        <p class="dim-body-exp">Score 3 is awarded because at least one confirmed moat-building mechanism exists (demo library + data flywheel + SEO compounding) and the path is explicit, with competitive research confirming no current competitor executes this stack. Score 4 is blocked because the durable barrier criterion is CONDITIONAL: it depends on incumbent inaction (Anthropic, which already operates a live marketplace, not adding a quality verification layer before SurfSkills&#39; flywheel reaches defensible scale). Score 5 fails outright on the Incumbent Test for the same reason.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade b">B-</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>3</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>2</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>1</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-market-growth">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Market Growth<span class="w">4%</span></div>
+        <div class="dim-row-score">5</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-5" style="width: 100%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">The AI agent skills ecosystem is growing at 29.5%+ CAGR with multiple independent structural drivers confirmed — SKILL.md standardization, enterprise AI adoption doubling, and developer behavioral shifts — placing SurfSkills in a rising-tide market with no ceiling evidence.</p>
+        <p class="dim-body-exp">Score 5 is warranted because all three criteria are met with research-grade evidence: CAGR exceeds 20% across multiple credible market reports (29.5% for AI prompt marketplace, 23.7% for AI code tools), multiple independent growth drivers are confirmed (technology standardization, enterprise adoption, behavioral shifts, economic pressure), and the trajectory is demonstrably structural across multiple years with GitHub data showing 1,400x repo growth from 2023 to Q1 2026. The score cannot be lower — there is no ambiguity about the growth rate exceeding 20%, and the structural nature is corroborated by independent data sources.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade b">B-</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>1</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>4</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>0</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-scalability">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Scalability<span class="w">4%</span></div>
+        <div class="dim-row-score">4 <span class="arrow">→</span> 5</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-4" style="width: 80%;"></div>
+          <div class="dim-bar-ghost sc-4" style="left: 80%; width: 20%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">SurfSkills is structurally highly scalable — digital subscription with automated delivery and near-zero marginal cost per user — and reaches Score 5 potential if the programmatic SEO compounding acquisition mechanism is confirmed working in practice.</p>
+        <p class="dim-body-exp">Score 4 is assigned because the business model clearly demonstrates operational leverage (digital subscription, automated delivery, no per-user labor) and mostly automated delivery — both Score 4 criteria pass with confidence. Score 5 requires a self-reinforcing acquisition mechanism that reduces marginal CAC as the user base grows; the programmatic SEO flywheel described by the founder is a credible mechanism and well-supported by external research analogues, but the Channel Viability hypothesis is UNCONFIRMED and the product is pre-launch, so no actual evidence of the mechanism working exists yet. Score 3 and below are not applicable — this is not a linear-cost or high-touch delivery model.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade d">D</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>4</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>5</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-clarity-of-target-customer">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Clarity of Target Customer<span class="w">4%</span></div>
+        <div class="dim-row-score">3</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-3" style="width: 60%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">The ICP is partially defined — &#39;solo founders needing launch assets&#39; is distinguishable from adjacent segments but lacks the channel specificity, named-accounts evidence, and demographic/psychographic depth required for Score 4.</p>
+        <p class="dim-body-exp">Score 3 is earned because the idea names a specific use case and segment (&#39;solo founders, decks/landing pages/launch assets&#39;) that is clearly distinguishable from adjacent segments, and programmatic SEO is identified as a distribution channel. Score 4 is not achievable because the founder cannot demonstrate ability to name 10 specific target individuals or companies, the solo-founder hypothesis is UNCONFIRMED, and no customer development evidence or targeted outreach plan is provided. Score 2 is not warranted because the ICP is not purely generic.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade d">D</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>3</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>5</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-behavior-change-required">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Behavior Change Required<span class="w">4%</span></div>
+        <div class="dim-row-score">4</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-4" style="width: 80%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">SurfSkills requires only low-friction behavior change: users must redirect their existing skill-discovery habit to a new destination, but the core AI workflow and post-install experience are unchanged, and the one-click install format eliminates learning curve entirely.</p>
+        <p class="dim-body-exp">Score 4 because SurfSkills complements existing workflows without disrupting them — the AI usage pattern is identical before and after skill installation, and the SKILL.md format means zero learning curve. Score 5 is not warranted because SurfSkills does not replace an existing dedicated tool; it redirects an informal discovery behavior (GitHub browsing) to a new destination, requiring minor habit formation. Score 3 would be too conservative given that no training, organizational change, or process redesign is needed.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade f">F</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>1</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>4</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-mandatory-nature">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Mandatory Nature<span class="w">2%</span></div>
+        <div class="dim-row-score">1</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-1" style="width: 20%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">SurfSkills solves a discretionary convenience problem with no regulatory, contractual, or operational forcing function — users face zero external compulsion to adopt a verified AI skill library.</p>
+        <p class="dim-body-exp">Score 1 is assigned because every rubric criterion above Score 1 requires an external mandate — regulatory, contractual, operational, or professional — and none exists here. AI skill discovery and quality verification is purely optional; independent research confirms the entire ecosystem is voluntary and adoption-by-convenience. Score 2 would require at least a social or professional norm with some enforcement signal, which is absent. The score cannot be higher without evidence of an actual forcing function, and none is present in the idea text, hypotheses, or research.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade f">F</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>1</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>4</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="dim-item" id="dim-incumbent-indifference">
+      <summary>
+        <svg class="dim-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <div class="dim-row-name">Incumbent Indifference<span class="w">2%</span></div>
+        <div class="dim-row-score">1 <span class="arrow">→</span> 2</div>
+        <div class="dim-bar dim-row-bar">
+          <div class="dim-bar-fill sc-1" style="width: 20%;"></div>
+          <div class="dim-bar-ghost sc-1" style="left: 20%; width: 20%;"></div>
+        </div>
+      </summary>
+      <div class="dim-item-body">
+        <p class="dim-body-kf">Anthropic launched a native Skills Marketplace in May 2026 with first-party distribution built into Claude Code, placing SurfSkills directly in the kill zone; the only runway is Anthropic&#39;s current deliberate restraint from building demos, security scanning, and multi-model support.</p>
+        <p class="dim-body-exp">Score 1 is assigned because all three kill-zone indicators are present: the market is large and obvious ($2.51B, 29.5% CAGR), the problem is core to Anthropic&#39;s business (skill quality = Claude quality), and confirmed incumbent activity exists (Anthropic marketplace May 2026, Google Chrome Skills April 2026). Potential is 2 rather than 1 because Anthropic&#39;s current marketplace explicitly lacks before/after demos and deep security auditing — features SurfSkills would lead with — and Anthropic has publicly signaled a coexistence posture; this narrow gap means a differentiated SurfSkills could survive at Score 2 if Anthropic maintains restraint.</p>
+        <div class="dim-body-ev">
+          <div class="dim-body-ev-head">
+            <span class="dim-body-ev-label">Evidence</span>
+            <span class="dim-body-ev-letter grade b">B-</span>
+          </div>
+          <div class="dim-body-ev-tiers">
+            <span class="tier"><span class="ev-dot ev-verified"></span>Verified <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-research"></span>Research <b>5</b></span>
+            <span class="tier"><span class="ev-dot ev-founder"></span>Founder <b>0</b></span>
+            <span class="tier"><span class="ev-dot ev-assumed"></span>Assumed <b>0</b></span>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <h2 class="section-heading" id="reach-potential">Reach potential</h2>
+
+  <div class="rp-callout">
+    <div class="rp-headline">
+      <span class="rp-headline-from">3.5</span>
+      <span class="rp-headline-arrow">→</span>
+      <span class="rp-headline-to">3.9</span>
+      <span class="rp-headline-delta">+0.4</span>
+    </div>
+
+    <div class="rp-bar-wrap">
+      <div class="rp-track" role="img" aria-label="Current weighted total 3.5, potential 3.9">
+        <div class="rp-delta" style="left: 70.0%; width: 8.0%;"></div>
+        <div class="rp-marker rp-marker-current" style="left: 70.0%;">
+          <span class="rp-marker-label">3.5</span>
+        </div>
+        <div class="rp-marker rp-marker-potential" style="left: 78.0%;">
+          <span class="rp-marker-label">3.9</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rp-blocks">
+    <div class="rp-block">
+      <div class="rp-block-head">
+        <span class="rp-block-name">Willingness to Pay</span>
+        <div class="rp-block-meta">
+          <span class="rp-block-jump">3 <span class="arrow">→</span> 4</span>
+          <span class="rp-block-uplift">+0.12</span>
+        </div>
+      </div>
+      <p class="rp-block-hint">Confirm any of these assumptions</p>
+      <ul class="rp-block-list">
+        <li>Users will pay a subscription fee to unlock the full verified skill library after experiencing free demos</li>
+        <li>Solo founders are the right wedge segment with acute pain around decks, landing pages, and launch assets where before/after demos resonate viscerally</li>
+      </ul>
+    </div>
+    <div class="rp-block">
+      <div class="rp-block-head">
+        <span class="rp-block-name">Frequency</span>
+        <div class="rp-block-meta">
+          <span class="rp-block-jump">2 <span class="arrow">→</span> 3</span>
+          <span class="rp-block-uplift">+0.08</span>
+        </div>
+      </div>
+      <p class="rp-block-hint">Confirm this assumption</p>
+      <ul class="rp-block-list">
+        <li>Solo founders encounter the skill-discovery problem (for decks, landing pages, launch assets) on a weekly basis due to their ongoing content creation cadence</li>
+      </ul>
+    </div>
+    <div class="rp-block">
+      <div class="rp-block-head">
+        <span class="rp-block-name">Market Size</span>
+        <div class="rp-block-meta">
+          <span class="rp-block-jump">3 <span class="arrow">→</span> 4</span>
+          <span class="rp-block-uplift">+0.08</span>
+        </div>
+      </div>
+      <p class="rp-block-hint">Confirm this assumption</p>
+      <ul class="rp-block-list">
+        <li>The verified AI skills curation niche (SurfSkills&#39; actual SAM) is large enough within the broader $1.94B AI prompt marketplace to support a $10M+ initial segment revenue target.</li>
+      </ul>
+    </div>
+    <div class="rp-block">
+      <div class="rp-block-head">
+        <span class="rp-block-name">Defensibility</span>
+        <div class="rp-block-meta">
+          <span class="rp-block-jump">3 <span class="arrow">→</span> 4</span>
+          <span class="rp-block-uplift">+0.08</span>
+        </div>
+      </div>
+      <p class="rp-block-hint">Confirm this assumption</p>
+      <ul class="rp-block-list">
+        <li>Incumbent platform owners (Anthropic, OpenAI) will not launch their own verified skill quality layer with security review and live demos before SurfSkills accumulates its flywheel advantage</li>
+      </ul>
+    </div>
+    <div class="rp-block">
+      <div class="rp-block-head">
+        <span class="rp-block-name">Scalability</span>
+        <div class="rp-block-meta">
+          <span class="rp-block-jump">4 <span class="arrow">→</span> 5</span>
+          <span class="rp-block-uplift">+0.04</span>
+        </div>
+      </div>
+      <p class="rp-block-hint">Confirm this assumption</p>
+      <ul class="rp-block-list">
+        <li>Programmatic SEO where every demo doubles as a landing page will generate enough organic distribution to grow the library without paid acquisition, creating a self-reinforcing acquisition mechanism that reduces marginal CAC as the user base grows.</li>
+      </ul>
+    </div>
+    <div class="rp-block">
+      <div class="rp-block-head">
+        <span class="rp-block-name">Incumbent Indifference</span>
+        <div class="rp-block-meta">
+          <span class="rp-block-jump">1 <span class="arrow">→</span> 2</span>
+          <span class="rp-block-uplift">+0.02</span>
+        </div>
+      </div>
+      <p class="rp-block-hint">Confirm this assumption</p>
+      <ul class="rp-block-list">
+        <li>Anthropic will expand its official Skills Marketplace to include before/after output demos and deep security scanning, closing the differentiation gap SurfSkills is targeting</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="section-heading" id="next-steps">Next steps</h2>
+
+  <div class="ns-list">
+    <div class="ns-row">
+      <span class="ns-num">1.</span>
+      <div class="ns-main">
+        <p class="ns-text">Run a 4-week paid pilot or pre-sale: gate the full verified library behind a $20-40/month subscription after free before/after demos, and track conversion from demo to paid among 30+ solo founders building decks, landing pages, and launch assets.</p>
+        <div class="ns-context">
+          <span class="ns-dim">Willingness to Pay</span>
+          <span class="ns-sep">·</span>
+          <span class="ns-jump">3 <span class="arrow">→</span> 4</span>
+        </div>
+      </div>
+      <span class="ns-uplift">+0.12</span>
+    </div>
+    <div class="ns-row">
+      <span class="ns-num">2.</span>
+      <div class="ns-main">
+        <p class="ns-text">Interview 15 solo founders about their content-creation cadence and instrument the pilot to log how often each one searches for or evaluates a new skill over 30 days.</p>
+        <div class="ns-context">
+          <span class="ns-dim">Frequency</span>
+          <span class="ns-sep">·</span>
+          <span class="ns-jump">2 <span class="arrow">→</span> 3</span>
+        </div>
+      </div>
+      <span class="ns-uplift">+0.08</span>
+    </div>
+    <div class="ns-row">
+      <span class="ns-num">3.</span>
+      <div class="ns-main">
+        <p class="ns-text">Build a bottom-up SAM model: estimate the count of solo founders actively using SKILL.md-format tools, multiply by realistic subscription ARPU, and map the path from the beachhead to $10M+ initial-segment revenue.</p>
+        <div class="ns-context">
+          <span class="ns-dim">Market Size</span>
+          <span class="ns-sep">·</span>
+          <span class="ns-jump">3 <span class="arrow">→</span> 4</span>
+        </div>
+      </div>
+      <span class="ns-uplift">+0.08</span>
+    </div>
+    <div class="ns-row">
+      <span class="ns-num">4.</span>
+      <div class="ns-main">
+        <p class="ns-text">Set a 90-day flywheel checkpoint: ship the demo library and usage-data capture, then monitor Anthropic&#39;s and OpenAI&#39;s marketplace roadmaps for any move toward security review or before/after demos before the moat accumulates.</p>
+        <div class="ns-context">
+          <span class="ns-dim">Defensibility</span>
+          <span class="ns-sep">·</span>
+          <span class="ns-jump">3 <span class="arrow">→</span> 4</span>
+        </div>
+      </div>
+      <span class="ns-uplift">+0.08</span>
+    </div>
+    <div class="ns-row">
+      <span class="ns-num">5.</span>
+      <div class="ns-main">
+        <p class="ns-text">Stand up 200+ programmatic SEO demo pages and measure organic ranking and demo-to-signup conversion over 60 days to prove the every-demo-is-a-landing-page acquisition loop works without paid spend.</p>
+        <div class="ns-context">
+          <span class="ns-dim">Scalability</span>
+          <span class="ns-sep">·</span>
+          <span class="ns-jump">4 <span class="arrow">→</span> 5</span>
+        </div>
+      </div>
+      <span class="ns-uplift">+0.04</span>
+    </div>
+  </div>
+
+  <p style="margin-top: 56px; font-size: 11px; color: var(--ink-faint); text-align: center;">
+    Generated by TweakIdea v2.1.1 · Schema v1 · 2026-06-10 08:56 UTC
+  </p>
+
+</main>
+
+<script>
+  {
+    // Wire summary dim-rows → matching <details> in the Dimensions section.
+    const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const nameOf = el => (el.firstChild && el.firstChild.nodeValue || el.textContent).trim();
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const rowTarget = new WeakMap();
+    const targets = new Map();
+    document.querySelectorAll('details.dim-item').forEach(d => {
+      const nameEl = d.querySelector('.dim-row-name');
+      if (!nameEl) return;
+      const name = nameOf(nameEl);
+      targets.set(name, d);
+    });
+
+    document.querySelectorAll('.dim-grid .dim-row').forEach(row => {
+      const nameEl = row.querySelector('.dim-name');
+      if (!nameEl) return;
+      const name = nameOf(nameEl);
+      const target = targets.get(name);
+      if (!target) return;
+      rowTarget.set(row, target);
+      row.setAttribute('role', 'link');
+      row.setAttribute('tabindex', '0');
+      row.setAttribute('aria-label', 'Jump to ' + name + ' details');
+    });
+
+    const jumpTo = row => {
+      const target = rowTarget.get(row);
+      if (!target) return;
+      target.open = true;
+      try { history.replaceState(null, '', '#' + target.id); } catch (_) {}
+      target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      if (reduceMotion) return;
+      target.animate(
+        [{ background: 'var(--blue-bg)' }, { background: 'transparent' }],
+        { duration: 1200, easing: 'ease-out' }
+      );
+    };
+
+    const grid = document.querySelector('.dim-grid');
+    if (grid) {
+      grid.addEventListener('click', e => {
+        const row = e.target.closest('.dim-row');
+        if (row) jumpTo(row);
+      });
+      grid.addEventListener('keydown', e => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const row = e.target.closest('.dim-row');
+        if (!row) return;
+        e.preventDefault();
+        jumpTo(row);
+      });
+    }
+  }
+</script>
+
+</body>
+</html>
