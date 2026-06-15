@@ -24,7 +24,7 @@ const {
          ponytail: cookie-presence is a heuristic, not a validated session;
          upgrade path = SSR the page if the header ever needs exact session. -->
     <script is:inline>
-      if (document.cookie.includes("-auth-token"))
+      if (/-auth-token(\.\d+)?=/.test(document.cookie))
         document.documentElement.classList.add("is-authed");
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
