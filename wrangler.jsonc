@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "surfskills",
+  "name": "surfskills-web",
   "main": "./dist/_worker.js/index.js",
   "compatibility_date": "2026-06-01",
   // nodejs_compat is required by @polar-sh/sdk/webhooks (standardwebhooks → Buffer).
