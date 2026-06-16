@@ -14,9 +14,8 @@ const content = skillDetails[slug!];
 const skill = skills.find((s) => s.slug === slug);
 if (!content || !skill) return Astro.rewrite("/404");
 
-// One URL for every state — the download endpoint re-checks entitlement
-// server-side, so the page itself renders the same for everyone.
-const downloadHref = `/api/skills/${slug}/download`;
+// Free skills open setup instructions; paid skills keep entitlement-gated install.
+const downloadHref = skill.free ? content.github : `/api/skills/${slug}/download`;
 
 const title = `${skill.title} — verified AI skill, shown working | surfskills.surf`;
 ---

@@ -27,13 +27,13 @@ export const detail: SkillContent = {
     },
   },
 
-  worksWith: ["Claude Code", "Codex", "Cursor", "Gemini CLI"],
-  worksWithNote: "or any AI coding assistant",
+  worksWith: ["Claude Code"],
+  worksWithNote: "",
   setup: ["No MCP servers", "No API keys"],
 
   author: {
-    name: "Aleksandr Sarantsev",
-    githubUrl: "https://github.com/eph5xx/tweakidea",
+    name: "eph5xx",
+    githubUrl: "https://github.com/eph5xx",
     repoLabel: "eph5xx/tweakidea",
   },
   github: "https://github.com/eph5xx/tweakidea",
