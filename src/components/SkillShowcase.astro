@@ -2,19 +2,16 @@
 import { skills as allSkills, categories, type Skill } from "@/data/skills";
 import SkillSpotlight from "./SkillSpotlight.astro";
 
-// Home-page "examples" bento. Right now exactly one skill is live — Validate
-// Startup Idea, which gets a large animated scorecard card. Everything else is
-// a "coming soon" tease tile. As more skills ship, demote them out of the
-// coming-soon set (or give them their own live card).
+// Home-page "examples" bento. The first skill with available + video gets the
+// large spotlight card; everything else is a "coming soon" tease tile.
 interface Props {
   heading?: string;
 }
 
 const { heading = "What can you do with it?" } = Astro.props;
 
-const LIVE_SLUG = "validate-startup-idea";
-const live = allSkills.find((s) => s.slug === LIVE_SLUG)!;
-const comingSoon: Skill[] = allSkills.filter((s) => s.slug !== LIVE_SLUG);
+const live = allSkills.find((s) => s.available && s.video);
+const comingSoon: Skill[] = allSkills.filter((s) => s !== live);
 
 // emoji lookup for the coming-soon tiles
 const emojiFor = (cat: string) => categories.find((c) => c.name === cat)?.emoji ?? "✨";
@@ -33,43 +30,49 @@ const emojiFor = (cat: string) => categories.find((c) => c.name === cat)?.emoji 
     </p>
   </div>
 
-  <div class="grid grid-cols-1 gap-5 md:grid-cols-3 md:auto-rows-[minmax(0,1fr)]">
-    <!-- ============ LIVE CARD — Validate Startup Idea ============ -->
-    <SkillSpotlight
-      title="Validate Startup Idea"
-      blurb={live.blurb}
-      video={live.video!}
-      ctaLabel="See it run →"
-      ctaHref="/skills/validate-startup-idea/"
-      class="md:col-span-2 md:row-span-2"
-    />
+  {
+    live ? (
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-3 md:auto-rows-[minmax(0,1fr)]">
+        <SkillSpotlight
+          title={live.title}
+          blurb={live.blurb}
+          video={live.video!}
+          ctaLabel="See it run →"
+          ctaHref={`/skills/${live.slug}/`}
+          class="md:col-span-2 md:row-span-2"
+        />
 
-    <!-- ============ COMING SOON tiles ============ -->
-    {
-      comingSoon.map((s) => (
-        <article class="card card-border border-base-300 bg-base-100/60 shadow-sm grayscale opacity-70 pointer-events-none">
-          <div class="card-body justify-between gap-4 p-6">
-            <div class="flex items-start justify-between gap-3">
-              <span class="text-[22px]" aria-hidden="true">
-                {emojiFor(s.category)}
-              </span>
-              <span class="badge badge-ghost badge-sm gap-1.5 text-base-content/55">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-base-content/40" aria-hidden="true">
-                  <rect x="5" y="11" width="14" height="10" rx="2" />
-                  <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-                </svg>
-                Coming soon
-              </span>
-            </div>
-            <div>
-              <h3 class="font-display text-[19px] leading-snug text-base-content/75">{s.title}</h3>
-              <p class="mt-1 text-[13.5px] leading-[1.4] text-base-content/50">{s.blurb}</p>
-            </div>
-          </div>
-        </article>
-      ))
-    }
-  </div>
+        {
+          comingSoon.map((s) => (
+            <article class="card card-border border-base-300 bg-base-100/60 shadow-sm grayscale opacity-70 pointer-events-none">
+              <div class="card-body justify-between gap-4 p-6">
+                <div class="flex items-start justify-between gap-3">
+                  <span class="text-[22px]" aria-hidden="true">
+                    {emojiFor(s.category)}
+                  </span>
+                  <span class="badge badge-ghost badge-sm gap-1.5 text-base-content/55">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-base-content/40" aria-hidden="true">
+                      <rect x="5" y="11" width="14" height="10" rx="2" />
+                      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                    </svg>
+                    Coming soon
+                  </span>
+                </div>
+                <div>
+                  <h3 class="font-display text-[19px] leading-snug text-base-content/75">{s.title}</h3>
+                  <p class="mt-1 text-[13.5px] leading-[1.4] text-base-content/50">{s.blurb}</p>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    ) : (
+      <p class="py-12 text-center text-[16px] text-base-content/60">
+        New skills land here soon — check back.
+      </p>
+    )
+  }
 
   <div class="mt-10 text-center">
     <a href="/discover" class="btn btn-lg">Browse the full lineup →</a>

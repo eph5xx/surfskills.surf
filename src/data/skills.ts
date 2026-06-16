@@ -154,10 +154,7 @@ export const skills: Skill[] = [
   },
 ];
 
-/** Honest site stats. Counts derive from real data so they can't drift;
- *  ideasEvaluated is a curated estimate owned by the copy. */
+/** Honest site stats. Counts derive from real data so they can't drift. */
 export const stats = {
-  skillsLive: skills.length,
-  toolsSupported: supportedTools.length,
-  ideasEvaluated: 300,
+  skillsLive: skills.filter((s) => s.available).length,
 } as const;

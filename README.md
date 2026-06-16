@@ -5,10 +5,10 @@ site + gated skill downloads.
 
 ## Stack
 
-- **[Astro 5](https://astro.build)** with React islands — marketing pages
-  prerender; auth, billing, and skill pages render on demand.
+- **[Astro 5](https://astro.build)** — marketing pages prerender; auth, billing,
+  and skill pages render on demand (SSR via inline scripts where needed).
 - **Tailwind + DaisyUI** for styling.
-- **Cloudflare** (Pages/Workers) via `@astrojs/cloudflare` — deploy target.
+- **Cloudflare** (Workers) via `@astrojs/cloudflare` — deploy target.
 - **Supabase** — auth.
 - **Polar** — subscriptions and entitlement checks.
 
