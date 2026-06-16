@@ -8,9 +8,9 @@
 // Stays on the page's base-200 sand (NO full-bleed band) so it reads as a
 // distinct block from SkillShowcase below, which uses a full-bleed bg-base-100.
 
-// The AI tools a skill runs in — real supportedTools. Shown as a label-free logo
-// wall, so Claude Code is omitted: its mark is byte-identical to Claude's and would
-// read as a duplicate without text. 12 distinct brand marks → 3×4 mobile / 4×3 desktop.
+// The AI tools shown as a curated logo wall (not per-skill compatibility —
+// that lives on each skill detail page). Claude Code is omitted: its mark is
+// byte-identical to Claude's and would read as a duplicate without text.
 const tools = [
   { name: "Claude", src: "/logos/claude.svg" },
   { name: "ChatGPT", src: "/logos/openai.svg" },

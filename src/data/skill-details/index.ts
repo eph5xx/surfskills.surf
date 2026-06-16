@@ -5,7 +5,3 @@ import { detail as validateStartupIdea } from "./validate-startup-idea/detail";
 export const skillDetails: Record<string, SkillContent> = {
   [validateStartupIdea.slug]: validateStartupIdea,
 };
-
-export function hasDetailPage(slug: string): boolean {
-  return slug in skillDetails;
-}
