@@ -1,8 +1,19 @@
 import type { APIRoute } from "astro";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { NEXT_COOKIE, sanitizeNext } from "@/lib/auth";
+import { captureEvent, identifyPerson } from "@/lib/posthog-server";
 
 export const prerender = false;
+
+async function trackSignIn(locals: App.Locals, method: "magic_link" | "oauth") {
+  const {
+    data: { user },
+  } = await locals.supabase.auth.getUser();
+  if (!user) return;
+  const env = locals.runtime.env;
+  captureEvent(env, user.id, "sign_in_completed", { method });
+  identifyPerson(env, user.id, { email: user.email ?? undefined });
+}
 
 // Magic-link landing. Handles both email-template shapes:
 //  - customized template: ?token_hash=...&type=email (verified here, server-side)
@@ -16,6 +27,7 @@ export const GET: APIRoute = async ({ url, locals, cookies, redirect }) => {
   if (tokenHash && type) {
     const { error } = await locals.supabase.auth.verifyOtp({ token_hash: tokenHash, type });
     if (error) return redirect("/login?error=expired", 303);
+    await trackSignIn(locals, "magic_link");
     return redirect(next, 303);
   }
 
@@ -23,6 +35,7 @@ export const GET: APIRoute = async ({ url, locals, cookies, redirect }) => {
   if (code) {
     const { error } = await locals.supabase.auth.exchangeCodeForSession(code);
     if (error) return redirect("/login?error=expired", 303);
+    await trackSignIn(locals, "magic_link");
     return redirect(next, 303);
   }
 

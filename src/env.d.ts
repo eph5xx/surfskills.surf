@@ -10,6 +10,7 @@ interface Env {
   POLAR_SERVER: 'sandbox' | 'production';
   POLAR_PRODUCT_ID_MONTHLY: string;
   POLAR_PRODUCT_ID_YEARLY: string;
+  POSTHOG_API_KEY: string;
 }
 
 type Runtime = import('@astrojs/cloudflare').Runtime<Env>;
@@ -26,6 +27,8 @@ declare namespace App {
 interface ImportMetaEnv {
   readonly PUBLIC_SUPABASE_URL: string;
   readonly PUBLIC_SUPABASE_PUBLISHABLE_KEY: string;
+  readonly PUBLIC_POSTHOG_KEY: string;
+  readonly PUBLIC_POSTHOG_HOST: string;
 }
 
 interface ImportMeta {

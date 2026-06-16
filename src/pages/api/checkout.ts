@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { sanitizeNext } from "@/lib/auth";
+import { captureEvent } from "@/lib/posthog-server";
 import { polarClient } from "@/lib/polar";
 import { getSubscription, hasActiveSub } from "@/lib/subscription";
 
@@ -28,6 +29,7 @@ export const GET: APIRoute = async ({ url, locals, redirect }) => {
   // Preserve where the buyer was headed (e.g. a skill download) across the
   // Polar round trip — /account offers it back once the sub is active.
   const next = sanitizeNext(url.searchParams.get("next"), "");
+  const plan = url.searchParams.get("plan") === "yearly" ? "yearly" : "monthly";
   const successUrl =
     `${url.origin}/account?checkout_id={CHECKOUT_ID}` +
     (next ? `&next=${encodeURIComponent(next)}` : "");
@@ -41,6 +43,7 @@ export const GET: APIRoute = async ({ url, locals, redirect }) => {
       externalCustomerId: locals.user.id,
       customerEmail: locals.user.email ?? undefined,
     });
+    captureEvent(env, locals.user.id, "checkout_started", { plan, next });
     return redirect(checkout.url, 303);
   } catch {
     return redirect("/account?error=checkout", 303);

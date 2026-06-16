@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { validateEvent, WebhookVerificationError } from "@polar-sh/sdk/webhooks";
 import { createAdminClient } from "@/lib/supabase-admin";
+import { captureEvent, identifyPerson } from "@/lib/posthog-server";
 
 export const prerender = false;
 
@@ -97,6 +98,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
         // Other DB failures → 5xx so Polar retries with backoff.
         return new Response("db write failed", { status: 500 });
       }
+
+      captureEvent(env, userId, "subscription_updated", {
+        polar_event: event.type,
+        status: sub.status,
+        plan,
+        cancel_at_period_end: !!sub.cancelAtPeriodEnd,
+      });
+      identifyPerson(env, userId, {
+        subscription_status: sub.status,
+        ...(plan ? { plan } : {}),
+      });
     }
   }
 
