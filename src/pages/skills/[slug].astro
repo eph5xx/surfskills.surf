@@ -3,8 +3,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SkillPage from "@/components/skill/SkillPage.astro";
+import PostHogIdentify from "@/components/PostHogIdentify.astro";
 import { skills } from "@/data/skills";
 import { skillDetails } from "@/data/skill-details";
+import { getSubscription } from "@/lib/subscription";
 
 // Dynamic route, no getStaticPaths — rendered on demand.
 export const prerender = false;
@@ -17,10 +19,23 @@ if (!content || !skill) return Astro.rewrite("/404");
 // Free skills open setup instructions; paid skills keep entitlement-gated install.
 const downloadHref = skill.free ? content.github : `/api/skills/${slug}/download`;
 
+const user = Astro.locals.user;
+const sub = user ? await getSubscription(Astro.locals) : null;
+
 const title = `${skill.title} — verified AI skill, shown working | surfskills.surf`;
 ---
 
 <BaseLayout title={title} description={content.tagline}>
+  {
+    user && (
+      <PostHogIdentify
+        userId={user.id}
+        email={user.email}
+        plan={sub?.plan ?? null}
+        subscriptionStatus={sub?.status ?? null}
+      />
+    )
+  }
   <div id="top" class="mx-auto max-w-[1200px] px-8">
     <Header />
   </div>

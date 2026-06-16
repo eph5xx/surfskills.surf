@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { skills } from "@/data/skills";
+import { captureEvent } from "@/lib/posthog-server";
 import { getSubscription, hasActiveSub } from "@/lib/subscription";
 
 export const prerender = false;
@@ -27,6 +28,12 @@ export const GET: APIRoute = async ({ params, locals, url, redirect }) => {
     // the file the moment the subscription lands.
     return redirect(`/api/checkout?plan=monthly&next=${encodeURIComponent(url.pathname)}`, 303);
   }
+
+  captureEvent(locals.runtime.env, locals.user.id, "skill_downloaded", {
+    skill_slug: slug,
+    free: skill.free,
+    category: skill.category,
+  });
 
   return new Response(raw, {
     headers: {

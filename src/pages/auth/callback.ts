@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { sanitizeNext } from "@/lib/auth";
+import { captureEvent, identifyPerson } from "@/lib/posthog-server";
 
 export const prerender = false;
 
@@ -13,6 +14,15 @@ export const GET: APIRoute = async ({ url, locals, redirect }) => {
 
   const { error } = await locals.supabase.auth.exchangeCodeForSession(code);
   if (error) return redirect("/login?error=oauth", 303);
+
+  const {
+    data: { user },
+  } = await locals.supabase.auth.getUser();
+  if (user) {
+    const env = locals.runtime.env;
+    captureEvent(env, user.id, "sign_in_completed", { method: "oauth" });
+    identifyPerson(env, user.id, { email: user.email ?? undefined });
+  }
 
   return redirect(next, 303);
 };

@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import PostHogIdentify from "@/components/PostHogIdentify.astro";
 import { sanitizeNext } from "@/lib/auth";
 import { getSubscription, hasActiveSub } from "@/lib/subscription";
 
@@ -39,6 +40,12 @@ const planLabel = sub?.plan === "yearly" ? "Pro Yearly · $60/yr" : "Pro Monthly
 ---
 
 <BaseLayout title="Your account — surfskills.surf" description="Manage your surfskills pass.">
+  <PostHogIdentify
+    userId={user.id}
+    email={user.email}
+    plan={sub?.plan ?? null}
+    subscriptionStatus={sub?.status ?? null}
+  />
   <div class="mx-auto max-w-[1200px] px-8">
     <Header />
 
@@ -175,6 +182,7 @@ const planLabel = sub?.plan === "yearly" ? "Pro Yearly · $60/yr" : "Pro Monthly
       sessionStorage.removeItem(key);
       document.getElementById("finalizing-wait")?.classList.add("hidden");
       document.getElementById("finalizing-timeout")?.classList.remove("hidden");
+      window.posthog?.capture("checkout_finalizing_timeout", { attempts: POLL_LIMIT });
     }
   } else {
     sessionStorage.removeItem(key);

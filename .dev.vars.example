@@ -14,3 +14,6 @@ POLAR_WEBHOOK_SECRET=...
 POLAR_SERVER=sandbox
 POLAR_PRODUCT_ID_MONTHLY=
 POLAR_PRODUCT_ID_YEARLY=
+
+# PostHog → Project Settings → Project API key (phc_…). Same value for client + server.
+POSTHOG_API_KEY=phc_...
