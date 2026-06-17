@@ -37,5 +37,5 @@ export const detail: SkillContent = {
   },
   github: "https://github.com/your-handle/your-repo",
 
-  relatedSlugs: ["validate-startup-idea", "where-to-relocate"],
+  relatedSlugs: ["validate-startup-idea", "hyperframes"],
 };

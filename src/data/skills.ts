@@ -50,21 +50,6 @@ export const categories = [
 export const supportedTools = ["Claude", "ChatGPT", "Cursor", "Lovable", "Gemini", "Claude Code"];
 
 export const skills: Skill[] = [
-  // --- 5 new skill templates. Placeholder copy — edit title/blurb/category/tools
-  //     per skill. Two are `available` (active on the landing + clickable in the
-  //     catalog); three are coming-soon teases. ---
-  {
-    slug: "where-to-relocate",
-    title: "New Skill One",
-    blurb:
-      "Plain input in, a finished deliverable out. Edit this template to describe your skill.",
-    category: "Relocation",
-    tools: ["Claude", "ChatGPT"],
-    free: true,
-    thumbLabel: "Input → outcome",
-    verified: false,
-    available: true,
-  },
   {
     slug: "validate-startup-idea",
     title: "Validate Startup Idea",
@@ -81,6 +66,20 @@ export const skills: Skill[] = [
     available: true,
     video: "/skills/validate-startup-idea-demo.mp4",
   },
+  {
+    slug: "hyperframes",
+    title: "HyperFrames Video Agent",
+    blurb: "Describe a video, get an HTML-native composition rendered to MP4.",
+    category: "Motion",
+    tools: ["Cursor", "Claude Code", "Gemini"],
+    free: true,
+    thumbLabel: "Prompt -> rendered video",
+    verified: true,
+    available: true,
+    video: "/skills/hyperframes-demo.mp4",
+  },
+  // --- Placeholder skill templates. Edit title/blurb/category/tools per skill.
+  //     "New Skill Two" is available; the rest are coming-soon teases. ---
   {
     slug: "design-your-landing",
     title: "New Skill Two",
@@ -128,17 +127,6 @@ export const skills: Skill[] = [
     thumbLabel: "Input → outcome",
     verified: false,
     available: false,
-  },
-  {
-    slug: "hyperframes",
-    title: "HyperFrames Video Agent",
-    blurb: "Describe a video, get an HTML-native composition rendered to MP4.",
-    category: "Motion",
-    tools: ["Cursor", "Claude Code", "Gemini"],
-    free: true,
-    thumbLabel: "Prompt -> rendered video",
-    verified: true,
-    available: true,
   },
 ];
 
