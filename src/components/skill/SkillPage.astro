@@ -107,12 +107,14 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
                 loop
                 playsinline
                 preload="metadata"
-                poster={skill.image}
               >
                 <source src={skill.video} type="video/mp4" />
               </video>
             ) : (
-              <img src={skill.image} alt={skill.imageAlt} class="size-full object-cover" />
+              /* ponytail: no images — text placeholder hero. Add a <video> if you want a demo. */
+              <div class="grid size-full place-items-center bg-[#1c1a28] p-6 text-center text-[13px] font-medium text-base-100/55">
+                {content.tagline}
+              </div>
             )
           }
         </div>
