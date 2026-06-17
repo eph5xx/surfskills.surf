@@ -30,6 +30,7 @@ const tiers = [
     cta: "Get all-access →",
     href: "/api/checkout?plan=monthly",
     featured: true,
+    preview: true,
   },
   {
     name: "Yearly",
@@ -44,6 +45,7 @@ const tiers = [
     cta: "Get a year →",
     href: "/api/checkout?plan=yearly",
     featured: false,
+    preview: true,
   },
 ];
 ---
@@ -56,6 +58,13 @@ const tiers = [
   <div class="mb-[34px] text-center">
     <h1 class="text-[34px]">One pass, every wave</h1>
     <p class="mt-1.5 text-[15px] text-base-content/70">Start free. Upgrade when you're hooked.</p>
+  </div>
+
+  <div role="alert" class="alert mb-[26px] bg-base-100 border border-secondary/30 text-[14px]">
+    <span>
+      <strong>We're not taking payments yet.</strong>
+      These prices are a preview — start free today and you'll be first in line when paid plans open.
+    </span>
   </div>
 
   <!-- The page's one intentional equal-column grid: towers want columns. -->
@@ -71,6 +80,7 @@ const tiers = [
           <div class="card-body p-8">
             <div class="min-h-[148px]">
               {tier.featured && <span class="badge badge-accent mb-3 font-bold">Most popular</span>}
+              {tier.preview && <span class="badge badge-secondary mb-3 ml-2 font-bold">Available soon</span>}
               <h3 class="text-[24px]">{tier.name}</h3>
               <div class="mt-3 flex items-end gap-1.5">
                 <span class="font-display text-[52px] leading-none">{tier.price}</span>
@@ -90,12 +100,16 @@ const tiers = [
               ))}
             </ul>
 
-            <a
-              href={tier.href}
-              class:list={["btn btn-lg btn-block mt-7", tier.featured && "btn-primary"]}
-            >
-              {tier.cta}
-            </a>
+            {tier.preview ? (
+              <span class="btn btn-lg btn-block mt-7 btn-disabled">Available soon</span>
+            ) : (
+              <a
+                href={tier.href}
+                class:list={["btn btn-lg btn-block mt-7", tier.featured && "btn-primary"]}
+              >
+                {tier.cta}
+              </a>
+            )}
           </div>
         </div>
       ))
