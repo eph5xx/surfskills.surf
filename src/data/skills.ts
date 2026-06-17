@@ -43,10 +43,11 @@ export const categories = [
   { name: "Research", emoji: "🔬" },
   { name: "Marketing", emoji: "📣" },
   { name: "Design", emoji: "🎨" },
+  { name: "Motion", emoji: "🎬" },
 ];
 
 /** AI tools every skill is built to run in. */
-export const supportedTools = ["Claude", "ChatGPT", "Cursor", "Lovable", "Gemini"];
+export const supportedTools = ["Claude", "ChatGPT", "Cursor", "Lovable", "Gemini", "Claude Code"];
 
 export const skills: Skill[] = [
   // --- 5 new skill templates. Placeholder copy — edit title/blurb/category/tools
@@ -127,6 +128,17 @@ export const skills: Skill[] = [
     thumbLabel: "Input → outcome",
     verified: false,
     available: false,
+  },
+  {
+    slug: "hyperframes",
+    title: "HyperFrames Video Agent",
+    blurb: "Describe a video, get an HTML-native composition rendered to MP4.",
+    category: "Motion",
+    tools: ["Cursor", "Claude Code", "Gemini"],
+    free: true,
+    thumbLabel: "Prompt -> rendered video",
+    verified: true,
+    available: true,
   },
 ];
 

@@ -10,11 +10,11 @@ import type { SkillContent } from "@/data/skill-details/types";
 interface Props {
   skill: Skill;
   content: SkillContent;
-  /** One URL for every state — the endpoint routes login/checkout/file. */
-  downloadHref: string;
+  /** Install destination for this directory entry (usually source repo). */
+  installHref: string;
 }
 
-const { skill, content, downloadHref } = Astro.props;
+const { skill, content, installHref } = Astro.props;
 const f = content.flow;
 
 // Header icon-tile glyphs (white SVG path on a sienna tile). Add as needed.
@@ -124,7 +124,7 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
       <div class="order-3 lg:hidden">
         <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 p-6 shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
           <a
-            href={downloadHref}
+            href={installHref}
             class="ph-install-cta btn btn-primary btn-lg btn-block gap-2 rounded-[14px] text-[18px] shadow-[0_10px_24px_-10px_var(--color-primary)]"
             data-skill-slug={skill.slug}
             data-skill-free={skill.free ? "1" : "0"}
@@ -133,7 +133,7 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
             <svg viewBox="0 0 24 24" class="size-[19px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
             </svg>
-            {skill.free ? "Install free skill" : "Install skill"}
+            View source repo
           </a>
           <a
             href={content.github}
@@ -320,7 +320,7 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
       <aside class="order-3 hidden flex-col gap-[18px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:flex">
         <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 p-6 shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
           <a
-            href={downloadHref}
+            href={installHref}
             class="ph-install-cta btn btn-primary btn-lg btn-block gap-2 rounded-[14px] text-[18px] shadow-[0_10px_24px_-10px_var(--color-primary)]"
             data-skill-slug={skill.slug}
             data-skill-free={skill.free ? "1" : "0"}
@@ -329,7 +329,7 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
             <svg viewBox="0 0 24 24" class="size-[19px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
             </svg>
-            {skill.free ? "Install free skill" : "Install skill"}
+            View source repo
           </a>
           <a
             href={content.github}
@@ -471,7 +471,7 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
 
   for (const el of document.querySelectorAll(".ph-install-cta")) {
     el.addEventListener("click", () => {
-      window.posthog?.capture("skill_download_clicked", {
+      window.posthog?.capture("skill_repo_clicked", {
         skill_slug: el.dataset.skillSlug,
         free: el.dataset.skillFree === "1",
         category: el.dataset.skillCategory,
