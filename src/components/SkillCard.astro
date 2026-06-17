@@ -17,9 +17,9 @@ const live = skill.available && skill.slug in skillDetails;
   live ? (
     <a
       href={`/skills/${skill.slug}/`}
-      class="card card-border border-base-300 bg-base-100 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+      class="group block transition hover:-translate-y-0.5"
     >
-      <div class="card-body gap-4 p-5">
+      <div class="flex flex-col gap-3">
         <div class="aspect-video w-full overflow-hidden rounded-xl bg-base-200">
           {
             skill.video ? (
@@ -41,14 +41,14 @@ const live = skill.available && skill.slug in skillDetails;
           }
         </div>
         <div class="flex items-center justify-between gap-3">
-          <h3 class="font-display text-[18px] leading-snug">{skill.title}</h3>
+          <h3 class="font-display text-[22px] font-semibold leading-snug text-base-content">{skill.title}</h3>
           <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>
         </div>
       </div>
     </a>
   ) : (
-    <article class="card card-border border-base-300 bg-base-100/70 shadow-sm opacity-80 pointer-events-none">
-      <div class="card-body gap-4 p-5">
+    <article class="block opacity-80 pointer-events-none">
+      <div class="flex flex-col gap-3">
         <div class="aspect-video w-full overflow-hidden rounded-xl bg-base-200">
           {
             skill.video ? (
@@ -70,7 +70,7 @@ const live = skill.available && skill.slug in skillDetails;
           }
         </div>
         <div class="flex items-center justify-between gap-3">
-          <h3 class="font-display text-[18px] leading-snug text-base-content/80">{skill.title}</h3>
+          <h3 class="font-display text-[22px] font-semibold leading-snug text-base-content">{skill.title}</h3>
           <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>
         </div>
       </div>
