@@ -14,14 +14,6 @@ const { heading = "What can you do with it?" } = Astro.props;
 
 const live = allSkills.find((s) => s.available && s.video);
 const rest: Skill[] = allSkills.filter((s) => s !== live);
-
-// Landing-only copy: the coming-soon cards show real names/blurbs here while the
-// Discover catalog keeps the editable "New Skill …" templates. Data stays one source.
-const landingCopy: Record<string, { title: string; blurb: string }> = {
-  "deep-market-research": { title: "Deep Market Research", blurb: "Name a space, get a sourced map: players, gaps, where it's growing." },
-  "cold-email-engine": { title: "Cold Email Engine", blurb: "Your offer and list in, a sequence out that doesn't read like a bot wrote it." },
-  "pitch-deck-narrative": { title: "Pitch Deck Narrative", blurb: "Messy founder brain in, a tight slide-by-slide story arc out — ready to design." },
-};
 ---
 
 <!-- Solid surface band (full-bleed) so the section reads as "inside". -->
@@ -49,7 +41,7 @@ const landingCopy: Record<string, { title: string; blurb: string }> = {
           class="md:col-span-2 md:row-span-2"
         />
 
-        {rest.map((s) => <SkillCard skill={{ ...s, ...landingCopy[s.slug] }} />)}
+        {rest.map((s) => <SkillCard skill={s} />)}
       </div>
     ) : (
       <p class="py-12 text-center text-[16px] text-base-content/60">

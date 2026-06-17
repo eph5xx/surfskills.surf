@@ -78,55 +78,68 @@ export const skills: Skill[] = [
     available: true,
     video: "/skills/hyperframes-demo.mp4",
   },
-  // --- Placeholder skill templates. Edit title/blurb/category/tools per skill.
-  //     "New Skill Two" is available; the rest are coming-soon teases. ---
   {
-    slug: "design-your-landing",
-    title: "New Skill Two",
-    blurb:
-      "Plain input in, a finished deliverable out. Edit this template to describe your skill.",
+    slug: "taste-skill",
+    title: "Taste Skill",
+    blurb: "Open-source design rules that stop AI coding agents from shipping templated, generic frontends.",
     category: "Design",
-    tools: ["Claude", "Cursor", "Lovable"],
-    free: false,
-    thumbLabel: "Input → outcome",
-    verified: false,
+    tools: ["Claude Code", "Cursor", "Gemini"],
+    free: true,
+    thumbLabel: "Brief → polished UI",
+    testedDate: "Jun 2026",
+    verified: true,
     available: true,
   },
   {
-    slug: "deep-market-research",
-    title: "New Skill Three",
-    blurb:
-      "Plain input in, a finished deliverable out. Edit this template to describe your skill.",
-    category: "Research",
-    tools: ["Claude", "ChatGPT", "Gemini"],
-    free: false,
-    thumbLabel: "Input → outcome",
-    verified: false,
-    available: false,
+    "slug": "make-interfaces-feel-better",
+    "title": "Interfaces Feel Better",
+    "blurb": "Paste a UI component, get a Before/After table of design-engineering fixes.",
+    "category": "Design",
+    "tools": [
+      "Claude Code",
+      "Cursor"
+    ],
+    "free": true,
+    "image": "",
+    "imageAlt": "Placeholder: replace with a before/after of this skill's output",
+    "thumbLabel": "Input → outcome",
+    "verified": true,
+    "available": true,
+    "video": "/skills/make-interfaces-feel-better-demo.mp4"
   },
   {
-    slug: "cold-email-engine",
-    title: "New Skill Four",
-    blurb:
-      "Plain input in, a finished deliverable out. Edit this template to describe your skill.",
-    category: "Marketing",
-    tools: ["Claude", "ChatGPT"],
-    free: true,
-    thumbLabel: "Input → outcome",
-    verified: false,
-    available: false,
+    "slug": "understand-anything",
+    "title": "Understand Any Codebase",
+    "blurb": "Unfamiliar repo → an interactive knowledge graph that teaches you how every piece fits.",
+    "category": "Research",
+    "tools": [
+      "Claude Code",
+      "Cursor",
+      "Gemini"
+    ],
+    "free": true,
+    "thumbLabel": "Repo → knowledge graph",
+    "testedDate": "Jun 2026",
+    "verified": true,
+    "available": true,
+    "video": "/skills/understand-anything-demo.mp4"
   },
   {
-    slug: "pitch-deck-narrative",
-    title: "New Skill Five",
-    blurb:
-      "Plain input in, a finished deliverable out. Edit this template to describe your skill.",
-    category: "Startups",
-    tools: ["Claude", "ChatGPT", "Gemini"],
-    free: false,
-    thumbLabel: "Input → outcome",
-    verified: false,
-    available: false,
+    "slug": "gsap-skills",
+    "title": "GSAP Animation Skills",
+    "blurb": "Ask for an animation in plain words, get correct, production-ready GSAP — timelines, ScrollTrigger, and reduced-motion handling, first try.",
+    "category": "Motion",
+    "tools": [
+      "Claude Code",
+      "Cursor",
+      "Gemini"
+    ],
+    "free": true,
+    "thumbLabel": "Prompt → production GSAP",
+    "testedDate": "Jun 2026",
+    "verified": true,
+    "available": true,
+    "video": "/skills/gsap-skills-demo.mp4"
   },
 ];
 

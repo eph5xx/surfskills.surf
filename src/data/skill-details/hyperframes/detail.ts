@@ -41,7 +41,7 @@ export const detail: SkillContent = {
   },
   "github": "https://github.com/heygen-com/hyperframes",
   "relatedSlugs": [
-    "design-your-landing",
+    "gsap-skills",
     "validate-startup-idea"
   ]
 };

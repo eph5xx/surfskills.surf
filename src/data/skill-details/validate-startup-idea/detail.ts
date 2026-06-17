@@ -38,5 +38,5 @@ export const detail: SkillContent = {
   },
   github: "https://github.com/eph5xx/tweakidea",
 
-  relatedSlugs: ["pitch-deck-narrative", "deep-market-research"],
+  relatedSlugs: ["understand-anything", "hyperframes"],
 };
