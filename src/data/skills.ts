@@ -79,18 +79,6 @@ export const skills: Skill[] = [
     video: "/skills/hyperframes-demo.mp4",
   },
   {
-    slug: "taste-skill",
-    title: "Taste Skill",
-    blurb: "Open-source design rules that stop AI coding agents from shipping templated, generic frontends.",
-    category: "Design",
-    tools: ["Claude Code", "Cursor", "Gemini"],
-    free: true,
-    thumbLabel: "Brief → polished UI",
-    testedDate: "Jun 2026",
-    verified: true,
-    available: true,
-  },
-  {
     "slug": "make-interfaces-feel-better",
     "title": "Interfaces Feel Better",
     "blurb": "Paste a UI component, get a Before/After table of design-engineering fixes.",
@@ -140,6 +128,23 @@ export const skills: Skill[] = [
     "verified": true,
     "available": true,
     "video": "/skills/gsap-skills-demo.mp4"
+  },
+  {
+    "slug": "taste-skill",
+    "title": "Taste Skill",
+    "blurb": "A plain UI brief in, a frontend that doesn't look AI-generated out.",
+    "category": "Design",
+    "tools": [
+      "Claude Code",
+      "Cursor",
+      "Gemini",
+      "Lovable"
+    ],
+    "free": true,
+    "thumbLabel": "Input → outcome",
+    "verified": true,
+    "available": true,
+    "video": "/skills/taste-skill-demo.mp4"
   },
 ];
 

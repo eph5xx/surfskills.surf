@@ -1,5 +1,5 @@
 ---
-import { skills, categories, type Skill } from "@/data/skills";
+import { skills, type Skill } from "@/data/skills";
 import { skillDetails } from "@/data/skill-details";
 import type { SkillContent } from "@/data/skill-details/types";
 
@@ -48,7 +48,6 @@ const sp = content.command.indexOf(" ");
 const cmdHead = sp === -1 ? content.command : content.command.slice(0, sp);
 const cmdRest = sp === -1 ? "" : content.command.slice(sp);
 
-const emojiFor = (cat: string) => categories.find((c) => c.name === cat)?.emoji ?? "✨";
 const related = content.relatedSlugs
   .map((s) => skills.find((k) => k.slug === s))
   .filter((s): s is Skill => s !== undefined);
@@ -297,16 +296,30 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
                         hasPage(s) ? "hover:border-primary/40 hover:bg-base-200" : "cursor-default",
                       ]}
                     >
-                      <span class="flex items-center justify-between gap-2">
-                        <span class="text-[18px]" aria-hidden="true">{emojiFor(s.category)}</span>
-                        {!hasPage(s) && (
-                          <span class="badge badge-ghost badge-sm text-base-content/55">Soon</span>
-                        )}
-                      </span>
-                      <b class="mt-2 block font-display text-[15px] font-semibold leading-snug">{s.title}</b>
-                      <span class="mt-1 block text-[12.5px] leading-[1.4] text-base-content/55 line-clamp-2">
-                        {s.blurb}
-                      </span>
+                      <div class="aspect-video w-full overflow-hidden rounded-xl bg-base-200">
+                        {
+                          s.video ? (
+                            <video
+                              class="size-full object-cover"
+                              autoplay
+                              muted
+                              loop
+                              playsinline
+                              preload="metadata"
+                            >
+                              <source src={s.video} type="video/mp4" />
+                            </video>
+                          ) : (
+                            <div class="grid size-full place-items-center px-4 text-center text-[12px] font-medium text-base-content/55">
+                              Demo coming soon
+                            </div>
+                          )
+                        }
+                      </div>
+                      <div class="mt-2.5 flex items-center justify-between gap-2">
+                        <b class="block font-display text-[15px] font-semibold leading-snug">{s.title}</b>
+                        <span class="badge badge-ghost badge-sm text-base-content/60">{s.category}</span>
+                      </div>
                     </Tag>
                   );
                 })}
@@ -427,16 +440,30 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
                         hasPage(s) ? "hover:border-primary/40 hover:bg-base-200" : "cursor-default",
                       ]}
                     >
-                      <span class="flex items-center justify-between gap-2">
-                        <span class="text-[18px]" aria-hidden="true">{emojiFor(s.category)}</span>
-                        {!hasPage(s) && (
-                          <span class="badge badge-ghost badge-sm text-base-content/55">Soon</span>
-                        )}
-                      </span>
-                      <b class="mt-2 block font-display text-[15px] font-semibold leading-snug">{s.title}</b>
-                      <span class="mt-1 block text-[12.5px] leading-[1.4] text-base-content/55 line-clamp-2">
-                        {s.blurb}
-                      </span>
+                      <div class="aspect-video w-full overflow-hidden rounded-xl bg-base-200">
+                        {
+                          s.video ? (
+                            <video
+                              class="size-full object-cover"
+                              autoplay
+                              muted
+                              loop
+                              playsinline
+                              preload="metadata"
+                            >
+                              <source src={s.video} type="video/mp4" />
+                            </video>
+                          ) : (
+                            <div class="grid size-full place-items-center px-4 text-center text-[12px] font-medium text-base-content/55">
+                              Demo coming soon
+                            </div>
+                          )
+                        }
+                      </div>
+                      <div class="mt-2.5 flex items-center justify-between gap-2">
+                        <b class="block font-display text-[15px] font-semibold leading-snug">{s.title}</b>
+                        <span class="badge badge-ghost badge-sm text-base-content/60">{s.category}</span>
+                      </div>
                     </Tag>
                   );
                 })}
