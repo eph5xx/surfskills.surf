@@ -1,0 +1,79 @@
+---
+import type { Skill } from "@/data/skills";
+import { skillDetails } from "@/data/skill-details";
+
+// One catalog card, reused on the landing grid and the Discover catalog.
+// Live + has a detail page → full-color clickable card. Otherwise → greyed
+// "Coming soon" tease (markup lifted from the old SkillShowcase tiles).
+interface Props {
+  skill: Skill;
+}
+
+const { skill } = Astro.props;
+const live = skill.available && skill.slug in skillDetails;
+---
+
+{
+  live ? (
+    <a
+      href={`/skills/${skill.slug}/`}
+      class="card card-border border-base-300 bg-base-100 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+    >
+      <div class="card-body gap-4 p-5">
+        <div class="aspect-video w-full overflow-hidden rounded-xl bg-base-200">
+          {
+            skill.video ? (
+              <video
+                class="size-full object-cover"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+              >
+                <source src={skill.video} type="video/mp4" />
+              </video>
+            ) : (
+              <div class="grid size-full place-items-center px-4 text-center text-[12.5px] font-medium text-base-content/55">
+                Demo coming soon
+              </div>
+            )
+          }
+        </div>
+        <div class="flex items-center justify-between gap-3">
+          <h3 class="font-display text-[18px] leading-snug">{skill.title}</h3>
+          <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>
+        </div>
+      </div>
+    </a>
+  ) : (
+    <article class="card card-border border-base-300 bg-base-100/70 shadow-sm opacity-80 pointer-events-none">
+      <div class="card-body gap-4 p-5">
+        <div class="aspect-video w-full overflow-hidden rounded-xl bg-base-200">
+          {
+            skill.video ? (
+              <video
+                class="size-full object-cover"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+              >
+                <source src={skill.video} type="video/mp4" />
+              </video>
+            ) : (
+              <div class="grid size-full place-items-center px-4 text-center text-[12.5px] font-medium text-base-content/55">
+                Demo coming soon
+              </div>
+            )
+          }
+        </div>
+        <div class="flex items-center justify-between gap-3">
+          <h3 class="font-display text-[18px] leading-snug text-base-content/80">{skill.title}</h3>
+          <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>
+        </div>
+      </div>
+    </article>
+  )
+}
