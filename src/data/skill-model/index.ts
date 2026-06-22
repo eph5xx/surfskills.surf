@@ -77,8 +77,8 @@ export const directoryEntries: DirectoryEntry[] = [
 export const directoryCollections = directoryEntries.map((entry) => entry.collection);
 export const directorySkills = directoryEntries.map((entry) => entry.skill);
 
-export const directorySkillsBySlug: Record<string, DirectorySkill> = Object.fromEntries(
-  directorySkills.map((skill) => [skillSlugFromId(skill.id), skill]),
+export const directorySkillsById: Record<string, DirectorySkill> = Object.fromEntries(
+  directorySkills.map((skill) => [skill.id, skill]),
 );
 
 // Human labels for the SkillKind / SkillAudience / SkillTask enums — used by the

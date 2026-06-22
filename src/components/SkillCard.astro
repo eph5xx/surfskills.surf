@@ -1,6 +1,6 @@
 ---
 import type { Skill } from "@/data/skills";
-import { directorySkillsBySlug } from "@/data/skill-model";
+import { directorySkillsById } from "@/data/skill-model";
 
 // One catalog card, reused on the landing grid and the Discover catalog.
 // Live + has a detail page → full-color clickable card. Otherwise → greyed
@@ -12,13 +12,13 @@ interface Props {
 }
 
 const { skill, hideCategory = false } = Astro.props;
-const live = skill.available && skill.slug in directorySkillsBySlug;
+const live = skill.available && skill.id in directorySkillsById;
 ---
 
 {
   live ? (
     <a
-      href={`/skills/${skill.slug}/`}
+      href={`/s/${skill.id}/`}
       class="group block transition hover:-translate-y-0.5"
     >
       <div class="flex flex-col gap-3">

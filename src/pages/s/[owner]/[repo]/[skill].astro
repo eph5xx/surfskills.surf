@@ -4,14 +4,18 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SkillPage from "@/components/skill/SkillPage.astro";
 import PostHogIdentify from "@/components/PostHogIdentify.astro";
-import { directorySkillsBySlug, directoryCollectionsById } from "@/data/skill-model";
+import { directorySkillsById, directoryCollectionsById } from "@/data/skill-model";
 import { getSubscription } from "@/lib/subscription";
 
-// Dynamic route, no getStaticPaths — rendered on demand.
+// Dynamic route, no getStaticPaths — rendered on demand. Skills live under the /s/ prefix
+// keyed by their full id ("owner/repo/skill", e.g. /s/greensock/gsap-skills/gsap-scrolltrigger).
+// The skill segment may contain a colon (e.g. tweak:evaluate). The 2-segment collection
+// route under /s/ is distinct from this 3-segment skill route.
 export const prerender = false;
 
-const { slug } = Astro.params;
-const skill = slug ? directorySkillsBySlug[slug] : undefined;
+const { owner, repo, skill: skillSeg } = Astro.params;
+const id = owner && repo && skillSeg ? `${owner}/${repo}/${skillSeg}` : undefined;
+const skill = id ? directorySkillsById[id] : undefined;
 const collection = skill ? directoryCollectionsById[skill.collection]?.collection : undefined;
 if (!skill || !collection) return Astro.rewrite("/404");
 

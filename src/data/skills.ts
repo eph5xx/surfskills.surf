@@ -6,6 +6,7 @@ import {
 import { SkillAudience, SkillTask } from "./skill-model/types";
 
 export interface Skill {
+  id: string;
   slug: string;
   title: string;
   blurb: string;
@@ -58,6 +59,7 @@ const mapThumbLabel = (tasks: SkillTask[]): string => {
 export const skills: Skill[] = directoryEntries.map(({ skill }) => {
   const slug = skillSlugFromId(skill.id);
   return {
+    id: skill.id,
     slug,
     title: skill.name,
     blurb: skill.description.short,
