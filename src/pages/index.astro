@@ -6,9 +6,31 @@ import WhatIsIt from "@/components/WhatIsIt.astro";
 import SkillShowcase from "@/components/SkillShowcase.astro";
 import JoinBanner from "@/components/JoinBanner.astro";
 import Footer from "@/components/Footer.astro";
+import { absoluteUrl } from "@/lib/seo";
+
+const title = "AI Skills Directory — Preview & Install Open-Source AI Skills | surfskills.surf";
+const siteUrl = absoluteUrl(Astro.site!, "/");
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "surfskills.surf",
+    url: siteUrl,
+    description:
+      "Curated open-source AI skills directory — preview what each skill does before you install it.",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "surfskills.surf",
+    url: siteUrl,
+    email: "team@surfskills.surf",
+  },
+];
 ---
 
-<BaseLayout>
+<BaseLayout title={title} jsonLd={jsonLd}>
   <div id="top" class="relative isolate mx-auto max-w-[1200px] px-8">
     <div
       class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[min(840px,92vh)] w-screen -translate-x-1/2 overflow-hidden"

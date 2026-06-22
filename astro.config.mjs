@@ -7,6 +7,8 @@ import cloudflare from '@astrojs/cloudflare';
 // rolldown-vite resolver.
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://surfskills.surf',
+  trailingSlash: 'ignore',
   // Output stays 'static': marketing pages prerender; auth/billing/skill pages
   // opt into SSR individually with `export const prerender = false`.
   adapter: cloudflare({

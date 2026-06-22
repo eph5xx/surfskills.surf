@@ -141,3 +141,17 @@ export const directoryCollectionsById: Record<
   {} as Record<string, { collection: Collection; skills: DirectorySkill[] }>,
 );
 
+export const directoryEntryBySkillId: Record<string, DirectoryEntry> = Object.fromEntries(
+  directoryEntries.map((entry) => [entry.skill.id, entry]),
+);
+
+const directorySkillsBySlug = new Map(
+  directorySkills.map((skill) => [skillSlugFromId(skill.id), skill]),
+);
+
+/** Resolve relatedSkillSlugs from a directory entry to live skill records. */
+export const resolveRelatedSkills = (relatedSkillSlugs: string[]): DirectorySkill[] =>
+  relatedSkillSlugs
+    .map((slug) => directorySkillsBySlug.get(slug))
+    .filter((skill): skill is DirectorySkill => skill !== undefined);
+

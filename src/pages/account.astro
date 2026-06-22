@@ -39,7 +39,7 @@ const periodEnd = sub?.current_period_end
 const planLabel = sub?.plan === "yearly" ? "Pro Yearly · $60/yr" : "Pro Monthly · $9/mo";
 ---
 
-<BaseLayout title="Your account — surfskills.surf" description="Manage your surfskills pass.">
+<BaseLayout title="Your account — surfskills.surf" description="Manage your surfskills pass." noindex>
   <PostHogIdentify
     userId={user.id}
     email={user.email}
