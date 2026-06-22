@@ -15,8 +15,6 @@ interface Props {
 
 const { collection, skills, facets } = Astro.props;
 
-const [owner, repo] = collection.id.split("/");
-
 const ghHandle = (() => {
   try {
     return new URL(collection.author.url).pathname.replace(/^\/+/, "") || collection.author.name;
@@ -79,17 +77,12 @@ const facetGroups = [
 ---
 
 <div class="bg-base-200">
-  <main class="mx-auto max-w-[1200px] px-5 pt-8 pb-20 md:px-8">
+  <main class="mx-auto max-w-[1200px] px-5 pt-10 pb-20 md:px-8 md:pt-[42px]">
     <!-- Breadcrumb -->
     <nav class="breadcrumbs mb-7 text-[13.5px] font-semibold">
       <ul>
-        <li><a href="/discover" class="text-secondary hover:text-primary">Skills</a></li>
-        <li>
-          <a href={collection.author.url} target="_blank" rel="noopener" class="text-secondary hover:text-primary"
-            >{owner}</a
-          >
-        </li>
-        <li>{repo}</li>
+        <li><a href="/discover" class="text-secondary hover:text-primary">All skills</a></li>
+        <li>{collection.name}</li>
       </ul>
     </nav>
 

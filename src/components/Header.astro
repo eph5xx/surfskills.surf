@@ -12,7 +12,7 @@ const navLinks = [
 // Server-rendered active state.
 const path = Astro.url.pathname;
 const isCurrent = (href: string) =>
-  path === href || path.startsWith(href + "/") || (href === "/discover" && path.startsWith("/skills"));
+  path === href || path.startsWith(href + "/");
 ---
 
 <header class="sticky top-0 z-50 pt-3">
