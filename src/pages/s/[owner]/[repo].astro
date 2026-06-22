@@ -7,6 +7,7 @@ import PostHogIdentify from "@/components/PostHogIdentify.astro";
 import { skills, type Skill } from "@/data/skills";
 import { directoryCollectionsById } from "@/data/skill-model";
 import { getSubscription } from "@/lib/subscription";
+import { absoluteUrl } from "@/lib/seo";
 
 // Dynamic route, no getStaticPaths — rendered on demand. Collections live under the /s/
 // prefix keyed by their full id ("owner/repo", e.g. /s/greensock/gsap-skills). The /s/
@@ -47,9 +48,23 @@ const sub = user ? await getSubscription(Astro.locals) : null;
 
 const count = rosterSkills.length;
 const title = `${collection.name} — ${count} AI skill${count === 1 ? "" : "s"} by ${collection.author.name} | surfskills.surf`;
+
+const discoverUrl = absoluteUrl(Astro.site!, "/discover");
+const collectionUrl = absoluteUrl(Astro.site!, `/s/${collection.id}`);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "All skills", item: discoverUrl },
+      { "@type": "ListItem", position: 2, name: collection.name, item: collectionUrl },
+    ],
+  },
+];
 ---
 
-<BaseLayout title={title} description={collection.shortDescription}>
+<BaseLayout title={title} description={collection.shortDescription} jsonLd={jsonLd}>
   {
     user && (
       <PostHogIdentify

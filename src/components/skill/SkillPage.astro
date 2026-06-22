@@ -9,9 +9,10 @@ import SkillSidebar from "@/components/skill/SkillSidebar.astro";
 interface Props {
   skill: DirectorySkill;
   collection: Collection;
+  relatedSkills?: DirectorySkill[];
 }
 
-const { skill, collection } = Astro.props;
+const { skill, collection, relatedSkills = [] } = Astro.props;
 
 const slug = skillSlugFromId(skill.id);
 
@@ -168,8 +169,31 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
         </div>
       </div>
 
+      {
+        relatedSkills.length > 0 && (
+          <div class="order-5 lg:col-start-1">
+            <h2 class="font-display text-[24px] tracking-[-0.02em]">Related skills</h2>
+            <ul class="mt-4 divide-y divide-base-content/13 border-t border-base-content/13">
+              {
+                relatedSkills.map((related) => (
+                  <li>
+                    <a
+                      href={`/s/${related.id}`}
+                      class="flex flex-col gap-1 py-4 transition hover:text-primary sm:flex-row sm:items-baseline sm:justify-between"
+                    >
+                      <span class="font-display text-[18px] font-semibold">{related.name}</span>
+                      <span class="text-[14px] text-base-content/65">{related.description.short}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        )
+      }
+
       <!-- Sidebar (desktop) — Collection + Links + Install as one sticky column -->
-      <aside class="order-3 hidden flex-col gap-[18px] lg:sticky lg:top-[92px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:flex lg:self-start">
+      <aside class="order-3 hidden flex-col gap-[18px] lg:sticky lg:top-[92px] lg:col-start-2 lg:row-span-4 lg:row-start-1 lg:flex lg:self-start">
         <SkillSidebar skill={skill} collection={collection} />
       </aside>
     </div>

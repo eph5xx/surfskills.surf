@@ -1,15 +1,22 @@
 ---
 import "@/styles/globals.css";
 import PostHog from "@/components/PostHog.astro";
+import { absoluteUrl } from "@/lib/seo";
 
 interface Props {
   title?: string;
   description?: string;
+  canonical?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
 }
 
 const {
-  title = "surfskills.surf — Bring the mess. Catch the finished thing.",
+  title = "AI Skills Directory — Preview & Install Open-Source AI Skills | surfskills.surf",
   description = "Curated AI skills you install in one click and run in your own AI — Claude, ChatGPT, Cursor and friends. Bring the messy input, take home the finished thing. No code needed.",
+  canonical = absoluteUrl(Astro.site!, Astro.url.pathname),
+  noindex = false,
+  jsonLd = [],
 } = Astro.props;
 ---
 
@@ -21,6 +28,13 @@ const {
     <link rel="icon" type="image/png" href="/favicon.png" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    {
+      jsonLd.map((schema) => (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+      ))
+    }
     <!-- Pre-paint auth check: pick the header CTA before first paint, no flash.
          ponytail: cookie-presence is a heuristic, not a validated session;
          upgrade path = SSR the page if the header ever needs exact session. -->

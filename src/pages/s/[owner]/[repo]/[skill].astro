@@ -4,8 +4,9 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SkillPage from "@/components/skill/SkillPage.astro";
 import PostHogIdentify from "@/components/PostHogIdentify.astro";
-import { directorySkillsById, directoryCollectionsById } from "@/data/skill-model";
+import { directorySkillsById, directoryCollectionsById, directoryEntryBySkillId, resolveRelatedSkills } from "@/data/skill-model";
 import { getSubscription } from "@/lib/subscription";
+import { absoluteUrl } from "@/lib/seo";
 
 // Dynamic route, no getStaticPaths — rendered on demand. Skills live under the /s/ prefix
 // keyed by their full id ("owner/repo/skill", e.g. /s/greensock/gsap-skills/gsap-scrolltrigger).
@@ -23,9 +24,41 @@ const user = Astro.locals.user;
 const sub = user ? await getSubscription(Astro.locals) : null;
 
 const title = `${skill.name} — verified AI skill, shown working | surfskills.surf`;
+
+const entry = directoryEntryBySkillId[skill.id];
+const relatedSkills = entry ? resolveRelatedSkills(entry.relatedSkillSlugs) : [];
+
+const skillUrl = absoluteUrl(Astro.site!, `/s/${skill.id}`);
+const discoverUrl = absoluteUrl(Astro.site!, "/discover");
+const collectionUrl = absoluteUrl(Astro.site!, `/s/${collection.id}`);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: skill.name,
+    description: skill.description.short,
+    url: skillUrl,
+    applicationCategory: "DeveloperApplication",
+    author: {
+      "@type": "Person",
+      name: collection.author.name,
+      url: collection.author.url,
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "All skills", item: discoverUrl },
+      { "@type": "ListItem", position: 2, name: collection.name, item: collectionUrl },
+      { "@type": "ListItem", position: 3, name: skill.name, item: skillUrl },
+    ],
+  },
+];
 ---
 
-<BaseLayout title={title} description={skill.description.short}>
+<BaseLayout title={title} description={skill.description.short} jsonLd={jsonLd}>
   {
     user && (
       <PostHogIdentify
@@ -39,6 +72,6 @@ const title = `${skill.name} — verified AI skill, shown working | surfskills.s
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
   </div>
-  <SkillPage skill={skill} collection={collection} />
+  <SkillPage skill={skill} collection={collection} relatedSkills={relatedSkills} />
   <Footer />
 </BaseLayout>

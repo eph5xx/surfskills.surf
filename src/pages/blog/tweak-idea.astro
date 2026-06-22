@@ -3,6 +3,31 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { author } from "@/data/skills";
+import { absoluteUrl } from "@/lib/seo";
+
+const headline = "Tweak Idea: score a startup idea across 14 dimensions";
+const articleUrl = absoluteUrl(Astro.site!, "/blog/tweak-idea");
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline,
+    description:
+      "Tweak Idea is an open-source Claude Code skillset that evaluates a startup idea across 14 weighted dimensions and returns a scored report with ranked next steps.",
+    datePublished: "2026-06-01",
+    author: {
+      "@type": "Person",
+      name: author.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "surfskills.surf",
+      url: absoluteUrl(Astro.site!, "/"),
+    },
+    mainEntityOfPage: articleUrl,
+  },
+];
 
 const dimensions = [
   "Pain intensity",
@@ -56,6 +81,7 @@ const commands = [
 <BaseLayout
   title="Tweak Idea — score a startup idea across 14 dimensions | surfskills.surf"
   description="Tweak Idea is an open-source Claude Code skillset that evaluates a startup idea across 14 weighted dimensions and returns a scored report with ranked next steps."
+  jsonLd={jsonLd}
 >
   <div id="top" class="mx-auto max-w-[1200px] px-8">
     <Header />
