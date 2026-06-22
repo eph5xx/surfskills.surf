@@ -4,8 +4,8 @@ import { skillDetails } from "@/data/skill-details";
 import type { SkillContent } from "@/data/skill-details/types";
 
 // Reusable, data-driven skill listing template (ported from the design handoff
-// V3 layout). Left column: identity → demo → how-it-works. Right column: a
-// sticky install rail with action, compatibility, author, and similar skills.
+// V3 layout). Left column: identity -> demo -> how-it-works. Right column: a
+// sticky install rail with action, setup, author, and similar skills.
 // To add a skill: add a catalog entry + a SkillContent module — no edits here.
 interface Props {
   skill: Skill;
@@ -22,19 +22,6 @@ const GLYPHS: Record<string, string> = {
   bars: '<rect x="3" y="13" width="4.4" height="8" rx="1.4"/><rect x="9.8" y="8" width="4.4" height="13" rx="1.4"/><rect x="16.6" y="3.5" width="4.4" height="17.5" rx="1.4"/>',
 };
 const glyph = GLYPHS[content.glyph ?? "bars"] ?? GLYPHS.bars;
-
-// Real brand logos from /public/logos (same assets as WhatIsIt.astro). Names
-// without a logo fall back to a first-letter monogram below.
-const TOOL_LOGOS: Record<string, string> = {
-  "Claude Code": "/logos/claude-code.svg",
-  Claude: "/logos/claude.svg",
-  Codex: "/logos/openai.svg",
-  ChatGPT: "/logos/openai.svg",
-  Cursor: "/logos/cursor.svg",
-  "Gemini CLI": "/logos/gemini.svg",
-  Gemini: "/logos/gemini.svg",
-  Lovable: "/logos/lovable.svg",
-};
 
 const initials = content.author.name
   .split(/\s+/)
@@ -213,50 +200,39 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
       <!-- Info + similar skills (mobile only) -->
       <div class="order-5 flex flex-col gap-[18px] lg:hidden">
         <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 px-6 py-[22px] shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
-          <!-- Works with -->
-          <div>
-            <div class="text-[14px] font-semibold text-base-content/55">Works with</div>
-            <div class="mt-3 flex flex-col gap-[11px]">
-              {
-                content.worksWith.map((t) => {
-                  const logo = TOOL_LOGOS[t];
-                  return (
-                    <span class="flex items-center gap-2.5 text-[15px] font-medium">
-                      <span class="grid size-6 shrink-0 place-items-center rounded-md border border-base-300 bg-base-100">
-                        {logo ? (
-                          <img src={logo} alt="" loading="lazy" class="h-3.5 w-auto" />
-                        ) : (
-                          <span class="font-mono text-[11px] font-bold text-base-content/70" aria-hidden="true">
-                            {t[0]}
-                          </span>
-                        )}
-                      </span>
-                      {t}
-                    </span>
-                  );
-                })
-              }
-              {content.worksWithNote && (
-                <span class="text-[13.5px] text-base-content/55">{content.worksWithNote}</span>
-              )}
-            </div>
-          </div>
-
           <!-- Setup -->
-          <div class="mt-[18px] border-t border-base-content/13 pt-[18px]">
-            <div class="text-[14px] font-semibold text-base-content/55">Setup</div>
-            <div class="mt-3 flex flex-wrap gap-x-4 gap-y-[7px]">
-              {
-                content.setup.map((n) => (
-                  <span class="flex items-center gap-1.5 text-[13.5px] text-base-content/55">
-                    <svg class="size-3 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                    {n}
-                  </span>
-                ))
-              }
+          <div>
+            <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">Install</div>
+            <div class="mt-3 flex items-start gap-2 rounded-xl border border-base-300 bg-base-200/50 px-3.5 py-3">
+              <code class="min-w-0 flex-1 font-mono text-[12.5px] leading-[1.55] [overflow-wrap:anywhere] text-base-content/65">{content.installCommand}</code>
+              <button
+                type="button"
+                data-copy-cmd
+                data-copy={content.installCommand}
+                aria-label="Copy install command"
+                class="swap swap-rotate mt-0.5 shrink-0 text-base-content/45 transition-colors hover:text-primary"
+              >
+                <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2" />
+                  <path d="M5 15V5a2 2 0 0 1 2-2h10" />
+                </svg>
+                <svg class="swap-on size-[15px] text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+              </button>
             </div>
+            <button
+              type="button"
+              data-paste-cta
+              data-copy={content.installCommand}
+              class="btn btn-primary mt-3 h-auto min-h-0 w-full gap-2 rounded-[14px] py-3.5 text-[16px] font-semibold normal-case shadow-[0_10px_24px_-10px_var(--color-primary)]"
+            >
+              <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
+              </svg>
+              <span data-paste-label>Paste into your agent</span>
+            </button>
+            <p class="mt-2.5 text-center text-[12px] text-base-content/45">Works in Claude, Cursor, Codex &amp; more</p>
           </div>
 
           <!-- Author -->
@@ -330,7 +306,7 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
       </div>
 
       <!-- Sidebar (desktop) — install + info + similar as one column -->
-      <aside class="order-3 hidden flex-col gap-[18px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:flex">
+      <aside class="order-3 hidden flex-col gap-[18px] lg:sticky lg:top-[92px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:flex lg:self-start">
         <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 p-6 shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
           <a
             href={installHref}
@@ -358,50 +334,39 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
         </div>
 
         <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 px-6 py-[22px] shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
-          <!-- Works with -->
-          <div>
-            <div class="text-[14px] font-semibold text-base-content/55">Works with</div>
-            <div class="mt-3 flex flex-col gap-[11px]">
-              {
-                content.worksWith.map((t) => {
-                  const logo = TOOL_LOGOS[t];
-                  return (
-                    <span class="flex items-center gap-2.5 text-[15px] font-medium">
-                      <span class="grid size-6 shrink-0 place-items-center rounded-md border border-base-300 bg-base-100">
-                        {logo ? (
-                          <img src={logo} alt="" loading="lazy" class="h-3.5 w-auto" />
-                        ) : (
-                          <span class="font-mono text-[11px] font-bold text-base-content/70" aria-hidden="true">
-                            {t[0]}
-                          </span>
-                        )}
-                      </span>
-                      {t}
-                    </span>
-                  );
-                })
-              }
-              {content.worksWithNote && (
-                <span class="text-[13.5px] text-base-content/55">{content.worksWithNote}</span>
-              )}
-            </div>
-          </div>
-
           <!-- Setup -->
-          <div class="mt-[18px] border-t border-base-content/13 pt-[18px]">
-            <div class="text-[14px] font-semibold text-base-content/55">Setup</div>
-            <div class="mt-3 flex flex-wrap gap-x-4 gap-y-[7px]">
-              {
-                content.setup.map((n) => (
-                  <span class="flex items-center gap-1.5 text-[13.5px] text-base-content/55">
-                    <svg class="size-3 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                    {n}
-                  </span>
-                ))
-              }
+          <div>
+            <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">Install</div>
+            <div class="mt-3 flex items-start gap-2 rounded-xl border border-base-300 bg-base-200/50 px-3.5 py-3">
+              <code class="min-w-0 flex-1 font-mono text-[12.5px] leading-[1.55] [overflow-wrap:anywhere] text-base-content/65">{content.installCommand}</code>
+              <button
+                type="button"
+                data-copy-cmd
+                data-copy={content.installCommand}
+                aria-label="Copy install command"
+                class="swap swap-rotate mt-0.5 shrink-0 text-base-content/45 transition-colors hover:text-primary"
+              >
+                <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2" />
+                  <path d="M5 15V5a2 2 0 0 1 2-2h10" />
+                </svg>
+                <svg class="swap-on size-[15px] text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+              </button>
             </div>
+            <button
+              type="button"
+              data-paste-cta
+              data-copy={content.installCommand}
+              class="btn btn-primary mt-3 h-auto min-h-0 w-full gap-2 rounded-[14px] py-3.5 text-[16px] font-semibold normal-case shadow-[0_10px_24px_-10px_var(--color-primary)]"
+            >
+              <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
+              </svg>
+              <span data-paste-label>Paste into your agent</span>
+            </button>
+            <p class="mt-2.5 text-center text-[12px] text-base-content/45">Works in Claude, Cursor, Codex &amp; more</p>
           </div>
 
           <!-- Author -->
@@ -492,6 +457,30 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
       window.clearTimeout(Number(btn.dataset.copyTimer));
       btn.dataset.copyTimer = String(
         window.setTimeout(() => btn.classList.remove("swap-active"), 1500),
+      );
+    });
+  }
+
+  // "Paste into your agent" — copies the full install command, then flips the
+  // label to a confirmation for 1.5s (no navigation).
+  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-paste-cta]")) {
+    btn.addEventListener("click", async () => {
+      const text = btn.getAttribute("data-copy");
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        return;
+      }
+      const label = btn.querySelector<HTMLElement>("[data-paste-label]");
+      if (!label) return;
+      if (!btn.dataset.pasteLabel) btn.dataset.pasteLabel = label.textContent ?? "";
+      label.textContent = "Copied to clipboard";
+      window.clearTimeout(Number(btn.dataset.pasteTimer));
+      btn.dataset.pasteTimer = String(
+        window.setTimeout(() => {
+          label.textContent = btn.dataset.pasteLabel ?? "";
+        }, 1500),
       );
     });
   }
