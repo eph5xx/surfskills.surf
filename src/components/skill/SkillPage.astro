@@ -1,11 +1,6 @@
 ---
 import type { Collection, DirectorySkill } from "@/data/skill-model/types";
-import {
-  skillSlugFromId,
-  KIND_LABELS,
-  AUDIENCE_LABELS,
-  TASK_LABELS,
-} from "@/data/skill-model";
+import { skillSlugFromId } from "@/data/skill-model";
 import SkillSidebar from "@/components/skill/SkillSidebar.astro";
 
 // Reusable, data-driven skill listing template. Left column: identity -> demo ->
@@ -21,10 +16,11 @@ const { skill, collection } = Astro.props;
 const slug = skillSlugFromId(skill.id);
 
 // The three "How it works" beats — input / process / output from the skill model.
+// The friendly label is the step heading; the jargon (Input/Process/Output) is dropped.
 const flow = {
-  write: { label: "You write", head: "Input", body: skill.description.input },
-  between: { label: "It works", head: "Process", body: skill.description.process },
-  get: { label: "You get", head: "Output", body: skill.description.output },
+  write: { label: "You write", body: skill.description.input },
+  between: { label: "It works", body: skill.description.process },
+  get: { label: "You get", body: skill.description.output },
 };
 
 // Header icon-tile glyph (white SVG path on a sienna tile).
@@ -36,18 +32,6 @@ const sp = skill.example.indexOf(" ");
 const cmdHead = sp === -1 ? skill.example : skill.example.slice(0, sp);
 const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
 
-// Outbound deep-link host labels for the Details section.
-const hostLabel = (href: string) => {
-  try {
-    return new URL(href).hostname.replace(/^www\./, "");
-  } catch {
-    return href;
-  }
-};
-
-const kindLabel = KIND_LABELS[skill.kind];
-const audienceLabels = skill.audiences.map((a) => AUDIENCE_LABELS[a]);
-const taskLabels = skill.tasks.map((t) => TASK_LABELS[t]);
 ---
 
 <div class="bg-base-200">
@@ -133,13 +117,12 @@ const taskLabels = skill.tasks.map((t) => TASK_LABELS[t]);
         <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
           <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">01</div>
           <div>
-            <div class="text-[13.5px] font-semibold text-primary">{flow.write.label}</div>
-            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{flow.write.head}</h3>
+            <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.write.label}</h3>
             <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.write.body}</p>
 
             <!-- Command terminal — full width, copy button lives in the title bar -->
             <div class="mt-4 overflow-hidden rounded-xl border border-white/[0.06] bg-[#232132]">
-              <div class="flex items-center gap-1.5 border-b border-white/[0.06] px-4 py-3">
+              <div class="flex items-center gap-2 border-b border-white/[0.06] px-5 py-3">
                 <span class="size-2.5 rounded-full" style="background:#e06c5e"></span>
                 <span class="size-2.5 rounded-full" style="background:#f2b134"></span>
                 <span class="size-2.5 rounded-full" style="background:#5bbd7a"></span>
@@ -159,7 +142,7 @@ const taskLabels = skill.tasks.map((t) => TASK_LABELS[t]);
                   </svg>
                 </button>
               </div>
-              <code class="block px-5 py-4 font-mono text-[14px] leading-[1.6] break-words whitespace-pre-wrap text-[#e9e6f2]">
+              <code class="block px-5 py-4 font-mono text-[13.5px] leading-[1.6] break-words whitespace-pre-wrap text-[#e9e6f2]">
                 <span class="text-primary">{cmdHead}</span><span class="text-accent">{cmdRest}</span>
               </code>
             </div>
@@ -170,8 +153,7 @@ const taskLabels = skill.tasks.map((t) => TASK_LABELS[t]);
         <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
           <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">02</div>
           <div>
-            <div class="text-[13.5px] font-semibold text-primary">{flow.between.label}</div>
-            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{flow.between.head}</h3>
+            <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.between.label}</h3>
             <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.between.body}</p>
           </div>
         </div>
@@ -180,73 +162,9 @@ const taskLabels = skill.tasks.map((t) => TASK_LABELS[t]);
         <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
           <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">03</div>
           <div>
-            <div class="text-[13.5px] font-semibold text-primary">{flow.get.label}</div>
-            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{flow.get.head}</h3>
+            <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.get.label}</h3>
             <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.get.body}</p>
           </div>
-        </div>
-      </div>
-
-      <!-- Details — the skill's classification + outbound deep links -->
-      <div class="order-5 lg:col-start-1">
-        <h2 class="font-display text-[24px] tracking-[-0.02em]">Details</h2>
-        <div class="mt-5 flex flex-col gap-5 border-t border-base-content/13 pt-6">
-          <!-- Kind -->
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="mr-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">Kind</span>
-            <span class="rounded-full bg-base-100 px-3.5 py-1.5 text-[13px] font-semibold text-base-content ring-1 ring-base-content/13">{kindLabel}</span>
-          </div>
-
-          {
-            audienceLabels.length > 0 && (
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="mr-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">For</span>
-                {audienceLabels.map((a) => (
-                  <span class="rounded-full bg-accent px-3.5 py-1.5 text-[13px] font-semibold text-accent-content">{a}</span>
-                ))}
-              </div>
-            )
-          }
-
-          {
-            taskLabels.length > 0 && (
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="mr-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">Tasks</span>
-                {taskLabels.map((t) => (
-                  <span class="rounded-full bg-secondary px-3.5 py-1.5 text-[13px] font-semibold text-secondary-content">{t}</span>
-                ))}
-              </div>
-            )
-          }
-
-          {
-            (skill.externalLinks.length > 0 || skill.referenceFile) && (
-              <div class="flex flex-col divide-y divide-base-content/10 border-t border-base-content/13 pt-2">
-                {skill.externalLinks.map((href) => (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener"
-                    class="group flex items-center justify-between gap-3 py-2.5 text-[14.5px] font-medium hover:text-primary"
-                  >
-                    <span class="text-base-content/85 group-hover:text-primary">{hostLabel(href)}</span>
-                    <span class="text-base-content/30 transition group-hover:text-primary">↗</span>
-                  </a>
-                ))}
-                {skill.referenceFile && (
-                  <a
-                    href={skill.referenceFile}
-                    target="_blank"
-                    rel="noopener"
-                    class="group flex items-center justify-between gap-3 py-2.5 text-[14.5px] font-medium hover:text-primary"
-                  >
-                    <span class="text-base-content/85 group-hover:text-primary">View source file</span>
-                    <span class="text-base-content/30 transition group-hover:text-primary">↗</span>
-                  </a>
-                )}
-              </div>
-            )
-          }
         </div>
       </div>
 

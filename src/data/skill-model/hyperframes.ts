@@ -38,11 +38,11 @@ export const skill: DirectorySkill = {
     short:
       "Describe the video you want and HyperFrames teaches your coding agent to compose it in HTML/CSS/JS. It renders a deterministic MP4, the same every time.",
     input:
-      "Run /hyperframes or describe the video in plain language - e.g. a 10-second product intro with a fade-in title, background video, and subtle background music.",
+      "Run /hyperframes or describe the video you want in plain language.",
     process:
-      "The read-first skill routes the intent to the right workflow, scaffolds a project, writes a seekable HTML composition (timed `clip` tracks + a paused GSAP timeline, fully deterministic), then previews and renders frame-by-frame in headless Chrome through FFmpeg.",
+      "It picks the right workflow, scaffolds the project, and writes a deterministic HTML composition, then renders it frame-by-frame to MP4.",
     output:
-      "The demo produced a 1920x1080, 10-second product intro - background video under a readability overlay, breathing accent glows, a staged title reveal, and a fade-to-black resolve - rendered to a ~1.6 MB H.264 MP4 (300 frames). Same input renders the same video, every time.",
+      "A polished MP4 — e.g. a 1920×1080, 10-second product intro. Same input, same video, every time.",
   },
   example:
     '/hyperframes "Create a 10-second product intro with a fade-in title, a background video, and subtle background music"',

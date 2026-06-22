@@ -35,11 +35,11 @@ export const skill: DirectorySkill = {
     short:
       "14 independent evaluators score your pitch, each doing its own web research. An honest scorecard tells you GO, PIVOT, or STOP.",
     input:
-      "Describe the problem and the solution. Point it at a file, or run it bare to be interviewed.",
+      "Describe the problem and solution, point it at a file, or run it bare to be interviewed.",
     process:
-      "It extracts ~12 hidden assumptions for you to confirm, then asks 5 founder-market-fit questions - each backed by its own live web research.",
+      "It surfaces your hidden assumptions to confirm, then runs 14 evaluators — each backed by its own live web research.",
     output:
-      "A shareable HTML or PDF scorecard: 14 independent dimension scores, the evidence behind each, and a single clear verdict.",
+      "A shareable scorecard: 14 dimension scores, the evidence behind each, and one clear verdict — GO, PIVOT, or STOP.",
   },
   example: '/tweak:evaluate "An app that lets restaurants sell unsold food"',
   installCommand:

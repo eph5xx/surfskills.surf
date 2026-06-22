@@ -47,11 +47,11 @@ export const skill: DirectorySkill = {
     short:
       "The official GreenSock skill for scroll-driven motion - pinning, scrub, and batched entrances. ScrollTrigger written the way it's actually meant to be.",
     input:
-      "Describe scroll-driven animation - parallax, pinned sections, scroll-into-view entrances. Run /gsap-scrolltrigger or ask in plain language.",
+      "Run /gsap-scrolltrigger or describe the scroll motion you want — parallax, pinned sections, scroll-in entrances.",
     process:
-      "Registers ScrollTrigger, configures trigger/start/end and pinning, batches grouped entrances - not the broken scroll-animation patterns models guess.",
+      "It wires up ScrollTrigger the right way — triggers, pinning, batched entrances — not the broken patterns models guess.",
     output:
-      "A launch hero: word-by-word headline stagger, then three stat counters counting up via ScrollTrigger.batch() as they scroll in - with reduced-motion handling.",
+      "Production-ready scroll animation, like a hero with a staggered headline and counting stats, with reduced-motion handling.",
   },
   example:
     '/gsap-scrolltrigger "Build a HeroSection with a scroll-triggered stagger entrance"',
