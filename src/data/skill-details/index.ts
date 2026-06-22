@@ -1,17 +1,44 @@
+import { directoryEntries, skillSlugFromId } from "../skill-model";
 import type { SkillContent } from "./types";
-import { detail as validateStartupIdea } from "./validate-startup-idea/detail";
-import { detail as hyperframes } from "./hyperframes/detail";
-import { detail as makeInterfacesFeelBetter } from "./make-interfaces-feel-better/detail";
-import { detail as understandAnything } from "./understand-anything/detail";
-import { detail as gsapSkills } from "./gsap-skills/detail";
-import { detail as tasteSkill } from "./taste-skill/detail";
 
-/** Registry of skills that have a full detail page at /skills/<slug>. */
-export const skillDetails: Record<string, SkillContent> = {
-  [validateStartupIdea.slug]: validateStartupIdea,
-  [hyperframes.slug]: hyperframes,
-  [makeInterfacesFeelBetter.slug]: makeInterfacesFeelBetter,
-  [understandAnything.slug]: understandAnything,
-  [gsapSkills.slug]: gsapSkills,
-  [tasteSkill.slug]: tasteSkill,
+const toSkillContent = (entry: (typeof directoryEntries)[number]): SkillContent => {
+  const slug = skillSlugFromId(entry.skill.id);
+  return {
+    slug,
+    tagline: entry.skill.description.short,
+    glyph: "bars",
+    command: entry.skill.example,
+    flow: {
+      write: {
+        label: "You write",
+        head: "Input",
+        body: entry.skill.description.input,
+      },
+      between: {
+        label: "It works",
+        head: "Process",
+        body: entry.skill.description.process,
+      },
+      get: {
+        label: "You get",
+        head: "Output",
+        body: entry.skill.description.output,
+      },
+    },
+    installCommand: entry.skill.installCommand ?? entry.collection.installCommand,
+    author: {
+      name: entry.collection.author.name,
+      githubUrl: entry.collection.author.url,
+      repoLabel: entry.collection.id,
+    },
+    github: entry.collection.repositoryURL,
+    relatedSlugs: entry.relatedSkillSlugs,
+  };
 };
+
+export const skillDetails: Record<string, SkillContent> = Object.fromEntries(
+  directoryEntries.map((entry) => {
+    const content = toSkillContent(entry);
+    return [content.slug, content];
+  }),
+);
