@@ -3,49 +3,16 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import PostHogIdentify from "@/components/PostHogIdentify.astro";
-import { sanitizeNext } from "@/lib/auth";
-import { getSubscription, hasActiveSub } from "@/lib/subscription";
 
 export const prerender = false;
 
 if (!Astro.locals.user) return Astro.redirect("/login?next=%2Faccount", 303);
 
 const user = Astro.locals.user;
-const sub = await getSubscription(Astro.locals);
-const active = hasActiveSub(sub);
-
-// A download intent carried through checkout — offer the file front and
-// center once the subscription is live.
-const next = sanitizeNext(Astro.url.searchParams.get("next"), "");
-const pendingDownload = active && next.startsWith("/api/skills/") ? next : null;
-
-// Arriving from Polar checkout before the webhook landed — poll by reload.
-const finalizing = !!Astro.url.searchParams.get("checkout_id") && !active;
-const error = Astro.url.searchParams.get("error");
-
-const errorCopy: Record<string, string> = {
-  checkout: "Couldn't start checkout. Try again in a moment.",
-  portal: "Couldn't open the billing portal. If you haven't subscribed yet, there's nothing to manage.",
-};
-
-const periodEnd = sub?.current_period_end
-  ? new Date(sub.current_period_end).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })
-  : null;
-
-const planLabel = sub?.plan === "yearly" ? "Pro Yearly · $60/yr" : "Pro Monthly · $9/mo";
 ---
 
-<BaseLayout title="Your account — surfskills.surf" description="Manage your surfskills pass." noindex>
-  <PostHogIdentify
-    userId={user.id}
-    email={user.email}
-    plan={sub?.plan ?? null}
-    subscriptionStatus={sub?.status ?? null}
-  />
+<BaseLayout title="Your account — surfskills.surf" description="Manage your surfskills account." noindex>
+  <PostHogIdentify userId={user.id} email={user.email} />
   <div class="mx-auto max-w-[1200px] px-8">
     <Header />
 
@@ -54,100 +21,15 @@ const planLabel = sub?.plan === "yearly" ? "Pro Yearly · $60/yr" : "Pro Monthly
         <h1 class="text-[34px]">Your account</h1>
         <p class="mt-1.5 text-[15px] text-base-content/70">{user.email ?? "Signed in"}</p>
 
-        {
-          error && (
-            <div role="alert" class="alert alert-error alert-soft mt-5 text-[14px] font-semibold">
-              <span>{errorCopy[error] ?? "Something went sideways. Try again."}</span>
-            </div>
-          )
-        }
-
         <div class="card mt-7 bg-base-100 shadow-md">
           <div class="card-body p-7 md:p-8">
-          {
-            finalizing ? (
-              <div id="finalizing" class="text-center">
-                <span class="loading loading-spinner loading-lg text-primary" />
-                <h2 class="mt-3 text-[22px]">Paddling out…</h2>
-                <p id="finalizing-wait" class="mt-2 text-[14.5px] leading-[1.6] text-base-content/70">
-                  Payment received — your pass is being activated. This page
-                  refreshes itself; it usually takes a few seconds.
-                </p>
-                <div id="finalizing-timeout" class="hidden">
-                  <p class="mt-2 text-[14.5px] leading-[1.6] text-base-content/70">
-                    This is taking longer than it should. Your payment is safe —
-                    activation sometimes lags a few minutes.
-                  </p>
-                  <p class="mt-3 text-[13.5px] text-base-content/70">
-                    <a href="/account" class="link font-semibold hover:text-primary">Check again</a>
-                    {" "}or email{" "}
-                    <a href="mailto:team@surfskills.surf" class="link font-semibold hover:text-primary">team@surfskills.surf</a>
-                    {" "}and I'll sort it out.
-                  </p>
-                </div>
-              </div>
-            ) : active ? (
-              <>
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <h2 class="text-[22px]">{planLabel}</h2>
-                  <span class="badge badge-accent font-bold">
-                    {sub!.status === "trialing" ? "Trial" : "Active"}
-                  </span>
-                </div>
-                {sub!.cancel_at_period_end && periodEnd ? (
-                  <p class="mt-3 text-[14.5px] leading-[1.6] text-base-content/70">
-                    Your pass is canceled and stays active until <strong class="text-base-content">{periodEnd}</strong>.
-                    Changed your mind? Uncancel in the billing portal.
-                  </p>
-                ) : periodEnd ? (
-                  <p class="mt-3 text-[14.5px] text-base-content/70">
-                    Renews on {periodEnd}.
-                  </p>
-                ) : null}
-                <p class="mt-2 text-[14.5px] text-base-content/70">
-                  Every skill in the lineup is unlocked — downloads included.
-                </p>
-                {pendingDownload && (
-                  <a href={pendingDownload} class="btn btn-primary btn-lg btn-block mt-5">
-                    Download your skill ↓
-                  </a>
-                )}
-                <div class="mt-6 flex flex-wrap gap-3">
-                  <a href="/discover" class:list={["btn flex-1", !pendingDownload && "btn-primary"]}>
-                    Browse skills
-                  </a>
-                  <a href="/api/portal" class="btn flex-1">
-                    Manage billing
-                  </a>
-                </div>
-              </>
-            ) : (
-              <>
-                <h2 class="text-[22px]">Free account</h2>
-                <p class="mt-2 text-[14.5px] leading-[1.6] text-base-content/70">
-                  {sub && (sub.status === "canceled" || sub.status === "revoked")
-                    ? "Your previous pass has ended. Hop back on whenever you like."
-                    : "Free skills are yours to download. A Pro pass unlocks every skill in the lineup."}
-                </p>
-                <div class="mt-6 flex flex-wrap gap-3">
-                  <a href="/api/checkout?plan=monthly" class="btn btn-primary flex-1">
-                    Get all-access · $9/mo
-                  </a>
-                  <a href="/api/checkout?plan=yearly" class="btn flex-1">
-                    Get a year · $60
-                  </a>
-                </div>
-                {sub && sub.status === "past_due" && (
-                  <div role="alert" class="alert alert-warning alert-soft mt-4 text-[13.5px] font-semibold">
-                    <span>
-                      Your last payment didn't go through —{" "}
-                      <a href="/api/portal" class="link">update your card</a> to keep Pro.
-                    </span>
-                  </div>
-                )}
-              </>
-            )
-          }
+            <h2 class="text-[22px]">Free account</h2>
+            <p class="mt-2 text-[14.5px] leading-[1.6] text-base-content/70">
+              Browse and download free skills from the library.
+            </p>
+            <a href="/discover" class="btn btn-primary btn-block mt-6">
+              Browse skills
+            </a>
           </div>
         </div>
 
@@ -165,26 +47,3 @@ const planLabel = sub?.plan === "yearly" ? "Pro Yearly · $60/yr" : "Pro Monthly
     <Footer />
   </div>
 </BaseLayout>
-
-<script>
-  // Poll for the webhook landing after checkout: the server renders the
-  // "finalizing" card only while a checkout_id is present but no active row
-  // yet. Cap the polling — if the webhook never lands (misconfigured secret,
-  // stale bookmarked URL), surface a way forward instead of looping forever.
-  const POLL_LIMIT = 10;
-  const key = `finalizing:${location.search}`;
-  if (document.getElementById("finalizing")) {
-    const attempts = Number(sessionStorage.getItem(key) ?? "0");
-    if (attempts < POLL_LIMIT) {
-      sessionStorage.setItem(key, String(attempts + 1));
-      setTimeout(() => location.reload(), 3000);
-    } else {
-      sessionStorage.removeItem(key);
-      document.getElementById("finalizing-wait")?.classList.add("hidden");
-      document.getElementById("finalizing-timeout")?.classList.remove("hidden");
-      window.posthog?.capture("checkout_finalizing_timeout", { attempts: POLL_LIMIT });
-    }
-  } else {
-    sessionStorage.removeItem(key);
-  }
-</script>
