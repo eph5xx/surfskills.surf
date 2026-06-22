@@ -32,7 +32,7 @@ export const collection: Collection = {
 };
 
 export const skill: DirectorySkill = {
-  name: "Taste Skill",
+  name: "Design With Taste",
   id: "Leonxlnx/taste-skill/design-taste-frontend",
   collection: "Leonxlnx/taste-skill",
   description: {

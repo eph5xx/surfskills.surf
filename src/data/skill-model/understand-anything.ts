@@ -32,7 +32,7 @@ export const collection: Collection = {
 };
 
 export const skill: DirectorySkill = {
-  name: "Understand Any Codebase",
+  name: "Map Any Codebase",
   id: "Egonex-AI/Understand-Anything/understand",
   collection: "Egonex-AI/Understand-Anything",
   description: {

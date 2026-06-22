@@ -32,7 +32,7 @@ export const collection: Collection = {
 };
 
 export const skill: DirectorySkill = {
-  name: "Interfaces Feel Better",
+  name: "Polish Your UI",
   id: "jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better",
   collection: "jakubkrehel/make-interfaces-feel-better",
   description: {

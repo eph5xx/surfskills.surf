@@ -40,7 +40,7 @@ export const collection: Collection = {
 };
 
 export const skill: DirectorySkill = {
-  name: "GSAP ScrollTrigger",
+  name: "Animate on Scroll",
   id: "greensock/gsap-skills/gsap-scrolltrigger",
   collection: "greensock/gsap-skills",
   description: {

@@ -28,7 +28,7 @@ export const collection: Collection = {
 };
 
 export const skill: DirectorySkill = {
-  name: "Validate Startup Idea",
+  name: "Validate Your Idea",
   id: "eph5xx/tweakidea/tweak:evaluate",
   collection: "eph5xx/tweakidea",
   description: {

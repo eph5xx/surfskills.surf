@@ -31,7 +31,7 @@ export const collection: Collection = {
 };
 
 export const skill: DirectorySkill = {
-  name: "HyperFrames Video Agent",
+  name: "Render a Video",
   id: "heygen-com/hyperframes/hyperframes",
   collection: "heygen-com/hyperframes",
   description: {
