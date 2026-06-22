@@ -27,7 +27,19 @@ export const collection: Collection = {
   },
   installCommand:
     "Install this skill collection or give me an instruction how to install it: https://github.com/heygen-com/hyperframes",
-  skills: ["heygen-com/hyperframes/hyperframes"],
+  skills: [
+    "heygen-com/hyperframes/hyperframes",
+    "heygen-com/hyperframes/embedded-captions",
+    "heygen-com/hyperframes/faceless-explainer",
+    "heygen-com/hyperframes/general-video",
+    "heygen-com/hyperframes/graphic-overlays",
+    "heygen-com/hyperframes/hyperframes-animation",
+    "heygen-com/hyperframes/hyperframes-cli",
+    "heygen-com/hyperframes/hyperframes-core",
+    "heygen-com/hyperframes/hyperframes-creative",
+    "heygen-com/hyperframes/hyperframes-media",
+    "heygen-com/hyperframes/hyperframes-registry",
+  ],
 };
 
 export const skill: DirectorySkill = {

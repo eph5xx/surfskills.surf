@@ -24,7 +24,16 @@ export const collection: Collection = {
   },
   installCommand:
     "Install this skill collection or give me an instruction how to install it: https://github.com/eph5xx/tweakidea",
-  skills: ["eph5xx/tweakidea/tweak:evaluate"],
+  skills: [
+    "eph5xx/tweakidea/tweak:evaluate",
+    "eph5xx/tweakidea/tweak:analyze-hn-post",
+    "eph5xx/tweakidea/tweak:browse-hn",
+    "eph5xx/tweakidea/tweak:diff",
+    "eph5xx/tweakidea/tweak:improve",
+    "eph5xx/tweakidea/tweak:list",
+    "eph5xx/tweakidea/tweak:share",
+    "eph5xx/tweakidea/tweak:show",
+  ],
 };
 
 export const skill: DirectorySkill = {

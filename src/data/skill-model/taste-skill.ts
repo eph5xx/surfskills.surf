@@ -28,7 +28,21 @@ export const collection: Collection = {
   },
   installCommand:
     "Install this skill collection or give me an instruction how to install it: https://github.com/Leonxlnx/taste-skill",
-  skills: ["Leonxlnx/taste-skill/design-taste-frontend"],
+  skills: [
+    "Leonxlnx/taste-skill/design-taste-frontend",
+    "Leonxlnx/taste-skill/brandkit",
+    "Leonxlnx/taste-skill/brutalist-skill",
+    "Leonxlnx/taste-skill/gpt-tasteskill",
+    "Leonxlnx/taste-skill/image-to-code-skill",
+    "Leonxlnx/taste-skill/imagegen-frontend-mobile",
+    "Leonxlnx/taste-skill/imagegen-frontend-web",
+    "Leonxlnx/taste-skill/minimalist-skill",
+    "Leonxlnx/taste-skill/output-skill",
+    "Leonxlnx/taste-skill/redesign-skill",
+    "Leonxlnx/taste-skill/soft-skill",
+    "Leonxlnx/taste-skill/stitch-skill",
+    "Leonxlnx/taste-skill/taste-skill-v1",
+  ],
 };
 
 export const skill: DirectorySkill = {

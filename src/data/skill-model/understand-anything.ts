@@ -28,7 +28,16 @@ export const collection: Collection = {
   },
   installCommand:
     "Install this skill collection or give me an instruction how to install it: https://github.com/Egonex-AI/Understand-Anything",
-  skills: ["Egonex-AI/Understand-Anything/understand"],
+  skills: [
+    "Egonex-AI/Understand-Anything/understand",
+    "Egonex-AI/Understand-Anything/understand-chat",
+    "Egonex-AI/Understand-Anything/understand-dashboard",
+    "Egonex-AI/Understand-Anything/understand-diff",
+    "Egonex-AI/Understand-Anything/understand-domain",
+    "Egonex-AI/Understand-Anything/understand-explain",
+    "Egonex-AI/Understand-Anything/understand-knowledge",
+    "Egonex-AI/Understand-Anything/understand-onboard",
+  ],
 };
 
 export const skill: DirectorySkill = {

@@ -4,8 +4,8 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import CollectionPage from "@/components/collection/CollectionPage.astro";
 import PostHogIdentify from "@/components/PostHogIdentify.astro";
-import { skills } from "@/data/skills";
-import { directoryCollectionsById, collectionFacets } from "@/data/skill-model";
+import { skills, type Skill } from "@/data/skills";
+import { directoryCollectionsById } from "@/data/skill-model";
 import { getSubscription } from "@/lib/subscription";
 
 // Dynamic route, no getStaticPaths — rendered on demand. Collections live under the /s/
@@ -19,15 +19,33 @@ const entry = id ? directoryCollectionsById[id] : undefined;
 if (!entry) return Astro.rewrite("/404");
 
 const { collection } = entry;
-const rosterSkills = entry.skills
-  .map((s) => skills.find((k) => k.id === s.id))
-  .filter((s): s is (typeof skills)[number] => s !== undefined);
-const facets = collectionFacets(entry.skills);
+
+const catalogById = new Map(skills.map((s) => [s.id, s]));
+const rosterSkills: Skill[] = collection.skills
+  .map((skillId) => {
+    const indexed = catalogById.get(skillId);
+    if (indexed) return indexed;
+    const name = skillId.split("/").pop() ?? skillId;
+    return {
+      id: skillId,
+      slug: name,
+      title: name,
+      blurb: "",
+      category: "",
+      tools: [],
+      free: true,
+      thumbLabel: "",
+      verified: false,
+      available: false,
+      video: undefined,
+    };
+  })
+  .sort((a, b) => Number(b.available) - Number(a.available));
 
 const user = Astro.locals.user;
 const sub = user ? await getSubscription(Astro.locals) : null;
 
-const count = entry.skills.length;
+const count = rosterSkills.length;
 const title = `${collection.name} — ${count} AI skill${count === 1 ? "" : "s"} by ${collection.author.name} | surfskills.surf`;
 ---
 
@@ -45,7 +63,7 @@ const title = `${collection.name} — ${count} AI skill${count === 1 ? "" : "s"}
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
   </div>
-  <CollectionPage collection={collection} skills={rosterSkills} facets={facets} />
+  <CollectionPage collection={collection} skills={rosterSkills} />
   <div class="mx-auto max-w-[1200px] px-8">
     <Footer />
   </div>

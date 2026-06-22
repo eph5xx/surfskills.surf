@@ -36,8 +36,11 @@ const live = skill.available && skill.id in directorySkillsById;
                 <source src={skill.video} type="video/mp4" />
               </video>
             ) : (
-              <div class="grid size-full place-items-center px-4 text-center text-[12.5px] font-medium text-base-content/55">
-                Demo coming soon
+              <div class="relative size-full">
+                <img src="/skills/skill-placeholder.svg" alt="" loading="lazy" class="size-full object-cover" />
+                <span class="absolute inset-x-0 bottom-2 text-center text-[12px] font-medium text-base-content/55">
+                  Demo coming soon
+                </span>
               </div>
             )
           }
@@ -65,8 +68,11 @@ const live = skill.available && skill.id in directorySkillsById;
                 <source src={skill.video} type="video/mp4" />
               </video>
             ) : (
-              <div class="grid size-full place-items-center px-4 text-center text-[12.5px] font-medium text-base-content/55">
-                Demo coming soon
+              <div class="relative size-full">
+                <img src="/skills/skill-placeholder.svg" alt="" loading="lazy" class="size-full object-cover" />
+                <span class="absolute inset-x-0 bottom-2 text-center text-[12px] font-medium text-base-content/55">
+                  Demo coming soon
+                </span>
               </div>
             )
           }
