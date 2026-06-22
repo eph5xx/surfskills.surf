@@ -1,59 +1,56 @@
 ---
-import { skills, type Skill } from "@/data/skills";
-import { skillDetails } from "@/data/skill-details";
-import type { SkillContent } from "@/data/skill-details/types";
+import type { Collection, DirectorySkill } from "@/data/skill-model/types";
+import { skillSlugFromId } from "@/data/skill-model";
+import SkillSidebar from "@/components/skill/SkillSidebar.astro";
 
-// Reusable, data-driven skill listing template (ported from the design handoff
-// V3 layout). Left column: identity -> demo -> how-it-works. Right column: a
-// sticky install rail with action, setup, author, and similar skills.
-// To add a skill: add a catalog entry + a SkillContent module — no edits here.
+// Reusable, data-driven skill listing template. Left column: identity -> demo ->
+// how-it-works -> details. Right column: a sticky rail with Collection, Links, and
+// Install. To add a skill: add a DirectorySkill + Collection module — no edits here.
 interface Props {
-  skill: Skill;
-  content: SkillContent;
-  /** Install destination for this directory entry (usually source repo). */
-  installHref: string;
+  skill: DirectorySkill;
+  collection: Collection;
 }
 
-const { skill, content, installHref } = Astro.props;
-const f = content.flow;
+const { skill, collection } = Astro.props;
 
-// Header icon-tile glyphs (white SVG path on a sienna tile). Add as needed.
-const GLYPHS: Record<string, string> = {
-  bars: '<rect x="3" y="13" width="4.4" height="8" rx="1.4"/><rect x="9.8" y="8" width="4.4" height="13" rx="1.4"/><rect x="16.6" y="3.5" width="4.4" height="17.5" rx="1.4"/>',
+const slug = skillSlugFromId(skill.id);
+
+// The three "How it works" beats — input / process / output from the skill model.
+// The friendly label is the step heading; the jargon (Input/Process/Output) is dropped.
+const flow = {
+  write: { label: "You write", body: skill.description.input },
+  between: { label: "It works", body: skill.description.process },
+  get: { label: "You get", body: skill.description.output },
 };
-const glyph = GLYPHS[content.glyph ?? "bars"] ?? GLYPHS.bars;
 
-const initials = content.author.name
-  .split(/\s+/)
-  .map((w) => w[0])
-  .slice(0, 2)
-  .join("")
-  .toUpperCase();
+// Header icon-tile glyph (white SVG path on a sienna tile).
+const glyph =
+  '<rect x="3" y="13" width="4.4" height="8" rx="1.4"/><rect x="9.8" y="8" width="4.4" height="13" rx="1.4"/><rect x="16.6" y="3.5" width="4.4" height="17.5" rx="1.4"/>';
 
 // Command coloring: leading /command token in primary, the rest in accent.
-const sp = content.command.indexOf(" ");
-const cmdHead = sp === -1 ? content.command : content.command.slice(0, sp);
-const cmdRest = sp === -1 ? "" : content.command.slice(sp);
+const sp = skill.example.indexOf(" ");
+const cmdHead = sp === -1 ? skill.example : skill.example.slice(0, sp);
+const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
 
-const related = content.relatedSlugs
-  .map((s) => skills.find((k) => k.slug === s))
-  .filter((s): s is Skill => s !== undefined);
-const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
 ---
 
 <div class="bg-base-200">
-  <div class="mx-auto max-w-[1180px] px-5 pt-10 pb-20 md:px-[60px] md:pt-[42px]">
+  <div class="mx-auto max-w-[1200px] px-5 pt-10 pb-20 md:px-8 md:pt-[42px]">
     <nav class="breadcrumbs mb-7 text-[13.5px] font-semibold">
       <ul>
         <li><a href="/discover" class="text-secondary hover:text-primary">All skills</a></li>
-        <li>{skill.title}</li>
+        <li>
+          <a href={`/s/${collection.id}`} class="text-secondary hover:text-primary"
+            >{collection.name}</a
+          >
+        </li>
+        <li>{skill.name}</li>
       </ul>
     </nav>
 
-    <div class="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1fr_344px]">
+    <div class="grid grid-cols-1 items-start gap-[44px] lg:grid-cols-[1fr_336px]">
       <!-- Identity -->
       <div class="order-1 lg:col-start-1">
-        <!-- Header -->
         <div class="flex items-center gap-[18px]">
           <span
             class="grid size-[60px] shrink-0 place-items-center rounded-[17px] bg-primary shadow-[0_10px_22px_-10px_var(--color-primary)]"
@@ -62,20 +59,18 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
             <svg viewBox="0 0 24 24" class="size-[30px]" fill="#fff" set:html={glyph} />
           </span>
           <div>
-            <p class="text-[13.5px] font-semibold text-base-content/55">
-              <span class="font-bold text-base-content">{skill.category}</span>
-            </p>
+            <div class="font-mono text-[13px] font-semibold text-secondary">{slug}</div>
             <h1
               class="mt-0.5 font-display text-[30px] font-semibold leading-[1.0] tracking-[-0.03em] text-balance md:text-[40px]"
             >
-              {skill.title}
+              {skill.name}
             </h1>
           </div>
         </div>
 
         <!-- Tagline -->
-        <p class="mt-4 max-w-[54ch] text-[15px] leading-[1.55] text-base-content/65 text-pretty md:text-[16px]">
-          {content.tagline}
+        <p class="mt-4 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/65 text-pretty md:text-[16px]">
+          {skill.description.short}
         </p>
       </div>
 
@@ -85,7 +80,7 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
           class="aspect-[16/9.1] w-full overflow-hidden rounded-[18px] bg-[#1c1a28] shadow-[0_30px_70px_-28px_rgba(42,44,65,0.55)]"
         >
           {
-            skill.video ? (
+            skill.previewVideo ? (
               <video
                 class="size-full object-cover"
                 autoplay
@@ -93,46 +88,25 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
                 loop
                 playsinline
                 preload="metadata"
+                poster={skill.previewImage}
               >
-                <source src={skill.video} type="video/mp4" />
+                <source src={skill.previewVideo} type="video/mp4" />
               </video>
+            ) : skill.previewImage ? (
+              <img src={skill.previewImage} alt="" class="size-full object-cover" loading="lazy" />
             ) : (
-              /* ponytail: no images — text placeholder hero. Add a <video> if you want a demo. */
+              /* No video or still — text placeholder hero. */
               <div class="grid size-full place-items-center bg-[#1c1a28] p-6 text-center text-[13px] font-medium text-base-100/55">
-                {content.tagline}
+                {skill.description.short}
               </div>
             )
           }
         </div>
       </div>
 
-      <!-- Install card (mobile only — sits between demo and How it works) -->
-      <div class="order-3 lg:hidden">
-        <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 p-6 shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
-          <a
-            href={installHref}
-            class="ph-install-cta btn btn-primary btn-lg btn-block gap-2 rounded-[14px] text-[18px] shadow-[0_10px_24px_-10px_var(--color-primary)]"
-            data-skill-slug={skill.slug}
-            data-skill-free={skill.free ? "1" : "0"}
-            data-skill-category={skill.category}
-          >
-            <svg viewBox="0 0 24 24" class="size-[19px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
-            </svg>
-            View source repo
-          </a>
-          <a
-            href={content.github}
-            target="_blank"
-            rel="noopener"
-            class="mt-3.5 flex items-center justify-center gap-2 text-[15px] font-semibold text-base-content/70 hover:text-primary"
-          >
-            <svg viewBox="0 0 16 16" class="size-4" fill="currentColor" aria-hidden="true">
-              <path d="M8 0C3.6 0 0 3.6 0 8c0 3.5 2.3 6.5 5.5 7.6.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-3.9 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.3-.3 2-.3s1.4.1 2 .3c1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3-1.8 3.7-3.6 3.9.3.3.6.8.6 1.6v2.4c0 .2.1.5.6.4A8 8 0 0016 8c0-4.4-3.6-8-8-8z" />
-            </svg>
-            View on GitHub
-          </a>
-        </div>
+      <!-- Sidebar (mobile — sits between demo and How it works) -->
+      <div class="order-3 flex flex-col gap-[18px] lg:hidden">
+        <SkillSidebar skill={skill} collection={collection} />
       </div>
 
       <!-- How it works -->
@@ -143,20 +117,19 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
         <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
           <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">01</div>
           <div>
-            <div class="text-[13.5px] font-semibold text-primary">{f.write.label}</div>
-            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{f.write.head}</h3>
-            <p class="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-base-content/70">{f.write.body}</p>
+            <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.write.label}</h3>
+            <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.write.body}</p>
 
             <!-- Command terminal — full width, copy button lives in the title bar -->
             <div class="mt-4 overflow-hidden rounded-xl border border-white/[0.06] bg-[#232132]">
-              <div class="flex items-center gap-1.5 border-b border-white/[0.06] px-4 py-3">
+              <div class="flex items-center gap-2 border-b border-white/[0.06] px-5 py-3">
                 <span class="size-2.5 rounded-full" style="background:#e06c5e"></span>
                 <span class="size-2.5 rounded-full" style="background:#f2b134"></span>
                 <span class="size-2.5 rounded-full" style="background:#5bbd7a"></span>
                 <button
                   type="button"
                   data-copy-cmd
-                  data-copy={content.command}
+                  data-copy={skill.example}
                   aria-label="Copy command"
                   class="swap swap-rotate ml-auto text-white/50 transition-colors hover:text-white"
                 >
@@ -169,7 +142,7 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
                   </svg>
                 </button>
               </div>
-              <code class="block px-5 py-4 font-mono text-[14px] leading-[1.6] break-words whitespace-pre-wrap text-[#e9e6f2]">
+              <code class="block px-5 py-4 font-mono text-[13.5px] leading-[1.6] break-words whitespace-pre-wrap text-[#e9e6f2]">
                 <span class="text-primary">{cmdHead}</span><span class="text-accent">{cmdRest}</span>
               </code>
             </div>
@@ -180,9 +153,8 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
         <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
           <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">02</div>
           <div>
-            <div class="text-[13.5px] font-semibold text-primary">{f.between.label}</div>
-            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{f.between.head}</h3>
-            <p class="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-base-content/70">{f.between.body}</p>
+            <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.between.label}</h3>
+            <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.between.body}</p>
           </div>
         </div>
 
@@ -190,252 +162,15 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
         <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
           <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">03</div>
           <div>
-            <div class="text-[13.5px] font-semibold text-primary">{f.get.label}</div>
-            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{f.get.head}</h3>
-            <p class="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-base-content/70">{f.get.body}</p>
+            <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.get.label}</h3>
+            <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.get.body}</p>
           </div>
         </div>
       </div>
 
-      <!-- Info + similar skills (mobile only) -->
-      <div class="order-5 flex flex-col gap-[18px] lg:hidden">
-        <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 px-6 py-[22px] shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
-          <!-- Setup -->
-          <div>
-            <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">Install</div>
-            <div class="mt-3 flex items-start gap-2 rounded-xl border border-base-300 bg-base-200/50 px-3.5 py-3">
-              <code class="min-w-0 flex-1 font-mono text-[12.5px] leading-[1.55] [overflow-wrap:anywhere] text-base-content/65">{content.installCommand}</code>
-              <button
-                type="button"
-                data-copy-cmd
-                data-copy={content.installCommand}
-                aria-label="Copy install command"
-                class="swap swap-rotate mt-0.5 shrink-0 text-base-content/45 transition-colors hover:text-primary"
-              >
-                <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="9" y="9" width="11" height="11" rx="2" />
-                  <path d="M5 15V5a2 2 0 0 1 2-2h10" />
-                </svg>
-                <svg class="swap-on size-[15px] text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20 6L9 17l-5-5" />
-                </svg>
-              </button>
-            </div>
-            <button
-              type="button"
-              data-paste-cta
-              data-copy={content.installCommand}
-              class="btn btn-primary mt-3 h-auto min-h-0 w-full gap-2 rounded-[14px] py-3.5 text-[16px] font-semibold normal-case shadow-[0_10px_24px_-10px_var(--color-primary)]"
-            >
-              <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
-              </svg>
-              <span data-paste-label>Paste into your agent</span>
-            </button>
-            <p class="mt-2.5 text-center text-[12px] text-base-content/45">Works in Claude, Cursor, Codex &amp; more</p>
-          </div>
-
-          <!-- Author -->
-          <div class="mt-[18px] border-t border-base-content/13 pt-[18px]">
-            <div class="text-[14px] font-semibold text-base-content/55">Author</div>
-            <a
-              href={content.author.githubUrl}
-              target="_blank"
-              rel="noopener"
-              class="mt-3 flex items-center gap-[11px] hover:text-primary"
-            >
-              <span
-                class="grid size-[34px] shrink-0 place-items-center rounded-full bg-secondary font-display text-[13px] text-secondary-content"
-                aria-hidden="true">{initials}</span
-              >
-              <span class="leading-tight">
-                <span class="block text-[12.5px] text-base-content/55">Built by</span>
-                <span class="block text-[15px] font-semibold">{content.author.name}</span>
-              </span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Similar skills -->
-        {
-          related.length > 0 && (
-            <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 px-6 py-[22px] shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
-              <div class="text-[14px] font-semibold text-base-content/55">Similar skills</div>
-              <div class="mt-3 flex flex-col gap-2.5">
-                {related.map((s) => {
-                  const Tag = hasPage(s) ? "a" : "div";
-                  return (
-                    <Tag
-                      href={hasPage(s) ? `/skills/${s.slug}` : undefined}
-                      class:list={[
-                        "block rounded-2xl border border-base-300 bg-base-100/60 p-3.5 transition-colors",
-                        hasPage(s) ? "hover:border-primary/40 hover:bg-base-200" : "cursor-default",
-                      ]}
-                    >
-                      <div class="aspect-video w-full overflow-hidden rounded-xl bg-base-200">
-                        {
-                          s.video ? (
-                            <video
-                              class="size-full object-cover"
-                              autoplay
-                              muted
-                              loop
-                              playsinline
-                              preload="metadata"
-                            >
-                              <source src={s.video} type="video/mp4" />
-                            </video>
-                          ) : (
-                            <div class="grid size-full place-items-center px-4 text-center text-[12px] font-medium text-base-content/55">
-                              Demo coming soon
-                            </div>
-                          )
-                        }
-                      </div>
-                      <div class="mt-2.5 flex items-center justify-between gap-2">
-                        <b class="block font-display text-[15px] font-semibold leading-snug">{s.title}</b>
-                        <span class="badge badge-ghost badge-sm text-base-content/60">{s.category}</span>
-                      </div>
-                    </Tag>
-                  );
-                })}
-              </div>
-            </div>
-          )
-        }
-      </div>
-
-      <!-- Sidebar (desktop) — install + info + similar as one column -->
+      <!-- Sidebar (desktop) — Collection + Links + Install as one sticky column -->
       <aside class="order-3 hidden flex-col gap-[18px] lg:sticky lg:top-[92px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:flex lg:self-start">
-        <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 p-6 shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
-          <a
-            href={installHref}
-            class="ph-install-cta btn btn-primary btn-lg btn-block gap-2 rounded-[14px] text-[18px] shadow-[0_10px_24px_-10px_var(--color-primary)]"
-            data-skill-slug={skill.slug}
-            data-skill-free={skill.free ? "1" : "0"}
-            data-skill-category={skill.category}
-          >
-            <svg viewBox="0 0 24 24" class="size-[19px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
-            </svg>
-            View source repo
-          </a>
-          <a
-            href={content.github}
-            target="_blank"
-            rel="noopener"
-            class="mt-3.5 flex items-center justify-center gap-2 text-[15px] font-semibold text-base-content/70 hover:text-primary"
-          >
-            <svg viewBox="0 0 16 16" class="size-4" fill="currentColor" aria-hidden="true">
-              <path d="M8 0C3.6 0 0 3.6 0 8c0 3.5 2.3 6.5 5.5 7.6.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-3.9 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.3-.3 2-.3s1.4.1 2 .3c1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3-1.8 3.7-3.6 3.9.3.3.6.8.6 1.6v2.4c0 .2.1.5.6.4A8 8 0 0016 8c0-4.4-3.6-8-8-8z" />
-            </svg>
-            View on GitHub
-          </a>
-        </div>
-
-        <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 px-6 py-[22px] shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
-          <!-- Setup -->
-          <div>
-            <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">Install</div>
-            <div class="mt-3 flex items-start gap-2 rounded-xl border border-base-300 bg-base-200/50 px-3.5 py-3">
-              <code class="min-w-0 flex-1 font-mono text-[12.5px] leading-[1.55] [overflow-wrap:anywhere] text-base-content/65">{content.installCommand}</code>
-              <button
-                type="button"
-                data-copy-cmd
-                data-copy={content.installCommand}
-                aria-label="Copy install command"
-                class="swap swap-rotate mt-0.5 shrink-0 text-base-content/45 transition-colors hover:text-primary"
-              >
-                <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="9" y="9" width="11" height="11" rx="2" />
-                  <path d="M5 15V5a2 2 0 0 1 2-2h10" />
-                </svg>
-                <svg class="swap-on size-[15px] text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20 6L9 17l-5-5" />
-                </svg>
-              </button>
-            </div>
-            <button
-              type="button"
-              data-paste-cta
-              data-copy={content.installCommand}
-              class="btn btn-primary mt-3 h-auto min-h-0 w-full gap-2 rounded-[14px] py-3.5 text-[16px] font-semibold normal-case shadow-[0_10px_24px_-10px_var(--color-primary)]"
-            >
-              <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
-              </svg>
-              <span data-paste-label>Paste into your agent</span>
-            </button>
-            <p class="mt-2.5 text-center text-[12px] text-base-content/45">Works in Claude, Cursor, Codex &amp; more</p>
-          </div>
-
-          <!-- Author -->
-          <div class="mt-[18px] border-t border-base-content/13 pt-[18px]">
-            <div class="text-[14px] font-semibold text-base-content/55">Author</div>
-            <a
-              href={content.author.githubUrl}
-              target="_blank"
-              rel="noopener"
-              class="mt-3 flex items-center gap-[11px] hover:text-primary"
-            >
-              <span
-                class="grid size-[34px] shrink-0 place-items-center rounded-full bg-secondary font-display text-[13px] text-secondary-content"
-                aria-hidden="true">{initials}</span
-              >
-              <span class="leading-tight">
-                <span class="block text-[12.5px] text-base-content/55">Built by</span>
-                <span class="block text-[15px] font-semibold">{content.author.name}</span>
-              </span>
-            </a>
-          </div>
-        </div>
-
-        {
-          related.length > 0 && (
-            <div class="card card-border border-base-content/13 rounded-[22px] bg-base-100 px-6 py-[22px] shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]">
-              <div class="text-[14px] font-semibold text-base-content/55">Similar skills</div>
-              <div class="mt-3 flex flex-col gap-2.5">
-                {related.map((s) => {
-                  const Tag = hasPage(s) ? "a" : "div";
-                  return (
-                    <Tag
-                      href={hasPage(s) ? `/skills/${s.slug}` : undefined}
-                      class:list={[
-                        "block rounded-2xl border border-base-300 bg-base-100/60 p-3.5 transition-colors",
-                        hasPage(s) ? "hover:border-primary/40 hover:bg-base-200" : "cursor-default",
-                      ]}
-                    >
-                      <div class="aspect-video w-full overflow-hidden rounded-xl bg-base-200">
-                        {
-                          s.video ? (
-                            <video
-                              class="size-full object-cover"
-                              autoplay
-                              muted
-                              loop
-                              playsinline
-                              preload="metadata"
-                            >
-                              <source src={s.video} type="video/mp4" />
-                            </video>
-                          ) : (
-                            <div class="grid size-full place-items-center px-4 text-center text-[12px] font-medium text-base-content/55">
-                              Demo coming soon
-                            </div>
-                          )
-                        }
-                      </div>
-                      <div class="mt-2.5 flex items-center justify-between gap-2">
-                        <b class="block font-display text-[15px] font-semibold leading-snug">{s.title}</b>
-                        <span class="badge badge-ghost badge-sm text-base-content/60">{s.category}</span>
-                      </div>
-                    </Tag>
-                  );
-                })}
-              </div>
-            </div>
-          )
-        }
+        <SkillSidebar skill={skill} collection={collection} />
       </aside>
     </div>
   </div>
@@ -485,12 +220,11 @@ const hasPage = (s: Skill) => s.available && s.slug in skillDetails;
     });
   }
 
-  for (const el of document.querySelectorAll(".ph-install-cta")) {
+  for (const el of document.querySelectorAll<HTMLElement>(".ph-install-cta")) {
     el.addEventListener("click", () => {
       window.posthog?.capture("skill_repo_clicked", {
         skill_slug: el.dataset.skillSlug,
-        free: el.dataset.skillFree === "1",
-        category: el.dataset.skillCategory,
+        kind: el.dataset.skillKind,
       });
     });
   }

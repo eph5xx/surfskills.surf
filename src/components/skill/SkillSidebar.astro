@@ -1,0 +1,246 @@
+---
+import type { Collection, DirectorySkill } from "@/data/skill-model/types";
+import {
+  skillSlugFromId,
+  KIND_LABELS,
+  AUDIENCE_LABELS,
+  TASK_LABELS,
+} from "@/data/skill-model";
+
+// The skill page's right rail: Collection → Links → Install. Rendered once for
+// mobile (in-flow) and once for the sticky desktop aside; the copy/paste + PostHog
+// scripts live in SkillPage.astro and bind by [data-*] selectors across both copies.
+interface Props {
+  skill: DirectorySkill;
+  collection: Collection;
+}
+
+const { skill, collection } = Astro.props;
+
+const initials = collection.name
+  .split(/\s+/)
+  .map((w) => w[0])
+  .slice(0, 2)
+  .join("")
+  .toUpperCase();
+
+// Real GitHub handle from the author URL (the display name isn't always the handle).
+const ghHandle = (() => {
+  try {
+    return new URL(collection.author.url).pathname.replace(/^\/+/, "") || collection.author.name;
+  } catch {
+    return collection.author.name;
+  }
+})();
+
+const compact = (n: number) =>
+  new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 })
+    .format(n)
+    .toLowerCase();
+
+const hostLabel = (href: string) => {
+  try {
+    return new URL(href).hostname.replace(/^www\./, "");
+  } catch {
+    return href;
+  }
+};
+
+// Install: skill-level command when set, else the collection's.
+const installCommand = skill.installCommand ?? collection.installCommand;
+
+// "Works in …" note: derived from the skill's declared tools, else a generic fallback.
+const worksIn =
+  skill.tools && skill.tools.length > 0
+    ? `Works in ${skill.tools.map((t) => t.name).join(", ")}`
+    : "Works in Claude, Cursor, Codex & more";
+
+const slug = skillSlugFromId(skill.id);
+
+// Hosts we don't surface in the rail for now (marketplace mirrors).
+const HIDDEN_LINK_HOSTS = ["skills.sh", "claudemarketplaces.com"];
+const isHiddenHost = (href: string) => {
+  try {
+    return HIDDEN_LINK_HOSTS.includes(new URL(href).hostname.replace(/^www\./, ""));
+  } catch {
+    return false;
+  }
+};
+
+const linkRows = [
+  { href: collection.repositoryURL, label: "Open in GitHub", icon: "github" as const },
+  ...(collection.websiteURL
+    ? [{ href: collection.websiteURL, label: "Open website", icon: "globe" as const }]
+    : []),
+  ...collection.externalLinks
+    .filter((href) => !isHiddenHost(href))
+    .map((href) => ({
+      href,
+      label: hostLabel(href),
+      icon: "external" as const,
+    })),
+  ...(skill.referenceFile
+    ? [{ href: skill.referenceFile, label: "View source file", icon: "github" as const }]
+    : []),
+];
+
+// Classification chips — kind leads, then audiences + tasks.
+const kindLabel = KIND_LABELS[skill.kind];
+const tagLabels = [
+  ...skill.audiences.map((a) => AUDIENCE_LABELS[a]),
+  ...skill.tasks.map((t) => TASK_LABELS[t]),
+];
+
+// One sticky card; sections (Collection → Install → Links) divided by hairlines,
+// no section labels.
+const cardClass =
+  "card card-border border-base-content/13 rounded-[22px] bg-base-100 shadow-[0_24px_50px_-36px_rgba(42,44,65,0.5)]";
+const sectionClass = "px-6 py-[22px]";
+---
+
+<div class={cardClass}>
+  <!-- Collection -->
+  <div class={sectionClass}>
+    <div class="flex items-center gap-3">
+      {
+        collection.author.avatarURL ? (
+          <img
+            src={collection.author.avatarURL}
+            alt=""
+            loading="lazy"
+            class="size-[42px] shrink-0 rounded-full border border-base-300 object-cover"
+          />
+        ) : (
+          <span
+            class="grid size-[42px] shrink-0 place-items-center rounded-full bg-secondary font-display text-[14px] text-secondary-content"
+            aria-hidden="true"
+          >
+            {initials}
+          </span>
+        )
+      }
+      <div class="min-w-0 flex-1">
+        <a
+          href={`/s/${collection.id}`}
+          class="block truncate font-display text-[17px] font-semibold leading-tight hover:text-primary"
+          >{collection.name}</a
+        >
+        <a
+          href={collection.author.url}
+          target="_blank"
+          rel="noopener"
+          class="block text-[13px] font-medium text-secondary hover:text-primary"
+          >by @{ghHandle} ↗</a
+        >
+      </div>
+      {
+        collection.githubStars !== undefined && (
+          <span class="flex shrink-0 items-center gap-1 text-[13px] text-base-content/65">
+            <svg viewBox="0 0 24 24" class="size-[15px] text-accent" fill="currentColor" aria-hidden="true">
+              <path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z" />
+            </svg>
+            <b class="font-semibold text-base-content/85">{compact(collection.githubStars)}</b>
+          </span>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- Install -->
+  <div class:list={[sectionClass, "border-t border-base-content/13"]}>
+    <div class="flex items-start gap-2 rounded-xl border border-base-300 bg-base-200 px-3.5 py-3">
+      <code
+        class="min-w-0 flex-1 font-mono text-[13px] leading-[1.55] [overflow-wrap:anywhere] text-base-content/85"
+        >{installCommand}</code
+      >
+      <button
+        type="button"
+        data-copy-cmd
+        data-copy={installCommand}
+        aria-label="Copy install command"
+        class="swap swap-rotate mt-0.5 shrink-0 text-base-content/55 transition-colors hover:text-primary"
+      >
+        <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="9" y="9" width="11" height="11" rx="2" />
+          <path d="M5 15V5a2 2 0 0 1 2-2h10" />
+        </svg>
+        <svg class="swap-on size-[15px] text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 6L9 17l-5-5" />
+        </svg>
+      </button>
+    </div>
+    <button
+      type="button"
+      data-paste-cta
+      data-copy={installCommand}
+      class="btn btn-primary mt-3 h-auto min-h-0 w-full gap-2 rounded-[14px] py-3.5 text-[16px] font-semibold normal-case shadow-[0_10px_24px_-10px_var(--color-primary)]"
+    >
+      <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
+      </svg>
+      <span data-paste-label>Paste into your agent</span>
+    </button>
+    <p class="mt-2.5 text-center text-[12px] text-base-content/45">
+      {worksIn}
+    </p>
+  </div>
+
+  <!-- Links -->
+  <div class:list={[sectionClass, "border-t border-base-content/13"]}>
+    <div class="flex flex-col divide-y divide-base-content/10">
+      {
+        linkRows.map((row, i) => (
+          <a
+            href={row.href}
+            target="_blank"
+            rel="noopener"
+            class:list={[
+              "group flex items-center justify-between gap-3 py-2.5 text-[14.5px] font-medium hover:text-primary",
+              i === 0 && "ph-install-cta",
+            ]}
+            data-skill-slug={i === 0 ? slug : undefined}
+            data-skill-kind={i === 0 ? KIND_LABELS[skill.kind] : undefined}
+          >
+            <span class="flex items-center gap-3 text-base-content/85 group-hover:text-primary">
+              {row.icon === "github" && (
+                <svg viewBox="0 0 16 16" class="size-[17px] text-base-content/50 group-hover:text-primary" fill="currentColor" aria-hidden="true">
+                  <path d="M8 0C3.6 0 0 3.6 0 8c0 3.5 2.3 6.5 5.5 7.6.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-3.9 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.3-.3 2-.3s1.4.1 2 .3c1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3-1.8 3.7-3.6 3.9.3.3.6.8.6 1.6v2.4c0 .2.1.5.6.4A8 8 0 0 0 16 8c0-4.4-3.6-8-8-8z" />
+                </svg>
+              )}
+              {row.icon === "globe" && (
+                <svg viewBox="0 0 24 24" class="size-[17px] text-base-content/50 group-hover:text-primary" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M3 12h18" />
+                  <path d="M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" />
+                </svg>
+              )}
+              {row.icon === "external" && (
+                <svg viewBox="0 0 24 24" class="size-[17px] text-base-content/50 group-hover:text-primary" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 8l-9-5-9 5 9 5 9-5z" />
+                  <path d="M3 8v8l9 5 9-5V8" />
+                  <path d="M12 13v8" />
+                </svg>
+              )}
+              {row.label}
+            </span>
+            <span class="text-base-content/30 transition group-hover:text-primary">↗</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Tags — kind leads (tinted), then audiences + tasks (neutral) -->
+  <div class:list={[sectionClass, "border-t border-base-content/13"]}>
+    <div class="flex flex-wrap gap-1.5">
+      <span class="rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-medium text-primary">{kindLabel}</span>
+      {
+        tagLabels.map((t) => (
+          <span class="rounded-full bg-base-200 px-2.5 py-1 text-[12px] font-medium text-base-content/65 ring-1 ring-base-content/10">
+            {t}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</div>

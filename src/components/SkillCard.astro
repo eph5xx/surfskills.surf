@@ -1,22 +1,24 @@
 ---
 import type { Skill } from "@/data/skills";
-import { skillDetails } from "@/data/skill-details";
+import { directorySkillsById } from "@/data/skill-model";
 
 // One catalog card, reused on the landing grid and the Discover catalog.
 // Live + has a detail page → full-color clickable card. Otherwise → greyed
 // "Coming soon" tease (markup lifted from the old SkillShowcase tiles).
 interface Props {
   skill: Skill;
+  /** Collection roster tiles show video + name only — author/category inherited above. */
+  hideCategory?: boolean;
 }
 
-const { skill } = Astro.props;
-const live = skill.available && skill.slug in skillDetails;
+const { skill, hideCategory = false } = Astro.props;
+const live = skill.available && skill.id in directorySkillsById;
 ---
 
 {
   live ? (
     <a
-      href={`/skills/${skill.slug}/`}
+      href={`/s/${skill.id}/`}
       class="group block transition hover:-translate-y-0.5"
     >
       <div class="flex flex-col gap-3">
@@ -34,15 +36,18 @@ const live = skill.available && skill.slug in skillDetails;
                 <source src={skill.video} type="video/mp4" />
               </video>
             ) : (
-              <div class="grid size-full place-items-center px-4 text-center text-[12.5px] font-medium text-base-content/55">
-                Demo coming soon
+              <div class="relative size-full">
+                <img src="/skills/skill-placeholder.svg" alt="" loading="lazy" class="size-full object-cover" />
+                <span class="absolute inset-x-0 bottom-2 text-center text-[12px] font-medium text-base-content/55">
+                  Demo coming soon
+                </span>
               </div>
             )
           }
         </div>
         <div class="flex items-center justify-between gap-3">
           <h3 class="font-display text-[22px] font-semibold leading-snug text-base-content">{skill.title}</h3>
-          <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>
+          {!hideCategory && <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>}
         </div>
       </div>
     </a>
@@ -63,15 +68,18 @@ const live = skill.available && skill.slug in skillDetails;
                 <source src={skill.video} type="video/mp4" />
               </video>
             ) : (
-              <div class="grid size-full place-items-center px-4 text-center text-[12.5px] font-medium text-base-content/55">
-                Demo coming soon
+              <div class="relative size-full">
+                <img src="/skills/skill-placeholder.svg" alt="" loading="lazy" class="size-full object-cover" />
+                <span class="absolute inset-x-0 bottom-2 text-center text-[12px] font-medium text-base-content/55">
+                  Demo coming soon
+                </span>
               </div>
             )
           }
         </div>
         <div class="flex items-center justify-between gap-3">
           <h3 class="font-display text-[22px] font-semibold leading-snug text-base-content">{skill.title}</h3>
-          <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>
+          {!hideCategory && <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>}
         </div>
       </div>
     </article>

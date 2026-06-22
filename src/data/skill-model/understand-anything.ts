@@ -13,6 +13,10 @@ export const collection: Collection = {
     "Teaches you any codebase - every file, function, and dependency mapped into an interactive graph you can explore.",
   readme: "https://github.com/Egonex-AI/Understand-Anything/blob/main/README.md",
   repositoryURL: "https://github.com/Egonex-AI/Understand-Anything",
+  websiteURL: "https://understand-anything.com",
+  license: "MIT",
+  githubStars: 65949,
+  updatedAt: "2026-06-20",
   externalLinks: [
     "https://www.skills.sh/Egonex-AI/Understand-Anything",
     "https://claudemarketplaces.com/skills/Egonex-AI/Understand-Anything",
@@ -24,22 +28,31 @@ export const collection: Collection = {
   },
   installCommand:
     "Install this skill collection or give me an instruction how to install it: https://github.com/Egonex-AI/Understand-Anything",
-  skills: ["Egonex-AI/Understand-Anything/understand"],
+  skills: [
+    "Egonex-AI/Understand-Anything/understand",
+    "Egonex-AI/Understand-Anything/understand-chat",
+    "Egonex-AI/Understand-Anything/understand-dashboard",
+    "Egonex-AI/Understand-Anything/understand-diff",
+    "Egonex-AI/Understand-Anything/understand-domain",
+    "Egonex-AI/Understand-Anything/understand-explain",
+    "Egonex-AI/Understand-Anything/understand-knowledge",
+    "Egonex-AI/Understand-Anything/understand-onboard",
+  ],
 };
 
 export const skill: DirectorySkill = {
-  name: "Understand Any Codebase",
+  name: "Map Any Codebase",
   id: "Egonex-AI/Understand-Anything/understand",
   collection: "Egonex-AI/Understand-Anything",
   description: {
     short:
       "Other tools show you a hairball. This one teaches you the codebase - every file, function, and dependency, mapped into a graph you can explore.",
     input:
-      "Run /understand in any project - no arguments, no setup. It reads the current directory; pass a subpath like /understand src/frontend to scope a monorepo.",
+      "Run /understand in any project — no arguments, no setup. Pass a subpath to scope a monorepo.",
     process:
-      "Tree-sitter parses the real structure while five agents analyze files in parallel - extracting functions, classes, imports, architectural layers, and a dependency-ordered tour. Re-runs are incremental: only changed files get re-analyzed.",
+      "It parses the real structure and analyzes files in parallel, mapping functions, imports, and layers. Re-runs only touch changed files.",
     output:
-      "Running it on surfskills-web mapped 71 files into an 85-node graph across 8 layers (UI, Pages, API Routes, Services, Data, Database, Types, Config) with a 15-step guided tour from Project Overview through the Auth Flow, Billing, and Webhooks. A dashboard launches automatically - pan, zoom, search by meaning, and click any node for a plain-English summary.",
+      "An interactive graph and guided tour you can explore — pan, zoom, search by meaning, and click any node for a plain-English summary.",
   },
   example: "/understand",
   referenceFile:

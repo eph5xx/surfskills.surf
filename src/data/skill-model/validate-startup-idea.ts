@@ -13,6 +13,9 @@ export const collection: Collection = {
     "An honest startup-idea validation suite: 14 independent evaluators score your pitch, each running its own live web research.",
   readme: "https://github.com/eph5xx/tweakidea/blob/main/README.md",
   repositoryURL: "https://github.com/eph5xx/tweakidea",
+  license: "MIT",
+  githubStars: 19,
+  updatedAt: "2026-04-30",
   externalLinks: [],
   author: {
     url: "https://github.com/eph5xx",
@@ -21,22 +24,31 @@ export const collection: Collection = {
   },
   installCommand:
     "Install this skill collection or give me an instruction how to install it: https://github.com/eph5xx/tweakidea",
-  skills: ["eph5xx/tweakidea/tweak:evaluate"],
+  skills: [
+    "eph5xx/tweakidea/tweak:evaluate",
+    "eph5xx/tweakidea/tweak:analyze-hn-post",
+    "eph5xx/tweakidea/tweak:browse-hn",
+    "eph5xx/tweakidea/tweak:diff",
+    "eph5xx/tweakidea/tweak:improve",
+    "eph5xx/tweakidea/tweak:list",
+    "eph5xx/tweakidea/tweak:share",
+    "eph5xx/tweakidea/tweak:show",
+  ],
 };
 
 export const skill: DirectorySkill = {
-  name: "Validate Startup Idea",
+  name: "Validate Your Idea",
   id: "eph5xx/tweakidea/tweak:evaluate",
   collection: "eph5xx/tweakidea",
   description: {
     short:
       "14 independent evaluators score your pitch, each doing its own web research. An honest scorecard tells you GO, PIVOT, or STOP.",
     input:
-      "Describe the problem and the solution. Point it at a file, or run it bare to be interviewed.",
+      "Describe the problem and solution, point it at a file, or run it bare to be interviewed.",
     process:
-      "It extracts ~12 hidden assumptions for you to confirm, then asks 5 founder-market-fit questions - each backed by its own live web research.",
+      "It surfaces your hidden assumptions to confirm, then runs 14 evaluators — each backed by its own live web research.",
     output:
-      "A shareable HTML or PDF scorecard: 14 independent dimension scores, the evidence behind each, and a single clear verdict.",
+      "A shareable scorecard: 14 dimension scores, the evidence behind each, and one clear verdict — GO, PIVOT, or STOP.",
   },
   example: '/tweak:evaluate "An app that lets restaurants sell unsold food"',
   installCommand:

@@ -14,6 +14,9 @@ export const collection: Collection = {
   readme:
     "https://github.com/jakubkrehel/make-interfaces-feel-better/blob/main/README.md",
   repositoryURL: "https://github.com/jakubkrehel/make-interfaces-feel-better",
+  websiteURL: "https://jakub.kr/writing/details-that-make-interfaces-feel-better",
+  githubStars: 1446,
+  updatedAt: "2026-04-19",
   externalLinks: [
     "https://www.skills.sh/jakubkrehel/make-interfaces-feel-better",
     "https://claudemarketplaces.com/skills/jakubkrehel/make-interfaces-feel-better",
@@ -29,18 +32,18 @@ export const collection: Collection = {
 };
 
 export const skill: DirectorySkill = {
-  name: "Interfaces Feel Better",
+  name: "Polish Your UI",
   id: "jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better",
   collection: "jakubkrehel/make-interfaces-feel-better",
   description: {
     short:
       "Great interfaces aren't one big thing - they're 16 small details that compound.",
     input:
-      "Run /make-interfaces-feel-better on any UI component - a card, button, modal. Works on React, HTML, or Tailwind code.",
+      "Run /make-interfaces-feel-better on any UI component — a card, button, or modal in React, HTML, or Tailwind.",
     process:
-      "Checks your code against 16 design-engineering rules: concentric border radius, shadow depth, optical alignment, tabular numbers, text wrapping, icon animations, scale on press, transition specificity, minimum hit area, and more.",
+      "It checks your code against 16 design-engineering rules — concentric radius, shadow depth, optical alignment, tabular numbers, and more.",
     output:
-      "A grouped markdown table - one section per triggered principle, exact code fixes in each row. The demo caught 9 issues in a ProductCard: concentric radius, shadow depth, optical alignment, font smoothing, tabular numbers, text-wrap on headings, image outline, scale on press, and transition-all replaced - plus a revised component file.",
+      "A grouped table of exact code fixes, plus a revised component file. The demo caught 9 issues in one card.",
   },
   example:
     '/make-interfaces-feel-better "Audit this ProductCard for design-engineering issues"',
