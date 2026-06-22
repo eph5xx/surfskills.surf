@@ -1,0 +1,368 @@
+---
+import type { Collection } from "@/data/skill-model/types";
+import type { CollectionFacets } from "@/data/skill-model";
+import type { Skill } from "@/data/skills";
+import SkillCard from "@/components/SkillCard.astro";
+
+// Collection landing page — "bold" direction (primary-color hero, stats strip,
+// roster grid, README card). Data-driven: pass a Collection, its roster skills,
+// and the derived facet labels.
+interface Props {
+  collection: Collection;
+  skills: Skill[];
+  facets: CollectionFacets;
+}
+
+const { collection, skills, facets } = Astro.props;
+
+const [owner, repo] = collection.id.split("/");
+
+const ghHandle = (() => {
+  try {
+    return new URL(collection.author.url).pathname.replace(/^\/+/, "") || collection.author.name;
+  } catch {
+    return collection.author.name;
+  }
+})();
+
+const compact = (n: number) =>
+  new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 })
+    .format(n)
+    .toLowerCase();
+
+const updatedLabel = collection.updatedAt
+  ? new Date(collection.updatedAt).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })
+  : null;
+
+const statCards = [
+  { value: String(skills.length), label: "Skills", small: false },
+  ...(collection.githubStars !== undefined
+    ? [{ value: compact(collection.githubStars), label: "GitHub stars", small: false }]
+    : []),
+  ...(collection.installCount !== undefined
+    ? [{ value: compact(collection.installCount), label: "Installs", small: false }]
+    : []),
+  ...(collection.license ? [{ value: collection.license, label: "License", small: false }] : []),
+  ...(updatedLabel ? [{ value: updatedLabel, label: "Updated", small: true }] : []),
+];
+
+const hostLabel = (href: string) => {
+  try {
+    return new URL(href).hostname.replace(/^www\./, "");
+  } catch {
+    return href;
+  }
+};
+
+const linkRows = [
+  { href: collection.repositoryURL, label: "Open in GitHub", icon: "github" as const },
+  ...(collection.websiteURL
+    ? [{ href: collection.websiteURL, label: "Open website", icon: "globe" as const }]
+    : []),
+  ...collection.externalLinks.map((href) => ({
+    href,
+    label: hostLabel(href),
+    icon: "external" as const,
+  })),
+];
+
+const readmeHref = collection.readme ?? collection.repositoryURL;
+const facetGroups = [
+  { label: "Kinds", items: facets.kinds, chip: "bg-base-100 text-base-content" },
+  { label: "For", items: facets.audiences, chip: "bg-accent text-accent-content" },
+  { label: "Tasks", items: facets.tasks, chip: "bg-secondary text-secondary-content" },
+];
+---
+
+<div class="bg-base-200">
+  <main class="mx-auto max-w-[1200px] px-5 pt-8 pb-20 md:px-8">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumbs mb-7 text-[13.5px] font-semibold">
+      <ul>
+        <li><a href="/discover" class="text-secondary hover:text-primary">Skills</a></li>
+        <li>
+          <a href={collection.author.url} target="_blank" rel="noopener" class="text-secondary hover:text-primary"
+            >{owner}</a
+          >
+        </li>
+        <li>{repo}</li>
+      </ul>
+    </nav>
+
+    <!-- BOLD HERO -->
+    <section
+      class="relative overflow-hidden rounded-[1.6rem] px-7 py-9 text-primary-content shadow-[0_1px_2px_rgba(42,44,65,0.04),0_22px_46px_-32px_rgba(42,44,65,0.5)] md:px-12 md:py-12"
+      style="background: linear-gradient(135deg, #dd6b4d 0%, #d4583a 52%, #c44a2d 100%)"
+    >
+      <div
+        class="pointer-events-none absolute inset-0"
+        style="background: radial-gradient(120% 90% at 88% -10%, rgba(242,177,52,.34) 0%, transparent 55%), radial-gradient(90% 70% at -8% 110%, rgba(28,26,40,.20) 0%, transparent 60%)"
+      >
+      </div>
+
+      <div class="relative z-10 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_minmax(320px,360px)]">
+        <!-- LEFT: identity, tagline, facets -->
+        <div class="flex min-w-0 flex-col">
+          <a
+            href={collection.author.url}
+            target="_blank"
+            rel="noopener"
+            class="flex w-fit items-center gap-3 rounded-full bg-black/15 py-1.5 pr-4 pl-1.5 backdrop-blur-sm"
+          >
+            {
+              collection.author.avatarURL && (
+                <img
+                  src={collection.author.avatarURL}
+                  alt=""
+                  loading="lazy"
+                  class="size-8 rounded-full ring-2 ring-primary-content/40"
+                />
+              )
+            }
+            <span class="text-[13.5px] font-semibold leading-tight">
+              {collection.author.name}
+              <span class="font-normal text-primary-content/80">· @{ghHandle} ↗</span>
+            </span>
+          </a>
+
+          <h1 class="mt-6 font-display text-[40px] font-semibold leading-[0.98] tracking-[-0.035em] md:text-[60px]">
+            {collection.name}
+          </h1>
+
+          <p class="mt-5 max-w-[52ch] text-[17px] font-medium leading-[1.5] text-primary-content/90 md:text-[19px]">
+            {collection.shortDescription}
+          </p>
+
+          <div class="mt-7 space-y-3">
+            {
+              facetGroups.map(
+                (g) =>
+                  g.items.length > 0 && (
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="mr-1 text-[11px] font-semibold tracking-[0.18em] text-primary-content/65 uppercase">
+                        {g.label}
+                      </span>
+                      {g.items.map((item) => (
+                        <span class={`rounded-full px-3.5 py-1.5 text-[13px] font-semibold ${g.chip}`}>
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  ),
+              )
+            }
+          </div>
+        </div>
+
+        <!-- RIGHT: install card -->
+        <aside class="flex flex-col">
+          <div class="flex h-full flex-col rounded-[1.25rem] bg-base-100 p-6 text-base-content shadow-[0_1px_2px_rgba(42,44,65,0.04),0_22px_46px_-32px_rgba(42,44,65,0.5)]">
+            <div class="text-[11px] font-semibold tracking-[0.18em] text-base-content/45 uppercase">
+              Install collection
+            </div>
+
+            <div class="mt-3 flex items-start gap-2 rounded-xl border border-base-300 bg-base-200/60 px-3.5 py-3">
+              <code
+                class="min-w-0 flex-1 font-mono text-[12.5px] leading-[1.6] [overflow-wrap:anywhere] text-base-content/75"
+                >{collection.installCommand}</code
+              >
+              <button
+                type="button"
+                data-copy-cmd
+                data-copy={collection.installCommand}
+                aria-label="Copy install command"
+                class="swap swap-rotate mt-0.5 shrink-0 text-base-content/45 transition-colors hover:text-primary"
+              >
+                <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="11" height="11" rx="2" />
+                  <path d="M5 15V5a2 2 0 0 1 2-2h10" />
+                </svg>
+                <svg class="swap-on size-[15px] text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 6L9 17l-5-5" />
+                </svg>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              data-paste-cta
+              data-copy={collection.installCommand}
+              class="btn btn-primary mt-3.5 h-auto min-h-0 w-full gap-2 rounded-[14px] py-4 text-[16px] font-semibold normal-case shadow-[0_10px_26px_-12px_var(--color-primary)]"
+            >
+              <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
+              </svg>
+              <span data-paste-label>Paste into your agent</span>
+            </button>
+            <p class="mt-2.5 text-center text-[12px] text-base-content/50">
+              Works in Claude, Cursor, Codex &amp; more
+            </p>
+
+            <hr class="my-5 border-base-300" />
+
+            <ul class="divide-y divide-base-300">
+              {
+                linkRows.map((row) => (
+                  <li>
+                    <a
+                      href={row.href}
+                      target="_blank"
+                      rel="noopener"
+                      class="group flex items-center justify-between py-2.5 text-[14px] font-semibold"
+                    >
+                      <span class="flex items-center gap-2.5 text-base-content/85 group-hover:text-primary">
+                        {row.icon === "github" && (
+                          <svg viewBox="0 0 16 16" class="size-[16px] text-base-content/50 group-hover:text-primary" fill="currentColor" aria-hidden="true">
+                            <path d="M8 0C3.6 0 0 3.6 0 8c0 3.5 2.3 6.5 5.5 7.6.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-3.9 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.3-.3 2-.3s1.4.1 2 .3c1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3-1.8 3.7-3.6 3.9.3.3.6.8.6 1.6v2.4c0 .2.1.5.6.4A8 8 0 0 0 16 8c0-4.4-3.6-8-8-8z" />
+                          </svg>
+                        )}
+                        {row.icon === "globe" && (
+                          <svg viewBox="0 0 24 24" class="size-[16px] text-base-content/50 group-hover:text-primary" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M3 12h18" />
+                            <path d="M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" />
+                          </svg>
+                        )}
+                        {row.icon === "external" && (
+                          <svg viewBox="0 0 24 24" class="size-[16px] text-base-content/50 group-hover:text-primary" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M21 8l-9-5-9 5 9 5 9-5z" />
+                            <path d="M3 8v8l9 5 9-5V8" />
+                            <path d="M12 13v8" />
+                          </svg>
+                        )}
+                        {row.label}
+                      </span>
+                      <span class="text-base-content/30 transition group-hover:text-primary">↗</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- STATS STRIP -->
+    <section class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 md:gap-4">
+      {
+        statCards.map((s) => (
+          <div class="rounded-2xl border border-base-300 bg-base-100 px-5 py-5 shadow-[0_1px_2px_rgba(42,44,65,0.04),0_14px_30px_-26px_rgba(42,44,65,0.45)]">
+            <div
+              class:list={[
+                "font-display font-semibold leading-none tracking-[-0.03em] tabular-nums",
+                s.small ? "text-[20px] md:text-[22px]" : "text-[30px] md:text-[36px]",
+                s.label === "Skills" ? "text-primary" : "text-base-content",
+              ]}
+            >
+              {s.value}
+            </div>
+            <div class="mt-1.5 text-[12.5px] font-semibold tracking-[0.1em] text-base-content/55 uppercase">
+              {s.label}
+            </div>
+          </div>
+        ))
+      }
+    </section>
+
+    <!-- ROSTER -->
+    <section class="mt-14">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <h2 class="font-display text-[28px] font-semibold tracking-[-0.025em] md:text-[34px]">
+            The roster
+          </h2>
+          <p class="mt-1 text-[14.5px] text-base-content/65">
+            All {skills.length} {skills.length === 1 ? "skill" : "skills"} in the collection. Author,
+            license &amp; stars inherited above.
+          </p>
+        </div>
+        <span class="hidden shrink-0 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-content sm:inline-block">
+          {skills.length} {skills.length === 1 ? "skill" : "skills"}
+        </span>
+      </div>
+
+      <div class="mt-7 grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {skills.map((s) => <SkillCard skill={s} hideCategory />)}
+      </div>
+    </section>
+
+    <!-- README -->
+    <section class="mt-16">
+      <div class="overflow-hidden rounded-[1.4rem] border border-base-300 bg-base-100 shadow-[0_1px_2px_rgba(42,44,65,0.04),0_14px_30px_-26px_rgba(42,44,65,0.45)]">
+        <div class="flex items-center gap-2.5 border-b border-base-300 bg-base-200/60 px-7 py-4">
+          <svg viewBox="0 0 24 24" class="size-[18px] text-base-content/55" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          </svg>
+          <span class="font-mono text-[13px] font-semibold text-base-content/65">README.md</span>
+        </div>
+
+        <div class="px-7 py-8 md:px-12 md:py-10">
+          <h3 class="font-display text-[24px] font-semibold tracking-[-0.02em]">{collection.name}</h3>
+          <p class="mt-3 max-w-[68ch] text-[16px] leading-[1.7] text-base-content/75">
+            {collection.shortDescription}
+          </p>
+          <a
+            href={readmeHref}
+            target="_blank"
+            rel="noopener"
+            class="mt-6 inline-flex items-center gap-2 text-[15px] font-semibold text-secondary hover:text-primary"
+          >
+            <svg viewBox="0 0 16 16" class="size-[16px]" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.6 0 0 3.6 0 8c0 3.5 2.3 6.5 5.5 7.6.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-3.9 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.3-.3 2-.3s1.4.1 2 .3c1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3-1.8 3.7-3.6 3.9.3.3.6.8.6 1.6v2.4c0 .2.1.5.6.4A8 8 0 0 0 16 8c0-4.4-3.6-8-8-8z" />
+            </svg>
+            Read the full README on GitHub ↗
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // Copy the install command. Shared by the code-block icon button [data-copy-cmd]
+  // (DaisyUI swap flips copy→check) and the "Paste into your agent" CTA [data-paste-cta].
+  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-copy-cmd]")) {
+    btn.addEventListener("click", async () => {
+      const text = btn.getAttribute("data-copy");
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        return;
+      }
+      btn.classList.add("swap-active");
+      window.clearTimeout(Number(btn.dataset.copyTimer));
+      btn.dataset.copyTimer = String(
+        window.setTimeout(() => btn.classList.remove("swap-active"), 1500),
+      );
+    });
+  }
+
+  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-paste-cta]")) {
+    btn.addEventListener("click", async () => {
+      const text = btn.getAttribute("data-copy");
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        return;
+      }
+      const label = btn.querySelector<HTMLElement>("[data-paste-label]");
+      if (!label) return;
+      if (!btn.dataset.pasteLabel) btn.dataset.pasteLabel = label.textContent ?? "";
+      label.textContent = "Copied to clipboard";
+      window.clearTimeout(Number(btn.dataset.pasteTimer));
+      btn.dataset.pasteTimer = String(
+        window.setTimeout(() => {
+          label.textContent = btn.dataset.pasteLabel ?? "";
+        }, 1500),
+      );
+    });
+  }
+</script>

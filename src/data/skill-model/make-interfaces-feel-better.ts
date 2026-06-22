@@ -14,6 +14,9 @@ export const collection: Collection = {
   readme:
     "https://github.com/jakubkrehel/make-interfaces-feel-better/blob/main/README.md",
   repositoryURL: "https://github.com/jakubkrehel/make-interfaces-feel-better",
+  websiteURL: "https://jakub.kr/writing/details-that-make-interfaces-feel-better",
+  githubStars: 1446,
+  updatedAt: "2026-04-19",
   externalLinks: [
     "https://www.skills.sh/jakubkrehel/make-interfaces-feel-better",
     "https://claudemarketplaces.com/skills/jakubkrehel/make-interfaces-feel-better",

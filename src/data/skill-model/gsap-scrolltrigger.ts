@@ -13,6 +13,9 @@ export const collection: Collection = {
     "The official GreenSock skills that teach your coding agent to animate anything - the way GSAP is actually meant to be written.",
   readme: "https://github.com/greensock/gsap-skills/blob/main/README.md",
   repositoryURL: "https://github.com/greensock/gsap-skills",
+  license: "MIT",
+  githubStars: 9734,
+  updatedAt: "2026-04-21",
   externalLinks: [
     "https://www.skills.sh/greensock/gsap-skills",
     "https://claudemarketplaces.com/skills/greensock/gsap-skills",

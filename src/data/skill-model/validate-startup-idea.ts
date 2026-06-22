@@ -13,6 +13,9 @@ export const collection: Collection = {
     "An honest startup-idea validation suite: 14 independent evaluators score your pitch, each running its own live web research.",
   readme: "https://github.com/eph5xx/tweakidea/blob/main/README.md",
   repositoryURL: "https://github.com/eph5xx/tweakidea",
+  license: "MIT",
+  githubStars: 19,
+  updatedAt: "2026-04-30",
   externalLinks: [],
   author: {
     url: "https://github.com/eph5xx",

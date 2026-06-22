@@ -13,6 +13,9 @@ export const collection: Collection = {
     "Write HTML, render video, built for agents - describe a video and HyperFrames composes it in HTML/CSS/JS and renders a deterministic MP4.",
   readme: "https://github.com/heygen-com/hyperframes/blob/main/README.md",
   repositoryURL: "https://github.com/heygen-com/hyperframes",
+  license: "Apache-2.0",
+  githubStars: 29740,
+  updatedAt: "2026-06-22",
   externalLinks: [
     "https://www.skills.sh/heygen-com/hyperframes",
     "https://claudemarketplaces.com/skills/heygen-com/hyperframes",

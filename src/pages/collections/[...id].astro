@@ -1,0 +1,50 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import CollectionPage from "@/components/collection/CollectionPage.astro";
+import PostHogIdentify from "@/components/PostHogIdentify.astro";
+import { skills } from "@/data/skills";
+import { directoryCollectionsById, collectionFacets, skillSlugFromId } from "@/data/skill-model";
+import { getSubscription } from "@/lib/subscription";
+
+// Dynamic route, no getStaticPaths — rendered on demand. The rest param captures
+// the full collection id ("owner/repo", e.g. /collections/eph5xx/tweakidea).
+export const prerender = false;
+
+const { id } = Astro.params;
+const entry = id ? directoryCollectionsById[id] : undefined;
+if (!entry) return Astro.rewrite("/404");
+
+const { collection } = entry;
+const rosterSkills = entry.skills
+  .map((s) => skills.find((k) => k.slug === skillSlugFromId(s.id)))
+  .filter((s): s is (typeof skills)[number] => s !== undefined);
+const facets = collectionFacets(entry.skills);
+
+const user = Astro.locals.user;
+const sub = user ? await getSubscription(Astro.locals) : null;
+
+const count = entry.skills.length;
+const title = `${collection.name} — ${count} AI skill${count === 1 ? "" : "s"} by ${collection.author.name} | surfskills.surf`;
+---
+
+<BaseLayout title={title} description={collection.shortDescription}>
+  {
+    user && (
+      <PostHogIdentify
+        userId={user.id}
+        email={user.email}
+        plan={sub?.plan ?? null}
+        subscriptionStatus={sub?.status ?? null}
+      />
+    )
+  }
+  <div id="top" class="mx-auto max-w-[1200px] px-8">
+    <Header />
+  </div>
+  <CollectionPage collection={collection} skills={rosterSkills} facets={facets} />
+  <div class="mx-auto max-w-[1200px] px-8">
+    <Footer />
+  </div>
+</BaseLayout>

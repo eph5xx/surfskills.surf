@@ -22,7 +22,13 @@ import {
   collection as tweakideaCollection,
   skill as tweakideaSkill,
 } from "./validate-startup-idea";
-import type { Collection, DirectorySkill } from "./types";
+import {
+  type Collection,
+  type DirectorySkill,
+  SkillKind,
+  SkillAudience,
+  SkillTask,
+} from "./types";
 
 export interface DirectoryEntry {
   collection: Collection;
@@ -73,5 +79,65 @@ export const directorySkills = directoryEntries.map((entry) => entry.skill);
 
 export const directorySkillsBySlug: Record<string, DirectorySkill> = Object.fromEntries(
   directorySkills.map((skill) => [skillSlugFromId(skill.id), skill]),
+);
+
+// Human labels for the SkillKind / SkillAudience / SkillTask enums — used by the
+// collection page facet chips and anywhere an enum needs a display string.
+export const KIND_LABELS: Record<SkillKind, string> = {
+  [SkillKind.Guidance]: "Guidance",
+  [SkillKind.Workflow]: "Workflow",
+  [SkillKind.Tool]: "Tool",
+  [SkillKind.Reference]: "Reference",
+  [SkillKind.Integration]: "Integration",
+};
+export const AUDIENCE_LABELS: Record<SkillAudience, string> = {
+  [SkillAudience.Founder]: "Founder",
+  [SkillAudience.Design]: "Design",
+  [SkillAudience.SEO]: "SEO",
+  [SkillAudience.Developer]: "Developer",
+};
+export const TASK_LABELS: Record<SkillTask, string> = {
+  [SkillTask.Audit]: "Audit",
+  [SkillTask.Website]: "Website",
+  [SkillTask.Video]: "Video",
+  [SkillTask.Research]: "Research",
+};
+
+export interface CollectionFacets {
+  kinds: string[];
+  audiences: string[];
+  tasks: string[];
+}
+
+/** Union of kind/audience/task labels across a collection's member skills. */
+export const collectionFacets = (skills: DirectorySkill[]): CollectionFacets => {
+  const kinds = new Set<SkillKind>();
+  const audiences = new Set<SkillAudience>();
+  const tasks = new Set<SkillTask>();
+  for (const s of skills) {
+    kinds.add(s.kind);
+    s.audiences.forEach((a) => audiences.add(a));
+    s.tasks.forEach((t) => tasks.add(t));
+  }
+  return {
+    kinds: [...kinds].map((k) => KIND_LABELS[k]),
+    audiences: [...audiences].map((a) => AUDIENCE_LABELS[a]),
+    tasks: [...tasks].map((t) => TASK_LABELS[t]),
+  };
+};
+
+// Collection lookup keyed by id ("owner/repo"), with its member skills resolved
+// from the registered directory entries (the skills we actually have pages for).
+export const directoryCollectionsById: Record<
+  string,
+  { collection: Collection; skills: DirectorySkill[] }
+> = directoryEntries.reduce(
+  (acc, entry) => {
+    const id = entry.collection.id;
+    if (!acc[id]) acc[id] = { collection: entry.collection, skills: [] };
+    acc[id].skills.push(entry.skill);
+    return acc;
+  },
+  {} as Record<string, { collection: Collection; skills: DirectorySkill[] }>,
 );
 

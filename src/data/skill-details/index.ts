@@ -8,6 +8,7 @@ const toSkillContent = (entry: (typeof directoryEntries)[number]): SkillContent 
     tagline: entry.skill.description.short,
     glyph: "bars",
     command: entry.skill.example,
+    commandLabel: slug,
     flow: {
       write: {
         label: "You write",
@@ -30,6 +31,20 @@ const toSkillContent = (entry: (typeof directoryEntries)[number]): SkillContent 
       name: entry.collection.author.name,
       githubUrl: entry.collection.author.url,
       repoLabel: entry.collection.id,
+    },
+    collection: {
+      name: entry.collection.name,
+      id: entry.collection.id,
+      handle: entry.collection.author.name,
+      handleUrl: entry.collection.author.url,
+      avatarURL: entry.collection.author.avatarURL,
+      stars: entry.collection.githubStars,
+      installs: entry.collection.installCount,
+    },
+    links: {
+      github: entry.collection.repositoryURL,
+      website: entry.collection.websiteURL,
+      external: entry.collection.externalLinks,
     },
     github: entry.collection.repositoryURL,
     relatedSlugs: entry.relatedSkillSlugs,

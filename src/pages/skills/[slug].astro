@@ -16,9 +16,6 @@ const content = skillDetails[slug!];
 const skill = skills.find((s) => s.slug === slug);
 if (!content || !skill) return Astro.rewrite("/404");
 
-// surfskills is now a curated directory: install CTA points to source repo.
-const installHref = content.github;
-
 const user = Astro.locals.user;
 const sub = user ? await getSubscription(Astro.locals) : null;
 
@@ -39,7 +36,7 @@ const title = `${skill.title} — verified AI skill, shown working | surfskills.
   <div id="top" class="mx-auto max-w-[1200px] px-8">
     <Header />
   </div>
-  <SkillPage skill={skill} content={content} installHref={installHref} />
+  <SkillPage skill={skill} content={content} />
   <div class="mx-auto max-w-[1200px] px-8">
     <Footer />
   </div>

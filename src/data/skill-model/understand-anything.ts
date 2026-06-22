@@ -13,6 +13,10 @@ export const collection: Collection = {
     "Teaches you any codebase - every file, function, and dependency mapped into an interactive graph you can explore.",
   readme: "https://github.com/Egonex-AI/Understand-Anything/blob/main/README.md",
   repositoryURL: "https://github.com/Egonex-AI/Understand-Anything",
+  websiteURL: "https://understand-anything.com",
+  license: "MIT",
+  githubStars: 65949,
+  updatedAt: "2026-06-20",
   externalLinks: [
     "https://www.skills.sh/Egonex-AI/Understand-Anything",
     "https://claudemarketplaces.com/skills/Egonex-AI/Understand-Anything",

@@ -13,6 +13,10 @@ export const collection: Collection = {
     "An anti-slop frontend skill - your agent reads the brief, infers the right design direction, and ships interfaces that do not look templated.",
   readme: "https://github.com/Leonxlnx/taste-skill/blob/main/README.md",
   repositoryURL: "https://github.com/Leonxlnx/taste-skill",
+  websiteURL: "https://tasteskill.dev",
+  license: "MIT",
+  githubStars: 48891,
+  updatedAt: "2026-06-20",
   externalLinks: [
     "https://www.skills.sh/Leonxlnx/taste-skill",
     "https://claudemarketplaces.com/skills/Leonxlnx/taste-skill",
