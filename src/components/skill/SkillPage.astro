@@ -1,29 +1,53 @@
 ---
-import { type Skill } from "@/data/skills";
-import type { SkillContent } from "@/data/skill-details/types";
+import type { Collection, DirectorySkill } from "@/data/skill-model/types";
+import {
+  skillSlugFromId,
+  KIND_LABELS,
+  AUDIENCE_LABELS,
+  TASK_LABELS,
+} from "@/data/skill-model";
 import SkillSidebar from "@/components/skill/SkillSidebar.astro";
 
 // Reusable, data-driven skill listing template. Left column: identity -> demo ->
-// how-it-works. Right column: a sticky rail with Collection, Links, and Install.
-// To add a skill: add a catalog entry + a SkillContent module — no edits here.
+// how-it-works -> details. Right column: a sticky rail with Collection, Links, and
+// Install. To add a skill: add a DirectorySkill + Collection module — no edits here.
 interface Props {
-  skill: Skill;
-  content: SkillContent;
+  skill: DirectorySkill;
+  collection: Collection;
 }
 
-const { skill, content } = Astro.props;
-const f = content.flow;
+const { skill, collection } = Astro.props;
 
-// Header icon-tile glyphs (white SVG path on a sienna tile). Add as needed.
-const GLYPHS: Record<string, string> = {
-  bars: '<rect x="3" y="13" width="4.4" height="8" rx="1.4"/><rect x="9.8" y="8" width="4.4" height="13" rx="1.4"/><rect x="16.6" y="3.5" width="4.4" height="17.5" rx="1.4"/>',
+const slug = skillSlugFromId(skill.id);
+
+// The three "How it works" beats — input / process / output from the skill model.
+const flow = {
+  write: { label: "You write", head: "Input", body: skill.description.input },
+  between: { label: "It works", head: "Process", body: skill.description.process },
+  get: { label: "You get", head: "Output", body: skill.description.output },
 };
-const glyph = GLYPHS[content.glyph ?? "bars"] ?? GLYPHS.bars;
+
+// Header icon-tile glyph (white SVG path on a sienna tile).
+const glyph =
+  '<rect x="3" y="13" width="4.4" height="8" rx="1.4"/><rect x="9.8" y="8" width="4.4" height="13" rx="1.4"/><rect x="16.6" y="3.5" width="4.4" height="17.5" rx="1.4"/>';
 
 // Command coloring: leading /command token in primary, the rest in accent.
-const sp = content.command.indexOf(" ");
-const cmdHead = sp === -1 ? content.command : content.command.slice(0, sp);
-const cmdRest = sp === -1 ? "" : content.command.slice(sp);
+const sp = skill.example.indexOf(" ");
+const cmdHead = sp === -1 ? skill.example : skill.example.slice(0, sp);
+const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
+
+// Outbound deep-link host labels for the Details section.
+const hostLabel = (href: string) => {
+  try {
+    return new URL(href).hostname.replace(/^www\./, "");
+  } catch {
+    return href;
+  }
+};
+
+const kindLabel = KIND_LABELS[skill.kind];
+const audienceLabels = skill.audiences.map((a) => AUDIENCE_LABELS[a]);
+const taskLabels = skill.tasks.map((t) => TASK_LABELS[t]);
 ---
 
 <div class="bg-base-200">
@@ -32,11 +56,11 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
       <ul>
         <li><a href="/discover" class="text-secondary hover:text-primary">All skills</a></li>
         <li>
-          <a href={`/collections/${content.collection.id}`} class="text-secondary hover:text-primary"
-            >{content.collection.name}</a
+          <a href={`/collections/${collection.id}`} class="text-secondary hover:text-primary"
+            >{collection.name}</a
           >
         </li>
-        <li>{skill.title}</li>
+        <li>{skill.name}</li>
       </ul>
     </nav>
 
@@ -51,18 +75,18 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
             <svg viewBox="0 0 24 24" class="size-[30px]" fill="#fff" set:html={glyph} />
           </span>
           <div>
-            <div class="font-mono text-[13px] font-semibold text-secondary">{content.commandLabel}</div>
+            <div class="font-mono text-[13px] font-semibold text-secondary">{slug}</div>
             <h1
               class="mt-0.5 font-display text-[30px] font-semibold leading-[1.0] tracking-[-0.03em] text-balance md:text-[40px]"
             >
-              {skill.title}
+              {skill.name}
             </h1>
           </div>
         </div>
 
         <!-- Tagline -->
         <p class="mt-4 max-w-[54ch] text-[15px] leading-[1.55] text-base-content/65 text-pretty md:text-[16px]">
-          {content.tagline}
+          {skill.description.short}
         </p>
       </div>
 
@@ -72,7 +96,7 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
           class="aspect-[16/9.1] w-full overflow-hidden rounded-[18px] bg-[#1c1a28] shadow-[0_30px_70px_-28px_rgba(42,44,65,0.55)]"
         >
           {
-            skill.video ? (
+            skill.previewVideo ? (
               <video
                 class="size-full object-cover"
                 autoplay
@@ -80,13 +104,16 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
                 loop
                 playsinline
                 preload="metadata"
+                poster={skill.previewImage}
               >
-                <source src={skill.video} type="video/mp4" />
+                <source src={skill.previewVideo} type="video/mp4" />
               </video>
+            ) : skill.previewImage ? (
+              <img src={skill.previewImage} alt="" class="size-full object-cover" loading="lazy" />
             ) : (
-              /* ponytail: no images — text placeholder hero. Add a <video> if you want a demo. */
+              /* No video or still — text placeholder hero. */
               <div class="grid size-full place-items-center bg-[#1c1a28] p-6 text-center text-[13px] font-medium text-base-100/55">
-                {content.tagline}
+                {skill.description.short}
               </div>
             )
           }
@@ -95,7 +122,7 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
 
       <!-- Sidebar (mobile — sits between demo and How it works) -->
       <div class="order-3 flex flex-col gap-[18px] lg:hidden">
-        <SkillSidebar skill={skill} content={content} />
+        <SkillSidebar skill={skill} collection={collection} />
       </div>
 
       <!-- How it works -->
@@ -106,9 +133,9 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
         <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
           <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">01</div>
           <div>
-            <div class="text-[13.5px] font-semibold text-primary">{f.write.label}</div>
-            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{f.write.head}</h3>
-            <p class="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-base-content/70">{f.write.body}</p>
+            <div class="text-[13.5px] font-semibold text-primary">{flow.write.label}</div>
+            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{flow.write.head}</h3>
+            <p class="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-base-content/70">{flow.write.body}</p>
 
             <!-- Command terminal — full width, copy button lives in the title bar -->
             <div class="mt-4 overflow-hidden rounded-xl border border-white/[0.06] bg-[#232132]">
@@ -119,7 +146,7 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
                 <button
                   type="button"
                   data-copy-cmd
-                  data-copy={content.command}
+                  data-copy={skill.example}
                   aria-label="Copy command"
                   class="swap swap-rotate ml-auto text-white/50 transition-colors hover:text-white"
                 >
@@ -143,9 +170,9 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
         <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
           <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">02</div>
           <div>
-            <div class="text-[13.5px] font-semibold text-primary">{f.between.label}</div>
-            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{f.between.head}</h3>
-            <p class="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-base-content/70">{f.between.body}</p>
+            <div class="text-[13.5px] font-semibold text-primary">{flow.between.label}</div>
+            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{flow.between.head}</h3>
+            <p class="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-base-content/70">{flow.between.body}</p>
           </div>
         </div>
 
@@ -153,16 +180,79 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
         <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
           <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">03</div>
           <div>
-            <div class="text-[13.5px] font-semibold text-primary">{f.get.label}</div>
-            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{f.get.head}</h3>
-            <p class="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-base-content/70">{f.get.body}</p>
+            <div class="text-[13.5px] font-semibold text-primary">{flow.get.label}</div>
+            <h3 class="mt-0.5 text-[18px] leading-[1.2] md:text-[19px]">{flow.get.head}</h3>
+            <p class="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-base-content/70">{flow.get.body}</p>
           </div>
+        </div>
+      </div>
+
+      <!-- Details — the skill's classification + outbound deep links -->
+      <div class="order-5 lg:col-start-1">
+        <h2 class="font-display text-[24px] tracking-[-0.02em]">Details</h2>
+        <div class="mt-5 flex flex-col gap-5 border-t border-base-content/13 pt-6">
+          <!-- Kind -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="mr-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">Kind</span>
+            <span class="rounded-full bg-base-100 px-3.5 py-1.5 text-[13px] font-semibold text-base-content ring-1 ring-base-content/13">{kindLabel}</span>
+          </div>
+
+          {
+            audienceLabels.length > 0 && (
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="mr-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">For</span>
+                {audienceLabels.map((a) => (
+                  <span class="rounded-full bg-accent px-3.5 py-1.5 text-[13px] font-semibold text-accent-content">{a}</span>
+                ))}
+              </div>
+            )
+          }
+
+          {
+            taskLabels.length > 0 && (
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="mr-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">Tasks</span>
+                {taskLabels.map((t) => (
+                  <span class="rounded-full bg-secondary px-3.5 py-1.5 text-[13px] font-semibold text-secondary-content">{t}</span>
+                ))}
+              </div>
+            )
+          }
+
+          {
+            (skill.externalLinks.length > 0 || skill.referenceFile) && (
+              <div class="flex flex-col divide-y divide-base-content/10 border-t border-base-content/13 pt-2">
+                {skill.externalLinks.map((href) => (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener"
+                    class="group flex items-center justify-between gap-3 py-2.5 text-[14.5px] font-medium hover:text-primary"
+                  >
+                    <span class="text-base-content/85 group-hover:text-primary">{hostLabel(href)}</span>
+                    <span class="text-base-content/30 transition group-hover:text-primary">↗</span>
+                  </a>
+                ))}
+                {skill.referenceFile && (
+                  <a
+                    href={skill.referenceFile}
+                    target="_blank"
+                    rel="noopener"
+                    class="group flex items-center justify-between gap-3 py-2.5 text-[14.5px] font-medium hover:text-primary"
+                  >
+                    <span class="text-base-content/85 group-hover:text-primary">View source file</span>
+                    <span class="text-base-content/30 transition group-hover:text-primary">↗</span>
+                  </a>
+                )}
+              </div>
+            )
+          }
         </div>
       </div>
 
       <!-- Sidebar (desktop) — Collection + Links + Install as one sticky column -->
       <aside class="order-3 hidden flex-col gap-[18px] lg:sticky lg:top-[92px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:flex lg:self-start">
-        <SkillSidebar skill={skill} content={content} />
+        <SkillSidebar skill={skill} collection={collection} />
       </aside>
     </div>
   </div>
@@ -216,8 +306,7 @@ const cmdRest = sp === -1 ? "" : content.command.slice(sp);
     el.addEventListener("click", () => {
       window.posthog?.capture("skill_repo_clicked", {
         skill_slug: el.dataset.skillSlug,
-        free: el.dataset.skillFree === "1",
-        category: el.dataset.skillCategory,
+        kind: el.dataset.skillKind,
       });
     });
   }

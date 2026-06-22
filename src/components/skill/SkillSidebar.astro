@@ -1,19 +1,18 @@
 ---
-import type { Skill } from "@/data/skills";
-import type { SkillContent } from "@/data/skill-details/types";
+import type { Collection, DirectorySkill } from "@/data/skill-model/types";
+import { skillSlugFromId, KIND_LABELS } from "@/data/skill-model";
 
 // The skill page's right rail: Collection → Links → Install. Rendered once for
 // mobile (in-flow) and once for the sticky desktop aside; the copy/paste + PostHog
 // scripts live in SkillPage.astro and bind by [data-*] selectors across both copies.
 interface Props {
-  skill: Skill;
-  content: SkillContent;
+  skill: DirectorySkill;
+  collection: Collection;
 }
 
-const { skill, content } = Astro.props;
-const c = content.collection;
+const { skill, collection } = Astro.props;
 
-const initials = c.name
+const initials = collection.name
   .split(/\s+/)
   .map((w) => w[0])
   .slice(0, 2)
@@ -23,9 +22,9 @@ const initials = c.name
 // Real GitHub handle from the author URL (the display name isn't always the handle).
 const ghHandle = (() => {
   try {
-    return new URL(c.handleUrl).pathname.replace(/^\/+/, "") || c.handle;
+    return new URL(collection.author.url).pathname.replace(/^\/+/, "") || collection.author.name;
   } catch {
-    return c.handle;
+    return collection.author.name;
   }
 })();
 
@@ -42,12 +41,23 @@ const hostLabel = (href: string) => {
   }
 };
 
+// Install: skill-level command when set, else the collection's.
+const installCommand = skill.installCommand ?? collection.installCommand;
+
+// "Works in …" note: derived from the skill's declared tools, else a generic fallback.
+const worksIn =
+  skill.tools && skill.tools.length > 0
+    ? `Works in ${skill.tools.map((t) => t.name).join(", ")}`
+    : "Works in Claude, Cursor, Codex & more";
+
+const slug = skillSlugFromId(skill.id);
+
 const linkRows = [
-  { href: content.links.github, label: "Open in GitHub", icon: "github" as const },
-  ...(content.links.website
-    ? [{ href: content.links.website, label: "Open website", icon: "globe" as const }]
+  { href: collection.repositoryURL, label: "Open in GitHub", icon: "github" as const },
+  ...(collection.websiteURL
+    ? [{ href: collection.websiteURL, label: "Open website", icon: "globe" as const }]
     : []),
-  ...content.links.external.map((href) => ({
+  ...collection.externalLinks.map((href) => ({
     href,
     label: hostLabel(href),
     icon: "external" as const,
@@ -65,9 +75,9 @@ const labelClass =
   <div class={labelClass}>Collection</div>
   <div class="mt-3 flex items-center gap-3">
     {
-      c.avatarURL ? (
+      collection.author.avatarURL ? (
         <img
-          src={c.avatarURL}
+          src={collection.author.avatarURL}
           alt=""
           loading="lazy"
           class="size-[42px] shrink-0 rounded-full border border-base-300 object-cover"
@@ -83,12 +93,12 @@ const labelClass =
     }
     <div class="min-w-0">
       <a
-        href={`/collections/${c.id}`}
+        href={`/collections/${collection.id}`}
         class="block truncate font-display text-[17px] font-semibold leading-tight hover:text-primary"
-        >{c.name}</a
+        >{collection.name}</a
       >
       <a
-        href={c.handleUrl}
+        href={collection.author.url}
         target="_blank"
         rel="noopener"
         class="block text-[13px] font-medium text-secondary hover:text-primary"
@@ -97,22 +107,22 @@ const labelClass =
     </div>
   </div>
   {
-    (c.stars !== undefined || c.installs !== undefined) && (
+    (collection.githubStars !== undefined || collection.installCount !== undefined) && (
       <div class="mt-4 flex items-center gap-4 border-t border-base-content/13 pt-3.5 text-[13.5px] text-base-content/65">
-        {c.stars !== undefined && (
+        {collection.githubStars !== undefined && (
           <span class="flex items-center gap-1.5">
             <svg viewBox="0 0 24 24" class="size-[15px] text-accent" fill="currentColor" aria-hidden="true">
               <path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z" />
             </svg>
-            <b class="font-semibold text-base-content/85">{compact(c.stars)}</b> stars
+            <b class="font-semibold text-base-content/85">{compact(collection.githubStars)}</b> stars
           </span>
         )}
-        {c.installs !== undefined && (
+        {collection.installCount !== undefined && (
           <span class="flex items-center gap-1.5">
             <svg viewBox="0 0 24 24" class="size-[15px] text-base-content/45" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
             </svg>
-            <b class="font-semibold text-base-content/85">{compact(c.installs)}</b> installs
+            <b class="font-semibold text-base-content/85">{compact(collection.installCount)}</b> installs
           </span>
         )}
       </div>
@@ -134,9 +144,8 @@ const labelClass =
             "group flex items-center justify-between gap-3 py-2.5 text-[14.5px] font-medium hover:text-primary",
             i === 0 && "ph-install-cta",
           ]}
-          data-skill-slug={i === 0 ? skill.slug : undefined}
-          data-skill-free={i === 0 ? (skill.free ? "1" : "0") : undefined}
-          data-skill-category={i === 0 ? skill.category : undefined}
+          data-skill-slug={i === 0 ? slug : undefined}
+          data-skill-kind={i === 0 ? KIND_LABELS[skill.kind] : undefined}
         >
           <span class="flex items-center gap-3 text-base-content/85 group-hover:text-primary">
             {row.icon === "github" && (
@@ -173,12 +182,12 @@ const labelClass =
   <div class="mt-3 flex items-start gap-2 rounded-xl border border-base-300 bg-base-200/50 px-3.5 py-3">
     <code
       class="min-w-0 flex-1 font-mono text-[12.5px] leading-[1.55] [overflow-wrap:anywhere] text-base-content/65"
-      >{content.installCommand}</code
+      >{installCommand}</code
     >
     <button
       type="button"
       data-copy-cmd
-      data-copy={content.installCommand}
+      data-copy={installCommand}
       aria-label="Copy install command"
       class="swap swap-rotate mt-0.5 shrink-0 text-base-content/45 transition-colors hover:text-primary"
     >
@@ -194,7 +203,7 @@ const labelClass =
   <button
     type="button"
     data-paste-cta
-    data-copy={content.installCommand}
+    data-copy={installCommand}
     class="btn btn-primary mt-3 h-auto min-h-0 w-full gap-2 rounded-[14px] py-3.5 text-[16px] font-semibold normal-case shadow-[0_10px_24px_-10px_var(--color-primary)]"
   >
     <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -203,6 +212,6 @@ const labelClass =
     <span data-paste-label>Paste into your agent</span>
   </button>
   <p class="mt-2.5 text-center text-[12px] text-base-content/45">
-    Works in Claude, Cursor, Codex &amp; more
+    {worksIn}
   </p>
 </div>

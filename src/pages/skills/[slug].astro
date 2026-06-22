@@ -4,25 +4,24 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SkillPage from "@/components/skill/SkillPage.astro";
 import PostHogIdentify from "@/components/PostHogIdentify.astro";
-import { skills } from "@/data/skills";
-import { skillDetails } from "@/data/skill-details";
+import { directorySkillsBySlug, directoryCollectionsById } from "@/data/skill-model";
 import { getSubscription } from "@/lib/subscription";
 
 // Dynamic route, no getStaticPaths — rendered on demand.
 export const prerender = false;
 
 const { slug } = Astro.params;
-const content = skillDetails[slug!];
-const skill = skills.find((s) => s.slug === slug);
-if (!content || !skill) return Astro.rewrite("/404");
+const skill = slug ? directorySkillsBySlug[slug] : undefined;
+const collection = skill ? directoryCollectionsById[skill.collection]?.collection : undefined;
+if (!skill || !collection) return Astro.rewrite("/404");
 
 const user = Astro.locals.user;
 const sub = user ? await getSubscription(Astro.locals) : null;
 
-const title = `${skill.title} — verified AI skill, shown working | surfskills.surf`;
+const title = `${skill.name} — verified AI skill, shown working | surfskills.surf`;
 ---
 
-<BaseLayout title={title} description={content.tagline}>
+<BaseLayout title={title} description={skill.description.short}>
   {
     user && (
       <PostHogIdentify
@@ -36,7 +35,7 @@ const title = `${skill.title} — verified AI skill, shown working | surfskills.
   <div id="top" class="mx-auto max-w-[1200px] px-8">
     <Header />
   </div>
-  <SkillPage skill={skill} content={content} />
+  <SkillPage skill={skill} collection={collection} />
   <div class="mx-auto max-w-[1200px] px-8">
     <Footer />
   </div>
