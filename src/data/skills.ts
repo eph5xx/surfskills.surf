@@ -74,6 +74,10 @@ export const skills: Skill[] = directoryEntries.map(({ skill }) => {
   };
 });
 
+export const skillsById: Record<string, Skill> = Object.fromEntries(
+  skills.map((s) => [s.id, s]),
+);
+
 export const categories = Array.from(new Set(skills.map((skill) => skill.category))).map(
   (name) => ({ name, emoji: "•" }),
 );

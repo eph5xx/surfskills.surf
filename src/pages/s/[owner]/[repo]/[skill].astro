@@ -5,6 +5,7 @@ import Footer from "@/components/Footer.astro";
 import SkillPage from "@/components/skill/SkillPage.astro";
 import PostHogIdentify from "@/components/PostHogIdentify.astro";
 import { directorySkillsById, directoryCollectionsById, directoryEntryBySkillId, resolveRelatedSkills } from "@/data/skill-model";
+import { skillsById, type Skill } from "@/data/skills";
 import { getSubscription } from "@/lib/subscription";
 import { absoluteUrl } from "@/lib/seo";
 
@@ -27,6 +28,9 @@ const title = `${skill.name} — verified AI skill, shown working | surfskills.s
 
 const entry = directoryEntryBySkillId[skill.id];
 const relatedSkills = entry ? resolveRelatedSkills(entry.relatedSkillSlugs) : [];
+const relatedCards = relatedSkills
+  .map((r) => skillsById[r.id])
+  .filter((s): s is Skill => Boolean(s));
 
 const skillUrl = absoluteUrl(Astro.site!, `/s/${skill.id}`);
 const discoverUrl = absoluteUrl(Astro.site!, "/discover");
@@ -72,6 +76,6 @@ const jsonLd = [
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
   </div>
-  <SkillPage skill={skill} collection={collection} relatedSkills={relatedSkills} />
+  <SkillPage skill={skill} collection={collection} relatedSkills={relatedCards} />
   <Footer />
 </BaseLayout>
