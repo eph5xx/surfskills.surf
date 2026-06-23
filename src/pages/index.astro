@@ -8,7 +8,7 @@ import JoinBanner from "@/components/JoinBanner.astro";
 import Footer from "@/components/Footer.astro";
 import { absoluteUrl } from "@/lib/seo";
 
-const title = "AI agent skills directory - preview before using | surfskills.surf";
+const title = "Surf Skills — AI agent skills directory, preview before using";
 const description =
   "Browse a categorized, open-source AI agent skills directory. Preview each skill before you use it — the curated alternative to noisy skill marketplaces.";
 const siteUrl = absoluteUrl(Astro.site!, "/");
@@ -17,7 +17,8 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "surfskills.surf",
+    name: "Surf Skills",
+    alternateName: "surfskills.surf",
     url: siteUrl,
     description:
       "Curated open-source AI agent skills directory — preview what each skill does before you use it.",
@@ -25,9 +26,16 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "surfskills.surf",
+    name: "Surf Skills",
+    alternateName: "surfskills.surf",
     url: siteUrl,
+    logo: absoluteUrl(Astro.site!, "/logo.png"),
     email: "team@surfskills.surf",
+    sameAs: [
+      "https://github.com/eph5xx",
+      "https://x.com/eph5xx",
+      "https://www.linkedin.com/in/ephemeralsad/",
+    ],
   },
 ];
 ---
