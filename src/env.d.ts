@@ -34,3 +34,11 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+interface Window {
+  /** PostHog browser SDK, initialized client-side by PostHog.astro (absent if no key). */
+  posthog?: {
+    identify(id: string, properties?: Record<string, unknown>): void;
+    capture(event: string, properties?: Record<string, unknown>): void;
+  };
+}

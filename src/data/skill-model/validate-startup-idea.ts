@@ -25,7 +25,10 @@ export const collection: Collection = {
   installCommand:
     "Install this skill collection or give me an instruction how to install it: https://github.com/eph5xx/tweakidea",
   skills: [
-    "eph5xx/tweakidea/tweak:evaluate",
+    // URL segment is colon-free ("tweak-evaluate") because Cloudflare Workers Assets
+    // percent-encodes a ":" in the path and 307-redirects, which would break the clean
+    // canonical/sitemap URL. The real command stays "/tweak:evaluate" (see skill.example).
+    "eph5xx/tweakidea/tweak-evaluate",
     "eph5xx/tweakidea/tweak:analyze-hn-post",
     "eph5xx/tweakidea/tweak:browse-hn",
     "eph5xx/tweakidea/tweak:diff",
@@ -38,7 +41,7 @@ export const collection: Collection = {
 
 export const skill: DirectorySkill = {
   name: "Validate Your Idea",
-  id: "eph5xx/tweakidea/tweak:evaluate",
+  id: "eph5xx/tweakidea/tweak-evaluate",
   collection: "eph5xx/tweakidea",
   description: {
     short:

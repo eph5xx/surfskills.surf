@@ -3,23 +3,24 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import CollectionPage from "@/components/collection/CollectionPage.astro";
-import PostHogIdentify from "@/components/PostHogIdentify.astro";
 import { skills, type Skill } from "@/data/skills";
-import { directoryCollectionsById } from "@/data/skill-model";
-import { getSubscription } from "@/lib/subscription";
+import { directoryCollections } from "@/data/skill-model";
+import type { Collection } from "@/data/skill-model/types";
 import { absoluteUrl } from "@/lib/seo";
 
-// Dynamic route, no getStaticPaths — rendered on demand. Collections live under the /s/
+// Prerendered: one static page per directory collection. Collections live under the /s/
 // prefix keyed by their full id ("owner/repo", e.g. /s/greensock/gsap-skills). The /s/
 // prefix keeps the root namespace free for top-level pages (/blog, /pricing, …).
-export const prerender = false;
+export const prerender = true;
 
-const { owner, repo } = Astro.params;
-const id = owner && repo ? `${owner}/${repo}` : undefined;
-const entry = id ? directoryCollectionsById[id] : undefined;
-if (!entry) return Astro.rewrite("/404");
+export function getStaticPaths() {
+  return directoryCollections.map((collection) => {
+    const [owner, repo] = collection.id.split("/");
+    return { params: { owner, repo }, props: { collection } };
+  });
+}
 
-const { collection } = entry;
+const { collection } = Astro.props as { collection: Collection };
 
 const catalogById = new Map(skills.map((s) => [s.id, s]));
 const rosterSkills: Skill[] = collection.skills
@@ -43,9 +44,6 @@ const rosterSkills: Skill[] = collection.skills
   })
   .sort((a, b) => Number(b.available) - Number(a.available));
 
-const user = Astro.locals.user;
-const sub = user ? await getSubscription(Astro.locals) : null;
-
 const count = rosterSkills.length;
 const title = `${collection.name} — ${count} AI skill${count === 1 ? "" : "s"} by ${collection.author.name} | surfskills.surf`;
 
@@ -65,16 +63,6 @@ const jsonLd = [
 ---
 
 <BaseLayout title={title} description={collection.shortDescription} jsonLd={jsonLd}>
-  {
-    user && (
-      <PostHogIdentify
-        userId={user.id}
-        email={user.email}
-        plan={sub?.plan ?? null}
-        subscriptionStatus={sub?.status ?? null}
-      />
-    )
-  }
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
   </div>

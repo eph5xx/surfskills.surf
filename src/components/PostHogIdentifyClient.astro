@@ -1,0 +1,30 @@
+---
+// Client-side PostHog identify. Replaces the per-page server <PostHogIdentify> so logged-in
+// users are identified on every page — including the now-static skill/collection pages and the
+// homepage/discover (which never identified before). Anonymous visitors stay anonymous
+// (person_profiles is "identified_only"); the Supabase client is dynamically imported only when
+// an auth cookie is present, so it adds no JS to the anonymous path.
+---
+
+<script>
+  const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
+  const SUPABASE_KEY = import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+  // Same cookie heuristic as the pre-paint check in BaseLayout: presence-only, not a
+  // validated session — good enough to decide whether it's worth loading Supabase.
+  if (SUPABASE_URL && SUPABASE_KEY && /-auth-token(\.\d+)?=/.test(document.cookie)) {
+    const { createBrowserClient } = await import("@supabase/ssr");
+    const supabase = createBrowserClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data } = await supabase.auth.getClaims();
+    const claims = data?.claims;
+
+    if (claims?.sub) {
+      const personProps: Record<string, string> = {};
+      if (typeof claims.email === "string") personProps.email = claims.email;
+
+      const run = () => window.posthog?.identify(claims.sub, personProps);
+      if (window.posthog) run();
+      else document.addEventListener("DOMContentLoaded", run, { once: true });
+    }
+  }
+</script>
