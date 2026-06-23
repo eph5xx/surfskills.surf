@@ -1,0 +1,48 @@
+---
+// Container for the engine-rendered removable filter chips. The engine fills
+// [data-dir-active] at runtime, so the chip rule is :global (those nodes aren't in
+// this template). Hidden until at least one filter is active.
+interface Props {
+  class?: string;
+}
+const { class: cls } = Astro.props;
+---
+
+<div
+  data-dir-active
+  hidden
+  aria-label="Active filters"
+  class:list={["flex flex-wrap items-center gap-2", cls]}
+>
+</div>
+
+<style>
+  :global([data-dir-chip]) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-base-300);
+    background: var(--color-base-100);
+    padding: 0.25rem 0.45rem 0.25rem 0.7rem;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-base-content);
+    cursor: pointer;
+    transition:
+      border-color 0.15s,
+      color 0.15s;
+  }
+  :global([data-dir-chip] span[aria-hidden]) {
+    font-size: 11px;
+    color: color-mix(in oklab, var(--color-base-content) 40%, transparent);
+  }
+  :global([data-dir-chip]:hover) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  :global([data-dir-chip]:hover span[aria-hidden]) {
+    color: var(--color-primary);
+  }
+</style>
