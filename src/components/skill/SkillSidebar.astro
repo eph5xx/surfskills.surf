@@ -125,13 +125,15 @@ const sectionClass = "px-6 py-[22px]";
           class="block truncate font-display text-[17px] font-semibold leading-tight hover:text-primary"
           >{collection.name}</a
         >
-        <a
-          href={collection.author.url}
-          target="_blank"
-          rel="noopener"
-          class="block text-[13px] font-medium text-secondary hover:text-primary"
-          >by @{ghHandle} ↗</a
-        >
+        <p class="truncate text-[13px] font-medium text-secondary">
+          by <a
+            href={collection.author.url}
+            target="_blank"
+            rel="noopener"
+            class="hover:text-primary"
+            >@{ghHandle} ↗</a
+          >
+        </p>
       </div>
       {
         collection.githubStars !== undefined && (
