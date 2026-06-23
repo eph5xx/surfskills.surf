@@ -91,10 +91,10 @@ export const KIND_LABELS: Record<SkillKind, string> = {
   [SkillKind.Integration]: "Integration",
 };
 export const AUDIENCE_LABELS: Record<SkillAudience, string> = {
-  [SkillAudience.Founder]: "Founder",
+  [SkillAudience.Founder]: "Startups",
   [SkillAudience.Design]: "Design",
   [SkillAudience.SEO]: "SEO",
-  [SkillAudience.Developer]: "Developer",
+  [SkillAudience.Developer]: "Development",
 };
 export const TASK_LABELS: Record<SkillTask, string> = {
   [SkillTask.Audit]: "Audit",

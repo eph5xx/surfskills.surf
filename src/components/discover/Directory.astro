@@ -1,0 +1,106 @@
+---
+import { directoryItems, facets, sortOptions } from "@/data/directory";
+import FacetOptions from "./FacetOptions.astro";
+import ActiveChips from "./ActiveChips.astro";
+import DirectoryCard from "./DirectoryCard.astro";
+
+// The Discover directory — faceted sidebar.
+// Facet groups are generated from the config registry (so a new field appears here
+// automatically), each group is a collapsible accordion with live result counts,
+// and a within-group search + scroll kick in as a facet's value list grows. Active
+// selections surface as removable chips above the grid.
+---
+
+<section
+  data-directory
+  class="relative lg:grid lg:grid-cols-[248px_minmax(0,1fr)] lg:gap-8"
+>
+  <input id="dir-filters" type="checkbox" class="peer/filters hidden" aria-hidden="true" />
+
+  <!-- Filter rail -->
+  <aside
+    class="mb-6 hidden rounded-box border border-base-300 bg-base-100 p-4 peer-checked/filters:block lg:sticky lg:top-[88px] lg:mb-0 lg:block lg:self-start lg:p-5"
+  >
+    <label class="input flex h-10 items-center gap-2 bg-base-200/60">
+      <svg viewBox="0 0 24 24" class="size-4 text-base-content/40" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+      </svg>
+      <input data-dir-search type="search" placeholder="Search…" class="grow text-[14px]" aria-label="Search skills" />
+    </label>
+
+    <div class="mt-4">
+      {
+        facets.map((facet, i) => (
+          <details class:list={["facet-acc pt-2.5", i > 0 && "border-t border-base-300"]} open>
+            <summary class="flex cursor-pointer list-none items-center justify-between py-1.5 font-display text-[15px] font-semibold text-base-content">
+              {facet.label}
+              <svg class="acc-chevron size-3.5 text-base-content/35 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+            <div class="pb-2">
+              <FacetOptions facet={facet} idPrefix="dir" />
+            </div>
+          </details>
+        ))
+      }
+    </div>
+
+    <button
+      data-dir-clear
+      type="button"
+      class="mt-4 border-t border-base-300 pt-3 text-[13px] font-medium text-base-content/50 underline-offset-4 hover:text-primary hover:underline"
+    >
+      Clear all filters
+    </button>
+  </aside>
+
+  <!-- Results -->
+  <div>
+    <div class="mb-4 flex items-center justify-between gap-3">
+      <p class="text-[14px] font-semibold text-base-content/55">
+        <span data-dir-count>{directoryItems.length}</span> skills
+      </p>
+      <div class="flex items-center gap-2">
+        <label for="dir-filters" class="btn btn-sm gap-1.5 lg:hidden">
+          <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M3 5h18M6 12h12M10 19h4" />
+          </svg>
+          Filters
+        </label>
+        <select data-dir-sort class="select select-sm bg-base-100" aria-label="Sort skills">
+          {sortOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+        </select>
+      </div>
+    </div>
+
+    <ActiveChips class="mb-4" />
+
+    <div data-dir-list class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {directoryItems.map((item) => <DirectoryCard item={item} />)}
+    </div>
+
+    <div data-dir-empty hidden class="py-20 text-center">
+      <p class="font-display text-[22px] text-base-content">No skills match those filters</p>
+      <p class="mt-1.5 text-[14px] text-base-content/60">Loosen a facet or clear your search.</p>
+      <button data-dir-clear type="button" class="btn btn-sm btn-primary mt-5 rounded-full">Clear all filters</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  [hidden] {
+    display: none !important;
+  }
+  .facet-acc > summary::-webkit-details-marker {
+    display: none;
+  }
+  .facet-acc[open] .acc-chevron {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  import "../../scripts/directory-engine";
+</script>

@@ -1,0 +1,98 @@
+---
+import type { FacetDef } from "@/data/directory";
+
+// Renders the option rows for ONE facet, generically — radios (+ an "All") for a
+// single-select facet, checkboxes for multi-select, each with a live result count.
+// A within-group text filter appears only once a facet grows past `searchAfter`,
+// and the list scrolls past `scrollAfter`. Driven entirely by the FacetDef, so a
+// new field added to the registry renders here with no changes.
+interface Props {
+  facet: FacetDef;
+  /** Namespaces radio groups + avoids id clashes when a page has several shells. */
+  idPrefix: string;
+  searchAfter?: number;
+  scrollAfter?: number;
+}
+const { facet, idPrefix, searchAfter = 8, scrollAfter = 9 } = Astro.props;
+const single = !facet.multi;
+const groupName = `${idPrefix}-${facet.key}`;
+const long = facet.values.length > scrollAfter;
+---
+
+<div>
+  {
+    facet.values.length > searchAfter && (
+      <input
+        type="search"
+        data-dir-facet-search
+        data-dir-target={facet.key}
+        placeholder={`Filter ${facet.label.toLowerCase()}…`}
+        class="input input-xs mb-2 w-full bg-base-200/50"
+        aria-label={`Filter ${facet.label} options`}
+      />
+    )
+  }
+  <div class:list={["flex flex-col", long && "max-h-56 overflow-y-auto pr-1"]}>
+    {
+      single && (
+        <label class="facet-opt">
+          <input
+            type="radio"
+            name={groupName}
+            data-dir-facet={facet.key}
+            data-dir-mode="single"
+            data-value=""
+            checked
+            class="radio radio-xs radio-primary"
+          />
+          <span class="facet-opt-label">All</span>
+          <span data-dir-facet-count class="facet-opt-count" />
+        </label>
+      )
+    }
+    {
+      facet.values.map((v) => (
+        <label class="facet-opt">
+          <input
+            type={single ? "radio" : "checkbox"}
+            name={single ? groupName : undefined}
+            data-dir-facet={facet.key}
+            data-dir-mode={single ? "single" : "multi"}
+            data-value={v.value}
+            class:list={[single ? "radio radio-xs radio-primary" : "checkbox checkbox-xs checkbox-secondary"]}
+          />
+          <span class="facet-opt-label">{v.value}</span>
+          <span data-dir-facet-count class="facet-opt-count">{v.count}</span>
+        </label>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .facet-opt {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.2rem 0.1rem;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 0.4rem;
+  }
+  .facet-opt:hover {
+    background: color-mix(in oklab, var(--color-base-200) 70%, transparent);
+  }
+  .facet-opt-label {
+    flex: 1;
+    min-width: 0;
+  }
+  .facet-opt-count {
+    font-variant-numeric: tabular-nums;
+    font-size: 11.5px;
+    color: color-mix(in oklab, var(--color-base-content) 45%, transparent);
+  }
+  .facet-opt[data-count-zero] {
+    opacity: 0.4;
+  }
+</style>
