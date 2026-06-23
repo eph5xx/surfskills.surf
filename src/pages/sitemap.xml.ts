@@ -10,7 +10,6 @@ export const prerender = true;
 const STATIC_PATHS = [
   "/",
   "/discover",
-  "/pricing",
   "/blog",
   "/blog/tweak-idea",
   "/terms",

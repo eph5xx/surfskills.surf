@@ -50,7 +50,7 @@ export const directoryEntries: DirectoryEntry[] = [
   {
     collection: hyperframesCollection,
     skill: hyperframesSkill,
-    relatedSkillSlugs: ["gsap-scrolltrigger", "tweak:evaluate"],
+    relatedSkillSlugs: ["gsap-scrolltrigger", "tweak-evaluate"],
   },
   {
     collection: interfacesCollection,
@@ -60,7 +60,7 @@ export const directoryEntries: DirectoryEntry[] = [
   {
     collection: understandCollection,
     skill: understandSkill,
-    relatedSkillSlugs: ["tweak:evaluate"],
+    relatedSkillSlugs: ["tweak-evaluate"],
   },
   {
     collection: gsapCollection,

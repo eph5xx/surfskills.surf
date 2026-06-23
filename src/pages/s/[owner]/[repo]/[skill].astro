@@ -3,28 +3,29 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SkillPage from "@/components/skill/SkillPage.astro";
-import PostHogIdentify from "@/components/PostHogIdentify.astro";
-import { directorySkillsById, directoryCollectionsById, directoryEntryBySkillId, resolveRelatedSkills } from "@/data/skill-model";
+import { directorySkills, directoryCollectionsById, directoryEntryBySkillId, resolveRelatedSkills } from "@/data/skill-model";
+import type { Collection, DirectorySkill } from "@/data/skill-model/types";
 import { skillsById, type Skill } from "@/data/skills";
-import { getSubscription } from "@/lib/subscription";
 import { absoluteUrl } from "@/lib/seo";
 
-// Dynamic route, no getStaticPaths — rendered on demand. Skills live under the /s/ prefix
-// keyed by their full id ("owner/repo/skill", e.g. /s/greensock/gsap-skills/gsap-scrolltrigger).
-// The skill segment may contain a colon (e.g. tweak:evaluate). The 2-segment collection
-// route under /s/ is distinct from this 3-segment skill route.
-export const prerender = false;
+// Prerendered: one static page per directory skill. Skills live under the /s/ prefix keyed by
+// their full id ("owner/repo/skill", e.g. /s/greensock/gsap-skills/gsap-scrolltrigger). The
+// skill segment may contain a colon (e.g. tweak:evaluate). The 2-segment collection route
+// under /s/ is distinct from this 3-segment skill route.
+export const prerender = true;
 
-const { owner, repo, skill: skillSeg } = Astro.params;
-const id = owner && repo && skillSeg ? `${owner}/${repo}/${skillSeg}` : undefined;
-const skill = id ? directorySkillsById[id] : undefined;
-const collection = skill ? directoryCollectionsById[skill.collection]?.collection : undefined;
-if (!skill || !collection) return Astro.rewrite("/404");
+export function getStaticPaths() {
+  return directorySkills.flatMap((skill) => {
+    const collection = directoryCollectionsById[skill.collection]?.collection;
+    if (!collection) return [];
+    const [owner, repo, ...rest] = skill.id.split("/");
+    return [{ params: { owner, repo, skill: rest.join("/") }, props: { skill, collection } }];
+  });
+}
 
-const user = Astro.locals.user;
-const sub = user ? await getSubscription(Astro.locals) : null;
+const { skill, collection } = Astro.props as { skill: DirectorySkill; collection: Collection };
 
-const title = `${skill.name} — verified AI skill, shown working | surfskills.surf`;
+const title = `${skill.name} — open-source AI skill by ${collection.author.name} | surfskills.surf`;
 
 const entry = directoryEntryBySkillId[skill.id];
 const relatedSkills = entry ? resolveRelatedSkills(entry.relatedSkillSlugs) : [];
@@ -63,16 +64,6 @@ const jsonLd = [
 ---
 
 <BaseLayout title={title} description={skill.description.short} jsonLd={jsonLd}>
-  {
-    user && (
-      <PostHogIdentify
-        userId={user.id}
-        email={user.email}
-        plan={sub?.plan ?? null}
-        subscriptionStatus={sub?.status ?? null}
-      />
-    )
-  }
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
   </div>

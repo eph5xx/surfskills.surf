@@ -1,6 +1,7 @@
 ---
 import "@/styles/globals.css";
 import PostHog from "@/components/PostHog.astro";
+import PostHogIdentifyClient from "@/components/PostHogIdentifyClient.astro";
 import { absoluteUrl } from "@/lib/seo";
 
 interface Props {
@@ -12,8 +13,8 @@ interface Props {
 }
 
 const {
-  title = "AI Skills Directory — Preview & Install Open-Source AI Skills | surfskills.surf",
-  description = "Curated AI skills you install in one click and run in your own AI — Claude, ChatGPT, Cursor and friends. Bring the messy input, take home the finished thing. No code needed.",
+  title = "AI agent skills directory — preview before using | surfskills.surf",
+  description = "A categorized directory of open-source AI agent skills. Preview what each one does, then open the source in one click.",
   canonical = absoluteUrl(Astro.site!, Astro.url.pathname),
   noindex = false,
   jsonLd = [],
@@ -49,6 +50,7 @@ const {
       rel="stylesheet"
     />
     <PostHog />
+    <PostHogIdentifyClient />
   </head>
   <body>
     <slot />

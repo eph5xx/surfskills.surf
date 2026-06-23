@@ -3,9 +3,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 
-// Rendered on demand so SSR pages can rewrite here (and so unmatched
-// routes get a styled 404 from the worker).
-export const prerender = false;
+// Prerendered to a static 404.html so Cloudflare Pages serves it for any unmatched route
+// (e.g. an unknown /s/ skill path that getStaticPaths didn't emit). No SSR page rewrites
+// here anymore, so on-demand rendering is no longer needed.
+export const prerender = true;
 ---
 
 <BaseLayout title="Lost at sea — surfskills.surf" description="That page drifted away.">
