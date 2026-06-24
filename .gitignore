@@ -27,3 +27,9 @@ pnpm-debug.log*
 .dev.vars.*
 !.dev.vars.example
 .wrangler/
+
+.claude/skills
+
+# hyperframes working renders (final web clips are committed under public/how/)
+media/how-it-works/renders/
+media/how-it-works/.debug/

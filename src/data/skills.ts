@@ -22,6 +22,19 @@ export interface Skill {
   available: boolean;
 }
 
+// Curated homepage "example section" (SkillShowcase). This is an explicit
+// allowlist, NOT derived from directoryEntries, so newly-onboarded skills
+// (e.g. via create-surf-skill) never auto-appear in the homepage example
+// section. Add an id here by hand to feature a skill.
+const FEATURED_SKILL_IDS = new Set<string>([
+  "greensock/gsap-skills/gsap-scrolltrigger",
+  "jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better",
+  "Leonxlnx/taste-skill/design-taste-frontend",
+  "Egonex-AI/Understand-Anything/understand",
+  "eph5xx/tweakidea/tweak-evaluate",
+  "heygen-com/hyperframes/hyperframes",
+]);
+
 export const author = {
   name: "Sasha S.",
   initial: "S",
@@ -66,6 +79,7 @@ export const skills: Skill[] = directoryEntries.map(({ skill }) => {
     category: mapCategory(skill.audiences, skill.tasks),
     tools: mapTools(slug, skill.audiences),
     free: true,
+    featured: FEATURED_SKILL_IDS.has(skill.id),
     thumbLabel: mapThumbLabel(skill.tasks),
     testedDate: "Jun 2026",
     verified: true,

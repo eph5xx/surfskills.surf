@@ -23,6 +23,10 @@ import {
   skill as tweakideaSkill,
 } from "./validate-startup-idea";
 import {
+  collection as websiteToVideoCollection,
+  skill as websiteToVideoSkill,
+} from "./website-to-video";
+import {
   type Collection,
   type DirectorySkill,
   SkillKind,
@@ -42,6 +46,11 @@ export const skillSlugFromId = (id: string): string => {
 };
 
 export const directoryEntries: DirectoryEntry[] = [
+  {
+    collection: websiteToVideoCollection,
+    skill: websiteToVideoSkill,
+    relatedSkillSlugs: ["hyperframes", "gsap-scrolltrigger"],
+  },
   {
     collection: tweakideaCollection,
     skill: tweakideaSkill,
@@ -74,7 +83,12 @@ export const directoryEntries: DirectoryEntry[] = [
   },
 ];
 
-export const directoryCollections = directoryEntries.map((entry) => entry.collection);
+// Dedupe by collection id: a collection can back more than one directory entry
+// (multiple skills from the same repo), but it must appear once for collection
+// routes/sitemap. Keeps one Collection object per id.
+export const directoryCollections = [
+  ...new Map(directoryEntries.map((entry) => [entry.collection.id, entry.collection])).values(),
+];
 export const directorySkills = directoryEntries.map((entry) => entry.skill);
 
 export const directorySkillsById: Record<string, DirectorySkill> = Object.fromEntries(
