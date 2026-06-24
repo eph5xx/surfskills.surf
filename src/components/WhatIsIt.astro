@@ -26,27 +26,32 @@ const tools = [
   { name: "Tabnine", src: "/logos/tabnine.svg" },
 ];
 
-// Each step shows a tiny artifact (mock) instead of a paragraph, so the workflow
-// is visible at a glance. Captions trimmed to one line; mock markup is authored
-// per step below (not data — three steps don't need an abstraction).
+// Each step shows a short, muted, looping demo clip (rendered with HyperFrames,
+// brand-matched to the goldenhour theme; sources in media/how-it-works/) instead
+// of a paragraph, so the workflow is visible at a glance. Clips live in
+// /public/how and play only while on screen (see the script at the bottom); the
+// poster still carries the frame for reduced-motion / pre-load.
 const steps = [
   {
     n: "1",
     title: "Find the right skill",
-    caption: "Search for capabilities that solve your bottleneck.",
-    mock: "catalog",
+    caption: "Browse the library and preview each skill's demo before you run it.",
+    video: "/how/step-1-discover.mp4",
+    poster: "/how/step-1-discover.jpg",
   },
   {
     n: "2",
-    title: "Turn it on instantly",
-    caption: "Add validate-startup-idea to your workspace in one click.",
-    mock: "result",
+    title: "Paste it into your agent",
+    caption: "Copy the one-line install command into the AI tool you already use.",
+    video: "/how/step-2-paste.mp4",
+    poster: "/how/step-2-paste.jpg",
   },
   {
     n: "3",
     title: "Get the result",
     caption: "Your input goes in, and a clear, ready-to-use outcome comes back.",
-    mock: "io",
+    video: "/how/step-3-result.mp4",
+    poster: "/how/step-3-result.jpg",
   },
 ];
 ---
@@ -167,81 +172,24 @@ const steps = [
               <h3 class="text-[19px] leading-snug">{step.title}</h3>
             </div>
 
-            {/* the artifact — decorative, screen readers get title + caption */}
+            {/* the artifact — a brand-rendered demo loop (16:10, matches the
+               clip's native canvas). Decorative; screen readers get title +
+               caption. Plays only while on screen — see the script below. */}
             <div
-              class="rounded-field border border-base-300 bg-base-200/60 p-3 text-[12.5px]"
+              class="aspect-[16/10] overflow-hidden rounded-field border border-base-300 bg-base-200/60"
               aria-hidden="true"
             >
-              {step.mock === "catalog" && (
-                <div class="flex flex-col gap-2">
-                  <div class="flex items-center gap-2 rounded-field border border-base-300 bg-base-100 px-2.5 py-1.5 text-base-content/55">
-                    <span aria-hidden="true">🔍</span>
-                    <span class="text-base-content/70">refine idea</span>
-                  </div>
-                  <div class="rounded-field border border-base-300 bg-base-100 px-2.5 py-2">
-                    <div class="flex items-center justify-between gap-2">
-                      <div class="flex min-w-0 items-center gap-2">
-                        <span
-                          class="size-6 shrink-0 rounded-full border border-base-300 bg-transparent"
-                          aria-hidden="true"
-                        ></span>
-                        <div class="min-w-0">
-                          <div class="truncate font-mono text-[12px] text-base-content/85">
-                            validate-startup-idea
-                          </div>
-                          <div class="truncate text-[11px] text-base-content/55">Product strategy</div>
-                        </div>
-                      </div>
-                      <span class="rounded-field bg-accent/15 px-1.5 py-0.5 text-[11px] font-semibold text-accent">
-                        Match
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {step.mock === "result" && (
-                <div class="flex flex-col gap-2">
-                  <div class="rounded-field border border-base-300 bg-base-100 px-2.5 py-2">
-                    <div class="text-[11px] text-base-content/50">Workspace integrations</div>
-                    <div class="mt-1.5 flex items-center justify-between gap-2">
-                      <span class="font-mono text-[12px] text-base-content/85">validate-startup-idea</span>
-                      <span class="badge badge-accent badge-xs border-0">ON</span>
-                    </div>
-                  </div>
-                  <div class="rounded-field bg-base-100 px-2.5 py-2">
-                    <div class="flex items-center justify-between gap-2">
-                      <span class="text-[11px] font-medium text-base-content/70">Workspace</span>
-                      <button class="btn btn-accent btn-xs h-6 min-h-6">Add to Workspace</button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {step.mock === "io" && (
-                <div class="flex flex-col gap-2">
-                  <div class="grid grid-cols-2 gap-2">
-                    <div class="rounded-field bg-base-100 px-2 py-2">
-                      <div class="text-[10px] uppercase tracking-wide text-base-content/45">Before</div>
-                      <div class="mt-1 text-[11px] leading-[1.35] text-base-content/70">
-                        Thinking about a new AI B2C app for personalized fitness coaching...
-                      </div>
-                    </div>
-                    <div class="rounded-field bg-base-100 px-2 py-2">
-                      <div class="text-[10px] uppercase tracking-wide text-base-content/45">After</div>
-                      <div class="mt-1 space-y-1 text-[11px]">
-                        <div class="rounded-field bg-base-200 px-1.5 py-1 text-base-content/75">Risks & Assumptions</div>
-                        <div class="rounded-field bg-base-200 px-1.5 py-1 text-base-content/75">Dimensions research</div>
-                        <div class="rounded-field bg-base-200 px-1.5 py-1 text-base-content/75">Next steps</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex items-center justify-between rounded-field bg-base-100 px-2.5 py-2">
-                    <span class="font-medium text-base-content/80">Validation report ready</span>
-                    <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-accent">✓ ready</span>
-                  </div>
-                </div>
-              )}
+              <video
+                class="size-full object-cover"
+                muted
+                loop
+                playsinline
+                preload="none"
+                poster={step.poster}
+                data-how-video
+              >
+                <source src={step.video} type="video/mp4" />
+              </video>
             </div>
 
             <p class="text-[13.5px] leading-[1.45] text-base-content/65">{step.caption}</p>
@@ -298,5 +246,23 @@ const steps = [
       { threshold: 0.15 },
     );
     io.observe(root);
+  }
+
+  // Each step's demo loop plays only while on screen (so three off-screen videos
+  // never decode at once) and stays on its poster frame when reduced motion is
+  // preferred. preload="none" defers the download until the first play().
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!prefersReduced) {
+    const vio = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const v = e.target as HTMLVideoElement;
+          if (e.isIntersecting) v.play().catch(() => {});
+          else v.pause();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    document.querySelectorAll("[data-how-video]").forEach((v) => vio.observe(v));
   }
 </script>

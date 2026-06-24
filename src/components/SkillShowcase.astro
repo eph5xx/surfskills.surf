@@ -12,8 +12,10 @@ interface Props {
 
 const { heading = "What can you do with it?" } = Astro.props;
 
-const live = allSkills.find((s) => s.available && s.video);
-const rest: Skill[] = allSkills.filter((s) => s !== live);
+// Only the curated featured set appears in the homepage example section.
+const featured = allSkills.filter((s) => s.featured);
+const live = featured.find((s) => s.available && s.video);
+const rest: Skill[] = featured.filter((s) => s !== live);
 ---
 
 <!-- Solid surface band (full-bleed) so the section reads as "inside". -->

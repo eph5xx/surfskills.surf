@@ -14,8 +14,8 @@ export const collection: Collection = {
   readme: "https://github.com/heygen-com/hyperframes/blob/main/README.md",
   repositoryURL: "https://github.com/heygen-com/hyperframes",
   license: "Apache-2.0",
-  githubStars: 29740,
-  updatedAt: "2026-06-22",
+  githubStars: 30893,
+  updatedAt: "2026-06-24",
   externalLinks: [
     "https://www.skills.sh/heygen-com/hyperframes",
     "https://claudemarketplaces.com/skills/heygen-com/hyperframes",
@@ -28,7 +28,6 @@ export const collection: Collection = {
   installCommand:
     "Install this skill collection or give me an instruction how to install it: https://github.com/heygen-com/hyperframes",
   skills: [
-    "heygen-com/hyperframes/hyperframes",
     "heygen-com/hyperframes/embedded-captions",
     "heygen-com/hyperframes/faceless-explainer",
     "heygen-com/hyperframes/general-video",
@@ -39,6 +38,14 @@ export const collection: Collection = {
     "heygen-com/hyperframes/hyperframes-creative",
     "heygen-com/hyperframes/hyperframes-media",
     "heygen-com/hyperframes/hyperframes-registry",
+    "heygen-com/hyperframes/hyperframes",
+    "heygen-com/hyperframes/motion-graphics",
+    "heygen-com/hyperframes/music-to-video",
+    "heygen-com/hyperframes/pr-to-video",
+    "heygen-com/hyperframes/product-launch-video",
+    "heygen-com/hyperframes/remotion-to-hyperframes",
+    "heygen-com/hyperframes/slideshow",
+    "heygen-com/hyperframes/website-to-video",
   ],
 };
 
