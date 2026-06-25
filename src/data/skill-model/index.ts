@@ -27,6 +27,10 @@ import {
   skill as websiteToVideoSkill,
 } from "./website-to-video";
 import {
+  collection as ponytailAuditCollection,
+  skill as ponytailAuditSkill,
+} from "./ponytail-audit";
+import {
   type Collection,
   type DirectorySkill,
   SkillKind,
@@ -46,6 +50,11 @@ export const skillSlugFromId = (id: string): string => {
 };
 
 export const directoryEntries: DirectoryEntry[] = [
+  {
+    collection: ponytailAuditCollection,
+    skill: ponytailAuditSkill,
+    relatedSkillSlugs: ["understand", "tweak-evaluate"],
+  },
   {
     collection: websiteToVideoCollection,
     skill: websiteToVideoSkill,
