@@ -53,6 +53,7 @@ export enum SkillTask {
   Website,
   Video,
   Research,
+  Review,
 }
 
 export interface DirectorySkill {
