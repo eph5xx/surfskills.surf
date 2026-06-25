@@ -30,7 +30,10 @@ const flow = {
 const glyph =
   '<rect x="3" y="13" width="4.4" height="8" rx="1.4"/><rect x="9.8" y="8" width="4.4" height="13" rx="1.4"/><rect x="16.6" y="3.5" width="4.4" height="17.5" rx="1.4"/>';
 
-// Command coloring: leading /command token in primary, the rest in accent.
+// Command coloring: a leading "/command" token renders in primary, its argument in
+// accent. Prose examples (no leading slash) aren't commands — they render whole in
+// accent, with no command-head highlight.
+const isCommand = skill.example.startsWith("/");
 const sp = skill.example.indexOf(" ");
 const cmdHead = sp === -1 ? skill.example : skill.example.slice(0, sp);
 const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
@@ -146,7 +149,11 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
                 </button>
               </div>
               <code class="block px-5 py-4 font-mono text-[13.5px] leading-[1.6] break-words whitespace-pre-wrap text-[#e9e6f2]">
-                <span class="text-primary">{cmdHead}</span><span class="text-accent">{cmdRest}</span>
+                {isCommand ? (
+                  <Fragment><span class="text-primary">{cmdHead}</span><span class="text-accent">{cmdRest}</span></Fragment>
+                ) : (
+                  <span class="text-accent">{skill.example}</span>
+                )}
               </code>
             </div>
           </div>
