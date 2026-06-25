@@ -31,6 +31,10 @@ import {
   skill as ponytailAuditSkill,
 } from "./ponytail-audit";
 import {
+  collection as grillMeCollection,
+  skill as grillMeSkill,
+} from "./grill-me";
+import {
   type Collection,
   type DirectorySkill,
   SkillKind,
@@ -50,6 +54,11 @@ export const skillSlugFromId = (id: string): string => {
 };
 
 export const directoryEntries: DirectoryEntry[] = [
+  {
+    collection: grillMeCollection,
+    skill: grillMeSkill,
+    relatedSkillSlugs: ["understand", "tweak-evaluate"],
+  },
   {
     collection: ponytailAuditCollection,
     skill: ponytailAuditSkill,
@@ -124,6 +133,7 @@ export const TASK_LABELS: Record<SkillTask, string> = {
   [SkillTask.Website]: "Website",
   [SkillTask.Video]: "Video",
   [SkillTask.Research]: "Research",
+  [SkillTask.Review]: "Review",
 };
 
 export interface CollectionFacets {
