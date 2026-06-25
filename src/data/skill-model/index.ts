@@ -35,6 +35,10 @@ import {
   skill as grillMeSkill,
 } from "./grill-me";
 import {
+  collection as taskObserverCollection,
+  skill as taskObserverSkill,
+} from "./task-observer";
+import {
   type Collection,
   type DirectorySkill,
   SkillKind,
@@ -54,6 +58,11 @@ export const skillSlugFromId = (id: string): string => {
 };
 
 export const directoryEntries: DirectoryEntry[] = [
+  {
+    collection: taskObserverCollection,
+    skill: taskObserverSkill,
+    relatedSkillSlugs: ["grill-me", "ponytail-audit"],
+  },
   {
     collection: grillMeCollection,
     skill: grillMeSkill,
