@@ -3,12 +3,13 @@ import { stats } from "../data/skills";
 ---
 
 <section class="relative pb-16 pt-16 text-center">
-  <span
-    class="badge badge-accent badge-lg mb-[22px] inline-flex h-auto flex-col gap-0.5 py-1.5 text-sm font-semibold sm:flex-row sm:items-center sm:gap-1.5 sm:text-base"
-  >
-    <span class="whitespace-nowrap font-bold">{stats.skillsLive} skill{stats.skillsLive === 1 ? "" : "s"} live now</span>
-    <span class="whitespace-nowrap opacity-80">· June 2026</span>
-  </span>
+  {stats.lastUpdated && (
+    <span
+      class="badge badge-accent badge-lg mb-[22px] inline-flex h-auto items-center py-1.5 text-sm font-semibold sm:text-base"
+    >
+      <span class="whitespace-nowrap">Last updated {stats.lastUpdated}</span>
+    </span>
+  )}
 
   <h1
     class="mx-auto mb-[18px] max-w-[900px] text-[clamp(52px,8.5vw,92px)] leading-[0.98] tracking-[-0.02em]"
