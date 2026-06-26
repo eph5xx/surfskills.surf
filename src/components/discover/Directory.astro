@@ -4,11 +4,19 @@ import FacetOptions from "./FacetOptions.astro";
 import ActiveChips from "./ActiveChips.astro";
 import DirectoryCard from "./DirectoryCard.astro";
 
-// The Discover directory — faceted sidebar.
-// Facet groups are generated from the config registry (so a new field appears here
-// automatically), each group is a collapsible accordion with live result counts,
-// and a within-group search + scroll kick in as a facet's value list grows. Active
-// selections surface as removable chips above the grid.
+// The Discover directory — faceted sidebar + a grid/list catalog.
+//
+// Sidebar: facet groups are generated from the config registry (so a new field
+// appears here automatically), each group is a collapsible accordion with live
+// result counts, and a within-group search + scroll kick in as a facet's value list
+// grows. Search lives at the top; "Clear all filters" at the bottom. Active
+// selections surface as removable chips above the results.
+//
+// Results: the SHARED read-only engine (src/scripts/directory-engine.ts) hides/sorts
+// ONE [data-dir-item] node per skill. The toolbar's segmented view toggle flips
+// [data-view] on [data-dir-list] (DirectoryCard restyles the same node for grid vs
+// list) and persists to localStorage + ?view= via the inline script below. The
+// engine is never modified.
 ---
 
 <section
@@ -17,7 +25,7 @@ import DirectoryCard from "./DirectoryCard.astro";
 >
   <input id="dir-filters" type="checkbox" class="peer/filters hidden" aria-hidden="true" />
 
-  <!-- Filter rail -->
+  <!-- Filter rail (original sidebar) -->
   <aside
     class="mb-6 hidden rounded-box border border-base-300 bg-base-100 p-4 peer-checked/filters:block lg:sticky lg:top-[88px] lg:mb-0 lg:block lg:self-start lg:p-5"
   >
@@ -57,19 +65,40 @@ import DirectoryCard from "./DirectoryCard.astro";
   </aside>
 
   <!-- Results -->
-  <div>
-    <div class="mb-4 flex items-center justify-between gap-3">
-      <p class="text-[14px] font-semibold text-base-content/55">
-        <span data-dir-count>{directoryItems.length}</span> skills
+  <div class="min-w-0">
+    <!-- Toolbar: count · (mobile) filters · view toggle · sort -->
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <p class="text-[15px] text-base-content/55">
+        <span data-dir-count class="font-display text-[17px] font-semibold text-base-content">{directoryItems.length}</span>
+        skills
       </p>
-      <div class="flex items-center gap-2">
-        <label for="dir-filters" class="btn btn-sm gap-1.5 lg:hidden">
+
+      <div class="flex items-center gap-2.5">
+        <label for="dir-filters" class="dir-mobile-filters">
           <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M3 5h18M6 12h12M10 19h4" />
           </svg>
           Filters
         </label>
-        <select data-dir-sort class="select select-sm bg-base-100" aria-label="Sort skills">
+
+        <!-- List / grid view toggle (segmented). -->
+        <div class="dir-view" role="group" aria-label="View mode">
+          <button type="button" data-dir-view="grid" class="dir-view-btn" aria-label="Grid view" aria-pressed="true">
+            <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" />
+              <rect x="14" y="3" width="7" height="7" rx="1.5" />
+              <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              <rect x="14" y="14" width="7" height="7" rx="1.5" />
+            </svg>
+          </button>
+          <button type="button" data-dir-view="list" class="dir-view-btn" aria-label="List view" aria-pressed="false">
+            <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        <select data-dir-sort class="dir-sort" aria-label="Sort skills">
           {sortOptions.map((o) => <option value={o.value}>{o.label}</option>)}
         </select>
       </div>
@@ -77,7 +106,8 @@ import DirectoryCard from "./DirectoryCard.astro";
 
     <ActiveChips class="mb-4" />
 
-    <div data-dir-list class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <!-- Results — ONE DirectoryCard node per skill; default GRID. -->
+    <div data-dir-list data-view="grid" class="dir-list">
       {directoryItems.map((item) => <DirectoryCard item={item} />)}
     </div>
 
@@ -89,18 +119,155 @@ import DirectoryCard from "./DirectoryCard.astro";
   </div>
 </section>
 
-<style>
+<!-- CRITICAL: lets the engine actually hide filtered items (card roots are a
+     separate component, so this must be global). -->
+<style is:global>
   [hidden] {
     display: none !important;
   }
+</style>
+
+<style>
   .facet-acc > summary::-webkit-details-marker {
     display: none;
   }
   .facet-acc[open] .acc-chevron {
     transform: rotate(180deg);
   }
+
+  /* GRID view: 2-col cards on laptops. LIST view: single comfortable column. */
+  .dir-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .dir-list[data-view="grid"] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .dir-list[data-view="list"] {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  /* --- toolbar controls --- */
+  .dir-mobile-filters {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2.35rem;
+    padding: 0 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-base-300);
+    background: var(--color-base-100);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-base-content);
+    cursor: pointer;
+  }
+  @media (min-width: 1024px) {
+    /* The persistent sidebar is shown at lg+, so the mobile Filters toggle hides.
+       (Done in scoped CSS — Tailwind's layered `lg:hidden` would lose to this
+       unlayered `display` declaration.) */
+    .dir-mobile-filters {
+      display: none;
+    }
+  }
+
+  .dir-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-base-300);
+    background: var(--color-base-100);
+  }
+  .dir-view-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: color-mix(in oklab, var(--color-base-content) 50%, transparent);
+    cursor: pointer;
+    transition:
+      background 0.15s,
+      color 0.15s;
+  }
+  .dir-view-btn:hover {
+    color: var(--color-base-content);
+  }
+  .dir-view-btn[aria-pressed="true"] {
+    background: var(--color-primary);
+    color: var(--color-primary-content);
+  }
+
+  .dir-sort {
+    height: 2.35rem;
+    padding: 0 2rem 0 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-base-300);
+    background-color: var(--color-base-100);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232a2c41' stroke-width='2.25'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 0.85rem;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-base-content);
+    cursor: pointer;
+    appearance: none;
+  }
 </style>
 
+<!-- Bind the SHARED read-only engine (do not edit it). -->
 <script>
   import "../../scripts/directory-engine";
+</script>
+
+<!-- List/grid view toggle: persists to localStorage + ?view=. Independent of the
+     engine (it never touches [data-view]) so there's no interference. -->
+<script is:inline>
+  (() => {
+    const root = document.querySelector("[data-directory]");
+    if (!root) return;
+    const list = root.querySelector("[data-dir-list]");
+    const btns = root.querySelectorAll("[data-dir-view]");
+    if (!list || !btns.length) return;
+
+    const KEY = "discover-view";
+
+    function apply(view) {
+      const v = view === "list" ? "list" : "grid";
+      list.setAttribute("data-view", v);
+      btns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.dirView === v)));
+      try {
+        localStorage.setItem(KEY, v);
+      } catch {}
+    }
+
+    // Initial: ?view= wins, then localStorage, then default grid.
+    const urlView = new URLSearchParams(location.search).get("view");
+    let stored = null;
+    try {
+      stored = localStorage.getItem(KEY);
+    } catch {}
+    apply(urlView || stored || "grid");
+
+    btns.forEach((b) =>
+      b.addEventListener("click", () => {
+        const v = b.dataset.dirView;
+        apply(v);
+        const p = new URLSearchParams(location.search);
+        if (v === "grid") p.delete("view");
+        else p.set("view", v);
+        const qs = p.toString();
+        history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
+      }),
+    );
+  })();
 </script>
