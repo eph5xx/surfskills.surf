@@ -155,3 +155,11 @@ export const formatUpdated = (iso?: string): string => {
   if (Number.isNaN(d.getTime())) return "";
   return new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(d);
 };
+
+/** "2026-06-25" → "Jun 25, 2026". */
+export const formatUpdatedFull = (iso?: string): string => {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(d);
+};

@@ -1,9 +1,11 @@
 import {
+  directoryCollections,
   directoryEntries,
   directorySkills,
   skillSlugFromId,
 } from "./skill-model";
 import { SkillAudience, SkillTask } from "./skill-model/types";
+import { formatUpdatedFull } from "./directory";
 
 export interface Skill {
   id: string;
@@ -100,6 +102,14 @@ export const supportedTools = Array.from(
   new Set(directorySkills.flatMap((skill) => mapTools(skillSlugFromId(skill.id), skill.audiences))),
 );
 
+// ISO "YYYY-MM-DD" strings sort lexicographically == chronologically, so the
+// last entry after sorting is the most recent update across all collections.
+const lastUpdatedISO = directoryCollections
+  .map((c) => c.updatedAt)
+  .filter((d): d is string => Boolean(d))
+  .sort()
+  .at(-1);
+
 export const stats = {
-  skillsLive: skills.filter((s) => s.available).length,
+  lastUpdated: formatUpdatedFull(lastUpdatedISO),
 } as const;
