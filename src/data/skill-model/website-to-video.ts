@@ -57,7 +57,7 @@ export const skill: DirectorySkill = {
   previewVideo: "/skills/website-to-video-demo.mp4",
   previewImage: "/skills/website-to-video-demo.jpg",
   externalLinks: ["https://www.skills.sh/heygen-com/hyperframes/website-to-video", "https://claudemarketplaces.com/skills/heygen-com/hyperframes/website-to-video"],
-  kind: SkillKind.Workflow,
+  kind: SkillKind.Action,
   audiences: [SkillAudience.Design, SkillAudience.Developer],
   tasks: [SkillTask.Video],
 };

@@ -57,7 +57,7 @@ export const skill: DirectorySkill = {
     "https://www.skills.sh/jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better",
     "https://claudemarketplaces.com/skills/jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better",
   ],
-  kind: SkillKind.Workflow,
+  kind: SkillKind.Action,
   audiences: [SkillAudience.Design, SkillAudience.Developer],
   tasks: [SkillTask.Audit],
 };

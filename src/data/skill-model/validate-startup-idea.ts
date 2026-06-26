@@ -59,7 +59,7 @@ export const skill: DirectorySkill = {
   tools: [],
   previewVideo: "/skills/validate-startup-idea-demo.mp4",
   externalLinks: [],
-  kind: SkillKind.Workflow,
+  kind: SkillKind.Action,
   audiences: [SkillAudience.Founder],
   tasks: [SkillTask.Audit],
 };

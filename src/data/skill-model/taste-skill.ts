@@ -71,7 +71,7 @@ export const skill: DirectorySkill = {
     "https://www.skills.sh/Leonxlnx/taste-skill/design-taste-frontend",
     "https://claudemarketplaces.com/skills/Leonxlnx/taste-skill/design-taste-frontend",
   ],
-  kind: SkillKind.Guidance,
+  kind: SkillKind.Action,
   audiences: [SkillAudience.Design, SkillAudience.Developer],
   tasks: [SkillTask.Website],
 };

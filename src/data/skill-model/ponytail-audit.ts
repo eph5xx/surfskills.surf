@@ -45,7 +45,7 @@ export const skill: DirectorySkill = {
   previewVideo: "/skills/ponytail-audit-demo.mp4",
   previewImage: "/skills/ponytail-audit-demo.jpg",
   externalLinks: [],
-  kind: SkillKind.Workflow,
+  kind: SkillKind.Action,
   audiences: [SkillAudience.Developer],
   tasks: [SkillTask.Audit],
 };

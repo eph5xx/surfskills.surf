@@ -125,11 +125,10 @@ export const directorySkillsById: Record<string, DirectorySkill> = Object.fromEn
 // Human labels for the SkillKind / SkillAudience / SkillTask enums — used by the
 // collection page facet chips and anywhere an enum needs a display string.
 export const KIND_LABELS: Record<SkillKind, string> = {
-  [SkillKind.Guidance]: "Guidance",
-  [SkillKind.Workflow]: "Workflow",
-  [SkillKind.Tool]: "Tool",
-  [SkillKind.Reference]: "Reference",
-  [SkillKind.Integration]: "Integration",
+  [SkillKind.Action]: "Action",
+  [SkillKind.Mode]: "Mode",
+  [SkillKind.Knowledge]: "Knowledge",
+  [SkillKind.Router]: "Router",
 };
 export const AUDIENCE_LABELS: Record<SkillAudience, string> = {
   [SkillAudience.Founder]: "Startups",

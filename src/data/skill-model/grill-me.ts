@@ -74,7 +74,7 @@ export const skill: DirectorySkill = {
   previewVideo: "/skills/grill-me-demo.mp4",
   previewImage: "/skills/grill-me-demo.jpg",
   externalLinks: [],
-  kind: SkillKind.Guidance,
+  kind: SkillKind.Action,
   audiences: [SkillAudience.Developer],
   tasks: [SkillTask.Review],
 };

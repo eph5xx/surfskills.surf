@@ -33,12 +33,13 @@ export interface SkillTool {
   blocking: boolean;
 }
 
+// How you work with a skill (its operational mode) — an expectation-setter shown
+// on the skill page, not a browse filter. Backbone: does-a-task-and-stops vs stays-on.
 export enum SkillKind {
-  Guidance,
-  Workflow,
-  Tool,
-  Reference,
-  Integration,
+  Action, // run it -> does a task -> done (generators, audits, interviews, setup)
+  Mode, // turn it on; it persists, reshaping or observing your work (ponytail, tdd, task-observer)
+  Knowledge, // never run; the agent consults it as knowledge (gsap, reference docs)
+  Router, // doesn't do the work; routes you to the right skill / orchestrates sub-skills
 }
 
 export enum SkillAudience {
