@@ -65,7 +65,7 @@ export const skill: DirectorySkill = {
     "https://www.skills.sh/greensock/gsap-skills/gsap-scrolltrigger",
     "https://claudemarketplaces.com/skills/greensock/gsap-skills/gsap-scrolltrigger",
   ],
-  kind: SkillKind.Reference,
+  kind: SkillKind.Knowledge,
   audiences: [SkillAudience.Developer, SkillAudience.Design],
   tasks: [SkillTask.Website],
 };

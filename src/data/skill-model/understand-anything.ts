@@ -65,7 +65,7 @@ export const skill: DirectorySkill = {
     "https://www.skills.sh/Egonex-AI/Understand-Anything/understand",
     "https://claudemarketplaces.com/skills/Egonex-AI/Understand-Anything/understand",
   ],
-  kind: SkillKind.Workflow,
+  kind: SkillKind.Action,
   audiences: [SkillAudience.Developer],
   tasks: [SkillTask.Research],
 };

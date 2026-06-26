@@ -41,7 +41,7 @@ export const skill: DirectorySkill = {
   previewVideo: "/skills/task-observer-demo.mp4",
   previewImage: "/skills/task-observer-demo.jpg",
   externalLinks: [],
-  kind: SkillKind.Workflow,
+  kind: SkillKind.Mode,
   audiences: [SkillAudience.Developer, SkillAudience.Founder],
   tasks: [SkillTask.Review],
 };

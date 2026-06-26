@@ -75,7 +75,7 @@ export const skill: DirectorySkill = {
     "https://www.skills.sh/heygen-com/hyperframes/hyperframes",
     "https://claudemarketplaces.com/skills/heygen-com/hyperframes/hyperframes",
   ],
-  kind: SkillKind.Workflow,
+  kind: SkillKind.Action,
   audiences: [SkillAudience.Design, SkillAudience.Developer],
   tasks: [SkillTask.Video],
 };
