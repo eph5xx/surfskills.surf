@@ -63,6 +63,22 @@ import {
   skill as illoSkill,
 } from "./illo";
 import {
+  collection as humanizerCollection,
+  skill as humanizerSkill,
+} from "./humanizer";
+import {
+  collection as last30daysCollection,
+  skill as last30daysSkill,
+} from "./last30days";
+import {
+  collection as brandkitCollection,
+  skill as brandkitSkill,
+} from "./brandkit";
+import {
+  collection as imagegenFrontendWebCollection,
+  skill as imagegenFrontendWebSkill,
+} from "./imagegen-frontend-web";
+import {
   type Collection,
   type DirectorySkill,
   SkillKind,
@@ -82,6 +98,26 @@ export const skillSlugFromId = (id: string): string => {
 };
 
 export const directoryEntries: DirectoryEntry[] = [
+  {
+    collection: imagegenFrontendWebCollection,
+    skill: imagegenFrontendWebSkill,
+    relatedSkillSlugs: ["design-taste-frontend", "gsap-scrolltrigger"],
+  },
+  {
+    collection: brandkitCollection,
+    skill: brandkitSkill,
+    relatedSkillSlugs: ["illo", "design-taste-frontend"],
+  },
+  {
+    collection: last30daysCollection,
+    skill: last30daysSkill,
+    relatedSkillSlugs: ["understand", "tweak-evaluate"],
+  },
+  {
+    collection: humanizerCollection,
+    skill: humanizerSkill,
+    relatedSkillSlugs: ["stop-slop", "seo-audit"],
+  },
   {
     collection: illoCollection,
     skill: illoSkill,
