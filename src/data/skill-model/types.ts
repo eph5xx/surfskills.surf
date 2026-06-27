@@ -47,6 +47,7 @@ export enum SkillAudience {
   Design,
   SEO,
   Developer,
+  Writing, // writers / content / marketing people authoring or editing prose (humanizer)
 }
 
 export enum SkillTask {
@@ -55,6 +56,8 @@ export enum SkillTask {
   Video,
   Research,
   Review,
+  Integrate, // wire a backend/API/SDK into an app (memory, RAG, infra)
+  Image, // generate static imagery/illustrations (illo)
 }
 
 export interface DirectorySkill {

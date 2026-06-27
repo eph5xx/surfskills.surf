@@ -47,6 +47,7 @@ const mapCategory = (audiences: SkillAudience[], tasks: SkillTask[]): string => 
   if (tasks.includes(SkillTask.Video)) return "Motion";
   if (audiences.includes(SkillAudience.Founder)) return "Startups";
   if (audiences.includes(SkillAudience.Design)) return "Design";
+  if (audiences.includes(SkillAudience.Writing)) return "Writing";
   if (tasks.includes(SkillTask.Research)) return "Research";
   if (tasks.includes(SkillTask.Website)) return "Design";
   if (tasks.includes(SkillTask.Audit)) return "Research";
@@ -68,6 +69,7 @@ const mapThumbLabel = (tasks: SkillTask[]): string => {
   if (tasks.includes(SkillTask.Research)) return "Repo -> knowledge graph";
   if (tasks.includes(SkillTask.Audit)) return "Input -> scored report";
   if (tasks.includes(SkillTask.Website)) return "Input -> improved UI";
+  if (tasks.includes(SkillTask.Integrate)) return "App -> persistent memory";
   return "Input -> output";
 };
 
