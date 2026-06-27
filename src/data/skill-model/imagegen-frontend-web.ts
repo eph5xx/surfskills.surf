@@ -1,0 +1,58 @@
+import {
+  type Collection,
+  type DirectorySkill,
+  SkillKind,
+  SkillAudience,
+  SkillTask,
+} from "./types";
+
+export const collection: Collection = {
+  name: "Taste Skill",
+  id: "Leonxlnx/taste-skill",
+  shortDescription: "An anti-slop frontend skill - your agent reads the brief, infers the right design direction, and ships interfaces that do not look templated.",
+  readme: "https://github.com/Leonxlnx/taste-skill/blob/main/README.md",
+  repositoryURL: "https://github.com/Leonxlnx/taste-skill",
+  websiteURL: "https://tasteskill.dev",
+  license: "MIT",
+  githubStars: 51834,
+  updatedAt: "2026-06-20",
+  externalLinks: ["https://www.skills.sh/Leonxlnx/taste-skill", "https://claudemarketplaces.com/skills/Leonxlnx/taste-skill"],
+  author: { url: "https://github.com/Leonxlnx", name: "Leon Lin & blueemi", avatarURL: "https://github.com/Leonxlnx.png" },
+  installCommand: "Install this skill collection or give me an instruction how to install it: https://github.com/Leonxlnx/taste-skill",
+  skills: [
+    "Leonxlnx/taste-skill/brandkit",
+    "Leonxlnx/taste-skill/industrial-brutalist-ui",
+    "Leonxlnx/taste-skill/gpt-taste",
+    "Leonxlnx/taste-skill/image-to-code",
+    "Leonxlnx/taste-skill/imagegen-frontend-mobile",
+    "Leonxlnx/taste-skill/imagegen-frontend-web",
+    "Leonxlnx/taste-skill/minimalist-ui",
+    "Leonxlnx/taste-skill/full-output-enforcement",
+    "Leonxlnx/taste-skill/redesign-existing-projects",
+    "Leonxlnx/taste-skill/high-end-visual-design",
+    "Leonxlnx/taste-skill/stitch-design-taste",
+    "Leonxlnx/taste-skill/design-taste-frontend-v1",
+    "Leonxlnx/taste-skill/design-taste-frontend",
+  ],
+};
+
+export const skill: DirectorySkill = {
+  name: "Art-Direct Website Comps",
+  id: "Leonxlnx/taste-skill/imagegen-frontend-web",
+  collection: "Leonxlnx/taste-skill",
+  description: {
+    short: "A full set of premium website design comps — one art-directed image per section that looks like a real high-end site and stays clear enough to hand straight to a coding agent.",
+    input: "Run /imagegen-frontend-web with a brief: the kind of site, the brand vibe, and optionally a section count (it defaults to 6 for a landing page, 8 for a full site).",
+    process: "It commits to one art direction — theme, typography, hero scale, palette — then renders each section as its own horizontal frame, deliberately varying composition and CTAs while keeping every frame in one brand world. It bans the overused left-text / right-image AI hero by default.",
+    output: "One horizontal image per section — 6 for a landing page, 8 for a full site — each showing layout, hierarchy, spacing, type scale, and CTA priority. A codeable reference set, never a single tall mockup or a vague moodboard.",
+  },
+  example: "/imagegen-frontend-web \"a premium SaaS analytics landing page, dark and cinematic, 6 sections\"",
+  referenceFile: "https://github.com/Leonxlnx/taste-skill/blob/main/skills/imagegen-frontend-web/SKILL.md",
+  installCommand: "Install the skill or give me an instruction how to install it - imagegen-frontend-web from https://github.com/Leonxlnx/taste-skill",
+  tools: [],
+  previewImage: "/skills/skill-placeholder.svg",
+  externalLinks: [],
+  kind: SkillKind.Action,
+  audiences: [SkillAudience.Design, SkillAudience.Developer],
+  tasks: [SkillTask.Image, SkillTask.Website],
+};
