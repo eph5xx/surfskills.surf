@@ -1,0 +1,220 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { author } from "@/data/skills";
+import { absoluteUrl } from "@/lib/seo";
+
+const headline = "Gradients, hero sections, and free fonts: three galleries worth bookmarking";
+const description =
+  "Three tightly curated galleries — Grainient, Supahero, and Free Faces — for gradients, landing-page hero inspiration, and open-license type.";
+const articleUrl = absoluteUrl(Astro.site!, "/blog/design-resource-galleries");
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline,
+    description,
+    datePublished: "2026-06-27",
+    author: {
+      "@type": "Person",
+      name: author.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "surfskills.surf",
+      url: absoluteUrl(Astro.site!, "/"),
+    },
+    mainEntityOfPage: articleUrl,
+  },
+];
+
+const contents = [
+  ["#grainient", "Grainient — gradients & backgrounds"],
+  ["#supahero", "Supahero — website hero sections"],
+  ["#free-faces", "Free Faces — open-license type"],
+  ["#design-skills", "Design skills on Surf Skills"],
+];
+
+const skills = [
+  {
+    href: "/s/Leonxlnx/taste-skill/design-taste-frontend",
+    name: "Design With Taste",
+    blurb:
+      "an anti-slop frontend skill: your agent reads the brief, infers the right design direction, and ships interfaces that don't look templated.",
+  },
+  {
+    href: "/s/jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better",
+    name: "Polish Your UI",
+    blurb:
+      "great interfaces aren't one big thing; they're 16 small details that compound, and this audits a component against all of them.",
+  },
+  {
+    href: "/s/JCodesMore/ai-website-cloner-template/clone-website",
+    name: "Clone Any Website",
+    blurb:
+      "point it at any live URL and get back a clean, pixel-perfect Next.js codebase: real assets, real content, real interactions, not a screenshot.",
+  },
+];
+---
+
+<BaseLayout title={`${headline} | surfskills.surf`} description={description} jsonLd={jsonLd}>
+  <div id="top" class="mx-auto max-w-[1200px] px-8">
+    <Header />
+
+    <!-- Hero -->
+    <header class="pt-12">
+      <a href="/blog" class="text-[13.5px] text-base-content/60 hover:text-base-content">← Blog</a>
+      <h1 class="mt-6 text-[42px] leading-[1.08]">
+        Gradients, hero sections, and free fonts: three galleries worth bookmarking
+      </h1>
+      <p class="mt-4 text-[18px] leading-[1.6] text-base-content/70">
+        Most of what makes a page look good comes down to a few decisions: the background, the
+        layout of the first screen, and the type. You don't have to make any of those from
+        scratch — here are three curated galleries that each do one of those jobs really well.
+      </p>
+      <div class="mt-6 flex items-center gap-2 text-[13.5px] text-base-content/60">
+        <span
+          class="flex size-[28px] items-center justify-center rounded-full font-display text-[12px] text-neutral-content"
+          style={`background:${author.avatarBg}`}
+        >
+          {author.initial}
+        </span>
+        {author.name} · Jun 2026
+      </div>
+    </header>
+
+    <!-- Body -->
+    <article
+      class="mt-10 mb-12 rounded-box bg-base-100 px-7 py-10 shadow-sm sm:px-16 sm:py-14 [&_h2]:mt-12 [&_h2]:text-[26px] [&_h2:first-child]:mt-0 [&_p]:mt-4 [&_p]:text-[16.5px] [&_p]:leading-[1.75] [&_p]:text-base-content/80"
+    >
+      <!-- Contents -->
+      <h2>Contents</h2>
+      <ul class="mt-4 space-y-2.5 text-[16px]">
+        {
+          contents.map(([href, label]) => (
+            <li>
+              <a
+                href={href}
+                class="group inline-flex items-baseline gap-2 link link-hover link-primary font-semibold"
+              >
+                <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">
+                  →
+                </span>
+                <span>{label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2 id="grainient" class="scroll-mt-24">Grainient</h2>
+      <figure class="mt-6 overflow-hidden rounded-box border border-base-300">
+        <img
+          src="/blog/grainient.jpg"
+          alt="Grainient's homepage: a dark hero reading 'Discover the Best Gradients on the Internet' over a glowing gradient."
+          loading="lazy"
+          class="w-full"
+        />
+      </figure>
+      <p>
+        <a href="https://grainient.supply/" target="_blank" rel="noopener" class="link link-primary">Grainient</a>
+        is a library of ready-made gradients and backgrounds. There are over a thousand of them —
+        smooth blends, grainy textures, mesh gradients, animated loops, and AI-generated
+        backgrounds — plus a real-time shader tool if you want to tune your own. Stills go up to
+        4K–12K and the animated clips run at 2K–4K, so they hold up as full-bleed page backgrounds.
+      </p>
+      <p>
+        It's freemium: there's a free <strong>Freebies</strong> section to grab a few without
+        paying, and Pro access (around $59/year or $299 lifetime) unlocks the full library with a
+        commercial license. Reach for it when a page needs a background with some depth and you
+        don't want to open a design tool to build one.
+      </p>
+      <p>
+        → <a href="https://grainient.supply/" target="_blank" rel="noopener" class="link link-primary">grainient.supply</a>
+      </p>
+
+      <h2 id="supahero" class="scroll-mt-24">Supahero</h2>
+      <figure class="mt-6 overflow-hidden rounded-box border border-base-300">
+        <img
+          src="/blog/supahero.jpg"
+          alt="Supahero's homepage: 'Website hero section library' above a grid of real hero-section screenshots."
+          loading="lazy"
+          class="w-full"
+        />
+      </figure>
+      <p>
+        <a href="https://supahero.io/" target="_blank" rel="noopener" class="link link-primary">Supahero</a>
+        is a curated collection of website hero sections — the top of the page, the part people see
+        first. It's a gallery of 1,000+ real examples pulled from actual sites, with thumbnails and
+        links so you can see each one in context. It's now part of the larger "screensdesign"
+        library.
+      </p>
+      <p>
+        It's free to browse. This is the one to open before you design a landing page: instead of
+        starting from a blank canvas, you can scroll through how strong heroes are really built —
+        layout, copy placement, imagery — and borrow what fits.
+      </p>
+      <p>
+        → <a href="https://supahero.io/" target="_blank" rel="noopener" class="link link-primary">supahero.io</a>
+      </p>
+
+      <h2 id="free-faces" class="scroll-mt-24">Free Faces</h2>
+      <figure class="mt-6 overflow-hidden rounded-box border border-base-300">
+        <img
+          src="/blog/freefaces.jpg"
+          alt="Free Faces' homepage: 'Free typefaces and fonts' over a painterly background, with category navigation."
+          loading="lazy"
+          class="w-full"
+        />
+      </figure>
+      <p>
+        <a href="https://www.freefaces.gallery/" target="_blank" rel="noopener" class="link link-primary">Free Faces</a>
+        is a curated gallery of free typefaces, all available under open licenses. It's organized
+        into six categories — Cursive, Display, Monospace, Sans Serif, Serif, and Slab — with list
+        and grid views so you can scan quickly. You'll spot familiar names like Space Grotesk,
+        Martian Mono, and Atkinson Hyperlegible. It's curated by Simon Foster.
+      </p>
+      <p>
+        Everything is free, and because the licenses are open, you can use these in real projects
+        without a licensing headache. Reach for it when you want type with a bit of personality but
+        don't want to buy a font family to find out if it works.
+      </p>
+      <p>
+        → <a href="https://www.freefaces.gallery/" target="_blank" rel="noopener" class="link link-primary">freefaces.gallery</a>
+      </p>
+
+      <h2>When to use which</h2>
+      <p>
+        Three galleries, three jobs. Pull a background from <strong>Grainient</strong>, study the
+        first screen on <strong>Supahero</strong>, and pick your type on <strong>Free Faces</strong>.
+        Bookmark all three and most of the "make it look good" work gets a lot faster.
+      </p>
+
+      <h2 id="design-skills" class="scroll-mt-24">Design skills on Surf Skills</h2>
+      <p>
+        If you'd rather have an AI agent do some of this work for you, a few related skills in the
+        <a href="/" class="link link-primary">Surf Skills</a> directory cover similar ground:
+      </p>
+      <ul class="mt-6 divide-y divide-base-300 border-y border-base-300">
+        {
+          skills.map((skill) => (
+            <li class="flex flex-col gap-1 py-3 sm:flex-row sm:items-baseline sm:gap-4">
+              <a href={skill.href} class="link link-primary shrink-0 font-semibold sm:basis-44">
+                {skill.name}
+              </a>
+              <span class="text-[15.5px] leading-[1.6] text-base-content/80">{skill.blurb}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+
+    <p class="mb-16 text-[14px] text-base-content/60">
+      <a href="/blog" class="hover:text-base-content">← Back to the blog</a>
+    </p>
+
+    <Footer />
+  </div>
+</BaseLayout>

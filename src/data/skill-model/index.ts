@@ -39,6 +39,30 @@ import {
   skill as taskObserverSkill,
 } from "./task-observer";
 import {
+  collection as supermemoryCollection,
+  skill as supermemorySkill,
+} from "./supermemory";
+import {
+  collection as stopSlopCollection,
+  skill as stopSlopSkill,
+} from "./stop-slop";
+import {
+  collection as cloneWebsiteCollection,
+  skill as cloneWebsiteSkill,
+} from "./clone-website";
+import {
+  collection as bookToSkillCollection,
+  skill as bookToSkillSkill,
+} from "./book-to-skill";
+import {
+  collection as seoAuditCollection,
+  skill as seoAuditSkill,
+} from "./seo-audit";
+import {
+  collection as illoCollection,
+  skill as illoSkill,
+} from "./illo";
+import {
   type Collection,
   type DirectorySkill,
   SkillKind,
@@ -58,6 +82,36 @@ export const skillSlugFromId = (id: string): string => {
 };
 
 export const directoryEntries: DirectoryEntry[] = [
+  {
+    collection: illoCollection,
+    skill: illoSkill,
+    relatedSkillSlugs: ["design-taste-frontend", "hyperframes"],
+  },
+  {
+    collection: seoAuditCollection,
+    skill: seoAuditSkill,
+    relatedSkillSlugs: ["stop-slop", "ponytail-audit"],
+  },
+  {
+    collection: bookToSkillCollection,
+    skill: bookToSkillSkill,
+    relatedSkillSlugs: ["understand", "supermemory"],
+  },
+  {
+    collection: cloneWebsiteCollection,
+    skill: cloneWebsiteSkill,
+    relatedSkillSlugs: ["design-taste-frontend", "gsap-scrolltrigger"],
+  },
+  {
+    collection: stopSlopCollection,
+    skill: stopSlopSkill,
+    relatedSkillSlugs: ["make-interfaces-feel-better", "ponytail-audit"],
+  },
+  {
+    collection: supermemoryCollection,
+    skill: supermemorySkill,
+    relatedSkillSlugs: ["understand", "gsap-scrolltrigger"],
+  },
   {
     collection: taskObserverCollection,
     skill: taskObserverSkill,
@@ -135,6 +189,7 @@ export const AUDIENCE_LABELS: Record<SkillAudience, string> = {
   [SkillAudience.Design]: "Design",
   [SkillAudience.SEO]: "SEO",
   [SkillAudience.Developer]: "Development",
+  [SkillAudience.Writing]: "Writing",
 };
 export const TASK_LABELS: Record<SkillTask, string> = {
   [SkillTask.Audit]: "Audit",
@@ -142,6 +197,8 @@ export const TASK_LABELS: Record<SkillTask, string> = {
   [SkillTask.Video]: "Video",
   [SkillTask.Research]: "Research",
   [SkillTask.Review]: "Review",
+  [SkillTask.Integrate]: "Integrate",
+  [SkillTask.Image]: "Image",
 };
 
 export interface CollectionFacets {
