@@ -1,5 +1,5 @@
 import { skillSlugFromId } from "./skill-model";
-import type { DirectorySkill } from "./skill-model/types";
+import type { DirectorySkill, SkillDescription } from "./skill-model/types";
 import { SkillAudience, SkillTask } from "./skill-model/types";
 
 // The flattened card view-model shared by the landing grid, the Discover-adjacent
@@ -62,7 +62,14 @@ export interface ToSkillCardOptions {
   testedDate?: string;
 }
 
-export const toSkillCard = (skill: DirectorySkill, opts: ToSkillCardOptions = {}): Skill => {
+// The subset of a DirectorySkill this card derives from. Full DirectorySkill rows
+// (DB-driven catalog) satisfy it structurally; the code-driven homepage can pass a
+// minimal object (see ./featured-skills) without carrying the unused catalog fields.
+type SkillCardInput = Pick<DirectorySkill, "id" | "name" | "audiences" | "tasks" | "previewVideo"> & {
+  description: Pick<SkillDescription, "short">;
+};
+
+export const toSkillCard = (skill: SkillCardInput, opts: ToSkillCardOptions = {}): Skill => {
   const slug = skillSlugFromId(skill.id);
   return {
     id: skill.id,

@@ -141,14 +141,6 @@ export const compactNumber = (n: number): string =>
     .format(n)
     .toLowerCase();
 
-/** "2026-06-20" → "Jun 2026". */
-export const formatUpdated = (iso?: string): string => {
-  if (!iso) return "";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  return new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(d);
-};
-
 /** "2026-06-25" → "Jun 25, 2026". */
 export const formatUpdatedFull = (iso?: string): string => {
   if (!iso) return "";
