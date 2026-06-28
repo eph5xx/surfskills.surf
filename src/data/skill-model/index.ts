@@ -38,32 +38,3 @@ export const USE_CASE_LABELS: Record<SkillUseCase, string> = {
   [SkillUseCase.Development]: "Development",
   [SkillUseCase.Research]: "Research",
 };
-
-// URL slug for each use case (the /discover/<slug> landing pages + sitemap).
-// `useCaseFromSlug` is the reverse lookup used by the dynamic route.
-export const USE_CASE_SLUGS: Record<SkillUseCase, string> = {
-  [SkillUseCase.Design]: "design",
-  [SkillUseCase.Video]: "video",
-  [SkillUseCase.Images]: "images",
-  [SkillUseCase.Writing]: "writing",
-  [SkillUseCase.SEO]: "seo",
-  [SkillUseCase.Development]: "development",
-  [SkillUseCase.Research]: "research",
-};
-
-// All use cases in display order — the canonical list for nav strips + sitemap.
-export const USE_CASES: SkillUseCase[] = [
-  SkillUseCase.Design,
-  SkillUseCase.Video,
-  SkillUseCase.Images,
-  SkillUseCase.Writing,
-  SkillUseCase.SEO,
-  SkillUseCase.Development,
-  SkillUseCase.Research,
-];
-
-const USE_CASE_BY_SLUG: Record<string, SkillUseCase | undefined> = Object.fromEntries(
-  USE_CASES.map((u) => [USE_CASE_SLUGS[u], u]),
-);
-export const useCaseFromSlug = (slug: string): SkillUseCase | undefined =>
-  USE_CASE_BY_SLUG[slug];
