@@ -1,6 +1,15 @@
 import { createServerClient, parseCookieHeader } from "@supabase/ssr";
 import { defineMiddleware } from "astro:middleware";
 
+// Public, edge-cacheable catalog pages (Discover, /s/**, sitemap). They read the
+// catalog with the shared client but need no session, so we skip the auth
+// round-trip and let them set their OWN public Cache-Control (see src/lib/cache).
+const isPublicCatalogRoute = (pathname: string): boolean =>
+  pathname === "/discover" ||
+  pathname === "/sitemap.xml" ||
+  pathname === "/s" ||
+  pathname.startsWith("/s/");
+
 export const onRequest = defineMiddleware(async (context, next) => {
   // Middleware also runs while prerendering static pages at build time, where
   // there is no live request or Cloudflare runtime — skip entirely.
@@ -31,19 +40,27 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   context.locals.supabase = supabase;
 
-  const { data, error } = await supabase.auth.getClaims();
-  context.locals.user =
-    !error && data?.claims
-      ? {
-          id: data.claims.sub,
-          email: typeof data.claims.email === "string" ? data.claims.email : null,
-        }
-      : null;
+  if (isPublicCatalogRoute(context.url.pathname)) {
+    // No session needed; skip the getClaims() network call on cache misses.
+    context.locals.user = null;
+  } else {
+    const { data, error } = await supabase.auth.getClaims();
+    context.locals.user =
+      !error && data?.claims
+        ? {
+            id: data.claims.sub,
+            email: typeof data.claims.email === "string" ? data.claims.email : null,
+          }
+        : null;
+  }
 
   const response = await next();
-  // Session-dependent HTML must never land in a shared or browser cache.
-  // Passthrough responses (e.g. proxied fetches) carry immutable headers —
-  // re-wrap those instead of crashing the request.
+  // Session-dependent HTML must never land in a shared or browser cache. Catalog
+  // pages opt INTO caching by setting their own public Cache-Control; everything
+  // else (account, api, auth) sets nothing and falls back to no-store here.
+  // Passthrough responses (e.g. proxied fetches) carry immutable headers — re-wrap
+  // those instead of crashing the request.
+  if (response.headers.has("Cache-Control")) return response;
   try {
     response.headers.set("Cache-Control", "private, no-store");
     return response;

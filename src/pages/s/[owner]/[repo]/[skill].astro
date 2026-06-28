@@ -3,35 +3,40 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SkillPage from "@/components/skill/SkillPage.astro";
-import { directorySkills, directoryCollectionsById, directoryEntryBySkillId, resolveRelatedSkills } from "@/data/skill-model";
-import type { Collection, DirectorySkill } from "@/data/skill-model/types";
-import { skillsById, type Skill } from "@/data/skills";
+import { loadSkill } from "@/data/skill-model/db";
+import { toSkillCard, type Skill } from "@/data/skill-card";
 import { absoluteUrl } from "@/lib/seo";
+import { setCatalogCache, notFound, NO_STORE } from "@/lib/cache";
 
-// Prerendered: one static page per directory skill. Skills live under the /s/ prefix keyed by
-// their full id ("owner/repo/skill", e.g. /s/greensock/gsap-skills/gsap-scrolltrigger). The
-// skill segment may contain a colon (e.g. tweak:evaluate). The 2-segment collection route
-// under /s/ is distinct from this 3-segment skill route.
-export const prerender = true;
+// SSR (was prerendered): one page per directory skill, read from Supabase per
+// request and cached at the edge, so new skills get a page with no redeploy.
+// Skills live under /s/ keyed by their full id ("owner/repo/skill", e.g.
+// /s/greensock/gsap-skills/gsap-scrolltrigger); the skill segment may contain a
+// colon (e.g. tweak:evaluate). The 2-segment collection route is distinct.
+export const prerender = false;
 
-export function getStaticPaths() {
-  return directorySkills.flatMap((skill) => {
-    const collection = directoryCollectionsById[skill.collection]?.collection;
-    if (!collection) return [];
-    const [owner, repo, ...rest] = skill.id.split("/");
-    return [{ params: { owner, repo, skill: rest.join("/") }, props: { skill, collection } }];
+const { owner, repo, skill: skillSlug } = Astro.params;
+const id = `${owner}/${repo}/${skillSlug}`;
+
+let loaded: Awaited<ReturnType<typeof loadSkill>>;
+try {
+  loaded = await loadSkill(Astro.locals.supabase, id);
+} catch (err) {
+  console.error(`[skill] failed to load "${id}"`, err);
+  return new Response("Catalog temporarily unavailable", {
+    status: 503,
+    headers: { "Cache-Control": NO_STORE },
   });
 }
 
-const { skill, collection } = Astro.props as { skill: DirectorySkill; collection: Collection };
+if (!loaded) return notFound(await Astro.rewrite("/404"));
+
+const { skill, collection, related } = loaded;
+setCatalogCache(Astro.response.headers);
 
 const title = `${skill.name} — open-source AI skill by ${collection.author.name} | surfskills.surf`;
 
-const entry = directoryEntryBySkillId[skill.id];
-const relatedSkills = entry ? resolveRelatedSkills(entry.relatedSkillSlugs) : [];
-const relatedCards = relatedSkills
-  .map((r) => skillsById[r.id])
-  .filter((s): s is Skill => Boolean(s));
+const relatedCards: Skill[] = related.map((r) => toSkillCard(r));
 
 const skillUrl = absoluteUrl(Astro.site!, `/s/${skill.id}`);
 const discoverUrl = absoluteUrl(Astro.site!, "/discover");

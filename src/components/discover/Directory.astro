@@ -1,8 +1,17 @@
 ---
-import { directoryItems, facets, sortOptions } from "@/data/directory";
+import { sortOptions } from "@/data/directory";
+import type { DirectoryItem, FacetDef } from "@/data/directory";
 import FacetOptions from "./FacetOptions.astro";
 import ActiveChips from "./ActiveChips.astro";
 import DirectoryCard from "./DirectoryCard.astro";
+
+// Items + facets are fetched per request by the page (discover.astro) from
+// Supabase and threaded in, so this shell stays presentational.
+interface Props {
+  items: DirectoryItem[];
+  facets: FacetDef[];
+}
+const { items, facets } = Astro.props;
 
 // The Discover directory — faceted sidebar + a grid/list catalog.
 //
@@ -69,7 +78,7 @@ import DirectoryCard from "./DirectoryCard.astro";
     <!-- Toolbar: count · (mobile) filters · view toggle · sort -->
     <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
       <p class="text-[15px] text-base-content/55">
-        <span data-dir-count class="font-display text-[17px] font-semibold text-base-content">{directoryItems.length}</span>
+        <span data-dir-count class="font-display text-[17px] font-semibold text-base-content">{items.length}</span>
         skills
       </p>
 
@@ -108,7 +117,7 @@ import DirectoryCard from "./DirectoryCard.astro";
 
     <!-- Results — ONE DirectoryCard node per skill; default GRID. -->
     <div data-dir-list data-view="grid" class="dir-list">
-      {directoryItems.map((item) => <DirectoryCard item={item} />)}
+      {items.map((item) => <DirectoryCard item={item} />)}
     </div>
 
     <div data-dir-empty hidden class="py-20 text-center">

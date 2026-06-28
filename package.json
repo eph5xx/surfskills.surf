@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro build && wrangler dev",
-    "astro": "astro"
+    "astro": "astro",
+    "seed:skills": "tsx scripts/seed-skills.ts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.13",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "daisyui": "^5.5.23",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "wrangler": "^4.99.0"
   }
