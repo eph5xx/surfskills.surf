@@ -1,6 +1,5 @@
 import type { APIRoute } from "astro";
 import { loadDirectory } from "@/data/skill-model/db";
-import { USE_CASES, USE_CASE_SLUGS } from "@/data/skill-model";
 import { absoluteUrl } from "@/lib/seo";
 import { PUBLIC_CATALOG_CACHE, NO_STORE } from "@/lib/cache";
 
@@ -12,8 +11,6 @@ export const prerender = false;
 const STATIC_PATHS = [
   "/",
   "/discover",
-  // Use-case landing pages (/discover/design, /discover/video, …).
-  ...USE_CASES.map((u) => `/discover/${USE_CASE_SLUGS[u]}`),
   "/blog",
   "/blog/tweak-idea",
   "/terms",
