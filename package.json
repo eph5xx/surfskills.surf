@@ -7,8 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro build && wrangler dev",
-    "astro": "astro",
-    "seed:skills": "tsx scripts/seed-skills.ts"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.13",

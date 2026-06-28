@@ -42,22 +42,17 @@ export enum SkillKind {
   Router, // doesn't do the work; routes you to the right skill / orchestrates sub-skills
 }
 
-export enum SkillAudience {
-  Founder,
-  Design,
-  SEO,
-  Developer,
-  Writing, // writers / content / marketing people authoring or editing prose (humanizer)
-}
-
-export enum SkillTask {
-  Audit,
-  Website,
-  Video,
-  Research,
-  Review,
-  Integrate, // wire a backend/API/SDK into an app (memory, RAG, infra)
-  Image, // generate static imagery/illustrations (illo)
+// What you'd use a skill for — the primary browse axis (the SEO/GEO landing-page
+// axis). Outcome/task-oriented and multi-select: a skill can serve several. This
+// replaced the old Audience + Task axes (which overlapped and mis-named personas).
+export enum SkillUseCase {
+  Design, // UI/UX, frontend, brand, websites
+  Video, // generate/edit video, motion graphics, captions
+  Images, // generate static imagery / illustrations
+  Writing, // content / copy / prose (humanizer)
+  SEO, // search / growth / marketing
+  Development, // build & integrate code (backend/API/SDK, infra)
+  Research, // research, understand, audit & review work
 }
 
 export interface DirectorySkill {
@@ -73,7 +68,6 @@ export interface DirectorySkill {
   previewImage?: string;
   externalLinks: string[];
   kind: SkillKind;
-  audiences: SkillAudience[];
-  tasks: SkillTask[];
+  useCases: SkillUseCase[];
 }
 

@@ -1,6 +1,6 @@
-import { skillSlugFromId } from "./skill-model";
+import { skillSlugFromId, USE_CASE_LABELS } from "./skill-model";
 import type { DirectorySkill, SkillDescription } from "./skill-model/types";
-import { SkillAudience, SkillTask } from "./skill-model/types";
+import { SkillUseCase } from "./skill-model/types";
 
 // The flattened card view-model shared by the landing grid, the Discover-adjacent
 // collection roster, and skill-detail "related" cards. `toSkillCard` is the ONE
@@ -24,20 +24,26 @@ export interface Skill {
   available: boolean;
 }
 
-const mapCategory = (audiences: SkillAudience[], tasks: SkillTask[]): string => {
-  if (tasks.includes(SkillTask.Video)) return "Motion";
-  if (audiences.includes(SkillAudience.Founder)) return "Startups";
-  if (audiences.includes(SkillAudience.Design)) return "Design";
-  if (audiences.includes(SkillAudience.Writing)) return "Writing";
-  if (tasks.includes(SkillTask.Research)) return "Research";
-  if (tasks.includes(SkillTask.Website)) return "Design";
-  if (tasks.includes(SkillTask.Audit)) return "Research";
-  return "Research";
+// The card badge shows the skill's *primary* use case — first match by priority,
+// falling back to "Research".
+const CATEGORY_PRIORITY: SkillUseCase[] = [
+  SkillUseCase.Video,
+  SkillUseCase.Images,
+  SkillUseCase.Design,
+  SkillUseCase.Writing,
+  SkillUseCase.SEO,
+  SkillUseCase.Research,
+  SkillUseCase.Development, // broadest — only wins when nothing more specific matches
+];
+
+const mapCategory = (useCases: SkillUseCase[]): string => {
+  const primary = CATEGORY_PRIORITY.find((u) => useCases.includes(u));
+  return primary !== undefined ? USE_CASE_LABELS[primary] : "Research";
 };
 
-const mapTools = (slug: string, audiences: SkillAudience[]): string[] => {
+const mapTools = (slug: string, useCases: SkillUseCase[]): string[] => {
   const tools = new Set<string>(["Claude Code"]);
-  if (audiences.includes(SkillAudience.Developer) || audiences.includes(SkillAudience.Design)) {
+  if (useCases.includes(SkillUseCase.Development) || useCases.includes(SkillUseCase.Design)) {
     tools.add("Cursor");
     tools.add("Gemini");
   }
@@ -45,12 +51,12 @@ const mapTools = (slug: string, audiences: SkillAudience[]): string[] => {
   return Array.from(tools);
 };
 
-const mapThumbLabel = (tasks: SkillTask[]): string => {
-  if (tasks.includes(SkillTask.Video)) return "Prompt -> rendered video";
-  if (tasks.includes(SkillTask.Research)) return "Repo -> knowledge graph";
-  if (tasks.includes(SkillTask.Audit)) return "Input -> scored report";
-  if (tasks.includes(SkillTask.Website)) return "Input -> improved UI";
-  if (tasks.includes(SkillTask.Integrate)) return "App -> persistent memory";
+const mapThumbLabel = (useCases: SkillUseCase[]): string => {
+  if (useCases.includes(SkillUseCase.Video)) return "Prompt -> rendered video";
+  if (useCases.includes(SkillUseCase.Images)) return "Prompt -> generated image";
+  if (useCases.includes(SkillUseCase.Research)) return "Repo -> knowledge graph";
+  if (useCases.includes(SkillUseCase.Design)) return "Input -> improved UI";
+  if (useCases.includes(SkillUseCase.Development)) return "App -> persistent memory";
   return "Input -> output";
 };
 
@@ -65,7 +71,7 @@ export interface ToSkillCardOptions {
 // The subset of a DirectorySkill this card derives from. Full DirectorySkill rows
 // (DB-driven catalog) satisfy it structurally; the code-driven homepage can pass a
 // minimal object (see ./featured-skills) without carrying the unused catalog fields.
-type SkillCardInput = Pick<DirectorySkill, "id" | "name" | "audiences" | "tasks" | "previewVideo"> & {
+type SkillCardInput = Pick<DirectorySkill, "id" | "name" | "useCases" | "previewVideo"> & {
   description: Pick<SkillDescription, "short">;
 };
 
@@ -76,11 +82,11 @@ export const toSkillCard = (skill: SkillCardInput, opts: ToSkillCardOptions = {}
     slug,
     title: skill.name,
     blurb: skill.description.short,
-    category: mapCategory(skill.audiences, skill.tasks),
-    tools: mapTools(slug, skill.audiences),
+    category: mapCategory(skill.useCases),
+    tools: mapTools(slug, skill.useCases),
     free: true,
     featured: opts.featured ?? false,
-    thumbLabel: mapThumbLabel(skill.tasks),
+    thumbLabel: mapThumbLabel(skill.useCases),
     testedDate: opts.testedDate ?? "Jun 2026",
     verified: true,
     available: opts.available ?? true,

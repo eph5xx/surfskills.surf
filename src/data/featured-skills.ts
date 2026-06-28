@@ -1,4 +1,4 @@
-import { SkillAudience, SkillTask } from "./skill-model/types";
+import { SkillUseCase } from "./skill-model/types";
 
 // Code-driven data for the homepage "examples" showcase (SkillShowcase) and the
 // Hero "last updated" badge. This is intentionally INDEPENDENT of the Supabase
@@ -14,8 +14,7 @@ export interface FeaturedSkill {
   id: string;
   name: string;
   description: { short: string };
-  audiences: SkillAudience[];
-  tasks: SkillTask[];
+  useCases: SkillUseCase[];
   previewVideo?: string;
   /** Parent collection's updatedAt — feeds the homepage "last updated" badge. */
   updatedAt?: string;
@@ -29,8 +28,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "14 independent evaluators score your pitch, each doing its own web research. An honest scorecard tells you GO, PIVOT, or STOP.",
     },
-    audiences: [SkillAudience.Founder],
-    tasks: [SkillTask.Audit],
+    useCases: [SkillUseCase.Research],
     previewVideo: "/skills/validate-startup-idea-demo.mp4",
     updatedAt: "2026-04-30",
   },
@@ -41,8 +39,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "Describe the video you want and HyperFrames teaches your coding agent to compose it in HTML/CSS/JS. It renders a deterministic MP4, the same every time.",
     },
-    audiences: [SkillAudience.Design, SkillAudience.Developer],
-    tasks: [SkillTask.Video],
+    useCases: [SkillUseCase.Video, SkillUseCase.Design, SkillUseCase.Development],
     previewVideo: "/skills/hyperframes-demo.mp4",
     updatedAt: "2026-06-28",
   },
@@ -53,8 +50,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "Great interfaces aren't one big thing - they're 16 small details that compound.",
     },
-    audiences: [SkillAudience.Design, SkillAudience.Developer],
-    tasks: [SkillTask.Audit],
+    useCases: [SkillUseCase.Design, SkillUseCase.Development],
     previewVideo: "/skills/make-interfaces-feel-better-demo.mp4",
     updatedAt: "2026-04-19",
   },
@@ -65,8 +61,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "Other tools show you a hairball. This one teaches you the codebase - every file, function, and dependency, mapped into a graph you can explore.",
     },
-    audiences: [SkillAudience.Developer],
-    tasks: [SkillTask.Research],
+    useCases: [SkillUseCase.Research, SkillUseCase.Development],
     previewVideo: "/skills/understand-anything-demo.mp4",
     updatedAt: "2026-06-20",
   },
@@ -77,8 +72,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "The official GreenSock skill for scroll-driven motion - pinning, scrub, and batched entrances. ScrollTrigger written the way it's actually meant to be.",
     },
-    audiences: [SkillAudience.Developer, SkillAudience.Design],
-    tasks: [SkillTask.Website],
+    useCases: [SkillUseCase.Design, SkillUseCase.Development],
     previewVideo: "/skills/gsap-skills-demo.mp4",
     updatedAt: "2026-04-21",
   },
@@ -89,8 +83,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "An anti-slop frontend skill: your agent reads the brief, infers the right design direction, and ships interfaces that don't look templated.",
     },
-    audiences: [SkillAudience.Design, SkillAudience.Developer],
-    tasks: [SkillTask.Website],
+    useCases: [SkillUseCase.Design, SkillUseCase.Development],
     previewVideo: "/skills/taste-skill-demo.mp4",
     updatedAt: "2026-06-20",
   },

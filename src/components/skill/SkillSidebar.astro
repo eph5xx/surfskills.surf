@@ -3,8 +3,7 @@ import type { Collection, DirectorySkill } from "@/data/skill-model/types";
 import {
   skillSlugFromId,
   KIND_LABELS,
-  AUDIENCE_LABELS,
-  TASK_LABELS,
+  USE_CASE_LABELS,
 } from "@/data/skill-model";
 
 // The skill page's right rail: Collection → Links → Install. Rendered once for
@@ -84,12 +83,9 @@ const linkRows = [
     : []),
 ];
 
-// Classification chips — kind leads, then audiences + tasks.
+// Classification chips — kind leads, then use cases.
 const kindLabel = KIND_LABELS[skill.kind];
-const tagLabels = [
-  ...skill.audiences.map((a) => AUDIENCE_LABELS[a]),
-  ...skill.tasks.map((t) => TASK_LABELS[t]),
-];
+const tagLabels = skill.useCases.map((u) => USE_CASE_LABELS[u]);
 
 // One sticky card; sections (Collection → Install → Links) divided by hairlines,
 // no section labels.
@@ -232,7 +228,7 @@ const sectionClass = "px-6 py-[22px]";
     </div>
   </div>
 
-  <!-- Tags — kind leads (tinted), then audiences + tasks (neutral) -->
+  <!-- Tags — kind leads (tinted), then use cases (neutral) -->
   <div class:list={[sectionClass, "border-t border-base-content/13"]}>
     <div class="flex flex-wrap gap-1.5">
       <span class="rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-medium text-primary">{kindLabel}</span>
