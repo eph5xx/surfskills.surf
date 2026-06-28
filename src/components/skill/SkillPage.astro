@@ -26,10 +26,6 @@ const flow = {
   get: { label: "You get", body: skill.description.output },
 };
 
-// Header icon-tile glyph (white SVG path on a sienna tile).
-const glyph =
-  '<rect x="3" y="13" width="4.4" height="8" rx="1.4"/><rect x="9.8" y="8" width="4.4" height="13" rx="1.4"/><rect x="16.6" y="3.5" width="4.4" height="17.5" rx="1.4"/>';
-
 // Command coloring: a leading "/command" token renders in primary, its argument in
 // accent. Prose examples (no leading slash) aren't commands — they render whole in
 // accent, with no command-head highlight.
@@ -57,22 +53,12 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
     <div class="grid grid-cols-1 items-start gap-[44px] lg:grid-cols-[1fr_336px]">
       <!-- Identity -->
       <div class="order-1 lg:col-start-1">
-        <div class="flex items-center gap-[18px]">
-          <span
-            class="grid size-[60px] shrink-0 place-items-center rounded-[17px] bg-primary shadow-[0_10px_22px_-10px_var(--color-primary)]"
-            aria-hidden="true"
-          >
-            <svg viewBox="0 0 24 24" class="size-[30px]" fill="#fff" set:html={glyph} />
-          </span>
-          <div>
-            <div class="font-mono text-[13px] font-semibold text-secondary">{slug}</div>
-            <h1
-              class="mt-0.5 font-display text-[30px] font-semibold leading-[1.0] tracking-[-0.03em] text-balance md:text-[40px]"
-            >
-              {skill.name}
-            </h1>
-          </div>
-        </div>
+        <div class="font-mono text-[13px] font-semibold text-secondary">{slug}</div>
+        <h1
+          class="mt-0.5 font-display text-[30px] font-semibold leading-[1.0] tracking-[-0.03em] text-balance md:text-[40px]"
+        >
+          {skill.name}
+        </h1>
 
         <!-- Tagline -->
         <p class="mt-4 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/65 text-pretty md:text-[16px]">
