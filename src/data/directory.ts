@@ -96,7 +96,7 @@ const FACET_REGISTRY: {
   { key: "use_case", label: "Use case", multi: true, get: (i) => i.useCases },
   { key: "kind", label: "Kind", multi: true, get: (i) => [i.kind] },
   // ↓ Adding a filterable field is one line — this is the whole extension point.
-  { key: "license", label: "License", multi: true, get: (i) => (i.license ? [i.license] : []) },
+  { key: "license", label: "License", multi: true, get: (i) => [i.license || "None"] },
 ];
 
 // Facet definitions with present values + catalog counts, ordered most-common first
