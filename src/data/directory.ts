@@ -1,6 +1,5 @@
 import {
-  directoryEntries,
-  directorySkillsById,
+  type DirectoryEntry,
   skillSlugFromId,
   AUDIENCE_LABELS,
   KIND_LABELS,
@@ -36,8 +35,13 @@ export interface DirectoryItem {
   available: boolean;
 }
 
-export const directoryItems: DirectoryItem[] = directoryEntries.map(
-  ({ collection, skill }) => ({
+/** Map fetched directory entries to the Discover view-model. `availableIds` is the
+ *  set of skill ids that have a live page (all of them, in the DB world). */
+export const buildDirectoryItems = (
+  entries: DirectoryEntry[],
+  availableIds: Set<string>,
+): DirectoryItem[] =>
+  entries.map(({ collection, skill }) => ({
     id: skill.id,
     slug: skillSlugFromId(skill.id),
     href: `/s/${skill.id}`,
@@ -57,21 +61,8 @@ export const directoryItems: DirectoryItem[] = directoryEntries.map(
     githubStars: collection.githubStars,
     updatedAt: collection.updatedAt,
     license: collection.license,
-    available: skill.id in directorySkillsById,
-  }),
-);
-
-// Facet options, kept in enum order but narrowed to values actually present in the
-// catalog — so we never render an empty "SEO" tab while there are no SEO skills.
-const audienceUsed = new Set(directoryItems.flatMap((i) => i.audiences));
-const kindUsed = new Set(directoryItems.map((i) => i.kind));
-const taskUsed = new Set(directoryItems.flatMap((i) => i.tasks));
-
-export const audienceOptions = Object.values(AUDIENCE_LABELS).filter((l) =>
-  audienceUsed.has(l),
-);
-export const kindOptions = Object.values(KIND_LABELS).filter((l) => kindUsed.has(l));
-export const taskOptions = Object.values(TASK_LABELS).filter((l) => taskUsed.has(l));
+    available: availableIds.has(skill.id),
+  }));
 
 export const sortOptions = [
   { value: "newest", label: "Newest" },
@@ -114,16 +105,18 @@ const FACET_REGISTRY: {
 ];
 
 // Facet definitions with present values + catalog counts, ordered most-common first
-// so the useful values stay at the top of a list as it grows.
-export const facets: FacetDef[] = FACET_REGISTRY.map((f) => {
-  const counts = new Map<string, number>();
-  for (const item of directoryItems)
-    for (const v of f.get(item)) counts.set(v, (counts.get(v) ?? 0) + 1);
-  const values = [...counts.entries()]
-    .map(([value, count]) => ({ value, count }))
-    .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
-  return { key: f.key, label: f.label, multi: f.multi, values };
-});
+// so the useful values stay at the top of a list as it grows. Built per request
+// from the fetched items.
+export const buildFacets = (items: DirectoryItem[]): FacetDef[] =>
+  FACET_REGISTRY.map((f) => {
+    const counts = new Map<string, number>();
+    for (const item of items)
+      for (const v of f.get(item)) counts.set(v, (counts.get(v) ?? 0) + 1);
+    const values = [...counts.entries()]
+      .map(([value, count]) => ({ value, count }))
+      .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+    return { key: f.key, label: f.label, multi: f.multi, values };
+  });
 
 /** Per-card data attributes the engine reads — every facet value + search/sort fields. */
 export const itemDataAttrs = (item: DirectoryItem): Record<string, string> => {

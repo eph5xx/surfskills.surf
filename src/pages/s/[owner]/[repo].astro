@@ -3,30 +3,43 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import CollectionPage from "@/components/collection/CollectionPage.astro";
-import { skills, type Skill } from "@/data/skills";
-import { directoryCollections } from "@/data/skill-model";
-import type { Collection } from "@/data/skill-model/types";
+import { loadCollection } from "@/data/skill-model/db";
+import { toSkillCard, type Skill } from "@/data/skill-card";
 import { absoluteUrl } from "@/lib/seo";
+import { setCatalogCache, notFound, NO_STORE } from "@/lib/cache";
 
-// Prerendered: one static page per directory collection. Collections live under the /s/
-// prefix keyed by their full id ("owner/repo", e.g. /s/greensock/gsap-skills). The /s/
-// prefix keeps the root namespace free for top-level pages (/blog, /pricing, …).
-export const prerender = true;
+// SSR (was prerendered): one page per directory collection, read from Supabase per
+// request and cached at the edge. Collections live under /s/ keyed by their full id
+// ("owner/repo", e.g. /s/greensock/gsap-skills). The 2-segment route here is
+// distinct from the 3-segment skill route under /s/.
+export const prerender = false;
 
-export function getStaticPaths() {
-  return directoryCollections.map((collection) => {
-    const [owner, repo] = collection.id.split("/");
-    return { params: { owner, repo }, props: { collection } };
+const { owner, repo } = Astro.params;
+const id = `${owner}/${repo}`;
+
+let loaded: Awaited<ReturnType<typeof loadCollection>>;
+try {
+  loaded = await loadCollection(Astro.locals.supabase, id);
+} catch (err) {
+  console.error(`[collection] failed to load "${id}"`, err);
+  return new Response("Catalog temporarily unavailable", {
+    status: 503,
+    headers: { "Cache-Control": NO_STORE },
   });
 }
 
-const { collection } = Astro.props as { collection: Collection };
+if (!loaded) return notFound(await Astro.rewrite("/404"));
 
-const catalogById = new Map(skills.map((s) => [s.id, s]));
+const { collection, skills: liveSkills } = loaded;
+setCatalogCache(Astro.response.headers);
+
+// Roster = every skill the repo ships. Live skills (we have a page) resolve to a
+// full card; the rest render greyed "coming soon". Live ones sort first.
+const liveById = new Map(liveSkills.map((s) => [s.id, toSkillCard(s, { available: true })]));
 const rosterSkills: Skill[] = collection.skills
   .map((skillId) => {
-    const indexed = catalogById.get(skillId);
-    if (indexed) return indexed;
+    const live = liveById.get(skillId);
+    if (live) return live;
     const name = skillId.split("/").pop() ?? skillId;
     return {
       id: skillId,
@@ -40,7 +53,7 @@ const rosterSkills: Skill[] = collection.skills
       verified: false,
       available: false,
       video: undefined,
-    };
+    } satisfies Skill;
   })
   .sort((a, b) => Number(b.available) - Number(a.available));
 
