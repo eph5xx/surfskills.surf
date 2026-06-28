@@ -1,16 +1,15 @@
 import {
   type DirectoryEntry,
   skillSlugFromId,
-  AUDIENCE_LABELS,
   KIND_LABELS,
-  TASK_LABELS,
+  USE_CASE_LABELS,
 } from "./skill-model";
 
 // View-model for the Discover *directory* (/discover).
 //
 // Unlike `skills.ts` — which flattens each skill onto a single derived `category`
 // string for the landing grid — this model exposes the REAL structured fields the
-// directory filters on: audience (primary axis), kind, task, plus the collection's
+// directory filters on: use case (primary axis), kind, plus the collection's
 // author / stars / updated date. `skills.ts` and the landing page are untouched.
 
 export interface DirectoryItem {
@@ -19,12 +18,10 @@ export interface DirectoryItem {
   href: string;
   title: string;
   blurb: string;
-  /** Primary facet axis — who the skill is for. */
-  audiences: string[];
-  /** What the skill is (single value). */
+  /** Primary facet axis — what you'd use the skill for. */
+  useCases: string[];
+  /** How you work with the skill (single value). */
   kind: string;
-  /** What the skill does. */
-  tasks: string[];
   video?: string;
   image?: string;
   author: { name: string; url: string; avatarURL?: string };
@@ -47,9 +44,8 @@ export const buildDirectoryItems = (
     href: `/s/${skill.id}`,
     title: skill.name,
     blurb: skill.description.short,
-    audiences: skill.audiences.map((a) => AUDIENCE_LABELS[a]),
+    useCases: skill.useCases.map((u) => USE_CASE_LABELS[u]),
     kind: KIND_LABELS[skill.kind],
-    tasks: skill.tasks.map((t) => TASK_LABELS[t]),
     video: skill.previewVideo,
     image: skill.previewImage,
     author: {
@@ -97,9 +93,8 @@ const FACET_REGISTRY: {
   multi: boolean;
   get: (i: DirectoryItem) => string[];
 }[] = [
-  { key: "audience", label: "Audience", multi: false, get: (i) => i.audiences },
+  { key: "use_case", label: "Use case", multi: true, get: (i) => i.useCases },
   { key: "kind", label: "Kind", multi: true, get: (i) => [i.kind] },
-  { key: "task", label: "Task", multi: true, get: (i) => i.tasks },
   // ↓ Adding a filterable field is one line — this is the whole extension point.
   { key: "license", label: "License", multi: true, get: (i) => (i.license ? [i.license] : []) },
 ];

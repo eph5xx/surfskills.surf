@@ -6,6 +6,7 @@ import { defineMiddleware } from "astro:middleware";
 // round-trip and let them set their OWN public Cache-Control (see src/lib/cache).
 const isPublicCatalogRoute = (pathname: string): boolean =>
   pathname === "/discover" ||
+  pathname.startsWith("/discover/") || // use-case landing pages
   pathname === "/sitemap.xml" ||
   pathname === "/s" ||
   pathname.startsWith("/s/");

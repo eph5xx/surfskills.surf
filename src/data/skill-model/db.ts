@@ -5,8 +5,7 @@ import {
   type SkillDescription,
   type SkillTool,
   SkillKind,
-  SkillAudience,
-  SkillTask,
+  SkillUseCase,
 } from "./types";
 import { type DirectoryEntry, skillSlugFromId } from "./index";
 
@@ -15,8 +14,8 @@ import { type DirectoryEntry, skillSlugFromId } from "./index";
 // static model used, so every downstream view-model and component is reused
 // unchanged — only the *source* moves from a static array to an async fetch.
 //
-// Enum-ish columns store the canonical enum KEY strings ("Action", "Founder",
-// "Audit"). They're hand-editable in Studio, so mapping is defensive: an unknown
+// Enum-ish columns store the canonical enum KEY strings ("Action", "Design",
+// "Research"). They're hand-editable in Studio, so mapping is defensive: an unknown
 // key is dropped (arrays) or the whole row is skipped-and-logged (kind), never
 // allowed to surface as `undefined` and 500 a page.
 
@@ -52,8 +51,7 @@ interface SkillRow {
   preview_image: string | null;
   external_links: string[] | null;
   kind: string;
-  audiences: string[] | null;
-  tasks: string[] | null;
+  use_cases: string[] | null;
   related_slugs: string[] | null;
   sort_order: number | null;
 }
@@ -64,21 +62,14 @@ const KIND_BY_KEY: Record<string, SkillKind | undefined> = {
   Knowledge: SkillKind.Knowledge,
   Router: SkillKind.Router,
 };
-const AUDIENCE_BY_KEY: Record<string, SkillAudience | undefined> = {
-  Founder: SkillAudience.Founder,
-  Design: SkillAudience.Design,
-  SEO: SkillAudience.SEO,
-  Developer: SkillAudience.Developer,
-  Writing: SkillAudience.Writing,
-};
-const TASK_BY_KEY: Record<string, SkillTask | undefined> = {
-  Audit: SkillTask.Audit,
-  Website: SkillTask.Website,
-  Video: SkillTask.Video,
-  Research: SkillTask.Research,
-  Review: SkillTask.Review,
-  Integrate: SkillTask.Integrate,
-  Image: SkillTask.Image,
+const USE_CASE_BY_KEY: Record<string, SkillUseCase | undefined> = {
+  Design: SkillUseCase.Design,
+  Video: SkillUseCase.Video,
+  Images: SkillUseCase.Images,
+  Writing: SkillUseCase.Writing,
+  SEO: SkillUseCase.SEO,
+  Development: SkillUseCase.Development,
+  Research: SkillUseCase.Research,
 };
 
 const mapCollection = (row: CollectionRow): Collection => ({
@@ -109,12 +100,9 @@ const mapSkill = (row: SkillRow): DirectorySkill | null => {
     console.warn(`[skills/db] skipping "${row.id}": unknown kind "${row.kind}"`);
     return null;
   }
-  const audiences = (row.audiences ?? [])
-    .map((a) => AUDIENCE_BY_KEY[a])
-    .filter((a): a is SkillAudience => a !== undefined);
-  const tasks = (row.tasks ?? [])
-    .map((t) => TASK_BY_KEY[t])
-    .filter((t): t is SkillTask => t !== undefined);
+  const useCases = (row.use_cases ?? [])
+    .map((u) => USE_CASE_BY_KEY[u])
+    .filter((u): u is SkillUseCase => u !== undefined);
   return {
     name: row.name,
     id: row.id,
@@ -128,8 +116,7 @@ const mapSkill = (row: SkillRow): DirectorySkill | null => {
     previewImage: row.preview_image ?? undefined,
     externalLinks: row.external_links ?? [],
     kind,
-    audiences,
-    tasks,
+    useCases,
   };
 };
 
