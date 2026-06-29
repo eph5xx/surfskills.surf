@@ -23,7 +23,7 @@ export interface FeaturedSkill {
 export const featuredSkills: FeaturedSkill[] = [
   {
     id: "eph5xx/tweakidea/tweak-evaluate",
-    name: "Validate Your Idea",
+    name: "Validate Startup Idea",
     description: {
       short:
         "14 independent evaluators score your pitch, each doing its own web research. An honest scorecard tells you GO, PIVOT, or STOP.",
@@ -34,7 +34,7 @@ export const featuredSkills: FeaturedSkill[] = [
   },
   {
     id: "heygen-com/hyperframes/hyperframes",
-    name: "Render a Video",
+    name: "Make a Video",
     description: {
       short:
         "Describe the video you want and HyperFrames teaches your coding agent to compose it in HTML/CSS/JS. It renders a deterministic MP4, the same every time.",
