@@ -25,6 +25,11 @@ type SortKey = "newest" | "stars" | "title";
 
 const ACTIVE_CLASS = "is-active";
 
+// Results are paged client-side (the engine already holds the full sorted/filtered
+// set, so paging is just a window over it). Overridable per shell via
+// [data-directory][data-dir-page-size].
+const PER_PAGE_DEFAULT = 12;
+
 // Fallback for shells that predate the generic data-facet-<key> convention.
 const LEGACY: Record<string, string> = {
   audience: "audiences",
@@ -74,7 +79,11 @@ export function initDirectory(root: Element | Document): void {
   const countEl = el.querySelector<HTMLElement>("[data-dir-count]");
   const emptyEl = el.querySelector<HTMLElement>("[data-dir-empty]");
   const activeEl = el.querySelector<HTMLElement>("[data-dir-active]");
+  const pagesEl = el.querySelector<HTMLElement>("[data-dir-pages]");
   const clearEls = Array.from(el.querySelectorAll<HTMLElement>("[data-dir-clear]"));
+
+  const perPage = Number(el.dataset.dirPageSize) || PER_PAGE_DEFAULT;
+  let page = 1; // 1-based; clamped to the result set in recompute().
 
   const itemsByList = lists.map((l) =>
     Array.from(l.querySelectorAll<HTMLElement>("[data-dir-item]")),
@@ -202,8 +211,96 @@ export function initDirectory(root: Element | Document): void {
     if (q) p.set("q", q);
     for (const [key, set] of active) if (set.size) p.set(key, [...set].join(","));
     if (sort !== "newest") p.set("sort", sort);
+    if (page > 1) p.set("page", String(page));
     const qs = p.toString();
     history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
+  }
+
+  // Build a windowed numeric pager (first · last · current±1, with "…" gaps) flanked
+  // by labelled Prev/Next buttons into [data-dir-pages]. Hidden when there's one page.
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const chevron = (d: string): SVGSVGElement => {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    for (const [k, v] of Object.entries({
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      "stroke-width": "2.25",
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      "aria-hidden": "true",
+    }))
+      svg.setAttribute(k, v);
+    const path = document.createElementNS(SVG_NS, "path");
+    path.setAttribute("d", d);
+    svg.appendChild(path);
+    return svg;
+  };
+
+  function renderPager(totalPages: number): void {
+    if (!pagesEl) return;
+    pagesEl.replaceChildren();
+    if (totalPages <= 1) {
+      pagesEl.toggleAttribute("hidden", true);
+      return;
+    }
+    pagesEl.toggleAttribute("hidden", false);
+
+    const mkNav = (target: "prev" | "next", aria: string, disabled: boolean): void => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.dataset.dirPage = target;
+      b.className = "dir-pager-nav";
+      b.setAttribute("aria-label", aria);
+      const label = document.createElement("span");
+      label.className = "dir-pager-label";
+      label.textContent = target === "prev" ? "Prev" : "Next";
+      const chev = chevron(target === "prev" ? "m15 6-6 6 6 6" : "m9 6 6 6-6 6");
+      // prev → [chevron][label]; next → [label][chevron]
+      b.append(...(target === "prev" ? [chev, label] : [label, chev]));
+      if (disabled) b.disabled = true;
+      pagesEl.appendChild(b);
+    };
+
+    // Number buttons + gaps live in their own wrapper, flanked by the nav buttons.
+    const numsWrap = document.createElement("div");
+    numsWrap.className = "dir-pager-nums";
+
+    const mkNum = (n: number): void => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "dir-pager-num";
+      b.dataset.dirPage = String(n);
+      b.textContent = String(n);
+      b.setAttribute("aria-label", `Page ${n}`);
+      if (n === page) {
+        b.setAttribute("aria-current", "page");
+        b.classList.add(ACTIVE_CLASS);
+      }
+      numsWrap.appendChild(b);
+    };
+
+    const mkGap = (): void => {
+      const s = document.createElement("span");
+      s.dataset.dirPageGap = "";
+      s.setAttribute("aria-hidden", "true");
+      s.textContent = "…";
+      numsWrap.appendChild(s);
+    };
+
+    const nums = [...new Set([1, totalPages, page, page - 1, page + 1])]
+      .filter((n) => n >= 1 && n <= totalPages)
+      .sort((a, b) => a - b);
+
+    mkNav("prev", "Previous page", page === 1);
+    let prev = 0;
+    for (const n of nums) {
+      if (n - prev > 1) mkGap();
+      mkNum(n);
+      prev = n;
+    }
+    pagesEl.appendChild(numsWrap);
+    mkNav("next", "Next page", page === totalPages);
   }
 
   function recompute(): void {
@@ -211,26 +308,45 @@ export function initDirectory(root: Element | Document): void {
     const active = new Map(facetKeys.map((k) => [k, activeValues(k)] as const));
     const sort = currentSort();
     const cmp = comparator(sort);
-    let visible = 0;
 
+    // Sort each list (so DOM order == sorted order) and gather the matching items
+    // across all lists into one ordered set — the window we page over.
+    const matched: HTMLElement[] = [];
     lists.forEach((list, i) => {
       const sorted = itemsByList[i].slice().sort(cmp);
       for (const it of sorted) list.appendChild(it);
-      for (const it of sorted) {
-        const ok = itemMatches(it, q, active);
-        it.toggleAttribute("hidden", !ok);
-        if (ok) visible += 1;
-      }
+      for (const it of sorted) if (itemMatches(it, q, active)) matched.push(it);
     });
+
+    const total = matched.length;
+    const totalPages = Math.max(1, Math.ceil(total / perPage));
+    page = Math.min(Math.max(page, 1), totalPages);
+    const start = (page - 1) * perPage;
+    const onPage = new Set(matched.slice(start, start + perPage));
+
+    // An item is visible only if it both matches AND falls in the current page.
+    for (const it of allItems) it.toggleAttribute("hidden", !onPage.has(it));
 
     for (const g of groups)
       g.toggleAttribute("hidden", !g.querySelector("[data-dir-item]:not([hidden])"));
 
-    if (countEl) countEl.textContent = String(visible);
-    if (emptyEl) emptyEl.toggleAttribute("hidden", visible !== 0);
+    if (countEl) countEl.textContent = String(total);
+    if (emptyEl) emptyEl.toggleAttribute("hidden", total !== 0);
+    renderPager(totalPages);
     updateFacetCounts(q, active);
     renderChips(active);
     syncURL(q, active, sort);
+  }
+
+  // Move to a page (a number, or "prev"/"next") and re-render. Upper bound is
+  // clamped inside recompute(); we only guard the lower bound here.
+  function goToPage(target: string): void {
+    const next =
+      target === "prev" ? page - 1 : target === "next" ? page + 1 : Number(target);
+    if (!Number.isFinite(next)) return;
+    page = Math.max(1, next);
+    recompute();
+    el.scrollIntoView({ block: "start", behavior: "smooth" });
   }
 
   function selectValue(key: string, value: string, on: boolean): void {
@@ -259,6 +375,8 @@ export function initDirectory(root: Element | Document): void {
     if (q && search) search.value = q;
     const sort = p.get("sort");
     if (sort && sortSel) sortSel.value = sort;
+    const pg = Math.floor(Number(p.get("page")));
+    if (pg >= 1) page = pg;
 
     for (const key of facetKeys) {
       const wanted = new Set(splitAttr(p.get(key) ?? ""));
@@ -280,9 +398,16 @@ export function initDirectory(root: Element | Document): void {
   }
 
   // Button-style facets are toggled by us; native inputs toggle themselves.
+  // Changing the result set resets to page 1; the pager keeps its own page.
   el.addEventListener("click", (e) => {
+    const pager = (e.target as HTMLElement).closest<HTMLElement>("[data-dir-page]");
+    if (pager && el.contains(pager)) {
+      goToPage(pager.dataset.dirPage ?? "");
+      return;
+    }
     const chip = (e.target as HTMLElement).closest<HTMLElement>("[data-dir-chip]");
     if (chip && el.contains(chip)) {
+      page = 1;
       selectValue(chip.dataset.key ?? "", chip.dataset.value ?? "", false);
       recompute();
       return;
@@ -290,6 +415,7 @@ export function initDirectory(root: Element | Document): void {
     const facet = (e.target as HTMLElement).closest<HTMLElement>("[data-dir-facet]");
     if (!facet || !el.contains(facet) || isInput(facet)) return;
     e.preventDefault();
+    page = 1;
     const key = facet.getAttribute("data-dir-facet") ?? "";
     const v = facet.getAttribute("data-value") ?? "";
     if (modeFor(key) === "single") selectValue(key, v, true);
@@ -299,10 +425,16 @@ export function initDirectory(root: Element | Document): void {
 
   el.addEventListener("change", (e) => {
     const t = e.target as HTMLElement;
-    if ((t.matches("[data-dir-facet]") && isInput(t)) || t === sortSel) recompute();
+    if ((t.matches("[data-dir-facet]") && isInput(t)) || t === sortSel) {
+      page = 1;
+      recompute();
+    }
   });
 
-  search?.addEventListener("input", recompute);
+  search?.addEventListener("input", () => {
+    page = 1;
+    recompute();
+  });
 
   // Filter a facet group's options by typed text (appears only when a group is long).
   for (const fs of el.querySelectorAll<HTMLInputElement>("[data-dir-facet-search]")) {
@@ -320,6 +452,7 @@ export function initDirectory(root: Element | Document): void {
 
   for (const b of clearEls)
     b.addEventListener("click", () => {
+      page = 1;
       resetAll();
       recompute();
     });
