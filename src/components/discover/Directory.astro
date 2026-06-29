@@ -30,6 +30,7 @@ const { items, facets } = Astro.props;
 
 <section
   data-directory
+  data-dir-page-size="12"
   class="relative lg:grid lg:grid-cols-[248px_minmax(0,1fr)] lg:gap-8"
 >
   <input id="dir-filters" type="checkbox" class="peer/filters hidden" aria-hidden="true" />
@@ -125,6 +126,9 @@ const { items, facets } = Astro.props;
       <p class="mt-1.5 text-[14px] text-base-content/60">Loosen a facet or clear your search.</p>
       <button data-dir-clear type="button" class="btn btn-sm btn-primary mt-5 rounded-full">Clear all filters</button>
     </div>
+
+    <!-- Pager — engine fills this with Prev/Next + numbered buttons; hidden at ≤1 page. -->
+    <nav data-dir-pages hidden class="dir-pager" aria-label="Pagination"></nav>
   </div>
 </section>
 
@@ -230,6 +234,108 @@ const { items, facets } = Astro.props;
     color: var(--color-base-content);
     cursor: pointer;
     appearance: none;
+  }
+
+  /* --- pager (engine-rendered): "Soft Tint" — flat and borderless at rest. Hover
+     washes a faint neutral fill; the current page is a soft Burnt Sienna tint (not a
+     solid). Prev/Next carry labels that collapse to chevrons on narrow screens.
+     These nodes are built by the engine at runtime, so — like the chips in
+     ActiveChips.astro — every rule must be :global(): Astro's scoped attribute lands
+     only on template elements, never on JS-created ones. --- */
+  :global(.dir-pager) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 2.75rem;
+  }
+
+  /* Prev / Next: borderless text + chevron. */
+  :global(.dir-pager-nav) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2.35rem;
+    padding: 0 0.75rem;
+    border: 0;
+    border-radius: var(--radius-field);
+    background: transparent;
+    font-family: var(--font-display);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: color-mix(in oklab, var(--color-base-content) 64%, transparent);
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+  }
+  :global(.dir-pager-nav:hover:not(:disabled)) {
+    background: color-mix(in oklab, var(--color-base-content) 6%, transparent);
+    color: var(--color-base-content);
+  }
+  :global(.dir-pager-nav:disabled) {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  :global(.dir-pager-nav svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  :global(.dir-pager-nums) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0 0.4rem;
+  }
+
+  /* Page numbers: borderless square; active is a soft sienna tint. */
+  :global(.dir-pager-num) {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.35rem;
+    height: 2.35rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-field);
+    background: transparent;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: color-mix(in oklab, var(--color-base-content) 64%, transparent);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+  }
+  :global(.dir-pager-num:hover:not(.is-active)) {
+    background: color-mix(in oklab, var(--color-base-content) 6%, transparent);
+    color: var(--color-base-content);
+  }
+  :global(.dir-pager-num.is-active) {
+    background: color-mix(in oklab, var(--color-primary) 16%, transparent);
+    color: var(--color-primary);
+    cursor: default;
+  }
+  :global(.dir-pager [data-dir-page-gap]) {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.25rem;
+    height: 2.35rem;
+    color: color-mix(in oklab, var(--color-base-content) 32%, transparent);
+    user-select: none;
+  }
+
+  @media (max-width: 560px) {
+    /* Collapse Prev/Next to icon-only to keep the row compact on phones. */
+    :global(.dir-pager-label) {
+      display: none;
+    }
+    :global(.dir-pager-nav) {
+      padding: 0 0.5rem;
+    }
   }
 </style>
 
