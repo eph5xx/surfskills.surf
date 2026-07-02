@@ -69,5 +69,7 @@ export interface DirectorySkill {
   externalLinks: string[];
   kind: SkillKind;
   useCases: SkillUseCase[];
+  /** When the skill was added to the site (skills.created_at). */
+  createdAt?: string;
 }
 

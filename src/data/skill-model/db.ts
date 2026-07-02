@@ -54,6 +54,7 @@ interface SkillRow {
   use_cases: string[] | null;
   related_slugs: string[] | null;
   sort_order: number | null;
+  created_at: string;
 }
 
 const KIND_BY_KEY: Record<string, SkillKind | undefined> = {
@@ -117,6 +118,7 @@ const mapSkill = (row: SkillRow): DirectorySkill | null => {
     externalLinks: row.external_links ?? [],
     kind,
     useCases,
+    createdAt: row.created_at,
   };
 };
 
