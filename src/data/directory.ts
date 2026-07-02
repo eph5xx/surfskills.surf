@@ -121,6 +121,7 @@ export const itemDataAttrs = (item: DirectoryItem): Record<string, string> => {
     "data-blurb": item.blurb.toLowerCase(),
     "data-author": item.author.name.toLowerCase(),
     "data-collection": item.collectionName.toLowerCase(),
+    "data-slug": item.id.toLowerCase(),
     "data-stars": String(item.githubStars ?? 0),
     "data-updated": item.updatedAt ?? "",
   };

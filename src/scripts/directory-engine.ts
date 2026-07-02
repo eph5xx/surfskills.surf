@@ -45,6 +45,9 @@ const splitAttr = (v: string | undefined): string[] =>
     .map((s) => s.trim())
     .filter(Boolean);
 
+const normText = (s: string): string =>
+  s.toLowerCase().replace(/[-_/]+/g, " ").replace(/\s+/g, " ").trim();
+
 const camelFacet = (key: string): string =>
   `facet${key.charAt(0).toUpperCase()}${key.slice(1)}`;
 
@@ -124,12 +127,17 @@ export function initDirectory(root: Element | Document): void {
 
   const currentSort = (): SortKey => (sortSel?.value as SortKey) || "newest";
 
+  // Search is separator-insensitive: "-", "_", "/" in queries and data (slugs,
+  // ids) are treated as spaces, and every whitespace-separated token must match.
   function matchText(item: HTMLElement, q: string): boolean {
-    if (!q) return true;
-    const hay = `${item.dataset.title ?? ""} ${item.dataset.blurb ?? ""} ${
-      item.dataset.author ?? ""
-    } ${item.dataset.collection ?? ""}`.toLowerCase();
-    return hay.includes(q);
+    const tokens = normText(q).split(" ").filter(Boolean);
+    if (tokens.length === 0) return true;
+    const hay = normText(
+      `${item.dataset.title ?? ""} ${item.dataset.blurb ?? ""} ${
+        item.dataset.author ?? ""
+      } ${item.dataset.collection ?? ""} ${item.dataset.slug ?? ""}`,
+    );
+    return tokens.every((t) => hay.includes(t));
   }
 
   // Match an item against the active filters, optionally ignoring one facet key
@@ -440,9 +448,9 @@ export function initDirectory(root: Element | Document): void {
   for (const fs of el.querySelectorAll<HTMLInputElement>("[data-dir-facet-search]")) {
     const key = fs.getAttribute("data-dir-target") ?? fs.getAttribute("data-dir-facet-search") ?? "";
     fs.addEventListener("input", () => {
-      const needle = fs.value.trim().toLowerCase();
+      const needle = normText(fs.value);
       for (const c of controlsFor(key)) {
-        const v = (c.getAttribute("data-value") ?? "").toLowerCase();
+        const v = normText(c.getAttribute("data-value") ?? "");
         if (!v) continue;
         const wrap = isInput(c) ? c.closest("label") ?? c : c;
         wrap.toggleAttribute("hidden", needle !== "" && !v.includes(needle));
