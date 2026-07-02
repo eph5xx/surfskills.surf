@@ -158,12 +158,18 @@ export function initDirectory(root: Element | Document): void {
   }
 
   function comparator(sort: SortKey): (a: HTMLElement, b: HTMLElement) => number {
+    const ts = (v: string | undefined): number => Date.parse(v ?? "") || 0;
     return (a, b) => {
       if (sort === "title")
         return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "");
       if (sort === "stars")
         return Number(b.dataset.stars ?? 0) - Number(a.dataset.stars ?? 0);
-      return (Date.parse(b.dataset.updated ?? "") || 0) - (Date.parse(a.dataset.updated ?? "") || 0);
+      // "Newest": when the skill was added to the site; the collection's update
+      // date breaks ties (bulk-seeded skills share one created_at instant).
+      return (
+        ts(b.dataset.created) - ts(a.dataset.created) ||
+        ts(b.dataset.updated) - ts(a.dataset.updated)
+      );
     };
   }
 

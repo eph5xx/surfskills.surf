@@ -28,6 +28,8 @@ export interface DirectoryItem {
   collectionName: string;
   githubStars?: number;
   updatedAt?: string;
+  /** When the skill was added to the site — the "Newest" sort key. */
+  createdAt?: string;
   license?: string;
   available: boolean;
 }
@@ -56,6 +58,7 @@ export const buildDirectoryItems = (
     collectionName: collection.name,
     githubStars: collection.githubStars,
     updatedAt: collection.updatedAt,
+    createdAt: skill.createdAt,
     license: collection.license,
     available: availableIds.has(skill.id),
   }));
@@ -124,6 +127,7 @@ export const itemDataAttrs = (item: DirectoryItem): Record<string, string> => {
     "data-slug": item.id.toLowerCase(),
     "data-stars": String(item.githubStars ?? 0),
     "data-updated": item.updatedAt ?? "",
+    "data-created": item.createdAt ?? "",
   };
   for (const f of FACET_REGISTRY) attrs[`data-facet-${f.key}`] = f.get(item).join(",");
   return attrs;
