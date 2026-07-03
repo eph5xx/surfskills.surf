@@ -41,7 +41,7 @@ export const featuredSkills: FeaturedSkill[] = [
     },
     useCases: [SkillUseCase.Video, SkillUseCase.Design, SkillUseCase.Development],
     previewVideo: "https://media.surfskills.surf/skills/hyperframes-demo.mp4",
-    updatedAt: "2026-07-03",
+    updatedAt: "2026-07-04",
   },
   {
     id: "jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better",

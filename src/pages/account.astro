@@ -11,7 +11,7 @@ if (!Astro.locals.user) return Astro.redirect("/login?next=%2Faccount", 303);
 const user = Astro.locals.user;
 ---
 
-<BaseLayout title="Your account — surfskills.surf" description="Manage your surfskills account." noindex>
+<BaseLayout title="Your account — Surf Skills" description="Manage your surfskills account." noindex>
   <PostHogIdentify userId={user.id} email={user.email} />
   <div class="mx-auto max-w-[1200px] px-8">
     <Header />

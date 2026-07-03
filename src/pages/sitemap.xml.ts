@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { loadDirectory } from "@/data/skill-model/db";
 import { absoluteUrl } from "@/lib/seo";
 import { PUBLIC_CATALOG_CACHE, NO_STORE } from "@/lib/cache";
+import { posts } from "@/data/blog";
 
 // SSR (was prerendered): the catalog half of the sitemap is read from Supabase per
 // request and cached at the edge, so newly added skills/collections show up in the
@@ -12,7 +13,6 @@ const STATIC_PATHS = [
   "/",
   "/discover",
   "/blog",
-  "/blog/tweak-idea",
   "/terms",
   "/privacy",
   "/cookies",
@@ -34,7 +34,7 @@ export const GET: APIRoute = async ({ site, locals }) => {
     cacheControl = NO_STORE; // serve the static paths but don't cache a partial sitemap
   }
 
-  const urls = [...STATIC_PATHS, ...catalogPaths]
+  const urls = [...STATIC_PATHS, ...posts.map((post) => post.href), ...catalogPaths]
     .map((path) => absoluteUrl(origin, path))
     .sort()
     .map((loc) => `  <url>\n    <loc>${loc}</loc>\n  </url>`)
