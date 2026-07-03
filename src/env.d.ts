@@ -11,6 +11,8 @@ interface Env {
   POLAR_PRODUCT_ID_MONTHLY: string;
   POLAR_PRODUCT_ID_YEARLY: string;
   POSTHOG_API_KEY: string;
+  /** Static-assets binding from wrangler.jsonc ("assets"): serves dist/ files. */
+  ASSETS: { fetch(input: RequestInfo | URL): Promise<Response> };
 }
 
 type Runtime = import('@astrojs/cloudflare').Runtime<Env>;

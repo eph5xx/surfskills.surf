@@ -6,7 +6,7 @@ import SkillPage from "@/components/skill/SkillPage.astro";
 import { loadSkill } from "@/data/skill-model/db";
 import { toSkillCard, type Skill } from "@/data/skill-card";
 import { absoluteUrl } from "@/lib/seo";
-import { setCatalogCache, notFound, NO_STORE } from "@/lib/cache";
+import { setCatalogCache, notFoundPage, NO_STORE } from "@/lib/cache";
 
 // SSR (was prerendered): one page per directory skill, read from Supabase per
 // request and cached at the edge, so new skills get a page with no redeploy.
@@ -29,18 +29,24 @@ try {
   });
 }
 
-if (!loaded) return notFound(await Astro.rewrite("/404"));
+if (!loaded) return await notFoundPage(Astro.locals);
 
 const { skill, collection, related } = loaded;
 setCatalogCache(Astro.response.headers);
 
-const title = `${skill.name} — open-source AI skill by ${collection.author.name} | surfskills.surf`;
+const title = `${skill.name} — AI skill by ${collection.author.name} | Surf Skills`;
 
 const relatedCards: Skill[] = related.map((r) => toSkillCard(r));
 
 const skillUrl = absoluteUrl(Astro.site!, `/s/${skill.id}`);
 const discoverUrl = absoluteUrl(Astro.site!, "/discover");
 const collectionUrl = absoluteUrl(Astro.site!, `/s/${collection.id}`);
+
+// schema.org license must be a URL; only emit it for plain SPDX ids.
+const licenseUrl =
+  collection.license && /^[A-Za-z0-9.+-]+$/.test(collection.license)
+    ? `https://spdx.org/licenses/${collection.license}`
+    : undefined;
 
 const jsonLd = [
   {
@@ -55,6 +61,16 @@ const jsonLd = [
       name: collection.author.name,
       url: collection.author.url,
     },
+    // No aggregateRating: skills have no genuine ratings, so the software
+    // rich result is out of reach; offers/dates/sameAs are for entity
+    // understanding, and eligibility follows automatically if ratings exist.
+    offers: { "@type": "Offer", price: 0, priceCurrency: "USD" },
+    isAccessibleForFree: true,
+    sameAs: [collection.repositoryURL, collection.websiteURL].filter(Boolean),
+    ...(skill.previewImage && { image: skill.previewImage }),
+    ...(skill.createdAt && { datePublished: skill.createdAt }),
+    ...(collection.updatedAt && { dateModified: collection.updatedAt }),
+    ...(licenseUrl && { license: licenseUrl }),
   },
   {
     "@context": "https://schema.org",
@@ -68,7 +84,12 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={skill.description.short} jsonLd={jsonLd}>
+<BaseLayout
+  title={title}
+  description={skill.description.short}
+  jsonLd={jsonLd}
+  ogImage={skill.previewImage}
+>
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
   </div>

@@ -3,28 +3,11 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { author } from "@/data/skills";
-
-// One entry per post. Add to the top as new field notes land.
-const posts = [
-  {
-    href: "/blog/design-resource-galleries",
-    title: "Gradients, hero sections, and free fonts: three galleries worth bookmarking",
-    blurb:
-      "Three curated galleries — Grainient for gradients, Supahero for hero sections, Free Faces for fonts — for shipping better-looking pages faster.",
-    date: "Jun 2026",
-  },
-  {
-    href: "/blog/tweak-idea",
-    title: "Tweak Idea: score a startup idea across 14 dimensions",
-    blurb:
-      "An open-source Claude Code skillset that runs a rough startup idea through a multi-agent pipeline and hands back a weighted scorecard with ranked next steps.",
-    date: "Jun 2026",
-  },
-];
+import { posts } from "@/data/blog";
 ---
 
 <BaseLayout
-  title="Blog — field notes from the lineup | surfskills.surf"
+  title="Blog — field notes from the lineup | Surf Skills"
   description="How the skills work and how they get tested — field notes from surfskills.surf."
 >
   <div id="top" class="mx-auto max-w-[1200px] px-8">

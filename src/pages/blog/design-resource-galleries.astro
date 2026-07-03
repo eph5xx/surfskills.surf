@@ -59,7 +59,13 @@ const skills = [
 ];
 ---
 
-<BaseLayout title={`${headline} | surfskills.surf`} description={description} jsonLd={jsonLd}>
+<BaseLayout
+  title={`${headline} | Surf Skills`}
+  description={description}
+  jsonLd={jsonLd}
+  ogImage={absoluteUrl(Astro.site!, "/blog/grainient.jpg")}
+  ogType="article"
+>
   <div id="top" class="mx-auto max-w-[1200px] px-8">
     <Header />
 

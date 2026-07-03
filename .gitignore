@@ -30,6 +30,10 @@ pnpm-debug.log*
 
 .claude/skills
 
+# agent skills installed via `skills` CLI (local only)
+.agents/
+skills-lock.json
+
 # hyperframes working renders (final web clips are committed under public/how/)
 media/how-it-works/renders/
 media/how-it-works/.debug/

@@ -6,7 +6,7 @@ import CollectionPage from "@/components/collection/CollectionPage.astro";
 import { loadCollection } from "@/data/skill-model/db";
 import { toSkillCard, type Skill } from "@/data/skill-card";
 import { absoluteUrl } from "@/lib/seo";
-import { setCatalogCache, notFound, NO_STORE } from "@/lib/cache";
+import { setCatalogCache, notFoundPage, NO_STORE } from "@/lib/cache";
 
 // SSR (was prerendered): one page per directory collection, read from Supabase per
 // request and cached at the edge. Collections live under /s/ keyed by their full id
@@ -28,7 +28,7 @@ try {
   });
 }
 
-if (!loaded) return notFound(await Astro.rewrite("/404"));
+if (!loaded) return await notFoundPage(Astro.locals);
 
 const { collection, skills: liveSkills } = loaded;
 setCatalogCache(Astro.response.headers);
@@ -58,7 +58,7 @@ const rosterSkills: Skill[] = collection.skills
   .sort((a, b) => Number(b.available) - Number(a.available));
 
 const count = rosterSkills.length;
-const title = `${collection.name} — ${count} AI skill${count === 1 ? "" : "s"} by ${collection.author.name} | surfskills.surf`;
+const title = `${collection.name} — ${count} AI skill${count === 1 ? "" : "s"} by ${collection.author.name} | Surf Skills`;
 
 const discoverUrl = absoluteUrl(Astro.site!, "/discover");
 const collectionUrl = absoluteUrl(Astro.site!, `/s/${collection.id}`);
@@ -75,7 +75,12 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={collection.shortDescription} jsonLd={jsonLd}>
+<BaseLayout
+  title={title}
+  description={collection.shortDescription}
+  jsonLd={jsonLd}
+  ogImage={liveSkills.find((s) => s.previewImage)?.previewImage}
+>
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
   </div>

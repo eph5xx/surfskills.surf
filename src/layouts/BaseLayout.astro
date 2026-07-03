@@ -10,6 +10,9 @@ interface Props {
   canonical?: string;
   noindex?: boolean;
   jsonLd?: Record<string, unknown>[];
+  /** Absolute URL; falls back to the site-wide 1200×630 share image. */
+  ogImage?: string;
+  ogType?: string;
 }
 
 const {
@@ -18,6 +21,8 @@ const {
   canonical = absoluteUrl(Astro.site!, Astro.url.pathname),
   noindex = false,
   jsonLd = [],
+  ogImage = absoluteUrl(Astro.site!, "/og-default.png"),
+  ogType = "website",
 } = Astro.props;
 ---
 
@@ -30,6 +35,14 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="surfskills.surf" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
     {
       jsonLd.map((schema) => (

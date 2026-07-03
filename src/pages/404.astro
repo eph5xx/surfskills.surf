@@ -3,13 +3,14 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 
-// Prerendered to a static 404.html so Cloudflare Pages serves it for any unmatched route
-// (e.g. an unknown /s/ skill path that getStaticPaths didn't emit). No SSR page rewrites
-// here anymore, so on-demand rendering is no longer needed.
+// Prerendered to a static 404.html so Cloudflare serves it for any unmatched route.
+// SSR catalog misses (/s/** unknown ids) serve this same built asset through the ASSETS
+// binding (see notFoundPage in lib/cache.ts) — Astro.rewrite can't reach a prerendered
+// page from an on-demand route, so no SSR rendering happens here.
 export const prerender = true;
 ---
 
-<BaseLayout title="Lost at sea — surfskills.surf" description="That page drifted away.">
+<BaseLayout title="Lost at sea — Surf Skills" description="That page drifted away.">
   <div class="mx-auto max-w-[1200px] px-8">
     <Header />
 
