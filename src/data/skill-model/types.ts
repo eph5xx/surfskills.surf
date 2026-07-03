@@ -53,6 +53,7 @@ export enum SkillUseCase {
   SEO, // search / growth / marketing
   Development, // build & integrate code (backend/API/SDK, infra)
   Research, // research, understand, audit & review work
+  Meta, // improve the agent itself (memory, workflow observation, skill-building)
 }
 
 export interface DirectorySkill {

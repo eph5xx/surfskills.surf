@@ -39,7 +39,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "Describe the video you want and HyperFrames teaches your coding agent to compose it in HTML/CSS/JS. It renders a deterministic MP4, the same every time.",
     },
-    useCases: [SkillUseCase.Video, SkillUseCase.Design, SkillUseCase.Development],
+    useCases: [SkillUseCase.Video],
     previewVideo: "https://media.surfskills.surf/skills/hyperframes-demo.mp4",
     updatedAt: "2026-07-04",
   },
@@ -50,7 +50,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "Great interfaces aren't one big thing - they're 16 small details that compound.",
     },
-    useCases: [SkillUseCase.Design, SkillUseCase.Development],
+    useCases: [SkillUseCase.Design],
     previewVideo: "https://media.surfskills.surf/skills/make-interfaces-feel-better-demo.mp4",
     updatedAt: "2026-04-19",
   },
@@ -61,7 +61,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "Other tools show you a hairball. This one teaches you the codebase - every file, function, and dependency, mapped into a graph you can explore.",
     },
-    useCases: [SkillUseCase.Research, SkillUseCase.Development],
+    useCases: [SkillUseCase.Development],
     previewVideo: "https://media.surfskills.surf/skills/understand-anything-demo.mp4",
     updatedAt: "2026-06-20",
   },
@@ -83,7 +83,7 @@ export const featuredSkills: FeaturedSkill[] = [
       short:
         "An anti-slop frontend skill: your agent reads the brief, infers the right design direction, and ships interfaces that don't look templated.",
     },
-    useCases: [SkillUseCase.Design, SkillUseCase.Development],
+    useCases: [SkillUseCase.Design],
     previewVideo: "https://media.surfskills.surf/skills/taste-skill-demo.mp4",
     updatedAt: "2026-06-20",
   },
