@@ -216,44 +216,7 @@ const linkRows = [
 </div>
 
 <script>
-  // Copy the install command. Shared by the code-block icon button [data-copy-cmd]
-  // (DaisyUI swap flips copy→check) and the "Paste into your agent" CTA [data-paste-cta].
-  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-copy-cmd]")) {
-    btn.addEventListener("click", async () => {
-      const text = btn.getAttribute("data-copy");
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        return;
-      }
-      btn.classList.add("swap-active");
-      window.clearTimeout(Number(btn.dataset.copyTimer));
-      btn.dataset.copyTimer = String(
-        window.setTimeout(() => btn.classList.remove("swap-active"), 1500),
-      );
-    });
-  }
-
-  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-paste-cta]")) {
-    btn.addEventListener("click", async () => {
-      const text = btn.getAttribute("data-copy");
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        return;
-      }
-      const label = btn.querySelector<HTMLElement>("[data-paste-label]");
-      if (!label) return;
-      if (!btn.dataset.pasteLabel) btn.dataset.pasteLabel = label.textContent ?? "";
-      label.textContent = "Copied to clipboard";
-      window.clearTimeout(Number(btn.dataset.pasteTimer));
-      btn.dataset.pasteTimer = String(
-        window.setTimeout(() => {
-          label.textContent = btn.dataset.pasteLabel ?? "";
-        }, 1500),
-      );
-    });
-  }
+  // Copy buttons ([data-copy-cmd] / [data-paste-cta]) with a global "Copied!"
+  // toast and robust clipboard fallback. Shared with the skill pages.
+  import "@/scripts/copy-feedback";
 </script>

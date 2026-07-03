@@ -184,55 +184,7 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
 </div>
 
 <script>
-  // Copy the run command. Bound via [data-copy-cmd] (the icon button in the
-  // terminal title bar); the DaisyUI swap flips copy→check for 1.5s.
-  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-copy-cmd]")) {
-    btn.addEventListener("click", async () => {
-      const text = btn.getAttribute("data-copy");
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        return;
-      }
-      btn.classList.add("swap-active");
-      window.clearTimeout(Number(btn.dataset.copyTimer));
-      btn.dataset.copyTimer = String(
-        window.setTimeout(() => btn.classList.remove("swap-active"), 1500),
-      );
-    });
-  }
-
-  // "Paste into your agent" — copies the full install command, then flips the
-  // label to a confirmation for 1.5s (no navigation).
-  for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-paste-cta]")) {
-    btn.addEventListener("click", async () => {
-      const text = btn.getAttribute("data-copy");
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        return;
-      }
-      const label = btn.querySelector<HTMLElement>("[data-paste-label]");
-      if (!label) return;
-      if (!btn.dataset.pasteLabel) btn.dataset.pasteLabel = label.textContent ?? "";
-      label.textContent = "Copied to clipboard";
-      window.clearTimeout(Number(btn.dataset.pasteTimer));
-      btn.dataset.pasteTimer = String(
-        window.setTimeout(() => {
-          label.textContent = btn.dataset.pasteLabel ?? "";
-        }, 1500),
-      );
-    });
-  }
-
-  for (const el of document.querySelectorAll<HTMLElement>(".ph-install-cta")) {
-    el.addEventListener("click", () => {
-      window.posthog?.capture("skill_repo_clicked", {
-        skill_slug: el.dataset.skillSlug,
-        kind: el.dataset.skillKind,
-      });
-    });
-  }
+  // Copy buttons ([data-copy-cmd] / [data-paste-cta]) with a global "Copied!"
+  // toast, robust clipboard fallback, and the PostHog install-CTA capture.
+  import "@/scripts/copy-feedback";
 </script>
