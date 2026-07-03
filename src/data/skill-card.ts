@@ -32,6 +32,7 @@ const CATEGORY_PRIORITY: SkillUseCase[] = [
   SkillUseCase.Design,
   SkillUseCase.Writing,
   SkillUseCase.SEO,
+  SkillUseCase.Meta,
   SkillUseCase.Research,
   SkillUseCase.Development, // broadest — only wins when nothing more specific matches
 ];

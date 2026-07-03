@@ -71,6 +71,7 @@ const USE_CASE_BY_KEY: Record<string, SkillUseCase | undefined> = {
   SEO: SkillUseCase.SEO,
   Development: SkillUseCase.Development,
   Research: SkillUseCase.Research,
+  Meta: SkillUseCase.Meta,
 };
 
 const mapCollection = (row: CollectionRow): Collection => ({

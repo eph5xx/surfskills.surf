@@ -37,4 +37,5 @@ export const USE_CASE_LABELS: Record<SkillUseCase, string> = {
   [SkillUseCase.SEO]: "SEO",
   [SkillUseCase.Development]: "Development",
   [SkillUseCase.Research]: "Research",
+  [SkillUseCase.Meta]: "Meta",
 };
