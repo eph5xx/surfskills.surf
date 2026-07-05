@@ -7,6 +7,31 @@ import SkillShowcase from "@/components/SkillShowcase.astro";
 import JoinBanner from "@/components/JoinBanner.astro";
 import Footer from "@/components/Footer.astro";
 import { absoluteUrl } from "@/lib/seo";
+import { formatUpdatedFull } from "@/data/directory";
+import { setCatalogCache, NO_STORE } from "@/lib/cache";
+
+// SSR: the hero's "Last updated" badge is the newest collections.updated_at,
+// read from Supabase per request (cached at the edge). On a DB error the badge
+// hides and the response stays uncached rather than 500. This response is
+// publicly cached — nothing rendered on this page may ever depend on the session.
+export const prerender = false;
+
+let lastUpdated = "";
+try {
+  const { data, error } = await Astro.locals.supabase
+    .from("collections")
+    .select("updated_at")
+    .order("updated_at", { ascending: false, nullsFirst: false })
+    .limit(1)
+    .abortSignal(AbortSignal.timeout(1500))
+    .maybeSingle();
+  if (error) throw error;
+  lastUpdated = formatUpdatedFull(data?.updated_at ?? undefined);
+  setCatalogCache(Astro.response.headers);
+} catch (err) {
+  console.error("[home] failed to load last-updated", err);
+  Astro.response.headers.set("Cache-Control", NO_STORE);
+}
 
 const title = "Surf Skills — AI agent skills directory, preview before using";
 const description =
@@ -54,7 +79,7 @@ const jsonLd = [
     </div>
 
     <Header />
-    <Hero />
+    <Hero lastUpdated={lastUpdated} />
     <WhatIsIt />
     <SkillShowcase />
     <JoinBanner />
