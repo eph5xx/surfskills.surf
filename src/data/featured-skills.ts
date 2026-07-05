@@ -1,9 +1,9 @@
 import { SkillUseCase } from "./skill-model/types";
 
-// Code-driven data for the homepage "examples" showcase (SkillShowcase) and the
-// Hero "last updated" badge. This is intentionally INDEPENDENT of the Supabase
-// catalog — the homepage must never break when the DB changes — and is the
-// explicit allowlist of which skills get featured (add/remove an entry by hand).
+// Code-driven data for the homepage "examples" showcase (SkillShowcase). This is
+// intentionally INDEPENDENT of the Supabase catalog — the showcase must never
+// break when the DB changes — and is the explicit allowlist of which skills get
+// featured (add/remove an entry by hand).
 //
 // Only the fields `toSkillCard` actually reads are kept (see ./skill-card); the
 // full catalog lives in Supabase and is fetched by ./skill-model/db.ts for the
@@ -16,8 +16,6 @@ export interface FeaturedSkill {
   description: { short: string };
   useCases: SkillUseCase[];
   previewVideo?: string;
-  /** Parent collection's updatedAt — feeds the homepage "last updated" badge. */
-  updatedAt?: string;
 }
 
 export const featuredSkills: FeaturedSkill[] = [
@@ -30,7 +28,6 @@ export const featuredSkills: FeaturedSkill[] = [
     },
     useCases: [SkillUseCase.Research],
     previewVideo: "https://media.surfskills.surf/skills/validate-startup-idea-demo.mp4",
-    updatedAt: "2026-04-30",
   },
   {
     id: "heygen-com/hyperframes/hyperframes",
@@ -41,7 +38,6 @@ export const featuredSkills: FeaturedSkill[] = [
     },
     useCases: [SkillUseCase.Video],
     previewVideo: "https://media.surfskills.surf/skills/hyperframes-demo.mp4",
-    updatedAt: "2026-07-04",
   },
   {
     id: "jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better",
@@ -52,7 +48,6 @@ export const featuredSkills: FeaturedSkill[] = [
     },
     useCases: [SkillUseCase.Design],
     previewVideo: "https://media.surfskills.surf/skills/make-interfaces-feel-better-demo.mp4",
-    updatedAt: "2026-04-19",
   },
   {
     id: "Egonex-AI/Understand-Anything/understand",
@@ -63,7 +58,6 @@ export const featuredSkills: FeaturedSkill[] = [
     },
     useCases: [SkillUseCase.Development],
     previewVideo: "https://media.surfskills.surf/skills/understand-anything-demo.mp4",
-    updatedAt: "2026-06-20",
   },
   {
     id: "greensock/gsap-skills/gsap-scrolltrigger",
@@ -74,7 +68,6 @@ export const featuredSkills: FeaturedSkill[] = [
     },
     useCases: [SkillUseCase.Design, SkillUseCase.Development],
     previewVideo: "https://media.surfskills.surf/skills/gsap-skills-demo.mp4",
-    updatedAt: "2026-04-21",
   },
   {
     id: "Leonxlnx/taste-skill/design-taste-frontend",
@@ -85,6 +78,5 @@ export const featuredSkills: FeaturedSkill[] = [
     },
     useCases: [SkillUseCase.Design],
     previewVideo: "https://media.surfskills.surf/skills/taste-skill-demo.mp4",
-    updatedAt: "2026-06-20",
   },
 ];

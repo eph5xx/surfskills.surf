@@ -1,10 +1,13 @@
 import { createServerClient, parseCookieHeader } from "@supabase/ssr";
 import { defineMiddleware } from "astro:middleware";
 
-// Public, edge-cacheable catalog pages (Discover, /s/**, sitemap). They read the
-// catalog with the shared client but need no session, so we skip the auth
-// round-trip and let them set their OWN public Cache-Control (see src/lib/cache).
+// Public, edge-cacheable catalog pages (home, Discover, /s/**, sitemap). They
+// read the catalog with the shared client but need no session, so we skip the
+// auth round-trip — which also keeps auth-refresh Set-Cookie headers out of
+// publicly cached responses — and let them set their OWN public Cache-Control
+// (see src/lib/cache).
 const isPublicCatalogRoute = (pathname: string): boolean =>
+  pathname === "/" ||
   pathname === "/discover" ||
   pathname === "/sitemap.xml" ||
   pathname === "/s" ||

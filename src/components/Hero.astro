@@ -1,13 +1,13 @@
 ---
-import { stats } from "../data/skills";
+const { lastUpdated = "" } = Astro.props;
 ---
 
 <section class="relative pb-16 pt-16 text-center">
-  {stats.lastUpdated && (
+  {lastUpdated && (
     <span
       class="badge badge-accent badge-lg mb-[22px] inline-flex h-auto items-center py-1.5 text-sm font-semibold sm:text-base"
     >
-      <span class="whitespace-nowrap">Last updated {stats.lastUpdated}</span>
+      <span class="whitespace-nowrap">Last updated {lastUpdated}</span>
     </span>
   )}
 
