@@ -34,7 +34,7 @@ const linkRows = [
 ---
 
 <div class="bg-base-200">
-  <main class="mx-auto max-w-[1200px] px-5 pt-10 pb-20 md:px-8 md:pt-[42px]">
+  <main id="content" class="mx-auto max-w-[1200px] px-5 pt-10 pb-20 md:px-8 md:pt-[42px]">
     <!-- Breadcrumb -->
     <nav class="breadcrumbs mb-7 text-[13.5px] font-semibold">
       <ul>
@@ -75,7 +75,7 @@ const linkRows = [
             }
             <span class="text-[13.5px] font-semibold leading-tight">
               {collection.author.name}
-              <span class="font-normal text-primary-content/80">· @{ghHandle} ↗</span>
+              <span class="whitespace-nowrap font-normal text-primary-content/80">· @{ghHandle} ↗</span>
             </span>
           </a>
 
@@ -145,12 +145,14 @@ const linkRows = [
               class="btn btn-primary mt-3.5 h-auto min-h-0 w-full gap-2 rounded-[14px] py-4 text-[16px] font-semibold normal-case shadow-[0_10px_26px_-12px_var(--color-primary)]"
             >
               <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
+                <rect x="9" y="9" width="11" height="11" rx="2" />
+                <path d="M5 15V5a2 2 0 0 1 2-2h10" />
               </svg>
-              <span data-paste-label>Paste into your agent</span>
+              <span data-paste-label>Copy install command</span>
             </button>
-            <p class="mt-2.5 text-center text-[12px] text-base-content/50">
-              Works in Claude, Cursor, Codex &amp; more
+            {/* /70 ink: 12px at /50 is ~2.8:1 on sand, under the AA 4.5:1 floor */}
+            <p class="mt-2.5 text-center text-[12px] text-base-content/70">
+              Paste it into Claude, Cursor, Codex &amp; more
             </p>
 
             <hr class="my-5 border-base-300" />
@@ -199,8 +201,8 @@ const linkRows = [
             The roster
           </h2>
           <p class="mt-1 text-[14.5px] text-base-content/65">
-            All {skills.length} {skills.length === 1 ? "skill" : "skills"} in the collection. Author,
-            license &amp; stars inherited above.
+            All {skills.length} {skills.length === 1 ? "skill" : "skills"} in the collection, by the
+            author above. One install gets you the whole set.
           </p>
         </div>
         <span class="hidden shrink-0 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-content sm:inline-block">

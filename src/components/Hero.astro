@@ -2,7 +2,7 @@
 const { lastUpdated = "" } = Astro.props;
 ---
 
-<section class="relative pb-16 pt-16 text-center">
+<section id="content" class="relative pb-16 pt-16 text-center">
   {lastUpdated && (
     <span
       class="badge badge-accent badge-lg mb-[22px] inline-flex h-auto items-center py-1.5 text-sm font-semibold sm:text-base"
@@ -11,13 +11,17 @@ const { lastUpdated = "" } = Astro.props;
     </span>
   )}
 
+  {/* The forced break holds only from sm up: below it the 2 halves rewrap into
+      4 ragged lines, so phones get a balanced natural wrap at a smaller floor. */}
   <h1
-    class="mx-auto mb-[18px] max-w-[900px] text-[clamp(52px,8.5vw,92px)] leading-[0.98] tracking-[-0.02em]"
+    class="mx-auto mb-[18px] max-w-[900px] text-balance text-[clamp(40px,8.5vw,92px)] leading-[0.98] tracking-[-0.02em]"
   >
-    Finally, AI skills<br />to get your work done
+    Finally, AI skills<br class="hidden sm:inline" /> to get your work done
   </h1>
 
-  <p class="mx-auto mb-[30px] max-w-[700px] text-balance text-[16px] leading-[1.6] text-base-content/70">
+  {/* /85 ink, not /70: this sits over live video, where the scrim can't
+      guarantee more than a sand-toned midground behind the text. */}
+  <p class="mx-auto mb-[30px] max-w-[560px] text-balance text-[16px] leading-[1.6] text-base-content/85">
     Curated AI skills library for marketing, design, research, and more. Preview
     what each skill makes before you run it, so the output is never a gamble — no
     technical skills needed.
@@ -27,4 +31,8 @@ const { lastUpdated = "" } = Astro.props;
     <a href="/login" class="btn btn-primary btn-lg">Join for free →</a>
     <a href="/discover" class="btn btn-lg">Discover skills</a>
   </div>
+
+  <p class="mt-4 text-[13.5px] font-medium text-base-content/85">
+    The free plan needs no card · <a href="/pricing" class="link link-hover underline-offset-2 hover:text-primary">see plans</a>
+  </p>
 </section>

@@ -15,6 +15,12 @@ const { skill, hideCategory = false } = Astro.props;
 // it (static landing = true; DB catalog = row exists; coming-soon roster = false),
 // so DB-only skills aren't wrongly greyed by a stale static index.
 const live = skill.available;
+
+// Roster tiles (hideCategory) run 2-up on phones and 5-up on desktop — the
+// full 22px card title drowns those small tiles, so they step down.
+const titleClass = hideCategory
+  ? "font-display text-[17px] font-semibold leading-snug text-base-content sm:text-[19px]"
+  : "font-display text-[22px] font-semibold leading-snug text-base-content";
 ---
 
 {
@@ -34,9 +40,13 @@ const live = skill.available;
                 loop
                 playsinline
                 preload="metadata"
+                poster={skill.image}
+                data-vis-play
               >
                 <source src={skill.video} type="video/mp4" />
               </video>
+            ) : skill.image ? (
+              <img src={skill.image} alt="" loading="lazy" class="size-full object-cover" />
             ) : (
               <div class="relative size-full">
                 <img src="/skills/skill-placeholder.svg" alt="" loading="lazy" class="size-full object-cover" />
@@ -48,7 +58,7 @@ const live = skill.available;
           }
         </div>
         <div class="flex items-center justify-between gap-3">
-          <h3 class="font-display text-[22px] font-semibold leading-snug text-base-content">{skill.title}</h3>
+          <h3 class={titleClass}>{skill.title}</h3>
           {!hideCategory && <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>}
         </div>
       </div>
@@ -66,9 +76,13 @@ const live = skill.available;
                 loop
                 playsinline
                 preload="metadata"
+                poster={skill.image}
+                data-vis-play
               >
                 <source src={skill.video} type="video/mp4" />
               </video>
+            ) : skill.image ? (
+              <img src={skill.image} alt="" loading="lazy" class="size-full object-cover" />
             ) : (
               <div class="relative size-full">
                 <img src="/skills/skill-placeholder.svg" alt="" loading="lazy" class="size-full object-cover" />
@@ -80,7 +94,7 @@ const live = skill.available;
           }
         </div>
         <div class="flex items-center justify-between gap-3">
-          <h3 class="font-display text-[22px] font-semibold leading-snug text-base-content">{skill.title}</h3>
+          <h3 class={titleClass}>{skill.title}</h3>
           {!hideCategory && <span class="badge badge-ghost badge-sm text-base-content/60">{skill.category}</span>}
         </div>
       </div>

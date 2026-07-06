@@ -8,12 +8,14 @@ import { buildDirectoryItems, buildFacets } from "@/data/directory";
 import { setCatalogCache, NO_STORE } from "@/lib/cache";
 
 // SSR: the catalog is read from Supabase per request (cached at the edge), so new
-// skills appear without a redeploy. On a DB error we render an empty directory and
-// keep the response uncached rather than 500.
+// skills appear without a redeploy. On a DB error we keep the page up (uncached,
+// never 500) but swap the directory for an honest error panel — rendering an empty
+// directory would read as "no skills match", which is a lie.
 export const prerender = false;
 
 let items: ReturnType<typeof buildDirectoryItems> = [];
 let facets: ReturnType<typeof buildFacets> = [];
+let loadFailed = false;
 try {
   const dir = await loadDirectory(Astro.locals.supabase);
   items = buildDirectoryItems(dir.entries, dir.availableIds);
@@ -21,6 +23,7 @@ try {
   setCatalogCache(Astro.response.headers);
 } catch (err) {
   console.error("[discover] failed to load catalog", err);
+  loadFailed = true;
   Astro.response.headers.set("Cache-Control", NO_STORE);
 }
 ---
@@ -32,7 +35,7 @@ try {
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
 
-    <section class="pb-6 pt-12">
+    <section id="content" class="pb-6 pt-12">
       <h1 class="text-[44px] leading-[1.05]">Skills available now</h1>
       <p class="mt-3 max-w-[560px] text-[16px] leading-[1.6] text-base-content/70">
         Every skill below is open source — preview what it does, then open the
@@ -40,7 +43,22 @@ try {
       </p>
     </section>
 
-    <Directory items={items} facets={facets} />
+    {
+      loadFailed ? (
+        <section class="rounded-box border border-base-300 bg-base-100 px-6 py-20 text-center">
+          <p class="font-display text-[22px] text-base-content">The catalog didn't load</p>
+          <p class="mx-auto mt-1.5 max-w-[42ch] text-[14px] leading-[1.6] text-base-content/60">
+            Something hiccuped on our end — the skills are all still here. Give it
+            a moment and try again.
+          </p>
+          <a href="/discover" class="btn btn-sm btn-primary mt-5 rounded-full">
+            Reload the catalog
+          </a>
+        </section>
+      ) : (
+        <Directory items={items} facets={facets} />
+      )
+    }
     <Footer />
   </div>
 </BaseLayout>

@@ -16,15 +16,23 @@ const errorCopy: Record<string, string> = {
   oauth: "That sign-in didn't go through. Give it another try.",
   email: "We couldn't send the link — check the address and try again.",
   expired: "That link has expired or was already used. Request a fresh one.",
-  unknown: "Something went sideways. Try again.",
+  unknown: "Something went wrong on our end. Please try again.",
 };
+// Object.hasOwn guards against prototype keys (?error=constructor would
+// otherwise render inherited object junk instead of a message).
+const errorMessage =
+  error !== null
+    ? Object.hasOwn(errorCopy, error)
+      ? errorCopy[error]
+      : errorCopy.unknown
+    : null;
 ---
 
-<BaseLayout title="Log in — Surf Skills" description="Sign in to surfskills to unlock and download verified AI skills." noindex>
+<BaseLayout title="Sign in — Surf Skills" description="Sign in to surfskills to unlock and download verified AI skills." noindex>
   <div class="mx-auto max-w-[1200px] px-8">
     <Header />
 
-    <main class="flex justify-center py-16 md:py-24">
+    <main id="content" class="flex justify-center py-16 md:py-24">
       <div class="w-full max-w-[440px]">
         <div class="card bg-base-100 shadow-md">
           <div class="card-body p-8 md:p-10">
@@ -37,6 +45,9 @@ const errorCopy: Record<string, string> = {
                   We sent you a sign-in link. Click it on this device and you'll
                   land right back here, signed in.
                 </p>
+                <p class="mt-3 text-[13px] leading-[1.5] text-base-content/60">
+                  Nothing after a minute? Check your spam folder.
+                </p>
                 <a href="/login" class="link link-secondary mt-6 inline-block text-[14px] font-semibold">
                   Use a different email
                 </a>
@@ -48,9 +59,9 @@ const errorCopy: Record<string, string> = {
                   One account, every verified skill.
                 </p>
 
-                {error && (
+                {errorMessage && (
                   <div role="alert" class="alert alert-error alert-soft mt-4 text-[14px] font-semibold">
-                    <span>{errorCopy[error] ?? errorCopy.unknown}</span>
+                    <span>{errorMessage}</span>
                   </div>
                 )}
 
@@ -87,7 +98,7 @@ const errorCopy: Record<string, string> = {
 
                 <form method="post" action="/api/auth/signin">
                   <fieldset class="fieldset">
-                    <legend class="fieldset-legend text-[13.5px]">Email magic link</legend>
+                    <legend class="fieldset-legend text-[13.5px]">Sign in with email</legend>
                     <input type="hidden" name="provider" value="email" />
                     <input type="hidden" name="next" value={next} />
                     <input
@@ -120,3 +131,37 @@ const errorCopy: Record<string, string> = {
     <Footer />
   </div>
 </BaseLayout>
+
+<script>
+  // One click, one sign-in: a second submit while the first is in flight would
+  // send a duplicate magic link (or start two OAuth dances). Lock each form on
+  // submit and show progress on its button; full-page navigation resets it.
+  const forms = document.querySelectorAll<HTMLFormElement>("form[action='/api/auth/signin']");
+  const unlock = (form: HTMLFormElement) => {
+    delete form.dataset.busy;
+    const btn = form.querySelector<HTMLButtonElement>("button[type='submit']");
+    if (btn) {
+      btn.classList.remove("btn-disabled");
+      btn.removeAttribute("aria-busy");
+    }
+  };
+  for (const form of forms) {
+    form.addEventListener("submit", (e) => {
+      if (form.dataset.busy) {
+        e.preventDefault();
+        return;
+      }
+      form.dataset.busy = "1";
+      const btn = form.querySelector<HTMLButtonElement>("button[type='submit']");
+      if (btn) {
+        btn.classList.add("btn-disabled");
+        btn.setAttribute("aria-busy", "true");
+      }
+    });
+  }
+  // Back from the OAuth page restores this one from the bfcache with the lock
+  // still applied — without this, the form comes back permanently disabled.
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) forms.forEach(unlock);
+  });
+</script>

@@ -14,6 +14,14 @@ const isCurrent = (href: string) =>
   path === href || path.startsWith(href + "/");
 ---
 
+{/* Hidden by transform, not sr-only: not-sr-only zeroes the button's padding
+    when revealed, leaving a cramped pill. Off-canvas keeps the btn intact. */}
+<a
+  href="#content"
+  class="btn btn-primary btn-sm fixed left-1/2 top-4 z-[60] -translate-x-1/2 -translate-y-24 rounded-full opacity-0 transition-[translate,opacity] focus-visible:translate-y-0 focus-visible:opacity-100 motion-reduce:transition-none"
+>
+  Skip to content
+</a>
 <header class="sticky top-0 z-50 pt-3">
   <nav class="navbar rounded-box border border-base-300 bg-base-100/80 px-3 shadow-md backdrop-blur">
     <div class="navbar-start shrink-0 gap-1">
@@ -47,12 +55,17 @@ const isCurrent = (href: string) =>
               </li>
             ))
           }
+          {/* Returning subscribers on phones need a way back in: the inline
+              "Sign in" link is hidden below sm, so it must live here too. */}
+          <li class="auth-anon">
+            <a href="/login">Sign in</a>
+          </li>
         </ul>
       </div>
       <Logo href={onHome ? "#top" : "/"} />
     </div>
 
-    <div class="navbar-end min-w-0 items-center gap-6">
+    <div class="navbar-end min-w-0 items-center gap-3 sm:gap-6">
       <nav class="hidden items-center gap-6 text-[15px] font-semibold md:flex">
         {
           navLinks.map((link) => (
@@ -73,7 +86,7 @@ const isCurrent = (href: string) =>
         href="/login"
         class="auth-anon link link-hover hidden text-[15px] font-semibold hover:text-primary sm:inline"
       >
-        Log in
+        Sign in
       </a>
       <a href="/login" class="auth-anon btn btn-primary btn-sm rounded-full">Join for free</a>
     </div>

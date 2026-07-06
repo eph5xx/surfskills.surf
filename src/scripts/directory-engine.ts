@@ -221,7 +221,13 @@ export function initDirectory(root: Element | Document): void {
   }
 
   function syncURL(q: string, active: Map<string, Set<string>>, sort: SortKey): void {
-    const p = new URLSearchParams();
+    // Start from the live query string so params the engine doesn't own (?view=,
+    // UTM tags) survive a recompute instead of being silently dropped.
+    const p = new URLSearchParams(location.search);
+    p.delete("q");
+    p.delete("sort");
+    p.delete("page");
+    for (const key of facetKeys) p.delete(key);
     if (q) p.set("q", q);
     for (const [key, set] of active) if (set.size) p.set(key, [...set].join(","));
     if (sort !== "newest") p.set("sort", sort);
@@ -360,7 +366,10 @@ export function initDirectory(root: Element | Document): void {
     if (!Number.isFinite(next)) return;
     page = Math.max(1, next);
     recompute();
-    el.scrollIntoView({ block: "start", behavior: "smooth" });
+    el.scrollIntoView({
+      block: "start",
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
   }
 
   function selectValue(key: string, value: string, on: boolean): void {
@@ -387,8 +396,11 @@ export function initDirectory(root: Element | Document): void {
     const p = new URLSearchParams(location.search);
     const q = p.get("q");
     if (q && search) search.value = q;
+    // Only accept a ?sort= value the select actually offers — assigning an
+    // unknown value blanks the control (selectedIndex -1).
     const sort = p.get("sort");
-    if (sort && sortSel) sortSel.value = sort;
+    if (sort && sortSel && [...sortSel.options].some((o) => o.value === sort))
+      sortSel.value = sort;
     const pg = Math.floor(Number(p.get("page")));
     if (pg >= 1) page = pg;
 

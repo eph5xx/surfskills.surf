@@ -48,6 +48,46 @@
 @theme {
   --font-sans: "Onest", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  /* Deep plum — the sanctioned dark (video canvas) and the ink on sienna fills.
+     Wetsuit Black only reaches 4.3:1 on Burnt Sienna; plum reaches 5.4:1. */
+  --color-plum: #1c1a28;
+}
+
+/* Sienna fills can't carry sand text at AA (3.2:1), so primary buttons use plum
+   ink (5.4:1) and brighten on hover instead of DaisyUI's default 7% darken —
+   darkening would drop the plum ink back below 4.5:1. Unlayered to beat
+   DaisyUI's layered rules. `--color-primary-content` itself stays sand for the
+   collection banner, whose darker gradient passes with sand text. */
+.btn-primary:not(.btn-outline, .btn-ghost, .btn-link) {
+  --btn-fg: var(--color-plum);
+}
+@media (hover: hover) {
+  .btn-primary:not(.btn-outline, .btn-ghost, .btn-link, .btn-active, :disabled, [disabled], .btn-disabled):hover {
+    --btn-bg: color-mix(in oklab, var(--color-primary), #fff 8%);
+    --btn-border: color-mix(in oklab, var(--color-primary), #fff 4%);
+  }
+}
+
+/* DaisyUI's 50%-alpha placeholder blends to ~2.9:1 on sand fields; 70% ink
+   holds the AA 4.5:1 floor while still reading as a hint. Unlayered to beat
+   DaisyUI's component rule. */
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in oklab, var(--color-base-content) 70%, transparent);
+}
+
+/* iOS Safari zooms the page when a focused field's font-size is under 16px.
+   On touch devices every text field renders at 16px, whatever its design size
+   (the 14px search, the 12px facet filters). Unlayered so it beats utilities. */
+@media (pointer: coarse) {
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  input[type="url"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }
 
 /* Header auth CTA toggle — `.is-authed` is set pre-paint in BaseLayout.
@@ -76,5 +116,11 @@ html.is-authed .auth-anon {
   h4 {
     font-family: var(--font-display);
     font-weight: 400;
+  }
+  /* Branded keyboard focus on plain links; buttons already get DaisyUI's
+     branded outline, so this closes the browser-blue vs sienna split. */
+  a:not(.btn):focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 }

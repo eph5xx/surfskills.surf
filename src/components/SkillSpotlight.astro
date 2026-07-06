@@ -17,13 +17,14 @@ const { title, blurb, video, ctaLabel, ctaHref, class: className } = Astro.props
 
 <article
   class:list={[
-    "card card-border border-base-300 bg-neutral text-neutral-content shadow-lg",
+    "card card-border border-base-300 bg-base-100 shadow-[0_1px_2px_rgba(42,44,65,0.04),0_22px_46px_-32px_rgba(42,44,65,0.5)]",
     className,
   ]}
 >
   <div class="card-body gap-6 p-7 md:p-8">
+    {/* plum canvas behind the demo so its edges never flash sand while loading */}
     <video
-      class="aspect-video w-full rounded-box border border-neutral-content/15"
+      class="aspect-video w-full rounded-box border border-base-300 bg-plum"
       autoplay
       muted
       loop
@@ -35,10 +36,12 @@ const { title, blurb, video, ctaLabel, ctaHref, class: className } = Astro.props
 
     <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div>
-        <h3 class="font-display text-[24px] leading-tight md:text-[28px]">{title}</h3>
-        <p class="mt-1.5 max-w-md text-[14.5px] leading-[1.5] text-neutral-content/75">{blurb}</p>
+        {/* Gold means verified: the demo above is the skill actually running. */}
+        <span class="badge badge-accent badge-sm font-semibold">Verified</span>
+        <h3 class="mt-2 font-display text-[24px] leading-tight md:text-[28px]">{title}</h3>
+        <p class="mt-1.5 max-w-md text-[14.5px] leading-[1.5] text-base-content/75">{blurb}</p>
       </div>
-      <a href={ctaHref} class="btn btn-accent shrink-0">{ctaLabel}</a>
+      <a href={ctaHref} class="btn btn-primary shrink-0">{ctaLabel}</a>
     </div>
   </div>
 </article>

@@ -48,11 +48,11 @@ const hostLabel = (href: string) => {
 // Install: skill-level command when set, else the collection's.
 const installCommand = skill.installCommand ?? collection.installCommand;
 
-// "Works in …" note: derived from the skill's declared tools, else a generic fallback.
+// "Paste it into …" note: derived from the skill's declared tools, else a generic fallback.
 const worksIn =
   skill.tools && skill.tools.length > 0
-    ? `Works in ${skill.tools.map((t) => t.name).join(", ")}`
-    : "Works in Claude, Cursor, Codex & more";
+    ? `Paste it into ${skill.tools.map((t) => t.name).join(", ")}`
+    : "Paste it into Claude, Cursor, Codex & more";
 
 const slug = skillSlugFromId(skill.id);
 
@@ -79,7 +79,7 @@ const linkRows = [
       icon: "external" as const,
     })),
   ...(skill.referenceFile
-    ? [{ href: skill.referenceFile, label: "View source file", icon: "github" as const }]
+    ? [{ href: skill.referenceFile, label: "View skill file", icon: "github" as const }]
     : []),
 ];
 
@@ -162,7 +162,8 @@ const sectionClass = "px-6 py-[22px]";
           <rect x="9" y="9" width="11" height="11" rx="2" />
           <path d="M5 15V5a2 2 0 0 1 2-2h10" />
         </svg>
-        <svg class="swap-on size-[15px] text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        {/* success sage, not gold: gold is reserved for verified/pass/free */}
+        <svg class="swap-on size-[15px] text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M20 6L9 17l-5-5" />
         </svg>
       </button>
@@ -174,11 +175,13 @@ const sectionClass = "px-6 py-[22px]";
       class="btn btn-primary mt-3 h-auto min-h-0 w-full gap-2 rounded-[14px] py-3.5 text-[16px] font-semibold normal-case shadow-[0_10px_24px_-10px_var(--color-primary)]"
     >
       <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
+        <rect x="9" y="9" width="11" height="11" rx="2" />
+        <path d="M5 15V5a2 2 0 0 1 2-2h10" />
       </svg>
-      <span data-paste-label>Paste into your agent</span>
+      <span data-paste-label>Copy install command</span>
     </button>
-    <p class="mt-2.5 text-center text-[12px] text-base-content/45">
+    {/* /70 ink: 12px at /45 is ~2.5:1 on sand, under the AA 4.5:1 floor */}
+    <p class="mt-2.5 text-center text-[12px] text-base-content/70">
       {worksIn}
     </p>
   </div>
@@ -231,7 +234,9 @@ const sectionClass = "px-6 py-[22px]";
   <!-- Tags — kind leads (tinted), then use cases (neutral) -->
   <div class:list={[sectionClass, "border-t border-base-content/13"]}>
     <div class="flex flex-wrap gap-1.5">
-      <span class="rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-medium text-primary">{kindLabel}</span>
+      {/* teal, not sienna: 12px sienna on a sienna tint is ~2.9:1, and DESIGN.md
+          gives secondary badges to Vintage Teal (6:1 here) */}
+      <span class="rounded-full bg-secondary/10 px-2.5 py-1 text-[12px] font-medium text-secondary">{kindLabel}</span>
       {
         tagLabels.map((t) => (
           <span class="rounded-full bg-base-200 px-2.5 py-1 text-[12px] font-medium text-base-content/65 ring-1 ring-base-content/10">

@@ -8,5 +8,6 @@ const { href = "#top", class: className = "" } = Astro.props;
 ---
 
 <a href={href} class:list={["inline-flex shrink-0 items-center", className]}>
-  <img src="/logo.png" alt="Surf Skills" class="h-12 w-[135px] object-contain object-left" />
+  {/* Scales down below sm: at 320px the full-size mark + the header CTA collide. */}
+  <img src="/logo.png" alt="Surf Skills" class="h-10 w-[112px] object-contain object-left sm:h-12 sm:w-[135px]" />
 </a>

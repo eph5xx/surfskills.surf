@@ -37,7 +37,7 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
 ---
 
 <div class="bg-base-200">
-  <div class="mx-auto max-w-[1200px] px-5 pt-10 pb-20 md:px-8 md:pt-[42px]">
+  <main id="content" class="mx-auto max-w-[1200px] px-5 pt-10 pb-20 md:px-8 md:pt-[42px]">
     <nav class="breadcrumbs mb-7 text-[13.5px] font-semibold">
       <ul>
         <li><a href="/discover" class="text-secondary hover:text-primary">All skills</a></li>
@@ -69,7 +69,7 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
       <!-- Demo video -->
       <div class="order-2 lg:col-start-1">
         <div
-          class="aspect-[16/9.1] w-full overflow-hidden rounded-[18px] bg-[#1c1a28] shadow-[0_30px_70px_-28px_rgba(42,44,65,0.55)]"
+          class="aspect-[16/9.1] w-full overflow-hidden rounded-[18px] bg-plum shadow-[0_30px_70px_-28px_rgba(42,44,65,0.55)]"
         >
           {
             skill.previewVideo ? (
@@ -81,6 +81,7 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
                 playsinline
                 preload="metadata"
                 poster={skill.previewImage}
+                data-vis-play
               >
                 <source src={skill.previewVideo} type="video/mp4" />
               </video>
@@ -88,7 +89,7 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
               <img src={skill.previewImage} alt="" class="size-full object-cover" loading="lazy" />
             ) : (
               /* No video or still — text placeholder hero. */
-              <div class="grid size-full place-items-center bg-[#1c1a28] p-6 text-center text-[13px] font-medium text-base-100/55">
+              <div class="grid size-full place-items-center bg-plum p-6 text-center text-[13px] font-medium text-base-100/55">
                 {skill.description.short}
               </div>
             )
@@ -112,33 +113,32 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
             <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.write.label}</h3>
             <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.write.body}</p>
 
-            <!-- Command terminal — full width, copy button lives in the title bar -->
-            <div class="mt-4 overflow-hidden rounded-xl border border-white/[0.06] bg-[#232132]">
-              <div class="flex items-center gap-2 border-b border-white/[0.06] px-5 py-3">
-                <span class="size-2.5 rounded-full" style="background:#e06c5e"></span>
-                <span class="size-2.5 rounded-full" style="background:#f2b134"></span>
-                <span class="size-2.5 rounded-full" style="background:#5bbd7a"></span>
+            <!-- What-you-type panel — sand, matching the WhatIsIt folder panel and the
+                 sidebar install row. The plum video above stays the only dark surface. -->
+            <div class="mt-4 rounded-field border border-base-300 bg-base-200/60">
+              <div class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-2.5">
+                <span class="text-[13.5px] font-semibold text-base-content/70">What you type</span>
                 <button
                   type="button"
                   data-copy-cmd
                   data-copy={skill.example}
                   aria-label="Copy command"
-                  class="swap swap-rotate ml-auto text-white/50 transition-colors hover:text-white"
+                  class="swap swap-rotate text-base-content/55 transition-colors hover:text-primary"
                 >
                   <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <rect x="9" y="9" width="11" height="11" rx="2" />
                     <path d="M5 15V5a2 2 0 0 1 2-2h10" />
                   </svg>
-                  <svg class="swap-on size-[15px] text-[#5bbd7a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <svg class="swap-on size-[15px] text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
                 </button>
               </div>
-              <code class="block px-5 py-4 font-mono text-[13.5px] leading-[1.6] break-words whitespace-pre-wrap text-[#e9e6f2]">
+              <code class="block px-4 py-3.5 font-mono text-[13.5px] leading-[1.6] break-words whitespace-pre-wrap text-base-content/85">
                 {isCommand ? (
-                  <Fragment><span class="text-primary">{cmdHead}</span><span class="text-accent">{cmdRest}</span></Fragment>
+                  <Fragment><span class="font-semibold text-secondary">{cmdHead}</span>{cmdRest}</Fragment>
                 ) : (
-                  <span class="text-accent">{skill.example}</span>
+                  skill.example
                 )}
               </code>
             </div>
@@ -180,7 +180,7 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
         <SkillSidebar skill={skill} collection={collection} />
       </aside>
     </div>
-  </div>
+  </main>
 </div>
 
 <script>

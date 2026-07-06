@@ -21,6 +21,8 @@ export interface Skill {
   testedDate?: string;
   verified: boolean;
   video?: string;
+  /** Still frame — the video's poster, and the thumb when there's no video. */
+  image?: string;
   available: boolean;
 }
 
@@ -74,6 +76,7 @@ export interface ToSkillCardOptions {
 // minimal object (see ./featured-skills) without carrying the unused catalog fields.
 type SkillCardInput = Pick<DirectorySkill, "id" | "name" | "useCases" | "previewVideo"> & {
   description: Pick<SkillDescription, "short">;
+  previewImage?: string;
 };
 
 export const toSkillCard = (skill: SkillCardInput, opts: ToSkillCardOptions = {}): Skill => {
@@ -92,5 +95,6 @@ export const toSkillCard = (skill: SkillCardInput, opts: ToSkillCardOptions = {}
     verified: true,
     available: opts.available ?? true,
     video: skill.previewVideo,
+    image: skill.previewImage,
   };
 };

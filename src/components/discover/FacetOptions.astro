@@ -78,7 +78,7 @@ const long = facet.values.length > scrollAfter;
     font-size: 13.5px;
     font-weight: 500;
     cursor: pointer;
-    border-radius: 0.4rem;
+    border-radius: var(--radius-field);
   }
   .facet-opt:hover {
     background: color-mix(in oklab, var(--color-base-200) 70%, transparent);
@@ -94,5 +94,15 @@ const long = facet.values.length > scrollAfter;
   }
   .facet-opt[data-count-zero] {
     opacity: 0.4;
+  }
+
+  /* Touch: taller option rows and a finger-sized within-group search. */
+  @media (pointer: coarse) {
+    .facet-opt {
+      padding-block: 0.45rem;
+    }
+    [data-dir-facet-search] {
+      height: 2.25rem;
+    }
   }
 </style>

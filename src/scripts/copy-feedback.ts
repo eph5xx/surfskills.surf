@@ -81,7 +81,7 @@ function showToast(message: string, variant: "success" | "error" = "success"): v
 
 // --- Bindings ------------------------------------------------------------------
 
-const COPY_FAIL_MSG = "Couldn’t copy — press ⌘/Ctrl+C";
+const COPY_FAIL_MSG = "Couldn’t copy — select the command and press ⌘/Ctrl+C";
 
 // Icon buttons: keep the DaisyUI swap (copy→check) on success, add the toast.
 for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-copy-cmd]")) {
@@ -101,7 +101,7 @@ for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-copy-cmd]"
   });
 }
 
-// "Paste into your agent" CTA: keep the label swap on success, add the toast.
+// "Copy install command" CTA: keep the label swap on success, add the toast.
 for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-paste-cta]")) {
   btn.addEventListener("click", async () => {
     const text = btn.getAttribute("data-copy");
@@ -113,12 +113,12 @@ for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-paste-cta]
     const label = btn.querySelector<HTMLElement>("[data-paste-label]");
     if (label) {
       if (!btn.dataset.pasteLabel) btn.dataset.pasteLabel = label.textContent ?? "";
-      label.textContent = "Copied to clipboard";
+      label.textContent = "Copied — now paste it into your agent";
       window.clearTimeout(Number(btn.dataset.pasteTimer));
       btn.dataset.pasteTimer = String(
         window.setTimeout(() => {
           label.textContent = btn.dataset.pasteLabel ?? "";
-        }, 1500),
+        }, 2200),
       );
     }
     showToast("Copied!");

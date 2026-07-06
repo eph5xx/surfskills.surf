@@ -66,20 +66,41 @@ const jsonLd = [
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
-  <div id="top" class="relative isolate mx-auto max-w-[1200px] px-8">
+  <div id="top" class="relative isolate mx-auto max-w-[1200px] px-5 sm:px-8">
     <div
       class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[min(840px,92vh)] w-screen -translate-x-1/2 overflow-hidden"
       aria-hidden="true"
     >
-      <video class="h-full w-full object-cover" autoplay muted loop playsinline preload="auto">
+      <video class="h-full w-full object-cover" autoplay muted loop playsinline preload="auto" data-hero-video>
         <source src="/background-hero.mp4" type="video/mp4" />
       </video>
-      <!-- light scrim: keeps the footage bright while lifting dark text legibility -->
-      <div class="absolute inset-0 bg-gradient-to-b from-base-100/40 via-base-100/25 to-base-200"></div>
+      <!-- light scrim: keeps the footage bright while lifting dark text legibility.
+           /55 → /35 floor so hero ink holds ≥4.5:1 even on the darkest frames. -->
+      <div class="absolute inset-0 bg-gradient-to-b from-base-100/55 via-base-100/35 to-base-200"></div>
     </div>
 
     <Header />
     <Hero lastUpdated={lastUpdated} />
+
+    <!-- Pause/stop affordance for the looping ambient video (PRODUCT.md a11y
+         commitment). Flow-anchored below the hero CTAs, over open footage. -->
+    <div class="pointer-events-none relative z-10 -mt-12 flex justify-end">
+      <button
+        type="button"
+        data-hero-video-toggle
+        data-state="playing"
+        aria-pressed="false"
+        aria-label="Pause background video"
+        class="btn btn-circle btn-sm pointer-events-auto border-base-300 bg-base-100/80 shadow-md backdrop-blur pointer-coarse:size-11"
+      >
+        <svg data-icon-pause viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true">
+          <path d="M7 5h4v14H7zM13 5h4v14h-4z"></path>
+        </svg>
+        <svg data-icon-play viewBox="0 0 24 24" class="hidden size-4" fill="currentColor" aria-hidden="true">
+          <path d="M8 5.5v13l11-6.5z"></path>
+        </svg>
+      </button>
+    </div>
     <WhatIsIt />
     <SkillShowcase />
     <JoinBanner />
@@ -87,3 +108,33 @@ const jsonLd = [
     <Footer />
   </div>
 </BaseLayout>
+
+<style>
+  [data-hero-video-toggle][data-state="paused"] [data-icon-pause] {
+    display: none;
+  }
+  [data-hero-video-toggle][data-state="paused"] [data-icon-play] {
+    display: block;
+  }
+</style>
+
+<script>
+  // The toggle mirrors real playback state (play/pause events), so it also
+  // reflects the reduced-motion pause applied globally in BaseLayout.
+  const video = document.querySelector<HTMLVideoElement>("[data-hero-video]");
+  const toggle = document.querySelector<HTMLButtonElement>("[data-hero-video-toggle]");
+  if (video && toggle) {
+    const setState = (playing: boolean) => {
+      toggle.dataset.state = playing ? "playing" : "paused";
+      toggle.setAttribute("aria-pressed", String(!playing));
+      toggle.setAttribute("aria-label", playing ? "Pause background video" : "Play background video");
+    };
+    video.addEventListener("play", () => setState(true));
+    video.addEventListener("pause", () => setState(false));
+    setState(!video.paused);
+    toggle.addEventListener("click", () => {
+      if (video.paused) video.play().catch(() => {});
+      else video.pause();
+    });
+  }
+</script>

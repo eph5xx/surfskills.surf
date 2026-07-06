@@ -55,6 +55,9 @@ const {
     <script is:inline>
       if (/-auth-token(\.\d+)?=/.test(document.cookie))
         document.documentElement.classList.add("is-authed");
+      // Pre-paint JS marker: scroll-reveal styles apply only under html.js, so
+      // with JS off nothing is ever stuck at opacity 0.
+      document.documentElement.classList.add("js");
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,5 +70,65 @@ const {
   </head>
   <body>
     <slot />
+    <script>
+      // PRODUCT.md: every animation needs a reduced-motion alternative — that
+      // includes autoplaying demo loops. Halt them all and re-check live.
+      const rm = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const applyMotionPreference = () => {
+        if (!rm.matches) return;
+        document.querySelectorAll<HTMLVideoElement>("video[autoplay]").forEach((v) => {
+          v.pause();
+        });
+      };
+      applyMotionPreference();
+      rm.addEventListener("change", applyMotionPreference);
+
+      // Catalog demo loops ([data-vis-play]) play only while on screen — a
+      // 32-card grid must not decode 32 videos at once on a phone. Videos
+      // keep `autoplay` for the pre-JS default; reduced motion always wins.
+      const loops = document.querySelectorAll<HTMLVideoElement>("video[data-vis-play]");
+      if (loops.length) {
+        const vio = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              const v = e.target as HTMLVideoElement;
+              if (e.isIntersecting && !rm.matches) v.play().catch(() => {});
+              else v.pause();
+            }
+          },
+          { rootMargin: "25% 0px" },
+        );
+        loops.forEach((v) => vio.observe(v));
+      }
+
+      // A demo mp4 that fails to load (CDN blip, pulled asset) must not leave a
+      // blank box. Videos with a poster keep it; the rest swap to the shared
+      // placeholder still. <source> errors don't bubble, so listen in capture.
+      const swapFailedVideo = (v: HTMLVideoElement) => {
+        if (v.hasAttribute("data-hero-video") || v.dataset.failed) return;
+        v.dataset.failed = "1";
+        if (v.poster) return;
+        const img = document.createElement("img");
+        img.src = "/skills/skill-placeholder.svg";
+        img.alt = "";
+        img.className = v.className;
+        v.replaceWith(img);
+      };
+      document.addEventListener(
+        "error",
+        (e) => {
+          const t = e.target;
+          if (t instanceof HTMLSourceElement) {
+            const v = t.closest("video");
+            if (v) swapFailedVideo(v);
+          }
+        },
+        true,
+      );
+      // Sources that already failed before this module ran (it's deferred).
+      document.querySelectorAll<HTMLVideoElement>("video").forEach((v) => {
+        if (v.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) swapFailedVideo(v);
+      });
+    </script>
   </body>
 </html>

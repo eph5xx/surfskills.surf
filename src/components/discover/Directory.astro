@@ -33,7 +33,9 @@ const { items, facets } = Astro.props;
   data-dir-page-size="12"
   class="relative lg:grid lg:grid-cols-[248px_minmax(0,1fr)] lg:gap-8"
 >
-  <input id="dir-filters" type="checkbox" class="peer/filters hidden" aria-hidden="true" />
+  {/* sr-only, not hidden: keyboard users below lg need to reach and toggle it
+      (Space); the labels below act as the pointer affordance. */}
+  <input id="dir-filters" type="checkbox" class="peer/filters sr-only" />
 
   <!-- Filter rail (original sidebar) -->
   <aside
@@ -72,6 +74,12 @@ const { items, facets } = Astro.props;
     >
       Clear all filters
     </button>
+
+    {/* Below lg the rail opens above the results, so the way back to them
+        lives at its end — filters apply live; this only closes the panel. */}
+    <label for="dir-filters" class="btn btn-sm mt-4 w-full rounded-full lg:hidden">
+      Show results
+    </label>
   </aside>
 
   <!-- Results -->
@@ -123,7 +131,7 @@ const { items, facets } = Astro.props;
 
     <div data-dir-empty hidden class="py-20 text-center">
       <p class="font-display text-[22px] text-base-content">No skills match those filters</p>
-      <p class="mt-1.5 text-[14px] text-base-content/60">Loosen a facet or clear your search.</p>
+      <p class="mt-1.5 text-[14px] text-base-content/60">Try removing a filter or clearing your search.</p>
       <button data-dir-clear type="button" class="btn btn-sm btn-primary mt-5 rounded-full">Clear all filters</button>
     </div>
 
@@ -186,6 +194,12 @@ const { items, facets } = Astro.props;
     .dir-mobile-filters {
       display: none;
     }
+  }
+  /* The sr-only checkbox holds keyboard focus; its ring renders on the visible
+     Filters toggle. */
+  #dir-filters:focus-visible ~ div .dir-mobile-filters {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 
   .dir-view {
@@ -335,6 +349,25 @@ const { items, facets } = Astro.props;
     }
     :global(.dir-pager-nav) {
       padding: 0 0.5rem;
+    }
+  }
+
+  /* Touch: the 32-38px pointer-sized controls grow to ~44px hit areas. */
+  @media (pointer: coarse) {
+    .dir-mobile-filters,
+    .dir-sort {
+      height: 2.75rem;
+    }
+    .dir-view-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+    :global(.dir-pager-nav),
+    :global(.dir-pager-num) {
+      height: 2.75rem;
+    }
+    :global(.dir-pager-num) {
+      min-width: 2.75rem;
     }
   }
 </style>

@@ -9,6 +9,10 @@ export const prerender = false;
 if (!Astro.locals.user) return Astro.redirect("/login?next=%2Faccount", 303);
 
 const user = Astro.locals.user;
+
+// /api/checkout bails out here with ?error=checkout when Polar can't start a
+// session — surface it instead of silently landing on a normal account page.
+const checkoutFailed = Astro.url.searchParams.get("error") === "checkout";
 ---
 
 <BaseLayout title="Your account — Surf Skills" description="Manage your surfskills account." noindex>
@@ -16,10 +20,21 @@ const user = Astro.locals.user;
   <div class="mx-auto max-w-[1200px] px-8">
     <Header />
 
-    <main class="flex justify-center py-16 md:py-24">
+    <main id="content" class="flex justify-center py-16 md:py-24">
       <div class="w-full max-w-[560px]">
         <h1 class="text-[34px]">Your account</h1>
-        <p class="mt-1.5 text-[15px] text-base-content/70">{user.email ?? "Signed in"}</p>
+        <p class="mt-1.5 text-[15px] text-base-content/70 [overflow-wrap:anywhere]">{user.email ?? "Signed in"}</p>
+
+        {
+          checkoutFailed && (
+            <div role="alert" class="alert alert-error alert-soft mt-5 text-[14px] font-semibold">
+              <span>
+                Checkout didn't start — nothing was charged. Give it another try
+                in a moment.
+              </span>
+            </div>
+          )
+        }
 
         <div class="card mt-7 bg-base-100 shadow-md">
           <div class="card-body p-7 md:p-8">
