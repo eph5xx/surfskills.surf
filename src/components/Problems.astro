@@ -107,7 +107,7 @@ const problems: Problem[] = [
 
 <style>
   /* Scroll-in reveal: tiles fade + rise, staggered by --i. JS toggles .is-in on
-     the [data-problems] root; mirrors WhatIsIt / SkillShowcase. */
+     the [data-problems] root; mirrors UseCases / WhatIsIt / JoinBanner. */
   .reveal {
     opacity: 0;
     transform: translateY(14px);
@@ -119,6 +119,14 @@ const problems: Problem[] = [
     opacity: 1;
     transform: none;
     transition-delay: calc(0.07s * var(--i, 0));
+  }
+
+  /* No JS → .is-in never fires. Show the content instead of leaving blank folds. */
+  @media (scripting: none) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

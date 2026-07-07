@@ -2,13 +2,12 @@
 // Hero — the promise in 5 seconds. Two columns: outcome-led copy on the left,
 // a portrait "preview" panel on the right that reads as a vertical carousel of
 // real skill demos with one card opened (so "preview before you install" is
-// shown, not claimed). Sunny performs the hand-off next to it.
+// shown, not claimed). Sunny (the mascot) carries the brand in the closing CTA,
+// so the hero stays focused on the demo preview.
 //
-// Build-order note: the preview panel and Sunny are PLACEHOLDERS for now — the
-// rendered vertical-carousel MP4 and the mascot cutout swap into these same
-// slots later (see the hero-redesign plan). The framing, copy, and motion ship
-// now. The panel is portrait 3:4 to match the video, so the swap causes no
-// layout shift.
+// The panel plays a transparent (alpha) vertical-carousel video that floats
+// directly on the sand — no card chrome. Portrait 3:4 matches the video's canvas,
+// and reduced-motion / no-alpha browsers get the poster still, so no layout shift.
 ---
 
 <section class="relative overflow-visible pb-8 pt-8 md:pt-14">
@@ -41,7 +40,7 @@
       </div>
     </div>
 
-    <!-- ============ RIGHT — the preview carousel + Sunny ============ -->
+    <!-- ============ RIGHT — the preview carousel ============ -->
     <!-- Large frameless panel: the carousel plays as a transparent (alpha) video,
          so it floats directly on the sand — no white card behind it. Fills the
          column and bleeds toward the container edge on md+ for scale. -->

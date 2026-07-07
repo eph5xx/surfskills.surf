@@ -23,6 +23,10 @@ try {
   console.error("[discover] failed to load catalog", err);
   Astro.response.headers.set("Cache-Control", NO_STORE);
 }
+
+// Honest social-proof stat: skills + distinct collections. Stars are per-collection,
+// so summing them across skills would double-count — counts are the truthful axis.
+const collectionCount = new Set(items.map((i) => i.collectionName)).size;
 ---
 
 <BaseLayout
@@ -33,11 +37,18 @@ try {
     <Header />
 
     <section class="pb-6 pt-12">
-      <h1 class="text-[44px] leading-[1.05]">Skills available now</h1>
-      <p class="mt-3 max-w-[560px] text-[16px] leading-[1.6] text-base-content/70">
-        Every skill below is open source — preview what it does, then open the
-        source in one click. More land each week.
-      </p>
+      <h1 class="text-[44px] leading-[1.05]">Discover Skills</h1>
+
+      {
+        items.length > 0 && (
+          <p class="mt-4 text-[14px] text-base-content/60">
+            <span class="font-display font-semibold text-base-content">{items.length}</span>{" "}
+            tools across{" "}
+            <span class="font-display font-semibold text-base-content">{collectionCount}</span>{" "}
+            open-source collections
+          </p>
+        )
+      }
     </section>
 
     <Directory items={items} facets={facets} />

@@ -28,26 +28,32 @@ const { items, facets } = Astro.props;
 // engine is never modified.
 ---
 
-<section
-  data-directory
-  data-dir-page-size="12"
-  class="relative lg:grid lg:grid-cols-[248px_minmax(0,1fr)] lg:gap-8"
->
-  <input id="dir-filters" type="checkbox" class="peer/filters hidden" aria-hidden="true" />
+<section data-directory data-dir-page-size="12" class="relative">
+  <!-- Search: promoted out of the sidebar to a prominent full-width bar. Highest-
+       intent action on a directory, and now visible on mobile too (it used to hide
+       behind the Filters toggle). Still the ONE [data-dir-search] the engine binds. -->
+  <label class="disc-search mb-5 lg:mb-6">
+    <svg viewBox="0 0 24 24" class="disc-search-icon" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="m21 21-4.3-4.3"></path>
+    </svg>
+    <input
+      data-dir-search
+      type="search"
+      placeholder="Search skills by name, author, or what they do…"
+      class="disc-search-input"
+      aria-label="Search skills"
+    />
+  </label>
 
-  <!-- Filter rail (original sidebar) -->
-  <aside
-    class="mb-6 hidden rounded-box border border-base-300 bg-base-100 p-4 peer-checked/filters:block lg:sticky lg:top-[88px] lg:mb-0 lg:block lg:self-start lg:p-5"
-  >
-    <label class="input flex h-10 items-center gap-2 bg-base-200/60">
-      <svg viewBox="0 0 24 24" class="size-4 text-base-content/40" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <circle cx="11" cy="11" r="7"></circle>
-        <path d="m21 21-4.3-4.3"></path>
-      </svg>
-      <input data-dir-search type="search" placeholder="Search…" class="grow text-[14px]" aria-label="Search skills" />
-    </label>
+  <div class="relative lg:grid lg:grid-cols-[248px_minmax(0,1fr)] lg:gap-8">
+    <input id="dir-filters" type="checkbox" class="peer/filters hidden" aria-hidden="true" />
 
-    <div class="mt-4">
+    <!-- Filter rail (original sidebar) -->
+    <aside
+      class="mb-6 hidden rounded-box border border-base-300 bg-base-100 p-4 peer-checked/filters:block lg:sticky lg:top-[88px] lg:mb-0 lg:block lg:self-start lg:p-5"
+    >
+      <div>
       {
         facets.map((facet, i) => (
           <details class:list={["facet-acc pt-2.5", i > 0 && "border-t border-base-300"]} open>
@@ -129,6 +135,7 @@ const { items, facets } = Astro.props;
 
     <!-- Pager — engine fills this with Prev/Next + numbered buttons; hidden at ≤1 page. -->
     <nav data-dir-pages hidden class="dir-pager" aria-label="Pagination"></nav>
+    </div>
   </div>
 </section>
 
@@ -141,6 +148,48 @@ const { items, facets } = Astro.props;
 </style>
 
 <style>
+  /* --- promoted search bar --- */
+  .disc-search {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    height: 3rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-base-300);
+    background: var(--color-base-100);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .disc-search:focus-within {
+    border-color: color-mix(in oklab, var(--color-primary) 55%, var(--color-base-300));
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 16%, transparent);
+  }
+  .disc-search-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+    color: color-mix(in oklab, var(--color-base-content) 42%, transparent);
+  }
+  .disc-search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    font-size: 15px;
+    color: var(--color-base-content);
+    outline: none;
+  }
+  .disc-search-input::placeholder {
+    color: color-mix(in oklab, var(--color-base-content) 62%, transparent);
+  }
+  /* Drop the native search clear control for a consistent look. */
+  .disc-search-input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+
   .facet-acc > summary::-webkit-details-marker {
     display: none;
   }
@@ -384,5 +433,61 @@ const { items, facets } = Astro.props;
         history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
       }),
     );
+  })();
+</script>
+
+<!-- YouTube-style previews. Poster still at rest; the video crossfades in while
+     active and returns to the still when it stops. Desktop plays on hover/focus;
+     touch autoplays the card in view (IntersectionObserver). Reduced-motion keeps
+     the poster on both. .is-playing (added on the `playing` event → no black flash)
+     drives the CSS crossfade in DirectoryCard.astro. -->
+<script is:inline>
+  (() => {
+    const root = document.querySelector("[data-directory]");
+    if (!root) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    const play = (v) => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+    const stop = (v) => {
+      v.classList.remove("is-playing");
+      v.pause();
+      try {
+        v.currentTime = 0;
+      } catch {}
+    };
+
+    const videos = root.querySelectorAll("[data-hover-video]");
+    // Only reveal the video once frames are actually decoding.
+    for (const v of videos) v.addEventListener("playing", () => v.classList.add("is-playing"));
+
+    if (window.matchMedia("(hover: hover)").matches) {
+      // Desktop: play on hover / keyboard focus of the card. Cards are all
+      // server-rendered (the engine only reorders/hides them, keeping listeners).
+      for (const v of videos) {
+        const card = v.closest(".dc-item") ?? v;
+        card.addEventListener("pointerenter", () => play(v));
+        card.addEventListener("pointerleave", () => stop(v));
+        card.addEventListener("focusin", () => play(v));
+        card.addEventListener("focusout", () => stop(v));
+      }
+    } else if ("IntersectionObserver" in window) {
+      // Touch: autoplay the card in view, return to the still when it leaves.
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            const v = e.target.querySelector("[data-hover-video]");
+            if (!v) continue;
+            if (e.isIntersecting) play(v);
+            else stop(v);
+          }
+        },
+        { threshold: 0.6, rootMargin: "-10% 0px -10% 0px" },
+      );
+      for (const v of videos) io.observe(v.closest(".dc-item") ?? v);
+    }
   })();
 </script>

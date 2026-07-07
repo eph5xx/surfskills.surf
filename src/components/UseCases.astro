@@ -9,8 +9,7 @@ import { SkillUseCase } from "@/data/skill-model/types";
 import { USE_CASE_LABELS } from "@/data/skill-model";
 
 // The jobs, in reading order. `?use_case=<Label>` is restored by the directory
-// engine (facet values ARE the labels). SEO + Meta stay off the homepage teaser,
-// matching the featured set in SkillShowcase below.
+// engine (facet values ARE the labels). SEO + Meta stay off the homepage teaser.
 //
 // activeCls is a LITERAL class string (never built at runtime) so Tailwind's JIT
 // scanner keeps it. Only the three brand colors are used — primary (sienna),
@@ -62,7 +61,7 @@ const ROW_IDLE = "bg-base-100 border-base-300 text-base-content hover:bg-base-20
 
 <style>
   /* Scroll-in reveal: elements fade + rise, staggered by --i. JS toggles .is-in
-     on the [data-usecases] root; mirrors Problems / WhatIsIt / SkillShowcase. */
+     on the [data-usecases] root; mirrors Problems / WhatIsIt / JoinBanner. */
   .reveal {
     opacity: 0;
     transform: translateY(14px);
@@ -74,6 +73,15 @@ const ROW_IDLE = "bg-base-100 border-base-300 text-base-content hover:bg-base-20
     opacity: 1;
     transform: none;
     transition-delay: calc(0.07s * var(--i, 0));
+  }
+
+  /* Keyboard focus ring. Defined here (not as a utility class) because the client
+     controller rebuilds each tile's className on every cycle/hover — a class would
+     be wiped. The ink outline + offset stays legible on the sand gap around both
+     idle and color-flooded tiles. */
+  .tile:focus-visible {
+    outline: 2px solid var(--color-base-content);
+    outline-offset: 2px;
   }
 
   /* The Browse cue is hidden until a row is active (or hovered), then slides in. */
@@ -88,6 +96,14 @@ const ROW_IDLE = "bg-base-100 border-base-300 text-base-content hover:bg-base-20
   .tile:hover .row-cta {
     opacity: 1;
     transform: none;
+  }
+
+  /* No JS → .is-in never fires. Show the content instead of leaving blank folds. */
+  @media (scripting: none) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
