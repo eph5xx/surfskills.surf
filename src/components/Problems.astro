@@ -1,0 +1,150 @@
+---
+// "The problem, named" — the empathy beat right after the hero, on its own white
+// full-bleed band (base-100) so it reads as a distinct surface from the sand.
+// An image-forward 3×2 grid of six problems: each tile is a big Sunny scene with
+// a one-word title and a one-line description beneath.
+// Columns 1–2 hold the four "raw AI is weak" problems; column 3 holds the two
+// "buying skills is a gamble" problems (teal titles), which tee up the preview/
+// curation moat. The mascot art carries the meaning; the caption names it.
+//
+// Layout: md:grid-flow-col + md:grid-rows-2 keeps DOM order "4 skill, then 2
+// preview" while filling top-to-bottom per column (preview pair lands in col 3)
+// on desktop, and stacks 4-then-2 in one column on mobile.
+//
+// Art: user-generated retro-screenprint scenes of Sunny (the mascot) in
+// public/sunny/<slug>.jpg, filling each aspect-[4/5] tile via object-cover with a
+// subtle hover-zoom.
+
+type Problem = {
+  kind: "skill" | "preview";
+  slug: string; // public/sunny/<slug>.jpg
+  title: string; // one word
+  desc: string;
+  alt: string;
+};
+
+const problems: Problem[] = [
+  {
+    kind: "skill",
+    slug: "generic",
+    title: "Generic",
+    desc: "The results of AI work look too common.",
+    alt: "Sunny the starfish holding up a dull gray printout at arm's length, unimpressed.",
+  },
+  {
+    kind: "skill",
+    slug: "re-explain",
+    title: "Repetitive",
+    desc: "You start from scratch every time, re-pasting the same instructions.",
+    alt: "Sunny beside a tall, toppling stack of identical papers, adding yet another copy.",
+  },
+  {
+    kind: "skill",
+    slug: "inconsistent",
+    title: "Inconsistent",
+    desc: "Run the same prompt twice and get two different results.",
+    alt: "Sunny at a slot machine as three mismatched results tumble out, each one different.",
+  },
+  {
+    kind: "skill",
+    slug: "cant-judge",
+    title: "Unverifiable",
+    desc: "You can't tell what's real without checking it yourself.",
+    alt: "Sunny holding two near-identical cards under a big question mark, unable to tell which is good.",
+  },
+  {
+    kind: "preview",
+    slug: "install-blind",
+    title: "Blind",
+    desc: "You install a skill just to find out what it does.",
+    alt: "Sunny reaching an arm into a sealed mystery box marked with a question mark.",
+  },
+  {
+    kind: "preview",
+    slug: "marketplace",
+    title: "Look-alikes",
+    desc: "Marketplaces have thousands of skills with no quality bar.",
+    alt: "Sunny dwarfed by a towering wall of identical look-alike crates.",
+  },
+];
+---
+
+<section
+  id="problems"
+  data-problems
+  class="relative mt-16 scroll-mt-24 py-16 md:mt-24 before:absolute before:inset-y-0 before:left-1/2 before:-z-10 before:w-screen before:-translate-x-1/2 before:bg-base-100"
+>
+  <h2 class="mb-8 text-[34px]">The problems you already know.</h2>
+
+  <!-- 3 cols × 2 rows on md+; column-flow keeps the two preview tiles in col 3.
+       Single column (4 skill, then 2 preview) on mobile. -->
+  <div class="grid grid-cols-1 gap-5 md:grid-cols-3 md:grid-rows-2 md:grid-flow-col">
+    {
+      problems.map((p, i) => (
+        <article class="reveal group" style={`--i:${i}`}>
+          <div class="aspect-[4/5] overflow-hidden rounded-box bg-base-200 shadow-sm">
+            <img
+              src={`/sunny/${p.slug}.jpg`}
+              alt={p.alt}
+              loading="lazy"
+              class="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            />
+          </div>
+          <h3
+            class:list={[
+              "mt-3 font-display text-[18px] font-semibold leading-snug",
+              p.kind === "preview" ? "text-secondary" : "text-base-content",
+            ]}
+          >
+            {p.title}
+          </h3>
+          <p class="mt-1 text-[14px] leading-[1.5] text-base-content/70">{p.desc}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  /* Scroll-in reveal: tiles fade + rise, staggered by --i. JS toggles .is-in on
+     the [data-problems] root; mirrors WhatIsIt / SkillShowcase. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.55s ease,
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .is-in .reveal {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.07s * var(--i, 0));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Scoped to the unique [data-problems] root.
+  const root = document.querySelector("[data-problems]");
+  if (root) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(root);
+  }
+</script>

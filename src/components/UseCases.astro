@@ -1,0 +1,183 @@
+---
+// "There's a skill for whatever you do" — the answer to "what's this actually
+// for?", right after the Problems empathy beat. The six jobs are big full-width
+// rows; the active one floods with its Golden Hour accent and reveals a Browse
+// cue. The highlight auto-cycles when idle and follows hover/focus. Every row is
+// a real link into a pre-filtered Discover. Sits on the page's base-200 sand
+// between the Problems band (base-100) and WhatIsIt.
+import { SkillUseCase } from "@/data/skill-model/types";
+import { USE_CASE_LABELS } from "@/data/skill-model";
+
+// The jobs, in reading order. `?use_case=<Label>` is restored by the directory
+// engine (facet values ARE the labels). SEO + Meta stay off the homepage teaser,
+// matching the featured set in SkillShowcase below.
+//
+// activeCls is a LITERAL class string (never built at runtime) so Tailwind's JIT
+// scanner keeps it. Only the three brand colors are used — primary (sienna),
+// secondary (teal), accent (gold) — the same trio the rest of the site uses
+// (Hero/Join CTAs, WhatIsIt dots), rotated so no two adjacent tiles match. The
+// *-content pairs keep text readable on every fill (gold carries dark ink).
+const jobs = [
+  { useCase: SkillUseCase.Design, activeCls: "bg-primary text-primary-content border-primary" },
+  { useCase: SkillUseCase.Video, activeCls: "bg-secondary text-secondary-content border-secondary" },
+  { useCase: SkillUseCase.Writing, activeCls: "bg-accent text-accent-content border-accent" },
+  { useCase: SkillUseCase.Development, activeCls: "bg-primary text-primary-content border-primary" },
+  { useCase: SkillUseCase.Research, activeCls: "bg-secondary text-secondary-content border-secondary" },
+  { useCase: SkillUseCase.Images, activeCls: "bg-accent text-accent-content border-accent" },
+].map((j) => {
+  const label = USE_CASE_LABELS[j.useCase];
+  return { ...j, label, href: `/discover?use_case=${label}` };
+});
+
+// Base class strings shared by markup + the client controller — kept in sync so
+// the script can rebuild a row's className without token bookkeeping.
+const ROW_BASE =
+  "tile group flex items-center justify-between gap-3 rounded-box border px-6 py-7 font-display text-[20px] leading-none transition-colors duration-300 md:px-7 md:py-10 md:text-[26px]";
+const ROW_IDLE = "bg-base-100 border-base-300 text-base-content hover:bg-base-200";
+---
+
+<section id="use-cases" data-usecases class="mt-16 scroll-mt-24 md:mt-24">
+  <h2 class="reveal text-[34px]" style="--i:0">There's a skill for whatever you do.</h2>
+
+  <!-- 2×3 grid of big tiles; the active one floods with its accent + reveals Browse. -->
+  <div class="reveal mt-6 grid grid-cols-2 gap-3 md:gap-4" style="--i:1" data-deck>
+    {
+      jobs.map((j, i) => (
+        <a
+          href={j.href}
+          data-seg={i}
+          data-active-cls={j.activeCls}
+          class:list={[ROW_BASE, i === 0 ? `${j.activeCls} is-active` : ROW_IDLE]}
+        >
+          <span>{j.label}</span>
+          <span class="row-cta hidden items-center gap-1.5 text-[14px] font-semibold sm:inline-flex">
+            Browse
+            <span aria-hidden="true">→</span>
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  /* Scroll-in reveal: elements fade + rise, staggered by --i. JS toggles .is-in
+     on the [data-usecases] root; mirrors Problems / WhatIsIt / SkillShowcase. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.55s ease,
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .is-in .reveal {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.07s * var(--i, 0));
+  }
+
+  /* The Browse cue is hidden until a row is active (or hovered), then slides in. */
+  .row-cta {
+    opacity: 0;
+    transform: translateX(-6px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .tile.is-active .row-cta,
+  .tile:hover .row-cta {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    .row-cta {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Scoped to the unique [data-usecases] root.
+  const root = document.querySelector<HTMLElement>("[data-usecases]");
+  if (root) {
+    // Scroll-in reveal.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(root);
+
+    // Move the accent highlight across the rows. Each row is its own link, so this
+    // only repaints active vs idle — no label/href swapping. Auto-cycle is gated
+    // on reduced-motion; hover/focus always works.
+    const deck = root.querySelector<HTMLElement>("[data-deck]");
+    const segs = Array.from(
+      root.querySelectorAll<HTMLAnchorElement>("[data-seg]"),
+    );
+
+    // Kept in sync with the ROW_BASE / ROW_IDLE constants above.
+    const ROW_BASE =
+      "tile group flex items-center justify-between gap-3 rounded-box border px-6 py-7 font-display text-[20px] leading-none transition-colors duration-300 md:px-7 md:py-10 md:text-[26px]";
+    const ROW_IDLE =
+      "bg-base-100 border-base-300 text-base-content hover:bg-base-200";
+
+    if (deck && segs.length) {
+      const reduce = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      let active = 0;
+      let timer: ReturnType<typeof setInterval> | undefined;
+
+      const activate = (next: number) => {
+        if (next === active) return;
+        active = next;
+        segs.forEach((s, i) => {
+          const state =
+            i === active ? `${s.dataset.activeCls ?? ""} is-active` : ROW_IDLE;
+          s.className = `${ROW_BASE} ${state}`;
+        });
+      };
+
+      const stop = () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = undefined;
+        }
+      };
+      const start = () => {
+        if (reduce || timer) return;
+        timer = setInterval(() => activate((active + 1) % segs.length), 2400);
+      };
+
+      segs.forEach((seg, i) => {
+        seg.addEventListener("mouseenter", () => {
+          stop();
+          activate(i);
+        });
+        seg.addEventListener("focus", () => {
+          stop();
+          activate(i);
+        });
+      });
+      deck.addEventListener("mouseleave", start);
+      deck.addEventListener("focusout", (e) => {
+        if (!deck.contains(e.relatedTarget as Node)) start();
+      });
+
+      start();
+    }
+  }
+</script>

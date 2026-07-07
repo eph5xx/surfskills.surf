@@ -2,36 +2,19 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Hero from "@/components/Hero.astro";
+import Problems from "@/components/Problems.astro";
+import UseCases from "@/components/UseCases.astro";
 import WhatIsIt from "@/components/WhatIsIt.astro";
-import SkillShowcase from "@/components/SkillShowcase.astro";
 import JoinBanner from "@/components/JoinBanner.astro";
 import Footer from "@/components/Footer.astro";
 import { absoluteUrl } from "@/lib/seo";
-import { formatUpdatedFull } from "@/data/directory";
-import { setCatalogCache, NO_STORE } from "@/lib/cache";
+import { setCatalogCache } from "@/lib/cache";
 
-// SSR: the hero's "Last updated" badge is the newest collections.updated_at,
-// read from Supabase per request (cached at the edge). On a DB error the badge
-// hides and the response stays uncached rather than 500. This response is
-// publicly cached — nothing rendered on this page may ever depend on the session.
+// SSR so the response carries the shared public catalog cache header at the edge.
+// Nothing on this page depends on the session or per-request data.
 export const prerender = false;
 
-let lastUpdated = "";
-try {
-  const { data, error } = await Astro.locals.supabase
-    .from("collections")
-    .select("updated_at")
-    .order("updated_at", { ascending: false, nullsFirst: false })
-    .limit(1)
-    .abortSignal(AbortSignal.timeout(1500))
-    .maybeSingle();
-  if (error) throw error;
-  lastUpdated = formatUpdatedFull(data?.updated_at ?? undefined);
-  setCatalogCache(Astro.response.headers);
-} catch (err) {
-  console.error("[home] failed to load last-updated", err);
-  Astro.response.headers.set("Cache-Control", NO_STORE);
-}
+setCatalogCache(Astro.response.headers);
 
 const title = "Surf Skills — AI agent skills directory, preview before using";
 const description =
@@ -67,23 +50,12 @@ const jsonLd = [
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
   <div id="top" class="relative isolate mx-auto max-w-[1200px] px-8">
-    <div
-      class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[min(840px,92vh)] w-screen -translate-x-1/2 overflow-hidden"
-      aria-hidden="true"
-    >
-      <video class="h-full w-full object-cover" autoplay muted loop playsinline preload="auto">
-        <source src="/background-hero.mp4" type="video/mp4" />
-      </video>
-      <!-- light scrim: keeps the footage bright while lifting dark text legibility -->
-      <div class="absolute inset-0 bg-gradient-to-b from-base-100/40 via-base-100/25 to-base-200"></div>
-    </div>
-
     <Header />
-    <Hero lastUpdated={lastUpdated} />
+    <Hero />
+    <Problems />
+    <UseCases />
     <WhatIsIt />
-    <SkillShowcase />
     <JoinBanner />
-    <div class="divider mt-16"></div>
     <Footer />
   </div>
 </BaseLayout>

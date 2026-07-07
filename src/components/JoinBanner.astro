@@ -1,13 +1,90 @@
 ---
-// Closing CTA — the page's last money moment: sienna button on a teal slab.
+// Closing CTA — the page's last money moment. A sienna button on a drenched teal
+// slab, now backed by proof: a gold-star open-source line, install/weekly-builder
+// numbers woven inline (not a metric grid), and a text "trusted by" caption
+// naming the agents. Reveal-on-scroll mirrors Problems / WhatIsIt.
 ---
 
-<section class="mt-[88px]">
-  <div class="rounded-box bg-secondary p-10 text-center text-secondary-content shadow-md md:p-14">
-    <h3 class="font-display text-[32px] md:text-[40px]">Start with one useful AI skill, free.</h3>
-    <p class="mx-auto mt-3 max-w-[560px] text-[16px] leading-[1.6] opacity-90">
-      Pick a skill. Run it once. See what it makes.
-    </p>
-    <a href="/login" class="btn btn-primary btn-lg mt-7">Try your free skill →</a>
+<section data-join class="mt-[88px] mb-[88px]">
+  <div class="rounded-box bg-secondary px-6 py-12 text-center text-secondary-content shadow-md md:px-14 md:py-16">
+    <!-- Zone 1 — the ask -->
+    <div class="reveal" style="--i:0">
+      <h3 class="text-balance font-display text-[32px] leading-[1.05] md:text-[42px]">
+        Start with one useful AI skill, free.
+      </h3>
+      <p class="mx-auto mt-3 max-w-[560px] text-[16px] leading-[1.6] text-secondary-content/85">
+        Pick a skill. Run it once. See what it makes.
+      </p>
+      <a href="/login" class="btn btn-primary btn-lg mt-8">Try your free skill →</a>
+    </div>
+
+    <!-- Zone 2 — the proof ribbon, under a full-width hairline -->
+    <div
+      class="reveal mx-auto mt-10 max-w-[640px] border-t border-secondary-content/15 pt-7"
+      style="--i:1"
+    >
+      <ul
+        class="flex flex-col items-center gap-y-2.5 text-[14.5px] leading-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-3.5 sm:gap-y-2"
+      >
+        <li class="text-secondary-content/80">Open source &amp; well-reviewed</li>
+        <li aria-hidden="true" class="hidden text-secondary-content/30 sm:block">·</li>
+        <li>
+          <span class="font-semibold text-secondary-content">1,000+</span>
+          <span class="text-secondary-content/75"> installs</span>
+        </li>
+        <li aria-hidden="true" class="hidden text-secondary-content/30 sm:block">·</li>
+        <li>
+          <span class="font-semibold text-secondary-content">300+</span>
+          <span class="text-secondary-content/75"> builders a week</span>
+        </li>
+      </ul>
+      <p class="mt-4 text-[13px] leading-[1.5] text-secondary-content/65">
+        Trusted by builders on Claude Code, Hermes, Codex, and other agents.
+      </p>
+    </div>
   </div>
 </section>
+
+<style>
+  /* Scroll-in reveal: zones fade + rise, staggered by --i. JS toggles .is-in on
+     the [data-join] root; mirrors Problems / WhatIsIt. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.55s ease,
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .is-in .reveal {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.09s * var(--i, 0));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Scoped to the unique [data-join] root.
+  const root = document.querySelector("[data-join]");
+  if (root) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(root);
+  }
+</script>

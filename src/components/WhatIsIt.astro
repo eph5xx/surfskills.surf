@@ -4,9 +4,11 @@
 // docs, with an outbound link) + a light tile showing the AI tools it runs in
 // with real brand logos. Row 2: the 3-step workflow as a light pipeline.
 //
-// No floating heading/paragraph above the grid — the tiles carry the meaning.
-// Stays on the page's base-200 sand (NO full-bleed band) so it reads as a
-// distinct block from SkillShowcase below, which uses a full-bleed bg-base-100.
+// A "How it works" heading sits above the grid (matching the other section
+// headers); the tiles carry the detail. Rides its own white full-bleed band
+// (base-100), like the Problems / SkillShowcase bands. It stays distinct from
+// SkillShowcase's white band below because the sand top-margin between the two
+// sections leaves a gap that neither band paints.
 
 // The AI tools shown as a curated logo wall (not per-skill compatibility —
 // that lives on each skill detail page). Claude Code is omitted: its mark is
@@ -56,7 +58,13 @@ const steps = [
 ];
 ---
 
-<section id="how" data-wii class="mt-28 scroll-mt-24 md:mt-40">
+<section
+  id="how"
+  data-wii
+  class="relative mt-16 scroll-mt-24 py-16 md:mt-24 before:absolute before:inset-y-0 before:left-1/2 before:-z-10 before:w-screen before:-translate-x-1/2 before:bg-base-100"
+>
+  <h2 class="mb-8 text-[34px]">How it works</h2>
+
   <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
     <!-- ============ TILE 1 — what an agent skill is (dark anchor, 2 cols) ============ -->
     <article
@@ -158,7 +166,7 @@ const steps = [
       steps.map((step, i) => (
         <article
           class:list={[
-            "reveal step-card card card-border relative border-base-300 bg-base-100 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md",
+            "reveal step-card card card-border relative border-base-300 bg-base-200 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md",
             i > 0 &&
               "md:before:pointer-events-none md:before:absolute md:before:-left-[10px] md:before:top-1/2 md:before:-translate-x-1/2 md:before:-translate-y-1/2 md:before:text-[20px] md:before:font-semibold md:before:leading-none md:before:text-base-content/30 md:before:content-['→']",
           ]}
