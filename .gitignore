@@ -37,3 +37,5 @@ skills-lock.json
 # hyperframes working renders (final web clips are committed under public/how/)
 media/how-it-works/renders/
 media/how-it-works/.debug/
+# hyperframes generation workspace (final web clips live under public/)
+videos/
