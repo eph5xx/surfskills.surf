@@ -1,6 +1,6 @@
 ---
 import type { DirectoryItem } from "@/data/directory";
-import { itemDataAttrs, compactNumber } from "@/data/directory";
+import { itemDataAttrs, compactNumber, isNew } from "@/data/directory";
 
 // Catalog item — ONE [data-dir-item] node per skill (engine contract). The shared
 // engine hides/sorts this single node; the toolbar's view toggle only flips
@@ -16,19 +16,35 @@ const { item } = Astro.props;
 
 // Marketplace slug e.g. "ponytail/ponytail-audit" (last two id segments).
 const slug = item.id.split("/").slice(-2).join("/");
+
+// Novelty signal — added in the last 7 days. Backs up the "more land each week"
+// promise with something visible.
+const fresh = isNew(item.createdAt);
 ---
 
 <a href={item.href} {...itemDataAttrs(item)} class="dc-item group">
   <figure class="dc-thumb">
     {
       item.video ? (
-        <video class="size-full object-cover" autoplay muted loop playsinline preload="metadata">
-          <source src={item.video} type="video/mp4" />
-        </video>
+        <>
+          {/* Poster still is its own layer (not the video's `poster` attr, which
+              only shows before the first play) so the card always returns to the
+              thumbnail when the video stops — YouTube-style. */}
+          <img
+            src={item.image ?? "/skills/skill-placeholder.svg"}
+            alt=""
+            loading="lazy"
+            class="dc-poster"
+          />
+          <video class="dc-video" muted loop playsinline preload="metadata" data-hover-video>
+            <source src={item.video} type="video/mp4" />
+          </video>
+        </>
       ) : (
         <img src={item.image ?? "/skills/skill-placeholder.svg"} alt="" loading="lazy" class="size-full object-cover" />
       )
     }
+    {fresh && <span class="dc-new">New</span>}
   </figure>
 
   <div class="dc-body">
@@ -77,9 +93,29 @@ const slug = item.id.split("/").slice(-2).join("/");
   }
 
   .dc-thumb {
+    position: relative;
     background: var(--color-base-200);
     overflow: hidden;
     flex-shrink: 0;
+  }
+
+  /* "New" badge — gold is the brand's "free / verified / fresh" color. Ink text on
+     solid gold reads well against the busy thumbnail behind it. */
+  .dc-new {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 1;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-accent-content);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+    box-shadow: 0 1px 4px color-mix(in oklab, var(--color-base-content) 30%, transparent);
   }
   .dc-thumb :global(img),
   .dc-thumb :global(video) {
@@ -88,6 +124,31 @@ const slug = item.id.split("/").slice(-2).join("/");
   .dc-item:hover .dc-thumb :global(img),
   .dc-item:hover .dc-thumb :global(video) {
     transform: scale(1.03);
+  }
+
+  /* Layered poster + video: the still sits underneath; the video crossfades over
+     it while playing and fades back out on stop (YouTube-style). */
+  .dc-thumb :global(.dc-poster),
+  .dc-thumb :global(.dc-video) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .dc-thumb :global(.dc-video) {
+    opacity: 0;
+    transition:
+      opacity 0.3s ease,
+      transform 0.4s ease;
+  }
+  .dc-thumb :global(.dc-video.is-playing) {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dc-thumb :global(.dc-video) {
+      transition: transform 0.4s ease;
+    }
   }
 
   .dc-body {
@@ -122,7 +183,8 @@ const slug = item.id.split("/").slice(-2).join("/");
     min-width: 0;
     flex-shrink: 0;
     font-size: 12.5px;
-    color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+    font-weight: 500;
+    color: color-mix(in oklab, var(--color-base-content) 72%, transparent);
   }
   .dc-avatar {
     width: 18px;
@@ -165,12 +227,12 @@ const slug = item.id.split("/").slice(-2).join("/");
   .dc-stars {
     display: inline-flex;
     align-items: center;
-    gap: 0.28rem;
+    gap: 0.3rem;
     flex-shrink: 0;
     align-self: center;
-    font-size: 12px;
-    font-weight: 600;
-    color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+    font-size: 13px;
+    font-weight: 700;
+    color: color-mix(in oklab, var(--color-base-content) 82%, transparent);
     font-variant-numeric: tabular-nums;
   }
 

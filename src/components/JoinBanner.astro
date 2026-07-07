@@ -2,16 +2,27 @@
 // Closing CTA — the page's last money moment. A sienna button on a drenched teal
 // slab, now backed by proof: a gold-star open-source line, install/weekly-builder
 // numbers woven inline (not a metric grid), and a text "trusted by" caption
-// naming the agents. Reveal-on-scroll mirrors Problems / WhatIsIt.
+// naming the agents. Sunny (the mascot) peeks over the top edge holding SKILL.md.
+// Reveal-on-scroll mirrors Problems / WhatIsIt.
 ---
 
-<section data-join class="mt-[88px] mb-[88px]">
-  <div class="rounded-box bg-secondary px-6 py-12 text-center text-secondary-content shadow-md md:px-14 md:py-16">
+<section data-join class="mt-28 mb-24 md:mt-32 md:mb-28">
+  <div class="relative rounded-box bg-secondary px-6 pb-12 pt-16 text-center text-secondary-content shadow-md md:px-14 md:pb-16 md:pt-20">
+    <!-- Sunny peeks over the top edge, holding the SKILL.md note -->
+    <img
+      src="/sunny-cta.png"
+      alt="Sunny, the Surf Skills starfish, holding a SKILL.md note"
+      width="150"
+      height="137"
+      loading="lazy"
+      class="sunny pointer-events-none absolute left-1/2 top-0 z-10 w-[104px] -translate-x-1/2 -translate-y-[58%] select-none drop-shadow-md md:w-[148px]"
+    />
+
     <!-- Zone 1 — the ask -->
     <div class="reveal" style="--i:0">
-      <h3 class="text-balance font-display text-[32px] leading-[1.05] md:text-[42px]">
+      <h2 class="text-balance font-display text-[32px] leading-[1.05] md:text-[42px]">
         Start with one useful AI skill, free.
-      </h3>
+      </h2>
       <p class="mx-auto mt-3 max-w-[560px] text-[16px] leading-[1.6] text-secondary-content/85">
         Pick a skill. Run it once. See what it makes.
       </p>
@@ -38,7 +49,7 @@
           <span class="text-secondary-content/75"> builders a week</span>
         </li>
       </ul>
-      <p class="mt-4 text-[13px] leading-[1.5] text-secondary-content/65">
+      <p class="mt-4 text-[13px] leading-[1.5] text-secondary-content/80">
         Trusted by builders on Claude Code, Hermes, Codex, and other agents.
       </p>
     </div>
@@ -61,11 +72,52 @@
     transition-delay: calc(0.09s * var(--i, 0));
   }
 
+  /* Sunny fades in with the section, then idles with a gentle bob. Opacity and the
+     bob use separate CSS properties (opacity / transform) so neither fights the
+     Tailwind `translate` that positions the peek. */
+  .sunny {
+    opacity: 0;
+    transition: opacity 0.6s ease 0.15s;
+  }
+  .is-in .sunny {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .is-in .sunny {
+      animation: sunny-bob 3.4s ease-in-out 0.9s infinite;
+    }
+  }
+  @keyframes sunny-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  /* No JS → .is-in never fires. Show the content instead of leaving blank folds. */
+  @media (scripting: none) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+    .sunny {
+      opacity: 1;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .reveal {
       opacity: 1 !important;
       transform: none !important;
       transition: none !important;
+    }
+    .sunny {
+      opacity: 1 !important;
+      transition: none !important;
+      animation: none !important;
     }
   }
 </style>

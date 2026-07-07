@@ -141,6 +141,15 @@ export const compactNumber = (n: number): string =>
     .format(n)
     .toLowerCase();
 
+/** True when a skill was added within the last 7 days — drives the "New" badge.
+ *  Guards empty / unparseable dates (→ false) and future dates count as new. */
+export const isNew = (iso?: string): boolean => {
+  if (!iso) return false;
+  const t = Date.parse(iso);
+  if (Number.isNaN(t)) return false;
+  return Date.now() - t < 7 * 24 * 60 * 60 * 1000;
+};
+
 /** "2026-06-25" → "Jun 25, 2026". */
 export const formatUpdatedFull = (iso?: string): string => {
   if (!iso) return "";

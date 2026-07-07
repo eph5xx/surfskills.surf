@@ -6,9 +6,7 @@
 //
 // A "How it works" heading sits above the grid (matching the other section
 // headers); the tiles carry the detail. Rides its own white full-bleed band
-// (base-100), like the Problems / SkillShowcase bands. It stays distinct from
-// SkillShowcase's white band below because the sand top-margin between the two
-// sections leaves a gap that neither band paints.
+// (base-100), like the Problems band above.
 
 // The AI tools shown as a curated logo wall (not per-skill compatibility —
 // that lives on each skill detail page). Claude Code is omitted: its mark is
@@ -73,7 +71,7 @@ const steps = [
     >
       <div class="card-body gap-6 p-7 md:p-8">
         <div>
-          <h2 class="text-[28px] leading-tight md:text-[31px]">What is a skill?</h2>
+          <h3 class="text-[28px] leading-tight md:text-[31px]">What is a skill?</h3>
           <p class="mt-3 max-w-[560px] text-[15px] leading-[1.6] text-neutral-content/70">
             An <a
               href="https://agentskills.io/home"
@@ -137,7 +135,7 @@ const steps = [
     >
       <div class="card-body gap-5 p-7 md:p-8">
         <div>
-          <h2 class="text-[28px] leading-tight md:text-[31px]">Use the AI you have</h2>
+          <h3 class="text-[28px] leading-tight md:text-[31px]">Use the AI you have</h3>
           <p class="mt-3 text-[15px] leading-[1.6] text-secondary-content/75">
             Skills plug into the tools you already pay for — no new app, no migration.
             Install once and they just work.
@@ -200,7 +198,7 @@ const steps = [
               </video>
             </div>
 
-            <p class="text-[13.5px] leading-[1.45] text-base-content/65">{step.caption}</p>
+            <p class="text-[13.5px] leading-[1.45] text-base-content/75">{step.caption}</p>
           </div>
         </article>
       ))
@@ -210,7 +208,7 @@ const steps = [
 
 <style>
   /* Scroll-in reveal: tiles fade + rise, staggered by --i. JS toggles .is-in on
-     the [data-wii] root; mirrors the SkillShowcase IntersectionObserver. */
+     the [data-wii] root; mirrors Problems / UseCases / JoinBanner. */
   .reveal {
     opacity: 0;
     transform: translateY(14px);
@@ -226,6 +224,14 @@ const steps = [
   /* keep the hover-lift independent of the reveal transition */
   .step-card {
     transition-property: transform, box-shadow;
+  }
+
+  /* No JS → .is-in never fires. Show the content instead of leaving blank folds. */
+  @media (scripting: none) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

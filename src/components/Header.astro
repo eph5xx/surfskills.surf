@@ -59,7 +59,10 @@ const isCurrent = (href: string) =>
             <a
               href={link.href}
               aria-current={isCurrent(link.href) ? "true" : undefined}
-              class:list={["hover:text-primary", isCurrent(link.href) && "font-semibold text-primary"]}
+              class:list={[
+                "rounded hover:text-primary focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-base-100",
+                isCurrent(link.href) && "font-semibold text-primary",
+              ]}
             >
               {link.label}
             </a>
@@ -71,7 +74,7 @@ const isCurrent = (href: string) =>
       <a href="/account" class="auth-authed btn btn-sm rounded-full">Account</a>
       <a
         href="/login"
-        class="auth-anon link link-hover hidden text-[15px] font-semibold hover:text-primary sm:inline"
+        class="auth-anon link link-hover hidden rounded text-[15px] font-semibold hover:text-primary focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-base-100 sm:inline"
       >
         Log in
       </a>
