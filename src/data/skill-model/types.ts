@@ -19,18 +19,38 @@ export interface Collection {
   installCommand: string;
   installCount?: number;
   skills: string[];
+  /** Long-form "What this collection does" body (collections.long_description). SEO content. */
+  longDescription?: string;
+  /** "When to use it" entries (collections.when_to_use). */
+  whenToUse?: WhenToUseItem[];
+  /** FAQ entries (collections.faq) — also emitted as FAQPage structured data. */
+  faq?: FaqItem[];
 }
 
 export interface SkillDescription {
   short: string;
-  input: string;
-  process: string;
-  output: string;
+  // Legacy "how it works" beats — stored on older rows but never rendered (only
+  // `short` is shown). No longer authored by the create-surf-skill pipeline.
+  input?: string;
+  process?: string;
+  output?: string;
 }
 
 export interface SkillTool {
   name: string;
   blocking: boolean;
+}
+
+/** One "When to use it" entry — a short outcome title plus a one-line explanation. */
+export interface WhenToUseItem {
+  title: string;
+  body: string;
+}
+
+/** One FAQ entry — feeds both the on-page accordion and FAQPage structured data. */
+export interface FaqItem {
+  q: string;
+  a: string;
 }
 
 // How you work with a skill (its operational mode) — an expectation-setter shown
@@ -72,5 +92,11 @@ export interface DirectorySkill {
   useCases: SkillUseCase[];
   /** When the skill was added to the site (skills.created_at). */
   createdAt?: string;
+  /** Long-form "What it does" body (skills.long_description). SEO content. */
+  longDescription?: string;
+  /** "When to use it" entries (skills.when_to_use). */
+  whenToUse?: WhenToUseItem[];
+  /** FAQ entries (skills.faq) — also emitted as FAQPage structured data. */
+  faq?: FaqItem[];
 }
 

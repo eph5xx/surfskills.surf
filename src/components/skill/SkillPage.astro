@@ -1,43 +1,36 @@
 ---
 import type { Collection, DirectorySkill } from "@/data/skill-model/types";
 import { skillSlugFromId } from "@/data/skill-model";
-import type { Skill } from "@/data/skills";
-import SkillCard from "@/components/SkillCard.astro";
+import type { DirectoryItem } from "@/data/directory";
+import DirectoryCard from "@/components/discover/DirectoryCard.astro";
 import SkillSidebar from "@/components/skill/SkillSidebar.astro";
 
 // Reusable, data-driven skill listing template. Left column: identity -> demo ->
-// how-it-works -> details. Right column: a sticky rail with Collection, Links, and
-// Install. To add a skill: add a DirectorySkill + Collection module — no edits here.
+// what-it-does -> when-to-use -> FAQ -> related. Right column: a sticky rail with
+// Collection, Install, Links, and Tags. The long-form sections render only when their
+// (optional) fields are populated, so sparse skills degrade to just identity + demo.
 interface Props {
   skill: DirectorySkill;
   collection: Collection;
-  relatedSkills?: Skill[];
+  relatedItems?: DirectoryItem[];
 }
 
-const { skill, collection, relatedSkills = [] } = Astro.props;
+const { skill, collection, relatedItems = [] } = Astro.props;
 
 const slug = skillSlugFromId(skill.id);
 
-// The three "How it works" beats — input / process / output from the skill model.
-// The friendly label is the step heading; the jargon (Input/Process/Output) is dropped.
-const flow = {
-  write: { label: "You write", body: skill.description.input },
-  between: { label: "It works", body: skill.description.process },
-  get: { label: "You get", body: skill.description.output },
-};
+// "What it does" body: split the long description into paragraphs on blank lines.
+const paragraphs = (skill.longDescription ?? "")
+  .split(/\n{2,}/)
+  .map((p) => p.trim())
+  .filter(Boolean);
 
-// Command coloring: a leading "/command" token renders in primary, its argument in
-// accent. Prose examples (no leading slash) aren't commands — they render whole in
-// accent, with no command-head highlight.
-const isCommand = skill.example.startsWith("/");
-const sp = skill.example.indexOf(" ");
-const cmdHead = sp === -1 ? skill.example : skill.example.slice(0, sp);
-const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
-
+const whenToUse = skill.whenToUse ?? [];
+const faq = skill.faq ?? [];
 ---
 
 <div class="bg-base-200">
-  <div class="mx-auto max-w-[1200px] px-5 pt-10 pb-20 md:px-8 md:pt-[42px]">
+  <div class="mx-auto max-w-[1120px] px-5 pt-10 pb-20 md:px-8 md:pt-[42px]">
     <nav class="breadcrumbs mb-7 text-[13.5px] font-semibold">
       <ul>
         <li><a href="/discover" class="text-secondary hover:text-primary">All skills</a></li>
@@ -50,34 +43,35 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
       </ul>
     </nav>
 
-    <div class="grid grid-cols-1 items-start gap-[44px] lg:grid-cols-[1fr_336px]">
+    <div class="grid grid-cols-1 items-start gap-y-0 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-x-[56px]">
       <!-- Identity -->
-      <div class="order-1 lg:col-start-1">
+      <div class="order-1 lg:col-start-1 lg:row-start-1">
         <div class="font-mono text-[13px] font-semibold text-secondary">{slug}</div>
         <h1
-          class="mt-0.5 font-display text-[30px] font-semibold leading-[1.0] tracking-[-0.03em] text-balance md:text-[40px]"
+          class="mt-1.5 font-display text-[32px] font-semibold leading-[1.05] tracking-[-0.035em] text-balance md:text-[44px]"
         >
           {skill.name}
         </h1>
-
-        <!-- Tagline -->
-        <p class="mt-4 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/65 text-pretty md:text-[16px]">
+        <p class="mt-4 max-w-[54ch] text-[17px] font-medium leading-[1.5] text-base-content/85 text-pretty md:text-[19px]">
           {skill.description.short}
         </p>
       </div>
 
       <!-- Demo video -->
-      <div class="order-2 lg:col-start-1">
+      <div class="order-2 mt-9 lg:col-start-1 lg:row-start-2">
         <div
-          class="aspect-[16/9.1] w-full overflow-hidden rounded-[18px] bg-[#1c1a28] shadow-[0_30px_70px_-28px_rgba(42,44,65,0.55)]"
+          class="aspect-[16/9.1] w-full overflow-hidden rounded-[18px] bg-[#1c1a28] shadow-[0_30px_70px_-30px_rgba(42,44,65,0.5)]"
         >
           {
             skill.previewVideo ? (
               <video
                 class="size-full object-cover"
+                data-demo-video
+                aria-label={`${skill.name} demo`}
                 autoplay
                 muted
                 loop
+                controls
                 playsinline
                 preload="metadata"
                 poster={skill.previewImage}
@@ -96,87 +90,95 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
         </div>
       </div>
 
-      <!-- Sidebar (mobile — sits between demo and How it works) -->
-      <div class="order-3 flex flex-col gap-[18px] lg:hidden">
+      <!-- Sidebar (mobile — sits between demo and the long-form content) -->
+      <div class="order-3 mt-7 flex flex-col gap-[18px] lg:hidden">
         <SkillSidebar skill={skill} collection={collection} />
       </div>
 
-      <!-- How it works -->
-      <div class="order-4 lg:col-start-1">
-        <h2 class="font-display text-[24px] tracking-[-0.02em]">How it works</h2>
-
-        <!-- Step 01 — includes the command terminal -->
-        <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
-          <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">01</div>
-          <div>
-            <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.write.label}</h3>
-            <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.write.body}</p>
-
-            <!-- Command terminal — full width, copy button lives in the title bar -->
-            <div class="mt-4 overflow-hidden rounded-xl border border-white/[0.06] bg-[#232132]">
-              <div class="flex items-center gap-2 border-b border-white/[0.06] px-5 py-3">
-                <span class="size-2.5 rounded-full" style="background:#e06c5e"></span>
-                <span class="size-2.5 rounded-full" style="background:#f2b134"></span>
-                <span class="size-2.5 rounded-full" style="background:#5bbd7a"></span>
-                <button
-                  type="button"
-                  data-copy-cmd
-                  data-copy={skill.example}
-                  aria-label="Copy command"
-                  class="swap swap-rotate ml-auto text-white/50 transition-colors hover:text-white"
-                >
-                  <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="9" y="9" width="11" height="11" rx="2" />
-                    <path d="M5 15V5a2 2 0 0 1 2-2h10" />
-                  </svg>
-                  <svg class="swap-on size-[15px] text-[#5bbd7a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M20 6L9 17l-5-5" />
-                  </svg>
-                </button>
+      <!-- Long-form content -->
+      <div class="order-4 mt-12 lg:col-start-1 lg:row-start-3 lg:mt-[60px]">
+        {
+          paragraphs.length > 0 && (
+            <section>
+              <h2 class="font-display text-[22px] tracking-[-0.02em]">What it does</h2>
+              <div class="mt-4 flex flex-col gap-[13px]">
+                {paragraphs.map((p) => (
+                  <p class="max-w-[66ch] text-[16px] leading-[1.6] text-base-content/90 text-pretty">
+                    {p}
+                  </p>
+                ))}
               </div>
-              <code class="block px-5 py-4 font-mono text-[13.5px] leading-[1.6] break-words whitespace-pre-wrap text-[#e9e6f2]">
-                {isCommand ? (
-                  <Fragment><span class="text-primary">{cmdHead}</span><span class="text-accent">{cmdRest}</span></Fragment>
-                ) : (
-                  <span class="text-accent">{skill.example}</span>
-                )}
-              </code>
-            </div>
-          </div>
-        </div>
+            </section>
+          )
+        }
 
-        <!-- Step 02 -->
-        <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
-          <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">02</div>
-          <div>
-            <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.between.label}</h3>
-            <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.between.body}</p>
-          </div>
-        </div>
+        {
+          whenToUse.length > 0 && (
+            <section class="mt-[52px]">
+              <h2 class="font-display text-[22px] tracking-[-0.02em]">When to use it</h2>
+              <ul class="mt-4 flex flex-col">
+                {whenToUse.map((item) => (
+                  <li class="flex gap-3.5 border-t border-base-content/12 py-4">
+                    <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-success/15">
+                      <svg viewBox="0 0 24 24" class="size-3 text-success" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    </span>
+                    <span>
+                      <b class="font-display text-[16px] font-semibold">{item.title}</b>
+                      <p class="mt-0.5 text-[14.5px] leading-[1.5] text-base-content/72">{item.body}</p>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
 
-        <!-- Step 03 -->
-        <div class="grid grid-cols-[44px_1fr] gap-[18px] border-t border-base-content/13 py-[26px] md:grid-cols-[52px_1fr] md:gap-[22px]">
-          <div class="font-display text-[32px] font-light leading-none tracking-[-0.03em] text-primary md:text-[36px]">03</div>
-          <div>
-            <h3 class="font-display text-[18px] leading-[1.2] md:text-[19px]">{flow.get.label}</h3>
-            <p class="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-base-content/70">{flow.get.body}</p>
-          </div>
-        </div>
+        {
+          faq.length > 0 && (
+            <section class="mt-[52px]">
+              <h2 class="font-display text-[22px] tracking-[-0.02em]">FAQ</h2>
+              <div class="mt-4 border-t border-base-content/12">
+                {faq.map((item) => (
+                  <details class="group border-b border-base-content/12">
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-[18px] font-display text-[16.5px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-details-marker]:hidden">
+                      {item.q}
+                      <svg viewBox="0 0 24 24" class="size-[18px] shrink-0 text-primary transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </summary>
+                    <p class="max-w-[68ch] pb-5 text-[15px] leading-[1.6] text-base-content/72 text-pretty">
+                      {item.a}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {
+          relatedItems.length > 0 && (
+            <section class="mt-[52px]">
+              <h2 class="font-display text-[22px] tracking-[-0.02em]">Pairs well with</h2>
+              {/* Discover's card + youtube-style preview: [data-dir-list][data-view=grid]
+                  triggers DirectoryCard's grid styles; hover-video.ts drives playback. */}
+              <div
+                data-related-previews
+                data-dir-list
+                data-view="grid"
+                class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2"
+              >
+                {relatedItems.map((item) => <DirectoryCard item={item} />)}
+              </div>
+            </section>
+          )
+        }
       </div>
 
-      {
-        relatedSkills.length > 0 && (
-          <div class="order-5 lg:col-start-1">
-            <h2 class="font-display text-[24px] tracking-[-0.02em]">Related skills</h2>
-            <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              {relatedSkills.map((related) => <SkillCard skill={related} />)}
-            </div>
-          </div>
-        )
-      }
-
-      <!-- Sidebar (desktop) — Collection + Links + Install as one sticky column -->
-      <aside class="order-3 hidden flex-col gap-[18px] lg:sticky lg:top-[92px] lg:col-start-2 lg:row-span-4 lg:row-start-1 lg:flex lg:self-start">
+      <!-- Sidebar (desktop) — Collection + Install + Links + Tags as one sticky column -->
+      <aside class="order-3 hidden flex-col gap-[18px] lg:sticky lg:top-[92px] lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:flex lg:self-start">
         <SkillSidebar skill={skill} collection={collection} />
       </aside>
     </div>
@@ -187,4 +189,20 @@ const cmdRest = sp === -1 ? "" : skill.example.slice(sp);
   // Copy buttons ([data-copy-cmd] / [data-paste-cta]) with a global "Copied!"
   // toast, robust clipboard fallback, and the PostHog install-CTA capture.
   import "@/scripts/copy-feedback";
+  // YouTube-style hover/in-view previews for the "Pairs well with" cards.
+  import { initHoverVideo } from "@/scripts/hover-video";
+  initHoverVideo("[data-related-previews]");
+
+  // Reduced motion: don't autoplay the hero demo. Poster + native controls stay,
+  // so it plays on demand — mirroring how the related-preview cards behave.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const demo = document.querySelector<HTMLVideoElement>("[data-demo-video]");
+    if (demo) {
+      demo.removeAttribute("autoplay");
+      demo.pause();
+      try {
+        demo.currentTime = 0;
+      } catch {}
+    }
+  }
 </script>

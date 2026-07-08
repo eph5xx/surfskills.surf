@@ -4,7 +4,8 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import CollectionPage from "@/components/collection/CollectionPage.astro";
 import { loadCollection } from "@/data/skill-model/db";
-import { toSkillCard, type Skill } from "@/data/skill-card";
+import { buildDirectoryItems, type DirectoryItem } from "@/data/directory";
+import { skillSlugFromId, type DirectoryEntry } from "@/data/skill-model";
 import { absoluteUrl } from "@/lib/seo";
 import { setCatalogCache, notFoundPage, NO_STORE } from "@/lib/cache";
 
@@ -33,35 +34,56 @@ if (!loaded) return await notFoundPage(Astro.locals);
 const { collection, skills: liveSkills } = loaded;
 setCatalogCache(Astro.response.headers);
 
-// Roster = every skill the repo ships. Live skills (we have a page) resolve to a
-// full card; the rest render greyed "coming soon". Live ones sort first.
-const liveById = new Map(liveSkills.map((s) => [s.id, toSkillCard(s, { available: true })]));
-const rosterSkills: Skill[] = collection.skills
-  .map((skillId) => {
-    const live = liveById.get(skillId);
-    if (live) return live;
-    const name = skillId.split("/").pop() ?? skillId;
-    return {
-      id: skillId,
-      slug: name,
-      title: name,
-      blurb: "",
-      category: "",
-      tools: [],
-      free: true,
-      thumbLabel: "",
-      verified: false,
-      available: false,
-      video: undefined,
-    } satisfies Skill;
-  })
-  .sort((a, b) => Number(b.available) - Number(a.available));
+// Roster = every skill the repo ships, rendered as the same DirectoryCard the
+// Discover grid and skill-page "Pairs well with" use. Live skills (we have a page)
+// become clickable preview cards (poster + hover video); the rest render as greyed
+// "coming soon" placeholders. Live ones sort first.
+const liveIds = new Set(liveSkills.map((s) => s.id));
+const liveEntries: DirectoryEntry[] = liveSkills.map((skill) => ({
+  collection,
+  skill,
+  relatedSkillSlugs: [],
+}));
+const liveItems = buildDirectoryItems(liveEntries, liveIds);
 
-const count = rosterSkills.length;
-const title = `${collection.name} — ${count} AI skill${count === 1 ? "" : "s"} by ${collection.author.name} | Surf Skills`;
+const comingSoonItems: DirectoryItem[] = collection.skills
+  .filter((skillId) => !liveIds.has(skillId))
+  .map((skillId) => ({
+    id: skillId,
+    slug: skillSlugFromId(skillId),
+    href: `/s/${skillId}`,
+    title: skillId.split("/").pop() ?? skillId,
+    blurb: "",
+    useCases: [],
+    kind: "",
+    author: {
+      name: collection.author.name,
+      url: collection.author.url,
+      avatarURL: collection.author.avatarURL,
+    },
+    collectionName: collection.name,
+    githubStars: collection.githubStars,
+    available: false,
+  }));
+
+const rosterItems: DirectoryItem[] = [...liveItems, ...comingSoonItems];
+
+const title = `${collection.name} — AI agent skills | Surf Skills`;
 
 const discoverUrl = absoluteUrl(Astro.site!, "/discover");
 const collectionUrl = absoluteUrl(Astro.site!, `/s/${collection.id}`);
+
+// Meta description: lead with the long-form body (first sentence) when present, so
+// the SERP snippet is richer than the one-line summary; fall back to it otherwise.
+const firstSentence = collection.longDescription?.trim().split(/(?<=[.!?])\s/)[0];
+const metaDescription =
+  firstSentence && firstSentence.length >= 40 ? firstSentence : collection.shortDescription;
+
+// schema.org license must be a URL; only emit it for plain SPDX ids.
+const licenseUrl =
+  collection.license && /^[A-Za-z0-9.+-]+$/.test(collection.license)
+    ? `https://spdx.org/licenses/${collection.license}`
+    : undefined;
 
 const jsonLd = [
   {
@@ -72,19 +94,66 @@ const jsonLd = [
       { "@type": "ListItem", position: 2, name: collection.name, item: collectionUrl },
     ],
   },
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": collectionUrl,
+    url: collectionUrl,
+    name: collection.name,
+    description: collection.shortDescription,
+    isPartOf: { "@type": "WebSite", name: "Surf Skills", url: Astro.site!.origin },
+    about: {
+      "@type": "Organization",
+      name: collection.author.name,
+      url: collection.author.url,
+    },
+    ...(licenseUrl && { license: licenseUrl }),
+    ...(collection.updatedAt && { dateModified: collection.updatedAt }),
+    // ItemList of the live skills only (coming-soon roster tiles have no page to point at).
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: liveSkills.length,
+      itemListElement: liveSkills.map((skill, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "SoftwareApplication",
+          name: skill.name,
+          applicationCategory: "DeveloperApplication",
+          url: absoluteUrl(Astro.site!, `/s/${skill.id}`),
+          description: skill.description.short,
+          offers: { "@type": "Offer", price: 0, priceCurrency: "USD" },
+        },
+      })),
+    },
+  },
+  // FAQPage — only when the collection has real Q&As, matching the on-page accordion.
+  ...(collection.faq && collection.faq.length > 0
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: collection.faq.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: { "@type": "Answer", text: item.a },
+          })),
+        },
+      ]
+    : []),
 ];
 ---
 
 <BaseLayout
   title={title}
-  description={collection.shortDescription}
+  description={metaDescription}
   jsonLd={jsonLd}
   ogImage={liveSkills.find((s) => s.previewImage)?.previewImage}
 >
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
   </div>
-  <CollectionPage collection={collection} skills={rosterSkills} />
+  <CollectionPage collection={collection} items={rosterItems} />
   <div class="mx-auto max-w-[1200px] px-8">
     <Footer />
   </div>

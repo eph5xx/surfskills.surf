@@ -1,16 +1,16 @@
 ---
 import type { Collection } from "@/data/skill-model/types";
-import type { Skill } from "@/data/skills";
-import SkillCard from "@/components/SkillCard.astro";
+import DirectoryCard from "@/components/discover/DirectoryCard.astro";
+import { formatUpdatedFull, type DirectoryItem } from "@/data/directory";
 
 // Collection landing page — minimal hero (author, name, description, inline meta),
 // install card, and roster grid.
 interface Props {
   collection: Collection;
-  skills: Skill[];
+  items: DirectoryItem[];
 }
 
-const { collection, skills } = Astro.props;
+const { collection, items } = Astro.props;
 
 const ghHandle = (() => {
   try {
@@ -31,6 +31,29 @@ const linkRows = [
     ? [{ href: collection.websiteURL, label: "Open website", icon: "globe" as const }]
     : []),
 ];
+
+// Trust line under the install CTA — mirrors the skill page. "Open source" shows
+// whenever the collection has a public repo (directory collections always do).
+const trustParts = [
+  "Free",
+  ...(collection.repositoryURL ? ["Open source"] : []),
+  "Works in Claude, Cursor, Codex & more",
+];
+
+// SEO content sections — mirror SkillPage: render each only when authored, so
+// sparse collections stay hero + roster. "What it does" splits on blank lines.
+const paragraphs = (collection.longDescription ?? "")
+  .split(/\n{2,}/)
+  .map((p) => p.trim())
+  .filter(Boolean);
+const whenToUse = collection.whenToUse ?? [];
+const faq = collection.faq ?? [];
+
+const hasWhat = paragraphs.length > 0;
+const hasWhen = whenToUse.length > 0;
+const hasFaq = faq.length > 0;
+const bothCols = hasWhat && hasWhen;
+const updatedLabel = formatUpdatedFull(collection.updatedAt);
 ---
 
 <div class="bg-base-200">
@@ -99,12 +122,17 @@ const linkRows = [
               )
             }
             {
+              updatedLabel && (
+                <span class="rounded-full bg-black/15 px-3 py-1">Updated {updatedLabel}</span>
+              )
+            }
+            {
               collection.license && (
                 <span class="rounded-full bg-black/15 px-3 py-1">{collection.license}</span>
               )
             }
             <span class="rounded-full bg-black/15 px-3 py-1">
-              {skills.length} {skills.length === 1 ? "skill" : "skills"}
+              {items.length} {items.length === 1 ? "skill" : "skills"}
             </span>
           </div>
         </div>
@@ -112,13 +140,10 @@ const linkRows = [
         <!-- RIGHT: install card -->
         <aside class="flex flex-col">
           <div class="flex h-full flex-col rounded-[1.25rem] bg-base-100 p-6 text-base-content shadow-[0_1px_2px_rgba(42,44,65,0.04),0_22px_46px_-32px_rgba(42,44,65,0.5)]">
-            <div class="text-[11px] font-semibold tracking-[0.18em] text-base-content/45 uppercase">
-              Install collection
-            </div>
-
-            <div class="mt-3 flex items-start gap-2 rounded-xl border border-base-300 bg-base-200/60 px-3.5 py-3">
+            <div class="flex items-center gap-2 rounded-xl border border-base-300 bg-base-200/60 px-3.5 py-3">
               <code
-                class="min-w-0 flex-1 font-mono text-[12.5px] leading-[1.6] [overflow-wrap:anywhere] text-base-content/75"
+                title={collection.installCommand}
+                class="min-w-0 flex-1 truncate font-mono text-[12.5px] leading-[1.6] text-base-content/75"
                 >{collection.installCommand}</code
               >
               <button
@@ -126,7 +151,7 @@ const linkRows = [
                 data-copy-cmd
                 data-copy={collection.installCommand}
                 aria-label="Copy install command"
-                class="swap swap-rotate mt-0.5 shrink-0 text-base-content/45 transition-colors hover:text-primary"
+                class="swap swap-rotate shrink-0 text-base-content/45 transition-colors hover:text-primary"
               >
                 <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <rect x="9" y="9" width="11" height="11" rx="2" />
@@ -142,15 +167,26 @@ const linkRows = [
               type="button"
               data-paste-cta
               data-copy={collection.installCommand}
-              class="btn btn-primary mt-3.5 h-auto min-h-0 w-full gap-2 rounded-[14px] py-4 text-[16px] font-semibold normal-case shadow-[0_10px_26px_-12px_var(--color-primary)]"
+              class="btn btn-primary mt-3.5 h-12 min-h-0 w-full gap-2 rounded-[13px] text-[15.5px] font-semibold normal-case shadow-none"
             >
               <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
               </svg>
               <span data-paste-label>Paste into your agent</span>
             </button>
-            <p class="mt-2.5 text-center text-[12px] text-base-content/50">
-              Works in Claude, Cursor, Codex &amp; more
+            <p class="mt-3 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-center text-[12.5px] text-base-content/70">
+              {
+                trustParts.map((part, i) => (
+                  <>
+                    {i > 0 && (
+                      <span class="text-base-content/30" aria-hidden="true">
+                        ·
+                      </span>
+                    )}
+                    <span class:list={[part === "Free" && "font-semibold text-[#4a6631]"]}>{part}</span>
+                  </>
+                ))
+              }
             </p>
 
             <hr class="my-5 border-base-300" />
@@ -198,20 +234,116 @@ const linkRows = [
           <h2 class="font-display text-[28px] font-semibold tracking-[-0.025em] md:text-[34px]">
             The roster
           </h2>
-          <p class="mt-1 text-[14.5px] text-base-content/65">
-            All {skills.length} {skills.length === 1 ? "skill" : "skills"} in the collection. Author,
-            license &amp; stars inherited above.
-          </p>
         </div>
         <span class="hidden shrink-0 rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-content sm:inline-block">
-          {skills.length} {skills.length === 1 ? "skill" : "skills"}
+          {items.length} {items.length === 1 ? "skill" : "skills"}
         </span>
       </div>
 
-      <div class="mt-7 grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {skills.map((s) => <SkillCard skill={s} hideCategory />)}
+      <!-- Same DirectoryCard + YouTube-style hover preview as Discover / "Pairs well
+           with": [data-dir-list][data-view=grid] triggers the card's grid styles,
+           initHoverVideo (below) drives poster↔video crossfade. -->
+      <div
+        data-roster-previews
+        data-dir-list
+        data-view="grid"
+        class="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {items.map((item) => <DirectoryCard item={item} />)}
       </div>
     </section>
+
+    <!-- SEO content: What it does / When to use it / FAQ — the whole card renders
+         only once any of the three is authored (sparse collections stay hero + roster). -->
+    {
+      (hasWhat || hasWhen || hasFaq) && (
+        <section class="mt-14">
+          <div class="rounded-[20px] border border-base-300 bg-base-100 px-6 py-[26px] shadow-[0_1px_2px_rgba(42,44,65,0.04),0_18px_40px_-34px_rgba(42,44,65,0.45)] md:px-10 md:py-[34px]">
+            {(hasWhat || hasWhen) && (
+              <div class={`grid gap-8 ${bothCols ? "md:grid-cols-2 md:gap-0" : ""}`}>
+                {hasWhat && (
+                  <div class={bothCols ? "md:border-r md:border-base-300 md:pr-11" : ""}>
+                    <h2 class="font-display text-[22px] tracking-[-0.02em]">
+                      What it does
+                    </h2>
+                    <div class="mt-4 flex flex-col gap-[13px]">
+                      {paragraphs.map((p) => (
+                        <p class="max-w-[52ch] text-[16px] leading-[1.62] text-base-content/80 text-pretty">
+                          {p}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {hasWhen && (
+                  <div class={bothCols ? "md:pl-11" : ""}>
+                    <h2 class="font-display text-[22px] tracking-[-0.02em]">When to use it</h2>
+                    <ul class="mt-4 flex flex-col gap-3.5">
+                      {whenToUse.map((item) => (
+                        <li class="flex gap-3">
+                          <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-md bg-success/15">
+                            <svg
+                              viewBox="0 0 24 24"
+                              class="size-3 text-success"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="3"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d="M20 6 9 17l-5-5" />
+                            </svg>
+                          </span>
+                          <span>
+                            <b class="font-display text-[15.5px] font-semibold">{item.title}</b>
+                            <p class="mt-0.5 text-[14.5px] leading-[1.5] text-base-content/72 text-pretty">
+                              {item.body}
+                            </p>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {(hasWhat || hasWhen) && hasFaq && <hr class="my-8 border-base-300 md:my-9" />}
+
+            {hasFaq && (
+              <div class="mx-auto max-w-[620px]">
+                <h2 class="font-display text-[22px] tracking-[-0.02em]">Common questions</h2>
+                <div class="mt-4 border-t border-base-content/12">
+                  {faq.map((item) => (
+                    <details class="group border-b border-base-content/12">
+                      <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md py-[18px] font-display text-[16.5px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-details-marker]:hidden">
+                        {item.q}
+                        <svg
+                          viewBox="0 0 24 24"
+                          class="size-[18px] shrink-0 text-primary transition-transform duration-200 group-open:rotate-180"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="m6 9 6 6 6-6" />
+                        </svg>
+                      </summary>
+                      <p class="max-w-[68ch] pb-5 text-[15px] leading-[1.6] text-base-content/72 text-pretty">
+                        {item.a}
+                      </p>
+                    </details>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )
+    }
   </main>
 </div>
 
@@ -219,4 +351,8 @@ const linkRows = [
   // Copy buttons ([data-copy-cmd] / [data-paste-cta]) with a global "Copied!"
   // toast and robust clipboard fallback. Shared with the skill pages.
   import "@/scripts/copy-feedback";
+  // YouTube-style hover/in-view previews for the roster cards — same as Discover
+  // and the skill page's "Pairs well with".
+  import { initHoverVideo } from "@/scripts/hover-video";
+  initHoverVideo("[data-roster-previews]");
 </script>

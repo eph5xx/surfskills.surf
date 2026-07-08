@@ -33,9 +33,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
           );
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            context.cookies.set(name, value, options),
-          );
+          cookiesToSet.forEach(({ name, value, options }) => {
+            try {
+              context.cookies.set(name, value, options);
+            } catch {
+              // Supabase can fire a deferred token-refresh write after the
+              // response is already sent; there's no response to attach it
+              // to, so drop it — the browser refreshes on the next request.
+            }
+          });
         },
       },
     },

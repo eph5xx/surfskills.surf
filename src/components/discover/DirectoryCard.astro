@@ -20,12 +20,20 @@ const slug = item.id.split("/").slice(-2).join("/");
 // Novelty signal — added in the last 7 days. Backs up the "more land each week"
 // promise with something visible.
 const fresh = isNew(item.createdAt);
+
+// Coming-soon roster tiles (no live page yet) render as a greyed, non-clickable
+// <article> with a "Coming soon" badge and no hover video. Live items are an <a>.
+const Tag = item.available ? "a" : "article";
 ---
 
-<a href={item.href} {...itemDataAttrs(item)} class="dc-item group">
+<Tag
+  {...(item.available ? { href: item.href } : {})}
+  {...itemDataAttrs(item)}
+  class:list={["dc-item group", { "dc-item--soon": !item.available }]}
+>
   <figure class="dc-thumb">
     {
-      item.video ? (
+      item.available && item.video ? (
         <>
           {/* Poster still is its own layer (not the video's `poster` attr, which
               only shows before the first play) so the card always returns to the
@@ -44,7 +52,7 @@ const fresh = isNew(item.createdAt);
         <img src={item.image ?? "/skills/skill-placeholder.svg"} alt="" loading="lazy" class="size-full object-cover" />
       )
     }
-    {fresh && <span class="dc-new">New</span>}
+    {item.available ? fresh && <span class="dc-new">New</span> : <span class="dc-soon">Coming soon</span>}
   </figure>
 
   <div class="dc-body">
@@ -74,7 +82,7 @@ const fresh = isNew(item.createdAt);
       }
     </div>
   </div>
-</a>
+</Tag>
 
 <style>
   /* ---------- base (shared by both views) ---------- */
@@ -117,6 +125,27 @@ const fresh = isNew(item.createdAt);
     line-height: 1.4;
     box-shadow: 0 1px 4px color-mix(in oklab, var(--color-base-content) 30%, transparent);
   }
+  /* Coming-soon tile — declared skill without a live page yet: greyed and inert. */
+  .dc-item--soon {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  .dc-soon {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 1;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--color-base-300);
+    color: color-mix(in oklab, var(--color-base-content) 62%, transparent);
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+  }
+
   .dc-thumb :global(img),
   .dc-thumb :global(video) {
     transition: transform 0.4s ease;

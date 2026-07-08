@@ -2,10 +2,10 @@ import { skillSlugFromId, USE_CASE_LABELS } from "./skill-model";
 import type { DirectorySkill, SkillDescription } from "./skill-model/types";
 import { SkillUseCase } from "./skill-model/types";
 
-// The flattened card view-model shared by the landing grid, the Discover-adjacent
-// collection roster, and skill-detail "related" cards. `toSkillCard` is the ONE
+// The flattened card view-model for the landing grid. `toSkillCard` is the ONE
 // place that derives a card from a DirectorySkill, so the static (code-driven)
-// landing and the DB-driven catalog pages produce byte-identical cards.
+// landing and any DB-driven reuse produce byte-identical cards. (Discover and the
+// collection roster render DirectoryCard from DirectoryItem instead.)
 
 export interface Skill {
   id: string;
@@ -64,7 +64,7 @@ const mapThumbLabel = (useCases: SkillUseCase[]): string => {
 export interface ToSkillCardOptions {
   featured?: boolean;
   /** Whether the skill has a live detail page. DB rows are live; static catalog
-   *  entries are too. Coming-soon roster tiles are built without `toSkillCard`. */
+   *  entries are too. */
   available?: boolean;
   testedDate?: string;
 }

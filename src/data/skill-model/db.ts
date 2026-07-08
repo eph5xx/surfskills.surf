@@ -4,6 +4,8 @@ import {
   type DirectorySkill,
   type SkillDescription,
   type SkillTool,
+  type WhenToUseItem,
+  type FaqItem,
   SkillKind,
   SkillUseCase,
 } from "./types";
@@ -36,6 +38,9 @@ interface CollectionRow {
   install_command: string;
   install_count: number | null;
   skills: string[] | null;
+  long_description: string | null;
+  when_to_use: unknown;
+  faq: unknown;
 }
 
 interface SkillRow {
@@ -55,7 +60,33 @@ interface SkillRow {
   related_slugs: string[] | null;
   sort_order: number | null;
   created_at: string;
+  long_description: string | null;
+  when_to_use: unknown;
+  faq: unknown;
 }
+
+/** jsonb columns are hand-editable in Studio; keep only well-formed entries. */
+const cleanWhenToUse = (raw: unknown): WhenToUseItem[] | undefined => {
+  if (!Array.isArray(raw)) return undefined;
+  const items = raw.filter(
+    (x): x is WhenToUseItem =>
+      !!x && typeof x === "object" &&
+      typeof (x as WhenToUseItem).title === "string" &&
+      typeof (x as WhenToUseItem).body === "string",
+  );
+  return items.length > 0 ? items : undefined;
+};
+
+const cleanFaq = (raw: unknown): FaqItem[] | undefined => {
+  if (!Array.isArray(raw)) return undefined;
+  const items = raw.filter(
+    (x): x is FaqItem =>
+      !!x && typeof x === "object" &&
+      typeof (x as FaqItem).q === "string" &&
+      typeof (x as FaqItem).a === "string",
+  );
+  return items.length > 0 ? items : undefined;
+};
 
 const KIND_BY_KEY: Record<string, SkillKind | undefined> = {
   Action: SkillKind.Action,
@@ -93,6 +124,9 @@ const mapCollection = (row: CollectionRow): Collection => ({
   installCommand: row.install_command,
   installCount: row.install_count ?? undefined,
   skills: row.skills ?? [],
+  longDescription: row.long_description ?? undefined,
+  whenToUse: cleanWhenToUse(row.when_to_use),
+  faq: cleanFaq(row.faq),
 });
 
 /** Map a skill row to a DirectorySkill, or null if it's unusable (bad `kind`). */
@@ -120,6 +154,9 @@ const mapSkill = (row: SkillRow): DirectorySkill | null => {
     kind,
     useCases,
     createdAt: row.created_at,
+    longDescription: row.long_description ?? undefined,
+    whenToUse: cleanWhenToUse(row.when_to_use),
+    faq: cleanFaq(row.faq),
   };
 };
 
@@ -191,22 +228,33 @@ export async function loadDirectory(supabase: SupabaseClient): Promise<Directory
   };
 }
 
-/** Resolve a skill's related slugs to live skill records (port of resolveRelatedSkills). */
-export const resolveRelated = (dir: Directory, id: string): DirectorySkill[] =>
+/** Resolve a skill's related slugs to full directory entries (skill + its collection),
+ *  ready for buildDirectoryItems — so "Pairs well with" reuses the Discover card. */
+export const resolveRelatedEntries = (dir: Directory, id: string): DirectoryEntry[] =>
   (dir.relatedBySkillId[id] ?? [])
     .map((slug) => dir.skillsBySlug.get(slug))
-    .filter((skill): skill is DirectorySkill => skill !== undefined);
+    .filter((skill): skill is DirectorySkill => skill !== undefined)
+    .map((skill) => ({
+      collection: dir.collectionsById[skill.collection]!.collection,
+      skill,
+      relatedSkillSlugs: [],
+    }));
 
 export async function loadSkill(
   supabase: SupabaseClient,
   id: string,
-): Promise<{ skill: DirectorySkill; collection: Collection; related: DirectorySkill[] } | null> {
+): Promise<{
+  skill: DirectorySkill;
+  collection: Collection;
+  related: DirectoryEntry[];
+  availableIds: Set<string>;
+} | null> {
   const dir = await loadDirectory(supabase);
   const skill = dir.skillsById[id];
   if (!skill) return null;
   const collection = dir.collectionsById[skill.collection]?.collection;
   if (!collection) return null;
-  return { skill, collection, related: resolveRelated(dir, id) };
+  return { skill, collection, related: resolveRelatedEntries(dir, id), availableIds: dir.availableIds };
 }
 
 export async function loadCollection(
