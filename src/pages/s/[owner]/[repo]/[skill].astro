@@ -4,7 +4,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SkillPage from "@/components/skill/SkillPage.astro";
 import { loadSkill } from "@/data/skill-model/db";
-import { toSkillCard, type Skill } from "@/data/skill-card";
+import { buildDirectoryItems } from "@/data/directory";
 import { absoluteUrl } from "@/lib/seo";
 import { setCatalogCache, notFoundPage, NO_STORE } from "@/lib/cache";
 
@@ -34,9 +34,15 @@ if (!loaded) return await notFoundPage(Astro.locals);
 const { skill, collection, related } = loaded;
 setCatalogCache(Astro.response.headers);
 
-const title = `${skill.name} — AI skill by ${collection.author.name} | Surf Skills`;
+const title = `${skill.name} with ${collection.name} | Surf Skills`;
 
-const relatedCards: Skill[] = related.map((r) => toSkillCard(r));
+// Meta description: lead with the long-form body (first sentence) when present, so the
+// SERP snippet is richer than the one-line summary; fall back to the short description.
+const firstSentence = skill.longDescription?.trim().split(/(?<=[.!?])\s/)[0];
+const metaDescription =
+  firstSentence && firstSentence.length >= 40 ? firstSentence : skill.description.short;
+
+const relatedItems = buildDirectoryItems(related, loaded.availableIds);
 
 const skillUrl = absoluteUrl(Astro.site!, `/s/${skill.id}`);
 const discoverUrl = absoluteUrl(Astro.site!, "/discover");
@@ -81,18 +87,32 @@ const jsonLd = [
       { "@type": "ListItem", position: 3, name: skill.name, item: skillUrl },
     ],
   },
+  // FAQPage — only when the skill has real Q&As, matching the on-page accordion.
+  ...(skill.faq && skill.faq.length > 0
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: skill.faq.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: { "@type": "Answer", text: item.a },
+          })),
+        },
+      ]
+    : []),
 ];
 ---
 
 <BaseLayout
   title={title}
-  description={skill.description.short}
+  description={metaDescription}
   jsonLd={jsonLd}
   ogImage={skill.previewImage}
 >
   <div id="top" class="mx-auto max-w-[1200px] px-5 md:px-8">
     <Header />
   </div>
-  <SkillPage skill={skill} collection={collection} relatedSkills={relatedCards} />
+  <SkillPage skill={skill} collection={collection} relatedItems={relatedItems} />
   <Footer />
 </BaseLayout>

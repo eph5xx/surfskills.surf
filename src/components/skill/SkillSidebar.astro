@@ -54,6 +54,10 @@ const worksIn =
     ? `Works in ${skill.tools.map((t) => t.name).join(", ")}`
     : "Works in Claude, Cursor, Codex & more";
 
+// Trust line under the install CTA — honest, qualitative signals only. "Open source"
+// shows whenever the collection has a public repo (directory skills always do).
+const trustParts = ["Free", ...(collection.repositoryURL ? ["Open source"] : []), worksIn];
+
 const slug = skillSlugFromId(skill.id);
 
 // Hosts we don't surface in the rail for now (marketplace mirrors).
@@ -146,9 +150,10 @@ const sectionClass = "px-6 py-[22px]";
 
   <!-- Install -->
   <div class:list={[sectionClass, "border-t border-base-content/13"]}>
-    <div class="flex items-start gap-2 rounded-xl border border-base-300 bg-base-200 px-3.5 py-3">
+    <div class="flex items-center gap-2 rounded-xl border border-base-300 bg-base-200 px-3.5 py-3">
       <code
-        class="min-w-0 flex-1 font-mono text-[13px] leading-[1.55] [overflow-wrap:anywhere] text-base-content/85"
+        title={installCommand}
+        class="min-w-0 flex-1 truncate font-mono text-[13px] leading-[1.55] text-base-content/85"
         >{installCommand}</code
       >
       <button
@@ -156,7 +161,7 @@ const sectionClass = "px-6 py-[22px]";
         data-copy-cmd
         data-copy={installCommand}
         aria-label="Copy install command"
-        class="swap swap-rotate mt-0.5 shrink-0 text-base-content/55 transition-colors hover:text-primary"
+        class="swap swap-rotate shrink-0 text-base-content/55 transition-colors hover:text-primary"
       >
         <svg class="swap-off size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="9" y="9" width="11" height="11" rx="2" />
@@ -171,15 +176,22 @@ const sectionClass = "px-6 py-[22px]";
       type="button"
       data-paste-cta
       data-copy={installCommand}
-      class="btn btn-primary mt-3 h-auto min-h-0 w-full gap-2 rounded-[14px] py-3.5 text-[16px] font-semibold normal-case shadow-[0_10px_24px_-10px_var(--color-primary)]"
+      class="btn btn-primary mt-3 h-11 min-h-0 w-full gap-2 rounded-[12px] text-[15px] font-semibold normal-case shadow-none"
     >
-      <svg viewBox="0 0 24 24" class="size-[18px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="size-[17px]" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
       </svg>
       <span data-paste-label>Paste into your agent</span>
     </button>
-    <p class="mt-2.5 text-center text-[12px] text-base-content/45">
-      {worksIn}
+    <p class="mt-3 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-center text-[12.5px] text-base-content/70">
+      {
+        trustParts.map((part, i) => (
+          <>
+            {i > 0 && <span class="text-base-content/30" aria-hidden="true">·</span>}
+            <span class:list={[part === "Free" && "font-semibold text-[#4a6631]"]}>{part}</span>
+          </>
+        ))
+      }
     </p>
   </div>
 
