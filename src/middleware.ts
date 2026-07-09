@@ -37,9 +37,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
             try {
               context.cookies.set(name, value, options);
             } catch {
-              // Supabase can fire a deferred token-refresh write after the
-              // response is already sent; there's no response to attach it
-              // to, so drop it — the browser refreshes on the next request.
+              // Supabase's onAuthStateChange subscriber can fire a deferred
+              // token-refresh write. If it lands after the response was fully
+              // sent, Astro throws ResponseSentError — drop it; the browser
+              // refreshes on the next request. (If the response was merely
+              // consumed, Astro instead logs an uncatchable console.warn here;
+              // that's harmless for the same reason.)
             }
           });
         },

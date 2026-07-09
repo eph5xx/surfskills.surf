@@ -5,9 +5,12 @@
 // shown, not claimed). Sunny (the mascot) carries the brand in the closing CTA,
 // so the hero stays focused on the demo preview.
 //
-// The panel plays a transparent (alpha) vertical-carousel video that floats
-// directly on the sand — no card chrome. Portrait 3:4 matches the video's canvas,
-// and reduced-motion / no-alpha browsers get the poster still, so no layout shift.
+// The panel plays a vertical-carousel video that reads as floating directly on
+// the sand — no card chrome. Chrome/Firefox get a transparent (alpha) webm;
+// Safari/iOS can't decode alpha webm, so they fall back to an mp4 pre-flattened
+// onto the exact sand background color, which blends seamlessly. Portrait 3:4
+// matches the video's canvas, and reduced-motion gets the poster still, so no
+// layout shift.
 ---
 
 <section class="relative overflow-visible pb-8 pt-8 md:pt-14">
@@ -41,17 +44,19 @@
     </div>
 
     <!-- ============ RIGHT — the preview carousel ============ -->
-    <!-- Large frameless panel: the carousel plays as a transparent (alpha) video,
-         so it floats directly on the sand — no white card behind it. Fills the
-         column and bleeds toward the container edge on md+ for scale. -->
+    <!-- Large frameless panel: the carousel reads as floating directly on the
+         sand — no white card behind it (transparent webm on Chrome/Firefox, an
+         mp4 flattened onto the sand color on Safari/iOS). Fills the column and
+         bleeds toward the container edge on md+ for scale. -->
     <div
       class="hero-rise relative mx-auto min-w-0 md:-mr-8"
       style="animation-delay:140ms"
     >
-      <!-- Portrait 3:4 stage for the transparent vertical-carousel video. No card
-           chrome (no border/bg/shadow) so the alpha video sits on the sand;
-           object-contain keeps the composited scene un-cropped. Reduced-motion and
-           browsers without alpha-webm (Safari) get the transparent poster still. -->
+      <!-- Portrait 3:4 stage for the vertical-carousel video. No card chrome (no
+           border/bg/shadow) so the video sits on the sand; object-contain keeps
+           the composited scene un-cropped. The webm carries true alpha; the mp4
+           fallback is flattened onto the sand color so it matches. Reduced-motion
+           gets the poster still. -->
       <div
         class="relative mx-auto aspect-[3/4] max-h-[min(74vh,720px)] w-full"
       >
@@ -65,7 +70,7 @@
           poster="/hero-carousel.png"
         >
           <source src="/hero-carousel.webm" type="video/webm" />
-          <source src="/hero-carousel.mp4" type='video/mp4; codecs="hvc1"' />
+          <source src="/hero-carousel.mp4" type="video/mp4" />
         </video>
         <img
           src="/hero-carousel.png"
