@@ -10,6 +10,7 @@ const isPublicCatalogRoute = (pathname: string): boolean =>
   pathname === "/" ||
   pathname === "/discover" ||
   pathname === "/sitemap.xml" ||
+  pathname === "/llms.txt" ||
   pathname === "/s" ||
   pathname.startsWith("/s/");
 
