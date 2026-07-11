@@ -43,9 +43,9 @@ const collectionCount = new Set(items.map((i) => i.collectionName)).size;
         items.length > 0 && (
           <p class="mt-4 text-[14px] text-base-content/60">
             <span class="font-display font-semibold text-base-content">{items.length}</span>{" "}
-            tools across{" "}
+            {items.length === 1 ? "skill" : "skills"} across{" "}
             <span class="font-display font-semibold text-base-content">{collectionCount}</span>{" "}
-            open-source collections
+            open-source {collectionCount === 1 ? "collection" : "collections"}
           </p>
         )
       }

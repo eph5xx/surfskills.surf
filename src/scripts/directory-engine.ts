@@ -221,7 +221,13 @@ export function initDirectory(root: Element | Document): void {
   }
 
   function syncURL(q: string, active: Map<string, Set<string>>, sort: SortKey): void {
-    const p = new URLSearchParams();
+    // Start from the current URL so params owned by other scripts (e.g. ?view=)
+    // survive; the engine only rewrites its own keys.
+    const p = new URLSearchParams(location.search);
+    p.delete("q");
+    p.delete("sort");
+    p.delete("page");
+    for (const key of facetKeys) p.delete(key);
     if (q) p.set("q", q);
     for (const [key, set] of active) if (set.size) p.set(key, [...set].join(","));
     if (sort !== "newest") p.set("sort", sort);
