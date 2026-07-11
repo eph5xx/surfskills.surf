@@ -42,5 +42,7 @@ interface Window {
   posthog?: {
     identify(id: string, properties?: Record<string, unknown>): void;
     capture(event: string, properties?: Record<string, unknown>): void;
+    opt_in_capturing(options?: { captureEventName?: string | null | false }): void;
+    opt_out_capturing(): void;
   };
 }

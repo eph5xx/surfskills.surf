@@ -10,9 +10,19 @@
   const SUPABASE_URL = import.meta.env.PUBLIC_SUPABASE_URL;
   const SUPABASE_KEY = import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
+  // Identifying sends the user's id and email to PostHog, so it needs explicit
+  // analytics consent (CookieConsent.astro) — not just a signed-in session.
+  const hasConsent = (() => {
+    try {
+      return localStorage.getItem("cookie-consent") === "accepted";
+    } catch {
+      return false;
+    }
+  })();
+
   // Same cookie heuristic as the pre-paint check in BaseLayout: presence-only, not a
   // validated session — good enough to decide whether it's worth loading Supabase.
-  if (SUPABASE_URL && SUPABASE_KEY && /-auth-token(\.\d+)?=/.test(document.cookie)) {
+  if (hasConsent && SUPABASE_URL && SUPABASE_KEY && /-auth-token(\.\d+)?=/.test(document.cookie)) {
     const { createBrowserClient } = await import("@supabase/ssr");
     const supabase = createBrowserClient(SUPABASE_URL, SUPABASE_KEY);
     const { data } = await supabase.auth.getClaims();

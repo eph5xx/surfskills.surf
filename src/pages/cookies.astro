@@ -4,8 +4,9 @@ import LegalLayout from "@/layouts/LegalLayout.astro";
 const cookies = [
   ["Authentication / session", "Supabase", "Keeps you signed in to your account.", "Essential", "Session – ~1 week"],
   ["Security", "Cloudflare", "Protects the site from abuse and keeps it available.", "Essential", "Up to 1 year"],
+  ["Cookie consent", "Surf Skills", "Remembers whether you accepted or rejected analytics cookies.", "Essential", "Persistent"],
   ["Preferences", "Surf Skills", "Remembers choices such as your settings.", "Functional", "Persistent"],
-  ["Analytics", "PostHog", "Measures how the site is used so we can improve it.", "Analytics", "Up to 1 year"],
+  ["Analytics", "PostHog", "Measures how the site is used, including sampled session recordings, so we can improve it. Set only if you accept via the consent banner.", "Analytics", "Up to 1 year"],
 ];
 ---
 
@@ -13,7 +14,7 @@ const cookies = [
   title="Cookies Policy — Surf Skills"
   description="What cookies Surf Skills uses, what each one is for, and how to control them."
   heading="Cookies Policy"
-  lastUpdated="15 June 2026"
+  lastUpdated="11 July 2026"
 >
   <p>
     This policy explains how Surf Skills uses cookies and similar technologies on
@@ -57,11 +58,29 @@ const cookies = [
     </table>
   </div>
 
+  <h2>Your consent</h2>
+  <p>
+    Analytics cookies are <strong>opt-in</strong>: none are set until you accept them in the
+    consent banner. If you reject, we don't set any analytics cookies or storage and don't record
+    your session — your visit is only counted in aggregate through a privacy-preserving,
+    irreversible hash computed on our analytics provider's servers with a salt that rotates
+    daily, so it can't be tied back to you.
+  </p>
+  <p>
+    You can change your choice at any time — rejecting is as easy as accepting, and neither
+    affects how the Service works for you:
+  </p>
+  <p>
+    <button type="button" data-cookie-settings class="btn btn-outline btn-sm">
+      Change your cookie choice
+    </button>
+  </p>
+
   <h2>Managing cookies</h2>
   <p>
-    You can clear or block cookies in your browser settings at any time. Essential cookies are
-    required for the Service to work — if you block them, sign-in and some features may break.
-    Blocking analytics cookies won't affect how the Service works for you.
+    You can also clear or block cookies in your browser settings at any time. Essential cookies
+    are required for the Service to work — if you block them, sign-in and some features may
+    break.
   </p>
 
   <h2>Changes and contact</h2>

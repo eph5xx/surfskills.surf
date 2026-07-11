@@ -1,0 +1,81 @@
+---
+// Consent banner gating PostHog (see PostHog.astro: cookieless_mode "on_reject").
+// Accept → opt_in_capturing(); Reject → opt_out_capturing(), which drops to
+// PostHog's anonymous cookieless counting. The choice lives in localStorage
+// ("cookie-consent") and can be reopened from any [data-cookie-settings] element.
+// Without a PostHog key nothing is tracked, so there is nothing to consent to.
+const hasPostHog = Boolean(import.meta.env.PUBLIC_POSTHOG_KEY);
+---
+
+{
+  hasPostHog && (
+    <div
+      id="cookie-consent"
+      hidden
+      role="region"
+      aria-label="Cookie consent"
+      class="fixed inset-x-0 bottom-0 z-50 p-4 sm:p-6"
+    >
+      <div class="mx-auto flex max-w-[720px] flex-col gap-4 rounded-2xl border border-base-300 bg-base-100 p-5 shadow-lg sm:flex-row sm:items-center">
+        <p class="grow text-[14.5px] text-base-content/80">
+          We'd like to use analytics cookies and sampled session recordings to improve Surf
+          Skills. If you reject, your visit is only counted anonymously — no cookies. See our
+          <a href="/cookies" class="link link-hover text-base-content">Cookies Policy</a>.
+        </p>
+        <div class="flex shrink-0 gap-3">
+          <button type="button" data-consent-choice="rejected" class="btn btn-outline btn-sm">
+            Reject
+          </button>
+          <button type="button" data-consent-choice="accepted" class="btn btn-primary btn-sm">
+            Accept
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  const KEY = "cookie-consent";
+  const banner = document.getElementById("cookie-consent");
+
+  if (banner) {
+    const stored = (() => {
+      try {
+        return localStorage.getItem(KEY);
+      } catch {
+        return null;
+      }
+    })();
+
+    // Re-applying on every load keeps PostHog's own consent state in sync with
+    // ours; captureEventName: null avoids re-firing the $opt_in event.
+    const apply = (choice: string, fresh: boolean) => {
+      if (choice === "accepted")
+        window.posthog?.opt_in_capturing(fresh ? undefined : { captureEventName: null });
+      else window.posthog?.opt_out_capturing();
+    };
+
+    if (stored === "accepted" || stored === "rejected") apply(stored, false);
+    else banner.hidden = false;
+
+    banner.querySelectorAll<HTMLButtonElement>("[data-consent-choice]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const choice = button.dataset.consentChoice!;
+        try {
+          localStorage.setItem(KEY, choice);
+        } catch {
+          /* not persistable — the banner will just reappear next page */
+        }
+        banner.hidden = true;
+        apply(choice, true);
+      });
+    });
+
+    // "Cookie settings" in the footer / cookies page reopens the banner so
+    // consent is as easy to withdraw as it was to give.
+    document.addEventListener("click", (event) => {
+      if ((event.target as Element).closest?.("[data-cookie-settings]")) banner.hidden = false;
+    });
+  }
+</script>

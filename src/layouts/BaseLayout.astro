@@ -1,5 +1,6 @@
 ---
 import "@/styles/globals.css";
+import CookieConsent from "@/components/CookieConsent.astro";
 import PostHog from "@/components/PostHog.astro";
 import PostHogIdentifyClient from "@/components/PostHogIdentifyClient.astro";
 import { absoluteUrl } from "@/lib/seo";
@@ -67,5 +68,6 @@ const {
   </head>
   <body>
     <slot />
+    <CookieConsent />
   </body>
 </html>
