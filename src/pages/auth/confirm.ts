@@ -10,9 +10,8 @@ async function trackSignIn(locals: App.Locals, method: "magic_link" | "oauth") {
     data: { user },
   } = await locals.supabase.auth.getUser();
   if (!user) return;
-  const env = locals.runtime.env;
-  captureEvent(env, user.id, "sign_in_completed", { method });
-  identifyPerson(env, user.id, { email: user.email ?? undefined });
+  captureEvent(locals, user.id, "sign_in_completed", { method });
+  identifyPerson(locals, user.id, { email: user.email ?? undefined });
 }
 
 // Magic-link landing. Handles both email-template shapes:

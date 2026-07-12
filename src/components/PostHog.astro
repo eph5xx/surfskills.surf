@@ -55,9 +55,10 @@ const host = import.meta.env.PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com";
           ui_host: "https://us.posthog.com",
           person_profiles: "identified_only",
           session_recording: { sample_rate: 0.15, maskAllInputs: true },
-          // Nothing is captured until the consent banner (CookieConsent.astro) calls
-          // opt_in_capturing() / opt_out_capturing(); rejected visitors are counted
-          // anonymously server-side, with no cookies or storage.
+          // Full capture only after the consent banner (CookieConsent.astro) calls
+          // opt_in_capturing(); undecided and rejected visitors are counted
+          // anonymously server-side, with no cookies, storage, or session replay.
+          // Requires "Cookieless server hash mode" in PostHog project settings.
           cookieless_mode: "on_reject",
         });
       }

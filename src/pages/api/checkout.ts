@@ -43,7 +43,7 @@ export const GET: APIRoute = async ({ url, locals, redirect }) => {
       externalCustomerId: locals.user.id,
       customerEmail: locals.user.email ?? undefined,
     });
-    captureEvent(env, locals.user.id, "checkout_started", { plan, next });
+    captureEvent(locals, locals.user.id, "checkout_started", { plan, next });
     return redirect(checkout.url, 303);
   } catch {
     return redirect("/account?error=checkout", 303);
