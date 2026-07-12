@@ -99,13 +99,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
         return new Response("db write failed", { status: 500 });
       }
 
-      captureEvent(env, userId, "subscription_updated", {
+      captureEvent(locals, userId, "subscription_updated", {
         polar_event: event.type,
         status: sub.status,
         plan,
         cancel_at_period_end: !!sub.cancelAtPeriodEnd,
       });
-      identifyPerson(env, userId, {
+      identifyPerson(locals, userId, {
         subscription_status: sub.status,
         ...(plan ? { plan } : {}),
       });

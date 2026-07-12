@@ -19,9 +19,8 @@ export const GET: APIRoute = async ({ url, locals, redirect }) => {
     data: { user },
   } = await locals.supabase.auth.getUser();
   if (user) {
-    const env = locals.runtime.env;
-    captureEvent(env, user.id, "sign_in_completed", { method: "oauth" });
-    identifyPerson(env, user.id, { email: user.email ?? undefined });
+    captureEvent(locals, user.id, "sign_in_completed", { method: "oauth" });
+    identifyPerson(locals, user.id, { email: user.email ?? undefined });
   }
 
   return redirect(next, 303);
