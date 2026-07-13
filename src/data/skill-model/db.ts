@@ -25,7 +25,6 @@ interface CollectionRow {
   id: string;
   name: string;
   short_description: string;
-  readme: string | null;
   repository_url: string;
   website_url: string | null;
   external_links: string[] | null;
@@ -36,7 +35,6 @@ interface CollectionRow {
   github_stars: number | null;
   updated_at: string | null;
   install_command: string;
-  install_count: number | null;
   skills: string[] | null;
   long_description: string | null;
   when_to_use: unknown;
@@ -48,13 +46,11 @@ interface SkillRow {
   collection_id: string;
   name: string;
   description: SkillDescription;
-  example: string;
   reference_file: string | null;
   install_command: string | null;
   tools: SkillTool[] | null;
   preview_video: string | null;
   preview_image: string | null;
-  external_links: string[] | null;
   kind: string;
   use_cases: string[] | null;
   related_slugs: string[] | null;
@@ -109,7 +105,6 @@ const mapCollection = (row: CollectionRow): Collection => ({
   name: row.name,
   id: row.id,
   shortDescription: row.short_description,
-  readme: row.readme ?? undefined,
   repositoryURL: row.repository_url,
   websiteURL: row.website_url ?? undefined,
   externalLinks: row.external_links ?? [],
@@ -122,7 +117,6 @@ const mapCollection = (row: CollectionRow): Collection => ({
   githubStars: row.github_stars ?? undefined,
   updatedAt: row.updated_at ?? undefined,
   installCommand: row.install_command,
-  installCount: row.install_count ?? undefined,
   skills: row.skills ?? [],
   longDescription: row.long_description ?? undefined,
   whenToUse: cleanWhenToUse(row.when_to_use),
@@ -144,13 +138,11 @@ const mapSkill = (row: SkillRow): DirectorySkill | null => {
     id: row.id,
     collection: row.collection_id,
     description: row.description,
-    example: row.example,
     referenceFile: row.reference_file ?? undefined,
     installCommand: row.install_command ?? undefined,
     tools: row.tools ?? undefined,
     previewVideo: row.preview_video ?? undefined,
     previewImage: row.preview_image ?? undefined,
-    externalLinks: row.external_links ?? [],
     kind,
     useCases,
     createdAt: row.created_at,
