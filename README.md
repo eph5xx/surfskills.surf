@@ -13,11 +13,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2A2C41" alt="MIT license"></a>
 </p>
 
-<!-- To get an inline player: edit this file on github.com, drag readme-demo.mp4
-     from .github/assets onto the line below, and commit. GitHub replaces the line
-     with a user-attachments URL that renders as a video player. -->
-
-[▶ Watch the demo](.github/assets/readme-demo.mp4) — Discover and a skill page, 11 seconds.
+<video align="center" src="https://github.com/user-attachments/assets/a37493f8-572c-42f3-b988-16033ece267d" controls playsinline width="800"></video>
 
 ## What this is
 
