@@ -8,7 +8,6 @@ export interface Collection {
   name: string;
   id: string;
   shortDescription: string;
-  readme?: string;
   repositoryURL: string;
   websiteURL?: string;
   externalLinks: string[];
@@ -17,7 +16,6 @@ export interface Collection {
   githubStars?: number;
   updatedAt?: string;
   installCommand: string;
-  installCount?: number;
   skills: string[];
   /** Long-form "What this collection does" body (collections.long_description). SEO content. */
   longDescription?: string;
@@ -29,16 +27,10 @@ export interface Collection {
 
 export interface SkillDescription {
   short: string;
-  // Legacy "how it works" beats — stored on older rows but never rendered (only
-  // `short` is shown). No longer authored by the create-surf-skill pipeline.
-  input?: string;
-  process?: string;
-  output?: string;
 }
 
 export interface SkillTool {
   name: string;
-  blocking: boolean;
 }
 
 /** One "When to use it" entry — a short outcome title plus a one-line explanation. */
@@ -81,13 +73,11 @@ export interface DirectorySkill {
   id: string;
   collection: string;
   description: SkillDescription;
-  example: string;
   referenceFile?: string;
   installCommand?: string;
   tools?: SkillTool[];
   previewVideo?: string;
   previewImage?: string;
-  externalLinks: string[];
   kind: SkillKind;
   useCases: SkillUseCase[];
   /** When the skill was added to the site (skills.created_at). */
