@@ -2,18 +2,5 @@
 # Cloudflare platform proxy. Copy to .dev.vars and fill in. Production uses
 # `wrangler secret put` for the secrets and wrangler.jsonc vars for the rest.
 
-# Supabase Dashboard → Settings → API Keys → create a secret key.
-SUPABASE_SECRET_KEY=sb_secret_...
-
-# Polar sandbox (sandbox.polar.sh) → Settings → create an Organization Access Token.
-POLAR_ACCESS_TOKEN=polar_oat_...
-
-# Polar sandbox → Settings → Webhooks → shown when you register the endpoint.
-POLAR_WEBHOOK_SECRET=...
-
-POLAR_SERVER=sandbox
-POLAR_PRODUCT_ID_MONTHLY=
-POLAR_PRODUCT_ID_YEARLY=
-
 # PostHog → Project Settings → Project API key (phc_…). Same value for client + server.
 POSTHOG_API_KEY=phc_...

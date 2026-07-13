@@ -4,12 +4,6 @@
 // Locally these come from .dev.vars (via platformProxy); in production from
 // wrangler.jsonc vars + `wrangler secret put`.
 interface Env {
-  SUPABASE_SECRET_KEY: string;
-  POLAR_ACCESS_TOKEN: string;
-  POLAR_WEBHOOK_SECRET: string;
-  POLAR_SERVER: 'sandbox' | 'production';
-  POLAR_PRODUCT_ID_MONTHLY: string;
-  POLAR_PRODUCT_ID_YEARLY: string;
   POSTHOG_API_KEY: string;
   /** Static-assets binding from wrangler.jsonc ("assets"): serves dist/ files. */
   ASSETS: { fetch(input: RequestInfo | URL): Promise<Response> };
