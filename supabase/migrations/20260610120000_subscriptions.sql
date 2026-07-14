@@ -1,7 +1,7 @@
 -- Subscription state, mirrored from Polar webhooks. One row per user; the row
 -- is upserted by the webhook handler (secret-key client) and only ever read
 -- by browsers/SSR. Apply via Supabase Dashboard → SQL Editor, or:
---   supabase link --project-ref tlyvjybccqlafmowvusp && supabase db push
+--   supabase link --project-ref <project-ref> && supabase db push
 
 create table public.subscriptions (
   user_id uuid primary key references auth.users (id) on delete cascade,

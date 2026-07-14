@@ -13,7 +13,7 @@
 --   faq               [{ q, a }]                → "FAQ" + FAQPage structured data
 --
 -- Apply via Supabase Dashboard → SQL Editor, or:
---   supabase link --project-ref tlyvjybccqlafmowvusp && supabase db push
+--   supabase link --project-ref <project-ref> && supabase db push
 
 alter table public.collections
   add column long_description text,

@@ -3,7 +3,7 @@
 -- Supabase Studio / SQL or seeded once from src/data/skill-model via
 -- `npm run seed:skills`. Browsers/SSR only ever read; writes go through the
 -- secret-key (service role) client. Apply via Supabase Dashboard → SQL Editor, or:
---   supabase link --project-ref tlyvjybccqlafmowvusp && supabase db push
+--   supabase link --project-ref <project-ref> && supabase db push
 
 -- A collection is a GitHub repo that ships one or more skills. id = "owner/repo".
 create table public.collections (

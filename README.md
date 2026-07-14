@@ -54,3 +54,7 @@ supabase/
 ## License
 
 [MIT](LICENSE)
+
+### Third-party assets
+
+The logos in `public/logos/` and the website screenshots in `public/blog/` belong to their respective owners. They are used nominatively/editorially to identify the tools and sites they depict, and are not covered by the MIT license.
