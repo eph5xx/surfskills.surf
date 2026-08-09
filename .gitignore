@@ -28,7 +28,9 @@ pnpm-debug.log*
 !.dev.vars.example
 .wrangler/
 
-.claude/skills
+# project skills are local-only, except the committed catalog tooling
+.claude/skills/*
+!.claude/skills/create-surf-skill/
 
 # agent skills installed via `skills` CLI (local only)
 .agents/

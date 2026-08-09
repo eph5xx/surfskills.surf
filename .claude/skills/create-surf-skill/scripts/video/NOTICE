@@ -1,0 +1,42 @@
+Licensing for this folder
+=========================
+
+The repository is MIT (see LICENSE at the repository root). One file in this
+folder is not:
+
+    template.html   Apache License, Version 2.0
+
+-------------------------------------------------------------------------------
+
+template.html
+
+Derived from the HyperFrames "blank" starter composition
+(dist/templates/blank/index.html in the `hyperframes` npm package).
+
+    Copyright 2026 HeyGen, Inc.
+    https://github.com/heygen-com/hyperframes
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. A copy of the License is in
+this folder at LICENSE-Apache-2.0.txt, and is also available at
+https://www.apache.org/licenses/LICENSE-2.0
+
+This file has been modified from the original. It was rebuilt as the four-beat
+"Command -> Result" preview loop, with its own layout, styling, and GSAP
+timeline; the a-roll video and audio elements were removed and a command
+placeholder was added for stageProject to stamp. Retained from the original are
+the #root composition element and its data attributes, the CSS reset, the
+pinned GSAP script tag, and the window.__timelines registration -- the contract
+the HyperFrames renderer requires.
+
+-------------------------------------------------------------------------------
+
+The rest of this folder -- lib.mjs, video.mjs, backfill-posters.mjs -- is
+original work under the repository's MIT license, as is the authoring guide at
+references/video/guide.md. Those scripts invoke hyperframes, ffmpeg, ffprobe,
+and wrangler as external programs; invoking a program is not distributing it,
+so no third-party terms attach to them.
+
+GSAP is not redistributed here either. template.html loads it from a CDN at
+render time, under GSAP's standard "no charge" license
+(https://gsap.com/standard-license).

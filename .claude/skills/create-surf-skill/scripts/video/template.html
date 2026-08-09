@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--
+  Derived from the HyperFrames "blank" starter composition.
+  Copyright 2026 HeyGen, Inc. — https://github.com/heygen-com/hyperframes
+
+  Licensed under the Apache License, Version 2.0; you may not use this file except
+  in compliance with the License. A copy is in this folder at LICENSE-Apache-2.0.txt
+  and at https://www.apache.org/licenses/LICENSE-2.0
+
+  THIS FILE HAS BEEN MODIFIED from the original: rebuilt as the four-beat loop below,
+  with its own layout, styling, and GSAP timeline; a-roll video/audio removed; command
+  placeholder added. The #root element and its data attributes, the CSS reset, the
+  pinned GSAP tag, and the window.__timelines registration are the renderer's contract
+  and come from the original. See NOTICE in this folder.
+
+  Unlike this file, the rest of the folder is MIT.
+-->
+<!--
+  Surf Skills preview starter — the proven "Command → Result" 4-beat loop.
+  Authored at 1920x1080, ~11s, silent, seamless loop. See references/video/guide.md.
+
+  WHAT TO EDIT:
+    - Beats 1 / 2 / 4 are wired and on-brand — leave them.
+    - Beat 3 (#result) is a PLACEHOLDER. Replace its contents with the skill's REAL output,
+      and add the type-appropriate affordance (see the guide §choosing-the-treatment):
+        video   -> embed <video> as a DIRECT child of #root (never nested) + light player UI
+        report  -> a verdict / score + sections cascading in + a "done" state
+        ui      -> the finished interface, settling (no OS window chrome)
+        diagram -> structure drawing itself in, then settling
+        data    -> numbers counting up / a chart filling
+    - Keep ONE dominant accent per frame. Warm background, never pure #FFFFFF.
+
+  stageProject (lib.mjs in this folder) substitutes the command placeholder below with the
+  scenario's input line (e.g. "/grill-me acme.com") when it stamps this template.
+-->
+<style>
+/* System stacks — nothing is downloaded or bundled, so the render never waits on
+   a font and never blocks on the network. Weight and size carry the hierarchy. */
+:root{
+  --font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+/* ---------- BEAT 1/2: COMMAND ---------- */
+#command{
+  position:absolute; left:0; top:0;
+  width:1920px; height:1080px;
+  display:flex; align-items:center; justify-content:center;
+  will-change:transform,opacity;
+}
+#command-inner{
+  display:inline-flex; align-items:center;
+  font-family:var(--font-mono);
+  font-size:72px; font-weight:500; color:#DD6B4D;
+  letter-spacing:-1px; white-space:nowrap;
+}
+#caret{
+  display:inline-block; width:6px; height:74px;
+  background:#2A2C41; margin-left:14px; border-radius:2px;
+}
+/* docked caption (bottom) */
+#dock-caption{
+  position:absolute; left:0; bottom:54px; width:1920px;
+  text-align:center;
+  font-family:var(--font-mono);
+  font-size:30px; font-weight:500; color:#DD6B4D;
+  letter-spacing:-0.5px; opacity:0;
+}
+
+/* ---------- BEAT 3: RESULT (PLACEHOLDER — replace with the real output) ---------- */
+#result{ position:absolute; left:0; top:0; width:1920px; height:1080px; }
+
+#title-row{
+  position:absolute; left:0; top:200px; width:1920px;
+  display:flex; align-items:center; justify-content:center; gap:22px;
+  opacity:0; will-change:transform,opacity;
+}
+#title-dot{
+  width:24px; height:24px; border-radius:50%;
+  background:#DD6B4D; box-shadow:0 0 0 7px rgba(221,107,77,0.16);
+}
+#title-text{
+  font-family:var(--font-body); font-weight:600; font-size:40px;
+  color:#2A2C41; letter-spacing:-0.4px;
+}
+
+.row{
+  position:absolute; left:0; width:1920px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-body); font-weight:600; font-size:46px;
+  color:#2A2C41; letter-spacing:-0.5px;
+  opacity:0; will-change:transform,opacity;
+}
+.row .accent{ color:#DD6B4D; }
+#r1{ top:344px; }
+#r2{ top:432px; }
+#r3{ top:520px; }
+
+/* footer pill — the resolved "finished" frame */
+#footer{
+  position:absolute; left:0; top:668px; width:1920px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; will-change:transform,opacity;
+}
+#footer-bar{
+  display:flex; align-items:baseline; justify-content:center; gap:18px;
+  background:#F4EAE1; border-radius:28px; padding:30px 70px 36px 70px;
+}
+#footer-num{
+  font-family:var(--font-display); font-weight:700; font-size:84px;
+  color:#DD6B4D; letter-spacing:-2px; line-height:1;
+}
+#footer-word{
+  font-family:var(--font-body); font-weight:600; font-size:42px;
+  color:#2A2C41; letter-spacing:-0.5px;
+}
+#footer-sub{
+  margin-top:22px;
+  font-family:var(--font-body); font-weight:500; font-size:28px;
+  color:#2A2C41; opacity:0.66; letter-spacing:-0.2px;
+}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-width="1920" data-height="1080" data-start="0" data-duration="11" style="position:relative;width:1920px;height:1080px;overflow:hidden;background:#FCF9F5;">
+
+  <!-- BEAT 3: RESULT (PLACEHOLDER) -->
+  <div id="result" data-layout-allow-overlap>
+    <div id="title-row">
+      <span id="title-dot"></span>
+      <span id="title-text">what it did&nbsp;—</span>
+    </div>
+
+    <div class="row" id="r1">replace this with a <span class="accent">&nbsp;real result line</span></div>
+    <div class="row" id="r2">one idea per line, big type, plain words</div>
+    <div class="row" id="r3">show, don't tell — <span class="accent">&nbsp;the output is the hero</span></div>
+
+    <div id="footer">
+      <div id="footer-bar">
+        <span id="footer-num">0</span><span id="footer-word">the headline outcome</span>
+      </div>
+      <div id="footer-sub">lead with the value · plain words anyone understands</div>
+    </div>
+  </div>
+
+  <!-- BEAT 1/2: COMMAND -->
+  <div id="command">
+    <span id="command-inner"><span>__COMMAND__</span><span id="caret"></span></span>
+  </div>
+
+  <!-- docked caption -->
+  <div id="dock-caption">__COMMAND__</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+  (function(){
+    var tl = gsap.timeline({paused:true});
+
+    // ----- BEAT 1: COMMAND + caret blink (0 -> ~2.2) — deterministic, opacity only -----
+    for(var i=0;i<11;i++){
+      tl.to("#caret",{opacity:0,duration:0.001,ease:"none"}, i*0.4);
+      tl.to("#caret",{opacity:1,duration:0.001,ease:"none"}, i*0.4 + 0.2);
+    }
+
+    // ----- BEAT 2: DOCK (2.2 -> 3.0) -----
+    tl.to("#caret",{opacity:0,duration:0.2,ease:"power1.out"}, 2.2);
+    tl.to("#command",{scale:0.34,yPercent:44,opacity:0,duration:0.7,ease:"power2.inOut"}, 2.25);
+    tl.fromTo("#dock-caption",{opacity:0,y:14},{opacity:0.5,y:0,duration:0.5,ease:"power2.out",immediateRender:false}, 2.55);
+
+    // ----- BEAT 3: RESULT (3.0 -> ~9.15) -----
+    tl.fromTo("#title-row",{opacity:0,y:26},{opacity:1,y:0,duration:0.6,ease:"power2.out",immediateRender:false}, 3.0);
+
+    // result rows cascade, one at a time, slide-in from left
+    var rows = ["#r1","#r2","#r3"];
+    var rStart = 3.6;
+    rows.forEach(function(sel, idx){
+      tl.fromTo(sel,{opacity:0,x:-34},{opacity:1,x:0,duration:0.55,ease:"power2.out",immediateRender:false}, rStart + idx*0.55);
+    });
+
+    // footer resolves it onto a finished frame
+    tl.fromTo("#footer",{opacity:0,y:34,scale:0.96},{opacity:1,y:0,scale:1,duration:0.7,ease:"back.out(1.4)",immediateRender:false}, 6.0);
+    tl.fromTo("#footer-num",{scale:0.92},{scale:1,duration:0.45,ease:"back.out(2)",immediateRender:false}, 6.15);
+
+    // HOLD the finished frame ~ until 9.15
+
+    // ----- BEAT 4: LOOP RETURN (9.15 -> 11) -----
+    tl.to(["#title-row","#r1","#r2","#r3","#footer"],{opacity:0,duration:0.55,ease:"power2.in"}, 9.15);
+    tl.to("#dock-caption",{opacity:0,duration:0.4,ease:"power2.in"}, 9.2);
+
+    // reset transforms instantly while hidden (clean loop seam: t=11 == t=0)
+    tl.set("#title-row",{y:0}, 9.8);
+    tl.set(["#r1","#r2","#r3"],{x:0}, 9.8);
+    tl.set("#footer",{y:0,scale:1}, 9.8);
+    tl.set("#footer-num",{scale:1}, 9.8);
+
+    // bring command back centered
+    tl.to("#command",{scale:1,yPercent:0,opacity:1,duration:0.75,ease:"power2.out"}, 9.85);
+    tl.to("#caret",{opacity:1,duration:0.001,ease:"none"}, 10.75);
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["main"] = tl;
+  })();
+  </script>
+</div>
+</body>
+</html>
