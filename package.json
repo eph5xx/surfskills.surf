@@ -12,8 +12,6 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.13",
-    "@supabase/ssr": "^0.12.0",
-    "@supabase/supabase-js": "^2.108.1",
     "@tailwindcss/postcss": "^4.3.0",
     "astro": "^5.18.2",
     "tailwindcss": "^4.3.0"

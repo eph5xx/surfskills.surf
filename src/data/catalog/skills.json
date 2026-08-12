@@ -1,0 +1,2357 @@
+[
+  {
+    "id": "Leonxlnx/taste-skill/imagegen-frontend-web",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Mock Up a Website",
+    "description": {
+      "input": "Run /imagegen-frontend-web with a brief: the kind of site, the brand vibe, and optionally a section count (it defaults to 6 for a landing page, 8 for a full site).",
+      "short": "Generate premium website comps: one art-directed image per section that looks like a real high-end landing page, clear enough to hand to a coding agent to build. Images only, no code.",
+      "output": "One horizontal image per section — 6 for a landing page, 8 for a full site — each showing layout, hierarchy, spacing, type scale, and CTA priority. A codeable reference set, never a single tall mockup or a vague moodboard.",
+      "process": "It commits to one art direction — theme, typography, hero scale, palette — then renders each section as its own horizontal frame, deliberately varying composition and CTAs while keeping every frame in one brand world. It bans the overused left-text / right-image AI hero by default."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/imagegen-frontend-web/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - imagegen-frontend-web from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/imagegen-frontend-web-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/imagegen-frontend-web-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "image-to-code",
+      "imagegen-frontend-mobile"
+    ],
+    "sort_order": 0,
+    "created_at": "2026-06-26T22:36:28+00:00",
+    "use_cases": [
+      "Design",
+      "Images"
+    ],
+    "long_description": "Give it a brief, the kind of site and the brand vibe, and it generates a full set of website design comps: one art-directed image per section, each looking like a real high-end site. It renders images only, six frames for a landing page or eight for a full site by default, and keeps them clear enough that a coding agent can build straight from them.\n\nEvery frame is its own horizontal image showing layout, hierarchy, spacing, type scale, and which CTA leads, so it works as a buildable reference rather than a vague moodboard or one endless scrolling mockup. It commits to a single art direction up front, theme, typography, hero scale, and palette, then deliberately varies the composition and calls to action section to section while holding everything in one brand world. It bans the tired left-text, right-image AI hero by default.",
+    "when_to_use": [
+      {
+        "body": "Get one art-directed image per section that looks like a real high-end site.",
+        "title": "You want website design comps before building"
+      },
+      {
+        "body": "Each frame stays clear enough to hand straight off, never a vague moodboard or one tall image.",
+        "title": "You need mockups a coding agent can build from"
+      },
+      {
+        "body": "It commits to a single art direction, then varies composition and CTAs across every section.",
+        "title": "You want section variety in one brand world"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. imagegen-frontend-web produces images only, one art-directed comp per section, clear enough to hand to a coding agent to build. The building happens elsewhere.",
+        "q": "Does it write any code?"
+      },
+      {
+        "a": "Yes. imagegen-frontend-web commits to one art direction for theme, typography, and palette, then renders each section as its own frame in that single brand world while varying the composition.",
+        "q": "Does it keep the sections consistent?"
+      },
+      {
+        "a": "No. imagegen-frontend-web deliberately bans the overused left-text, right-image AI hero, varying layout and CTAs across frames so the comp looks art-directed rather than generated.",
+        "q": "Will it default to the usual AI hero?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill/brandkit",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Make a Brand Kit",
+    "description": {
+      "input": "Run /brandkit and describe the brand: name, category, and any direction — core metaphor, accent color, layout (3×3 by default), reference vibe, or tagline.",
+      "short": "Generate a brand kit from a name and category: a premium guidelines board with a logo system, palette, type, and UI mockups laid out as one identity deck, not a lone logo.",
+      "output": "A single premium brand-kit presentation image on a dark charcoal canvas: logo mark, construction breakdown, UI application, tagline, color palette, type specimen, and a physical mockup — reading like an identity-studio deliverable.",
+      "process": "It infers brand strategy — category, audience, emotional promise, symbolic metaphor — concepts the logo via one of five methods, picks a visual mode (dark-tech, security, luxury, voice-AI, editorial, and more), and composes a disciplined panel grid with construction lines, page numbers, and texture."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/brandkit/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - brandkit from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/brandkit-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/brandkit-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "design-taste-frontend",
+      "illo"
+    ],
+    "sort_order": 1,
+    "created_at": "2026-06-26T06:37:53+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Give it a brand name, a category, and any direction you have, and it produces a full brand-guidelines board as a single image, the kind an identity studio would present. Not a lone logo on a white square, but a composed deck on a dark charcoal canvas: the logo mark, its construction breakdown, a color palette, a type specimen, the mark applied in a UI, a tagline, and a physical mockup.\n\nIt works like a strategist first. It infers the category, audience, and emotional promise, finds a symbolic metaphor for the mark, and concepts the logo through one of five methods. Then it picks a visual mode, dark-tech, luxury, security, voice-AI, or editorial, and lays everything out on a disciplined panel grid with construction lines, page numbers, and texture, so the result reads as deliberate rather than generated.",
+    "when_to_use": [
+      {
+        "body": "Describe the brand and get a full guidelines board: logo system, palette, type, and UI mockups on one deck.",
+        "title": "You need a brand identity, not just a logo"
+      },
+      {
+        "body": "The output is a single premium presentation image with construction lines, a type specimen, and a physical mockup.",
+        "title": "You want an identity deck that looks studio-made"
+      },
+      {
+        "body": "Give it a name and category and it infers the strategy, then designs the mark around a core metaphor.",
+        "title": "You're naming and launching something new"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. brandkit generates a full identity board, with a logo system, color palette, typography, and UI mockups laid out as one guidelines deck. A lone logo is only part of it.",
+        "q": "Do I just get a logo?"
+      },
+      {
+        "a": "A name and a category are enough for brandkit to infer the strategy, audience, and a visual direction. You can also steer it with a metaphor, layout, or accent color when you have one in mind.",
+        "q": "What do I have to give it?"
+      },
+      {
+        "a": "brandkit infers a brand strategy and picks a visual mode, such as dark-tech, luxury, or editorial, based on your category. You get a considered direction rather than a blank canvas, and you can override it.",
+        "q": "Does it decide the visual style for me?"
+      }
+    ]
+  },
+  {
+    "id": "mvanhorn/last30days-skill/last30days",
+    "collection_id": "mvanhorn/last30days-skill",
+    "name": "What People Are Saying",
+    "description": {
+      "input": "Run /last30days {topic} - a person, company, product, or \"X vs Y\" comparison. Add flags like --emit=html, --competitors, or --hiring-signals to shape the brief.",
+      "short": "See what people actually say about any topic in the last 30 days, ranked by real engagement across Reddit, X, YouTube, TikTok, Hacker News, Polymarket, and GitHub, not editorial picks.",
+      "output": "One grounded prose brief with cited sources and verbatim community quotes, a \"Best Takes\" section of the sharpest reactions, and an optional self-contained HTML file saved to disk.",
+      "process": "It first resolves who matters - the right handles, subreddits, repos, and hashtags - then searches every source in parallel, scores results by engagement, merges duplicate stories, and has an agent judge synthesize them."
+    },
+    "reference_file": "https://github.com/mvanhorn/last30days-skill/blob/main/skills/last30days/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - last30days from https://github.com/mvanhorn/last30days-skill",
+    "tools": [
+      {
+        "name": "Bash",
+        "blocking": false
+      },
+      {
+        "name": "Read",
+        "blocking": false
+      },
+      {
+        "name": "Write",
+        "blocking": false
+      },
+      {
+        "name": "AskUserQuestion",
+        "blocking": false
+      },
+      {
+        "name": "WebSearch",
+        "blocking": false
+      }
+    ],
+    "preview_video": "https://media.surfskills.surf/skills/last30days-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/last30days-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "agent-reach",
+      "tweak-evaluate"
+    ],
+    "sort_order": 2,
+    "created_at": "2026-06-26T12:29:21+00:00",
+    "use_cases": [
+      "Research"
+    ],
+    "long_description": "Give it a topic, a person, a company, a product, or an \"X vs Y\" matchup, and it tells you what people are actually saying about it right now. It reads Reddit, X, YouTube, TikTok, Hacker News, Polymarket, and GitHub in parallel and ranks what it finds by real engagement, upvotes, views, and money on prediction markets, rather than whatever an editor decided to feature.\n\nFirst it works out who matters for your topic, the right handles, subreddits, repos, and hashtags, then it collects, scores, merges duplicate stories, and has an agent judge write it up. You get one grounded brief with cited sources and verbatim quotes, plus a \"Best Takes\" section of the sharpest reactions. Add --emit=html for a self-contained file, or flags like --competitors and --hiring-signals to steer the brief.",
+    "when_to_use": [
+      {
+        "body": "Get what people are actually saying right now across Reddit, X, YouTube, and more, ranked by real engagement.",
+        "title": "You want the current take on a topic"
+      },
+      {
+        "body": "Run an X-vs-Y query and get a grounded brief with cited sources and verbatim quotes.",
+        "title": "You're comparing two products or companies"
+      },
+      {
+        "body": "It scores results by engagement instead of picks, and can save a self-contained HTML brief.",
+        "title": "Editorial roundups feel out of date"
+      }
+    ],
+    "faq": [
+      {
+        "a": "last30days focuses on the last 30 days, so you see what people are saying about a topic right now rather than older evergreen posts. It is built for current sentiment.",
+        "q": "How recent are the results?"
+      },
+      {
+        "a": "last30days scores results by real engagement across its sources, merges duplicate stories, and has an agent judge synthesize them. Ranking comes from what people engaged with, not an editor's picks.",
+        "q": "How does it decide what matters?"
+      },
+      {
+        "a": "last30days first resolves who matters, the relevant handles, subreddits, repos, and hashtags, then searches every source in parallel. It targets the right corners before ranking.",
+        "q": "How does it find the right sources for my topic?"
+      }
+    ]
+  },
+  {
+    "id": "blader/humanizer/humanizer",
+    "collection_id": "blader/humanizer",
+    "name": "Humanize AI Writing",
+    "description": {
+      "input": "Run /humanizer and paste the text you want to fix. Optionally give it a sample of your own writing so the rewrite matches your voice.",
+      "short": "Humanize AI writing: paste text that reads like a chatbot wrote it and get back a natural version with the same meaning and length, minus the AI tells.",
+      "output": "A clean rewrite that keeps your meaning and paragraph count, plus a short list of the AI tells it caught and what it changed.",
+      "process": "It scans for 33 documented AI patterns across content, grammar, style, and tone, drafts a rewrite, audits that draft for any tells it missed, then revises to a final version with zero em or en dashes."
+    },
+    "reference_file": "https://github.com/blader/humanizer/blob/main/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - humanizer from https://github.com/blader/humanizer",
+    "tools": [
+      {
+        "name": "Read",
+        "blocking": false
+      },
+      {
+        "name": "Write",
+        "blocking": false
+      },
+      {
+        "name": "Edit",
+        "blocking": false
+      },
+      {
+        "name": "Grep",
+        "blocking": false
+      },
+      {
+        "name": "Glob",
+        "blocking": false
+      },
+      {
+        "name": "AskUserQuestion",
+        "blocking": false
+      }
+    ],
+    "preview_video": "https://media.surfskills.surf/skills/humanizer-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/humanizer-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "stop-slop",
+      "seo-audit"
+    ],
+    "sort_order": 3,
+    "created_at": "2026-06-25T18:16:39+00:00",
+    "use_cases": [
+      "Writing"
+    ],
+    "long_description": "Paste text that reads like a chatbot wrote it and get back a version that sounds human. The meaning stays, the paragraph count stays, and the tells that give AI away are gone: em dash pileups, the rule of three, inflated significance, and stock words like \"delve,\" \"tapestry,\" and \"testament.\"\n\nIt checks your writing against 33 documented patterns from Wikipedia's \"Signs of AI writing\" guide, drafts a rewrite, then audits that draft a second time to catch anything it missed before handing back a final version with zero em or en dashes. Give it a sample of your own writing and it matches your rhythm and word choices instead of settling for generic clean prose.",
+    "when_to_use": [
+      {
+        "body": "Paste it and get the same points back in plain, human language, with tells like em dashes and the rule of three taken out.",
+        "title": "Your draft reads like a chatbot wrote it"
+      },
+      {
+        "body": "Clean out promotional filler, hedging, and stock AI phrases before the piece goes live, without changing what it says.",
+        "title": "You're about to publish and the copy feels generic"
+      },
+      {
+        "body": "Give it a sample of your own writing and it matches your rhythm and word choice instead of flattening everything to one voice.",
+        "title": "You want the rewrite to sound like you"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. Humanizer rewrites rather than deletes, so it keeps your meaning and your original length. A five-paragraph draft comes back as five paragraphs, with AI phrasings swapped for natural ones and nothing you said dropped.",
+        "q": "Will it change what I meant?"
+      },
+      {
+        "a": "Yes, if you want it to. Humanizer treats flat, voiceless prose as its own AI tell, and you can paste a sample of your own writing so the rewrite matches your rhythm and word choices instead of a default style.",
+        "q": "Will it still sound like me?"
+      },
+      {
+        "a": "Humanizer works from 33 documented patterns in Wikipedia's Signs of AI writing guide, not a vague ask. It drafts, audits that draft for tells it missed, then strips every em and en dash before handing the text back.",
+        "q": "How is this different from asking a chatbot to fix it?"
+      },
+      {
+        "a": "Yes. Humanizer matches the tone of the input, so technical, legal, and reference text stays neutral and plain instead of getting opinions bolted on. It only adds personality when the writing calls for it.",
+        "q": "Does it work on formal or work writing?"
+      }
+    ]
+  },
+  {
+    "id": "tmchow/illo-skill/illo",
+    "collection_id": "tmchow/illo-skill",
+    "name": "Make an Illustration",
+    "description": {
+      "input": "You invoke illo with an idea, a one-liner, or an article URL, optionally naming a character pack, look, or palette. It needs python3 plus either a logged-in Codex CLI (free on your subscription) or an OpenRouter API key.",
+      "short": "Turn a concept or article into an original editorial illustration: a recurring mascot acting out the idea in one clean print-style scene, not generic stock art.",
+      "output": "Publication-ready illustrations held to one idea per image: article sets you can interleave through a post, social-ready 16:9 or 1:1 art, or a transparent PNG cutout — with palettes matched to your blog or brand colors.",
+      "process": "It locks the thesis in a sentence, routes the idea to the right shape — a single editorial scene, a 2–4 panel mini-comic, a hand-built explainer diagram, or a transparent cutout — then renders the recurring mascot on-model in one of sixteen bundled looks (riso, blueprint, clay, woodcut, and more), re-rolling anything off-model or off-palette against a quality bar."
+    },
+    "reference_file": "https://github.com/tmchow/illo-skill/blob/main/skills/illo/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - illo from https://github.com/tmchow/illo-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/illo-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/illo-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "motion-graphics",
+      "brandkit"
+    ],
+    "sort_order": 4,
+    "created_at": "2026-06-27T17:36:46+00:00",
+    "use_cases": [
+      "Images"
+    ],
+    "long_description": "Give it an idea, a one-line thesis, or an article URL and it draws an original editorial illustration, the print-magazine kind where a recurring mascot acts out the concept in one clean scene, not a generic stock image. Hand it \"we replatform with zero downtime\" and it composes a single-metaphor scene around your character, in a palette matched to your blog or brand.\n\nIt first pins the thesis to a sentence, then routes it to the right shape: a single editorial scene, a two-to-four-panel mini-comic, a hand-built explainer diagram, or a transparent PNG cutout you can drop anywhere. It renders the mascot on-model in one of sixteen bundled looks, riso, blueprint, clay, woodcut, and more, and re-rolls anything that drifts off-model or off-palette against a quality bar. It runs on your Codex CLI, free for subscribers, or an OpenRouter key.",
+    "when_to_use": [
+      {
+        "body": "Turn a concept or article into an original editorial illustration with a recurring mascot acting out the idea.",
+        "title": "You need art for a post, not stock images"
+      },
+      {
+        "body": "Palettes match your blog or brand colors, in one of sixteen print-style looks like riso, blueprint, or clay.",
+        "title": "You want illustrations matched to your brand"
+      },
+      {
+        "body": "It outputs article sets, social-ready 16:9 or 1:1 art, or a transparent PNG.",
+        "title": "You need a transparent cutout or a set for an article"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. illo produces original editorial illustration, where a recurring mascot acts out your idea in one clean scene, closer to a magazine illustration than stock art or a generic render.",
+        "q": "Is this just generic AI image art?"
+      },
+      {
+        "a": "illo routes your idea to the right shape: a single editorial scene, a 2 to 4 panel mini-comic, a hand-built explainer diagram, or a transparent character cutout. It matches the form to the concept.",
+        "q": "What formats can it make?"
+      },
+      {
+        "a": "illo renders the mascot on-model in one of sixteen bundled looks and re-rolls anything that drifts off-model or off-palette against a quality bar. The character stays recognizable across illustrations.",
+        "q": "How does it keep the character consistent?"
+      }
+    ]
+  },
+  {
+    "id": "coreyhaines31/marketingskills/seo-audit",
+    "collection_id": "coreyhaines31/marketingskills",
+    "name": "Audit Your SEO",
+    "description": {
+      "input": "Run /seo-audit and point it at your site. It asks what you sell, your priority keywords, and whether you want a full-site or single-page, technical-or-everything audit.",
+      "short": "Run an SEO audit against the factors Google ranks on and get a prioritized fix list: indexation, Core Web Vitals, titles, and thin content, each rated by impact.",
+      "output": "A structured report: an executive summary with your top issues and quick wins, then technical, on-page, and content findings each rated High/Medium/Low with a concrete fix, closing with a prioritized action plan. It reports only — it never edits your site.",
+      "process": "It works in priority order — crawlability and indexation first, then technical foundations (speed, Core Web Vitals, mobile, HTTPS), on-page tags and headings, content quality and E-E-A-T, plus hreflang for multilingual sites — backing each finding with evidence."
+    },
+    "reference_file": "https://github.com/coreyhaines31/marketingskills/blob/main/skills/seo-audit/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - seo-audit from https://github.com/coreyhaines31/marketingskills",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/seo-audit-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/seo-audit-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "humanizer",
+      "stop-slop"
+    ],
+    "sort_order": 5,
+    "created_at": "2026-06-27T05:36:34+00:00",
+    "use_cases": [
+      "SEO"
+    ],
+    "long_description": "Point it at your site and get back a prioritized SEO audit: what is holding your rankings back, rated by impact, each with the specific fix. You tell it what you sell and your priority keywords, and choose a full-site or single-page scan. It reads only, so nothing on your site changes.\n\nIt works the way Google reads a site, in priority order. Crawlability and indexation come first, then the technical foundation of speed, Core Web Vitals, mobile, and HTTPS, then on-page titles and headings, then content quality and E-E-A-T, with hreflang checks for multilingual sites. Every finding comes with evidence and a High, Medium, or Low impact rating. You get an executive summary with quick wins up top and a prioritized action plan to close it out.",
+    "when_to_use": [
+      {
+        "body": "Point it at your site and get back the specific issues holding you down, from indexation to thin content, each rated by impact.",
+        "title": "Your site isn't ranking and you don't know why"
+      },
+      {
+        "body": "Get a prioritized report of what changed and what to fix first, with the evidence behind every finding.",
+        "title": "Traffic dropped after a Google update"
+      },
+      {
+        "body": "Every issue comes rated High, Medium, or Low with a concrete fix, so you work top-down instead of guessing.",
+        "title": "You want the fixes ranked, not a 200-item dump"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No special access. You give seo-audit a public URL and it crawls the live page, so there is nothing to log into or install. It reads what Google can already see.",
+        "q": "Do I need to give it access to my site?"
+      },
+      {
+        "a": "Yes. seo-audit returns a prioritized fix list, rating each issue by impact and handling crawlability and indexation first, then speed, on-page tags, and content. You act on the biggest wins before the small ones.",
+        "q": "Will it tell me what to fix first?"
+      },
+      {
+        "a": "Yes. seo-audit covers Core Web Vitals, mobile-friendliness, HTTPS, and indexation alongside titles, headings, and thin content. Each finding comes with the evidence behind it, not just a score.",
+        "q": "Does it check technical things like site speed?"
+      },
+      {
+        "a": "It finds and ranks them. seo-audit hands you an ordered list of what to change and why, so you or your developer make the edits. It focuses on diagnosis rather than editing your site directly.",
+        "q": "Does it fix the problems or just find them?"
+      }
+    ]
+  },
+  {
+    "id": "virgiliojr94/book-to-skill/book-to-skill",
+    "collection_id": "virgiliojr94/book-to-skill",
+    "name": "Turn a Book Into a Skill",
+    "description": {
+      "input": "Point it at a PDF, EPUB, DOCX, Markdown, folder, or glob — `/book-to-skill ~/books/your-book.pdf` — with an optional skill-name slug. Works in Claude Code, GitHub Copilot CLI, and Amp.",
+      "short": "Turn any technical book or folder of docs into a structured agent skill your agent loads on demand, answering questions at 24x to 51x fewer tokens than dumping the whole book into context.",
+      "output": "A ready-to-use skill in your agent's skills directory: a compact ~4K-token SKILL.md core plus one on-demand file per chapter, a glossary, a patterns file, and a cheatsheet. Ask `/your-book replication` and it loads just the right chapter and answers from the real text — no hallucination, ~5K tokens per question instead of the whole book.",
+      "process": "It extracts the text (Docling for technical books with tables and code, pdftotext for prose), analyzes the chapter structure, then distills the author's named frameworks, principles, techniques, and anti-patterns — structure, not a summary."
+    },
+    "reference_file": "https://github.com/virgiliojr94/book-to-skill/blob/master/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - book-to-skill from https://github.com/virgiliojr94/book-to-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/book-to-skill-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/book-to-skill-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "supermemory",
+      "task-observer"
+    ],
+    "sort_order": 6,
+    "created_at": "2026-06-26T11:06:23+00:00",
+    "use_cases": [
+      "Meta"
+    ],
+    "long_description": "Point it at a book or a pile of sources, a PDF, EPUB, DOCX, Markdown, a folder, or a glob, and it builds a structured skill your agent loads only when it needs it. It extracts the text (Docling for technical books with tables and code, pdftotext for prose), reads the chapter structure, and distills the author's named frameworks, principles, techniques, and anti-patterns, keeping that structure rather than flattening it into a summary.\n\nWhat you get is a compact core file of about 4,000 tokens plus one on-demand file per chapter, a glossary, a patterns doc, and a cheatsheet. Later you ask something like /your-book replication and it loads just the relevant chapter and answers from the real text, no hallucination, at roughly 5,000 tokens per question instead of the whole book, which works out to 24 to 51 times cheaper.",
+    "when_to_use": [
+      {
+        "body": "Point it at a PDF or EPUB and get a skill your agent loads on demand instead of dumping the whole book into context.",
+        "title": "You want your agent to know a specific book"
+      },
+      {
+        "body": "It answers questions from the real text at a fraction of the tokens, loading just the right chapter.",
+        "title": "Stuffing a book into context burns tokens"
+      },
+      {
+        "body": "Feed it documents, a folder, or a glob and it distills the frameworks and techniques into a structured skill.",
+        "title": "You have a folder of sources to turn into reference"
+      }
+    ],
+    "faq": [
+      {
+        "a": "book-to-skill turns the book into a structured skill your agent loads on demand, answering questions at 24 to 51 times fewer tokens than dumping the full text into context. It keeps the knowledge without the token cost.",
+        "q": "Why not just paste the whole book into the chat?"
+      },
+      {
+        "a": "No. book-to-skill distills the author's named frameworks, principles, techniques, and anti-patterns into structure, not a recap. You keep the usable methods rather than a shorter version of the prose.",
+        "q": "Is the result just a summary?"
+      },
+      {
+        "a": "Yes. book-to-skill extracts technical books with Docling to preserve tables and code, and uses pdftotext for prose, then analyzes the chapter structure. The method follows what the source needs.",
+        "q": "Does it handle books with code and tables?"
+      }
+    ]
+  },
+  {
+    "id": "JCodesMore/ai-website-cloner-template/clone-website",
+    "collection_id": "JCodesMore/ai-website-cloner-template",
+    "name": "Clone Any Website",
+    "description": {
+      "input": "You run /clone-website with one or more target URLs. It needs a browser-automation MCP (Chrome, Playwright, Browserbase, or Puppeteer) and the repo's pre-scaffolded Next.js + shadcn/ui + Tailwind v4 base.",
+      "short": "Point it at any live URL and get back a clean, pixel-perfect Next.js codebase with the real assets, content, and interactions extracted section by section, not a static screenshot.",
+      "output": "A buildable React/TypeScript clone: section components in src/components, downloaded images, videos, fonts, and favicons in public/, per-component spec files plus BEHAVIORS.md and PAGE_TOPOLOGY.md in docs/research, and a final visual QA pass against the original at desktop, tablet, and mobile.",
+      "process": "It works like a foreman walking the page: screenshots plus a mandatory interaction sweep capture every scroll, hover, and click behavior; then it extracts exact getComputedStyle values section-by-section into auditable spec files and dispatches parallel builder agents in git worktrees, merging and re-verifying the build as it goes."
+    },
+    "reference_file": "https://github.com/JCodesMore/ai-website-cloner-template/blob/master/.claude/skills/clone-website/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - clone-website from https://github.com/JCodesMore/ai-website-cloner-template",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/clone-website-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/clone-website-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "image-to-code",
+      "redesign-existing-projects"
+    ],
+    "sort_order": 7,
+    "created_at": "2026-06-27T10:43:20+00:00",
+    "use_cases": [
+      "Design",
+      "Development"
+    ],
+    "long_description": "Give it a live URL and it rebuilds the page as a real Next.js codebase, not a screenshot and not an approximation. It drives a browser through an MCP like Playwright or Puppeteer, screenshots the page, and runs a full interaction sweep so it captures the scroll, hover, and click behavior, not just the static look. Then it reads exact getComputedStyle values section by section into spec files you can audit.\n\nFrom those specs it dispatches parallel builder agents in git worktrees, each reconstructing a section, then merges them and runs a visual diff against the original at desktop, tablet, and mobile. You end up with buildable React and TypeScript components, the real images, fonts, and favicons downloaded into place, and behavior and topology docs describing how the page works.",
+    "when_to_use": [
+      {
+        "body": "Point it at a live URL and get a clean, buildable Next.js codebase, not a screenshot.",
+        "title": "You want to rebuild a site you like as real code"
+      },
+      {
+        "body": "It captures scroll, hover, and click behavior and downloads the actual images, fonts, and video.",
+        "title": "You need the real assets and interactions, not a static copy"
+      },
+      {
+        "body": "It runs a visual QA pass at desktop, tablet, and mobile so the build matches the source.",
+        "title": "You want the clone verified against the original"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. clone-website produces a working Next.js codebase with the real assets, content, and interactions, extracted section by section. You get editable code, not a static screenshot.",
+        "q": "Is the result just a picture of the site?"
+      },
+      {
+        "a": "Yes. clone-website runs a mandatory interaction sweep that records scroll, hover, and click behavior before building, so the clone reproduces the page's motion and states, not a frozen layout.",
+        "q": "Does it capture how the site behaves, not just how it looks?"
+      },
+      {
+        "a": "clone-website reads exact computed style values section by section into spec files it can audit, then builds and re-verifies against them. That keeps the result pixel-close rather than an approximation.",
+        "q": "How close to the original is it?"
+      }
+    ]
+  },
+  {
+    "id": "hardikpandya/stop-slop/stop-slop",
+    "collection_id": "hardikpandya/stop-slop",
+    "name": "Catch AI Slop",
+    "description": {
+      "input": "Hand it any draft, or keep it on while you write; it engages whenever you are drafting, editing, or reviewing prose.",
+      "short": "Stop your writing from reading like AI. This mode rewrites drafts to cut the predictable tells as you write, edit, or review, so the prose sounds like a person.",
+      "output": "Revised prose with the AI tells gone, plus a 1-to-10 score on five dimensions (directness, rhythm, trust, authenticity, density) and the specific edits to make when the total lands below 35 of 50.",
+      "process": "Checks the text against concrete rules for banned phrases, formulaic structures, and flat rhythm, then rewrites the offenders: it cuts throat-clearing and adverbs, breaks binary contrasts, and swaps passive voice and false agency for a named actor."
+    },
+    "reference_file": "https://github.com/hardikpandya/stop-slop/blob/main/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - stop-slop from https://github.com/hardikpandya/stop-slop",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/stop-slop-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/stop-slop-demo.jpg",
+    "kind": "Mode",
+    "related_slugs": [
+      "humanizer",
+      "seo-audit"
+    ],
+    "sort_order": 8,
+    "created_at": "2026-06-25T12:17:25+00:00",
+    "use_cases": [
+      "Writing"
+    ],
+    "long_description": "Keep it on while you write, or hand it a finished draft, and it rewrites prose so it stops reading like a machine produced it. It checks the text against concrete rules, banned phrases, throat-clearing openers, binary contrasts, and flat rhythm, then rewrites the offenders: it cuts the adverbs, breaks the this-not-that constructions, and swaps passive voice and vague agency for a named actor doing the thing.\n\nThen it scores the result from 1 to 10 on five dimensions of human voice: directness, rhythm, trust, authenticity, and density. If the total lands below 35 out of 50 it tells you exactly which edits will lift it and runs another pass. Because it engages whenever you are drafting or editing, you can leave it running instead of remembering to invoke it.",
+    "when_to_use": [
+      {
+        "body": "Keep it on while you draft and it flags the tells as they appear, then rewrites them.",
+        "title": "Your writing keeps slipping into AI phrasing"
+      },
+      {
+        "body": "It rates the draft 1 to 10 on directness, rhythm, trust, authenticity, and density, and tells you what to change when the total dips too low.",
+        "title": "You want a score, not just a vibe check"
+      },
+      {
+        "body": "It cuts throat-clearing and adverbs, breaks binary contrasts, and swaps passive voice for a named actor.",
+        "title": "A draft reads flat and generic"
+      }
+    ],
+    "faq": [
+      {
+        "a": "As you write. stop-slop is a mode that stays on while you draft, edit, or review, rewriting the predictable AI tells in place. You do not paste text into a separate tool for each pass.",
+        "q": "Does it work as I write or only on finished text?"
+      },
+      {
+        "a": "stop-slop cuts throat-clearing and adverbs, breaks two-sided \"not just X but Y\" contrasts, and replaces passive voice and false agency with a named actor. It targets specific tells, not random rewording.",
+        "q": "What does it actually change?"
+      },
+      {
+        "a": "No. stop-slop rewrites the phrasing that reads as AI while keeping your point, checking the text against concrete rules for banned phrases and flat rhythm. The meaning stays; the tells go.",
+        "q": "Will it change what I'm trying to say?"
+      }
+    ]
+  },
+  {
+    "id": "supermemoryai/supermemory/supermemory",
+    "collection_id": "supermemoryai/supermemory",
+    "name": "Give Your Agent Memory",
+    "description": {
+      "input": "Tell Claude you're building an app that needs to remember users, personalize responses, or search a knowledge base — in TypeScript or Python.",
+      "short": "Your AI forgets everything between conversations. Supermemory adds persistent memory, live user profiles, and RAG over your knowledge base behind one API.",
+      "output": "Working integration code keyed to your SUPERMEMORY_API_KEY: store memories with add(), pull personalized context with profile() in ~50ms, and run hybrid RAG — plus connectors (Drive, Gmail, Notion) and multi-modal extractors when you need them.",
+      "process": "Claude consults Supermemory's SDK guide, REST API reference, and architecture notes, then picks the right primitive — Memory API, User Profiles, or RAG — and writes the integration for your stack."
+    },
+    "reference_file": "https://github.com/supermemoryai/supermemory/blob/main/skills/supermemory/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - supermemory from https://github.com/supermemoryai/supermemory",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/supermemory-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/supermemory-demo.jpg",
+    "kind": "Knowledge",
+    "related_slugs": [
+      "book-to-skill",
+      "task-observer"
+    ],
+    "sort_order": 9,
+    "created_at": "2026-06-27T16:48:10+00:00",
+    "use_cases": [
+      "Meta"
+    ],
+    "long_description": "Tell your agent you are building an app that needs to remember users, personalize its replies, or search a knowledge base, in TypeScript or Python, and it writes the Supermemory integration for you. Rather than reciting docs, it consults Supermemory's SDK guide, REST reference, and architecture notes, decides which primitive your case needs, then generates code keyed to your API key.\n\nThat means the right call for the job: add() to store a memory, profile() to pull personalized context back in around 50 milliseconds, or hybrid RAG over your own content, with no vector database or embedding pipeline to stand up. When you need more, it wires in connectors for Drive, Gmail, and Notion and multi-modal extractors for PDFs, images, and video. You describe the feature; you get working integration code for your stack.",
+    "when_to_use": [
+      {
+        "body": "Install it once and your assistant remembers your preferences, projects, and past chats the next time you open it.",
+        "title": "Your AI forgets everything between conversations"
+      },
+      {
+        "body": "Add memory, RAG, and user profiles through one API instead of wiring up a vector database and embedding pipeline yourself.",
+        "title": "You're building an agent that needs memory"
+      },
+      {
+        "body": "Run the whole engine locally from one binary, bring any model, or go fully offline with Ollama.",
+        "title": "You want memory that runs on your own machine"
+      }
+    ],
+    "faq": [
+      {
+        "a": "supermemory picks the right primitive for you, whether the Memory API, User Profiles, or RAG over your knowledge base. It reads its own SDK and API references, then chooses based on what you are building.",
+        "q": "How do I know which memory feature to use?"
+      },
+      {
+        "a": "Yes. supermemory writes the integration for your stack, drawing on its SDK guide, REST API reference, and architecture notes. You describe the app and it produces the wiring, not generic snippets.",
+        "q": "Will it fit my tech stack?"
+      },
+      {
+        "a": "Yes. supermemory adds persistent memory, live user profiles that update over time, and retrieval over your own knowledge base, all behind one API. It is a memory layer, not just a transcript log.",
+        "q": "Is this more than saving chat history?"
+      }
+    ]
+  },
+  {
+    "id": "rebelytics/one-skill-to-rule-them-all/task-observer",
+    "collection_id": "rebelytics/one-skill-to-rule-them-all",
+    "name": "Learn How You Work",
+    "description": {
+      "input": "Invoke it at the start of any multi-step, tool-using work session — no arguments; it runs quietly alongside whatever you're doing.",
+      "short": "A mode that watches how you actually work, then turns the corrections and patterns it catches into new, reusable skills your agent keeps.",
+      "output": "A reviewed set of recommendations — new skills, concrete edits to existing ones, and cross-cutting principles — that you approve before anything touches your skill library.",
+      "process": "It logs friction points, your corrections, and reusable methods to a persistent observation log, then sorts them into new-skill candidates versus improvements to skills you already have."
+    },
+    "reference_file": "https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - task-observer from https://github.com/rebelytics/one-skill-to-rule-them-all",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/task-observer-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/task-observer-demo.jpg",
+    "kind": "Mode",
+    "related_slugs": [
+      "book-to-skill",
+      "supermemory"
+    ],
+    "sort_order": 10,
+    "created_at": "2026-06-27T09:50:15+00:00",
+    "use_cases": [
+      "Meta"
+    ],
+    "long_description": "Turn it on at the start of a multi-step work session and it runs quietly in the background, watching how you actually work. It logs the friction points, the corrections you make, and the little methods you reuse to a persistent observation file, so the patterns are captured while they happen instead of forgotten by the next session.\n\nAt the end it sorts what it saw into two piles: patterns worth turning into a brand-new skill, and places where a skill you already have could be clearer. You get a structured set of recommendations, new skills, specific edits, and cross-cutting principles, and nothing touches your skill library until you approve it. It also watches its own performance and folds improvements back into its method, so the thing that improves your skills keeps improving too.",
+    "when_to_use": [
+      {
+        "body": "It captures the repeated steps while you work so you can promote them into a reusable skill instead of explaining again.",
+        "title": "You keep teaching your agent the same workflow"
+      },
+      {
+        "body": "Each correction gets logged as an observation, turning a recurring fix into a documented rule in the right skill.",
+        "title": "You correct the same mistake again and again"
+      },
+      {
+        "body": "It gathers improvement notes during real work, so the best changes come from actual usage instead of a separate review session.",
+        "title": "Your skills need improving but you never sit down to do it"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. task-observer watches how you already work, logging friction points and the corrections you make as you do a normal task. You keep working while it observes in the background.",
+        "q": "Do I have to do anything differently while it runs?"
+      },
+      {
+        "a": "task-observer writes friction, corrections, and reusable methods to a persistent observation log, then sorts them into candidates for brand-new skills versus improvements to skills you already have.",
+        "q": "What does it do with what it notices?"
+      },
+      {
+        "a": "Yes. task-observer logs to a persistent file, so the patterns and corrections it captures carry across sessions rather than resetting. That is what lets it build skills your agent keeps.",
+        "q": "Does what it learns stick around?"
+      }
+    ]
+  },
+  {
+    "id": "mattpocock/skills/grill-me",
+    "collection_id": "mattpocock/skills",
+    "name": "Grill Your Plan",
+    "description": {
+      "input": "Invoke /grill-me with the plan, design, or idea you want stress-tested.",
+      "short": "Grill your plan or design with a relentless interview that surfaces every gap, assumption, and edge case before you write a line of code.",
+      "output": "A hardened plan with assumptions challenged, dependencies resolved, and a shared understanding reached before building begins.",
+      "process": "Walks down each branch of the design tree one decision at a time, asking a single pointed question per turn, exploring the codebase for answers when it can, and recommending an answer for every question."
+    },
+    "reference_file": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - grill-me from https://github.com/mattpocock/skills",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/grill-me-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/grill-me-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "understand",
+      "tweak-evaluate"
+    ],
+    "sort_order": 11,
+    "created_at": "2026-06-26T01:50:29+00:00",
+    "use_cases": [
+      "Development"
+    ],
+    "long_description": "Hand it a plan, a design, or a rough idea and it interviews you until every gap is on the table, before you write any code. Instead of nodding along and building the wrong thing, the agent walks down each branch of the design one decision at a time, asking a single pointed question per turn so you actually think about each one.\n\nWhen it can find the answer itself, it explores the codebase rather than making you repeat what is already there, and it recommends an answer for every question it raises so the session moves forward instead of stalling. You come out with a hardened plan: assumptions challenged, dependencies resolved, and a shared understanding of what you are building, which is the cheapest place to catch a mistake.",
+    "when_to_use": [
+      {
+        "body": "It interviews you one pointed question at a time until every gap and assumption is surfaced.",
+        "title": "You have a plan and want the holes found"
+      },
+      {
+        "body": "It challenges each decision and resolves dependencies before you write any code.",
+        "title": "You're about to build on shaky assumptions"
+      },
+      {
+        "body": "It explores the codebase for answers and recommends one for every open question.",
+        "title": "You want a sharper plan, not just a review"
+      }
+    ],
+    "faq": [
+      {
+        "a": "grill-me interviews you about your plan or design, surfacing the gaps, assumptions, and edge cases before you write code. It is a stress test for your thinking, not a code generator.",
+        "q": "What does grill-me actually do?"
+      },
+      {
+        "a": "No. grill-me stays on the design, asking one pointed question per turn and recommending an answer for each. You leave with a plan whose holes are already found, then build it separately.",
+        "q": "Does it write the code for me?"
+      },
+      {
+        "a": "No. grill-me walks the design one decision at a time, asking a single question per turn and exploring your codebase for answers when it can. It goes deep in order rather than dumping a checklist.",
+        "q": "Will it flood me with questions at once?"
+      }
+    ]
+  },
+  {
+    "id": "DietrichGebert/ponytail/ponytail-audit",
+    "collection_id": "DietrichGebert/ponytail",
+    "name": "Find Dead Code",
+    "description": {
+      "input": "Run /ponytail-audit on a repo. No arguments — it reads the whole tree, not just the current diff.",
+      "short": "Scan your whole codebase for over-engineering and get a ranked list of what to delete, simplify, or replace with stdlib and native equivalents, biggest cut first.",
+      "output": "A ranked, one-line-per-finding report tagged delete / stdlib / native / yagni / shrink, each with its replacement and file path, closing with the net lines and dependencies you could remove. It reports only — it never edits your code, and leaves correctness, security, and performance to a normal review.",
+      "process": "It hunts the usual over-engineering traps: dependencies the stdlib or platform already ships, single-implementation interfaces, factories with one product, wrappers that only delegate, files exporting one thing, and dead flags — tagging each finding with why it should go."
+    },
+    "reference_file": "https://github.com/DietrichGebert/ponytail/blob/main/skills/ponytail-audit/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - ponytail-audit from https://github.com/DietrichGebert/ponytail",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/ponytail-audit-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/ponytail-audit-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "understand",
+      "grill-me"
+    ],
+    "sort_order": 12,
+    "created_at": "2026-06-25T09:11:45+00:00",
+    "use_cases": [
+      "Development"
+    ],
+    "long_description": "Run it on a repo with no arguments and it reads the whole tree, then hands back a ranked list of what to cut, biggest saving first. Every finding is one line, tagged delete, stdlib, native, yagni, or shrink, with the replacement and the file path, and it closes with the net lines and dependencies you could drop.\n\nIt goes after the usual over-engineering: dependencies the standard library or platform already ships, interfaces with a single implementation, factories that make one thing, wrappers that only forward a call, files that export one symbol, and flags nothing reads. It reports only and never edits your code, and it leaves correctness, security, and performance to a normal review, so the list stays focused on what to remove.",
+    "when_to_use": [
+      {
+        "body": "Scan the whole tree and get a ranked list of what to delete, biggest cut first, each with its file path.",
+        "title": "Your codebase has grown bloated"
+      },
+      {
+        "body": "It flags packages the standard library or platform already ships, plus wrappers and interfaces with a single implementation.",
+        "title": "You suspect dependencies you don't need"
+      },
+      {
+        "body": "Findings are tagged delete, stdlib, native, yagni, or shrink, closing with the net lines and dependencies you could remove.",
+        "title": "You want cleanup ranked by payoff"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. ponytail-audit scans your codebase and returns a ranked list of what to delete, simplify, or replace, biggest cut first. You review each suggestion and decide, so nothing changes without your say.",
+        "q": "Will it change my code on its own?"
+      },
+      {
+        "a": "ponytail-audit hunts common over-engineering traps: dependencies your standard library already ships, interfaces with a single implementation, factories that make one thing, wrappers that only pass calls through, and dead feature flags.",
+        "q": "What does it actually look for?"
+      },
+      {
+        "a": "ponytail-audit ranks findings by the size of the cut and tags each one with why it should go, so the biggest simplifications sit at the top. You get the reasoning behind every item, not a bare list.",
+        "q": "How does it decide what to cut first?"
+      }
+    ]
+  },
+  {
+    "id": "heygen-com/hyperframes/website-to-video",
+    "collection_id": "heygen-com/hyperframes",
+    "name": "Turn a Website Into a Video",
+    "description": {
+      "input": "Run /website-to-video with a URL and the kind of video you want — social clip, site tour, or showcase.",
+      "short": "Point it at any website and get a polished, on-brand video built from the site's own screenshots and brand assets, whether a 15-second social clip or a 30-second tour.",
+      "output": "A finished HyperFrames video in your site's own look — e.g. a 1080×1920 Instagram clip — delivered as a live Studio preview you can render to a deterministic MP4.",
+      "process": "It captures the site with headless Chrome, learns your brand — colors, type, voice — then storyboards, scripts, voices, and builds the video in HTML/CSS/JS across a gated 7-step workflow."
+    },
+    "reference_file": "https://github.com/heygen-com/hyperframes/blob/main/skills/website-to-video/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - website-to-video from https://github.com/heygen-com/hyperframes",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/website-to-video-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/website-to-video-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "hyperframes",
+      "pr-to-video"
+    ],
+    "sort_order": 13,
+    "created_at": "2026-06-25T22:50:21+00:00",
+    "use_cases": [
+      "Video"
+    ],
+    "long_description": "Give it a URL and the kind of video you want, a quick social clip, a site tour, or a showcase, and it builds a polished video out of the site's own visuals and brand. It captures the live pages with headless Chrome, learns the colors, type, and voice, then storyboards, scripts, narrates, and animates the piece so it looks like it came from the same team that made the site.\n\nThe workflow runs in seven gated steps, so you approve the storyboard and script before it renders anything. You review it as a live Studio preview and then render a deterministic MP4, say a 1080 by 1920 clip for Instagram or a wider tour for the homepage. The source is a website, not a product brief, so the result reflects what the site already looks like.",
+    "when_to_use": [
+      {
+        "body": "Point it at the URL and it builds an on-brand video from the site's own visuals.",
+        "title": "You want a video built from your existing site"
+      },
+      {
+        "body": "It learns your colors, type, and voice, then delivers something like a 15-second portrait Instagram clip.",
+        "title": "You need a social clip in your brand's look"
+      },
+      {
+        "body": "Headless Chrome captures the pages and it storyboards them into a 30-second tour.",
+        "title": "You want a site tour without filming anything"
+      }
+    ],
+    "faq": [
+      {
+        "a": "From your own site. website-to-video captures the page with headless Chrome and uses those screenshots and your brand assets, so the video shows your real site rather than stock footage.",
+        "q": "Where do the visuals come from?"
+      },
+      {
+        "a": "Yes. website-to-video learns your colors, type, and voice from the site, then scripts, voices, and builds the video to match. The result stays on-brand across a gated workflow.",
+        "q": "Will it match my brand?"
+      },
+      {
+        "a": "Yes. website-to-video can produce a 15-second social clip or a 30-second tour, in portrait for platforms like Instagram, from the pages you point it at. You set the length up front.",
+        "q": "Can I choose the length and format?"
+      }
+    ]
+  },
+  {
+    "id": "eph5xx/tweakidea/tweak-evaluate",
+    "collection_id": "eph5xx/tweakidea",
+    "name": "Validate Startup Idea",
+    "description": {
+      "input": "Describe the problem and solution, point it at a file, or run it bare to be interviewed.",
+      "short": "Validate a startup idea before you build it: 14 independent evaluators each run their own web research and score your pitch, then an honest scorecard says GO, PIVOT, or STOP.",
+      "output": "A shareable scorecard: 14 dimension scores, the evidence behind each, and one clear verdict — GO, PIVOT, or STOP.",
+      "process": "It surfaces your hidden assumptions to confirm, then runs 14 evaluators — each backed by its own live web research."
+    },
+    "reference_file": null,
+    "install_command": "Install the skill or give me an instruction how to install it - tweak:evaluate from https://github.com/eph5xx/tweakidea",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/validate-startup-idea-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/validate-startup-idea-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "last30days",
+      "agent-reach"
+    ],
+    "sort_order": 14,
+    "created_at": "2026-06-27T06:10:47+00:00",
+    "use_cases": [
+      "Research"
+    ],
+    "long_description": "Describe your startup idea, point it at a file, or run it bare and let it interview you, then get an honest scorecard back. Fourteen independent evaluators each grade one dimension of the pitch, from pain intensity to willingness to pay, and each runs its own live web research so the scores rest on evidence rather than vibes.\n\nBefore it scores anything it surfaces the assumptions hiding in your pitch and asks you to confirm them, so you are not grading a strawman. The result is one clear verdict, GO, PIVOT, or STOP, with the reasoning and sources behind every dimension laid out in a scorecard you can share. It runs in about ten minutes, which is faster than talking yourself into or out of the idea alone.",
+    "when_to_use": [
+      {
+        "body": "Describe the problem and solution and get a scorecard with one clear verdict: GO, PIVOT, or STOP.",
+        "title": "You have a startup idea and want an honest read"
+      },
+      {
+        "body": "14 evaluators score it on separate dimensions, each backed by its own live web research, so the verdict rests on evidence.",
+        "title": "You're not sure your idea will hold up"
+      },
+      {
+        "body": "The output is a shareable scorecard showing each score and the reasoning behind it.",
+        "title": "You need something to share with a cofounder or investor"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. tweak-evaluate works from a short pitch, even one sentence, then surfaces the hidden assumptions in it for you to confirm before scoring. You do not need a deck.",
+        "q": "Do I need a finished business plan?"
+      },
+      {
+        "a": "tweak-evaluate runs 14 independent evaluators, and each one does its own live web research on a single dimension. The scorecard reflects that combined research, not one model's off-the-cuff take.",
+        "q": "Where do the scores come from?"
+      },
+      {
+        "a": "No. tweak-evaluate gives a calibrated verdict of GO, PIVOT, or STOP, so it will tell you to stop or change course when the research does not back the idea. It is built to be honest.",
+        "q": "Will it just tell me my idea is good?"
+      }
+    ]
+  },
+  {
+    "id": "heygen-com/hyperframes/hyperframes",
+    "collection_id": "heygen-com/hyperframes",
+    "name": "Make a Video",
+    "description": {
+      "input": "Run /hyperframes or describe the video you want in plain language.",
+      "short": "Make a video from a prompt: HyperFrames teaches your coding agent to compose it in HTML, CSS, and JS, then renders a deterministic MP4 that comes out the same every time.",
+      "output": "A polished MP4 — e.g. a 1920×1080, 10-second product intro. Same input, same video, every time.",
+      "process": "It picks the right workflow, scaffolds the project, and writes a deterministic HTML composition, then renders it frame-by-frame to MP4."
+    },
+    "reference_file": "https://github.com/heygen-com/hyperframes/blob/main/skills/hyperframes/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - hyperframes from https://github.com/heygen-com/hyperframes",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/hyperframes-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/hyperframes-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "motion-graphics",
+      "website-to-video"
+    ],
+    "sort_order": 15,
+    "created_at": "2026-06-25T20:12:32+00:00",
+    "use_cases": [
+      "Video"
+    ],
+    "long_description": "Describe the video you want in plain language and HyperFrames teaches your coding agent to build it as a real composition in HTML, CSS, and JavaScript, then render it to MP4. Because the animation is seekable and the render is deterministic, the same input produces the exact same video every time, frame for frame.\n\nThis is the entry point to HyperFrames. It reads what you asked for, routes it to the right workflow, whether that is a product promo, a website tour, a PR explainer, or a short motion graphic, then scaffolds the project and writes the composition. Ask for something simple like a 1920 by 1080 ten-second product intro and you get a polished, finished file, not a timeline you have to assemble by hand.",
+    "when_to_use": [
+      {
+        "body": "Describe it in plain language and your coding agent composes it in HTML, then renders a finished MP4.",
+        "title": "You want a video and have no footage or editor"
+      },
+      {
+        "body": "The composition is deterministic, so the same input produces the same MP4 on every run.",
+        "title": "You need the same video to render identically every time"
+      },
+      {
+        "body": "It picks the right workflow, scaffolds the project, and builds the composition for you.",
+        "title": "You're not sure which video workflow you need"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. HyperFrames turns a prompt into a video by having your coding agent compose it in HTML, CSS, and JavaScript, then rendering an MP4. You describe what you want instead of editing timelines.",
+        "q": "Do I need video editing experience?"
+      },
+      {
+        "a": "Yes. HyperFrames renders frame by frame to a deterministic MP4, so the same composition produces the same output every run. That makes edits predictable rather than a fresh roll each time.",
+        "q": "Will I get the same video every time I render?"
+      },
+      {
+        "a": "HyperFrames picks the right workflow for your request, scaffolds the project, and writes the composition before rendering. It routes a product intro, an explainer, or a title card to the approach that fits.",
+        "q": "How does it know which kind of video to build?"
+      }
+    ]
+  },
+  {
+    "id": "jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better",
+    "collection_id": "jakubkrehel/make-interfaces-feel-better",
+    "name": "Polish Your UI",
+    "description": {
+      "input": "Run /make-interfaces-feel-better on any UI component — a card, button, or modal in React, HTML, or Tailwind.",
+      "short": "Polish a UI with the details that compound: hover states, shadows, borders, spacing, optical alignment, and micro-interactions, applied as you build the frontend.",
+      "output": "A grouped table of exact code fixes, plus a revised component file. The demo caught 9 issues in one card.",
+      "process": "It checks your code against 16 design-engineering rules — concentric radius, shadow depth, optical alignment, tabular numbers, and more."
+    },
+    "reference_file": "https://github.com/jakubkrehel/make-interfaces-feel-better/blob/main/skills/make-interfaces-feel-better/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - make-interfaces-feel-better from https://github.com/jakubkrehel/make-interfaces-feel-better",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/make-interfaces-feel-better-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/make-interfaces-feel-better-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "design-taste-frontend",
+      "impeccable"
+    ],
+    "sort_order": 16,
+    "created_at": "2026-06-25T12:03:36+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Point it at a component, a card, button, or modal in React, HTML, or Tailwind, and it checks your code against 16 specific design-engineering rules, then hands back the exact fixes. Great interfaces are rarely one big move; they are the sixteen small details that compound, and this catches the ones easy to miss.\n\nIt looks for things like concentric border radius on nested elements, shadow depth instead of hard 1px borders, optical alignment over mathematical centering, and tabular numbers for values that change. You get a grouped table of the problems with the precise code change for each, plus a revised version of the component file. In the demo it found nine separate issues in a single card, so the polish adds up fast.",
+    "when_to_use": [
+      {
+        "body": "Run it on a card, button, or modal and get exact code fixes for the small details that make UI feel right.",
+        "title": "A component works but feels slightly off"
+      },
+      {
+        "body": "It checks against 16 design-engineering rules like concentric radius, optical alignment, and tabular numbers.",
+        "title": "You can tell something's wrong but not what"
+      },
+      {
+        "body": "You get a grouped table of changes plus a revised component file ready to drop in.",
+        "title": "You want the fixes as code, not advice"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No, it refines it. make-interfaces-feel-better polishes the details that compound, like hover states, shadows, borders, spacing, and optical alignment, while you build. It sharpens the UI you have rather than replacing it.",
+        "q": "Will it redesign my interface?"
+      },
+      {
+        "a": "make-interfaces-feel-better checks your code against 16 design-engineering rules, including concentric border radius, shadow depth, optical alignment, and tabular numbers. It flags the spots that make an interface feel unfinished.",
+        "q": "What does it check for?"
+      },
+      {
+        "a": "No. make-interfaces-feel-better reads your frontend code and points out the design-engineering issues itself, so you get expert-level polish without knowing the rules by name.",
+        "q": "Do I need to be a designer to use it?"
+      }
+    ]
+  },
+  {
+    "id": "Egonex-AI/Understand-Anything/understand",
+    "collection_id": "Egonex-AI/Understand-Anything",
+    "name": "Map Any Codebase",
+    "description": {
+      "input": "Run /understand in any project — no arguments, no setup. Pass a subpath to scope a monorepo.",
+      "short": "Map any codebase into an interactive knowledge graph. Instead of a dependency hairball, you get every file, function, and relationship laid out as something you can actually explore.",
+      "output": "An interactive graph and guided tour you can explore — pan, zoom, search by meaning, and click any node for a plain-English summary.",
+      "process": "It parses the real structure and analyzes files in parallel, mapping functions, imports, and layers. Re-runs only touch changed files."
+    },
+    "reference_file": "https://github.com/Egonex-AI/Understand-Anything/blob/main/understand-anything-plugin/skills/understand/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - understand from https://github.com/Egonex-AI/Understand-Anything",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/understand-anything-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/understand-anything-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "ponytail-audit",
+      "grill-me"
+    ],
+    "sort_order": 17,
+    "created_at": "2026-06-27T22:41:38+00:00",
+    "use_cases": [
+      "Development"
+    ],
+    "long_description": "Run it in any project and get an interactive map of the code instead of a wall of files. It parses the real structure and analyzes files in parallel, charting every function, import, and layer into a graph you can pan, zoom, and search by meaning, not just by name. Click any node and it explains what that piece does in plain English.\n\nThere is no setup and no arguments. Point it at a monorepo subpath to scope the map, and when you re-run it only re-reads the files that changed. The result is a guided tour of an unfamiliar codebase you can hand to someone on their first day, so they learn how the system fits together rather than grepping their way through it.",
+    "when_to_use": [
+      {
+        "body": "Run it in the project and get an interactive graph of every file, function, and dependency you can explore.",
+        "title": "You're onboarding to an unfamiliar codebase"
+      },
+      {
+        "body": "Click any node for a plain-English summary and take a guided tour instead of reading the tree file by file.",
+        "title": "You inherited a project with no docs"
+      },
+      {
+        "body": "Search the graph by what code does, then zoom into the parts that matter.",
+        "title": "You need to find something by meaning, not filename"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. understand only reads your codebase and maps it into an interactive graph of files, functions, and relationships. It never edits your source, so you can run it on an unfamiliar project without risk.",
+        "q": "Does it change any of my code?"
+      },
+      {
+        "a": "Yes. When you re-run understand, it re-analyzes only the files that changed rather than the whole repo, so the map stays current without a slow full rebuild each time.",
+        "q": "Does it stay current when the code changes?"
+      },
+      {
+        "a": "understand lays out every file, function, and relationship as something you explore, instead of a dependency hairball. You use it to trace how a part works before you touch it.",
+        "q": "What can I do with the result?"
+      }
+    ]
+  },
+  {
+    "id": "greensock/gsap-skills/gsap-scrolltrigger",
+    "collection_id": "greensock/gsap-skills",
+    "name": "Animate on Scroll",
+    "description": {
+      "input": "Run /gsap-scrolltrigger or describe the scroll motion you want — parallax, pinned sections, scroll-in entrances.",
+      "short": "The official GreenSock skill for scroll animations with GSAP ScrollTrigger. Your agent gets pinning, scrub, and stagger entrances right, with the cleanup React needs.",
+      "output": "Production-ready scroll animation, like a hero with a staggered headline and counting stats, with reduced-motion handling.",
+      "process": "It wires up ScrollTrigger the right way — triggers, pinning, batched entrances — not the broken patterns models guess."
+    },
+    "reference_file": "https://github.com/greensock/gsap-skills/blob/main/skills/gsap-scrolltrigger/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - gsap-scrolltrigger from https://github.com/greensock/gsap-skills",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/gsap-skills-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/gsap-skills-demo.jpg",
+    "kind": "Knowledge",
+    "related_slugs": [
+      "make-interfaces-feel-better",
+      "motion-graphics"
+    ],
+    "sort_order": 18,
+    "created_at": "2026-06-26T18:20:50+00:00",
+    "use_cases": [
+      "Design",
+      "Development"
+    ],
+    "long_description": "Describe the scroll effect you want, parallax, pinned sections, or elements that animate in as they enter the view, and your agent writes it with GSAP ScrollTrigger the way GreenSock actually intends. This is the official GreenSock skill, so instead of the broken patterns a model tends to guess, you get correct triggers, pinning, scrub, and batched entrances.\n\nThe output is production-ready. A hero might get a headline that staggers in and stats that count up as you scroll, with reduced-motion handling built in so it respects a visitor's accessibility settings. It covers the ScrollTrigger patterns that are easy to get subtly wrong, which is most of them, so the motion stays smooth rather than janking on the first scroll.",
+    "when_to_use": [
+      {
+        "body": "Describe the motion, like parallax or a pinned section, and get production-ready ScrollTrigger code.",
+        "title": "You want animation that reacts to scrolling"
+      },
+      {
+        "body": "This is GreenSock's official skill, so you get the patterns the library is actually meant to use, not a model's guess.",
+        "title": "Your agent keeps writing broken ScrollTrigger"
+      },
+      {
+        "body": "Entrances, scrub, and pinning come wired up with reduced-motion handling built in.",
+        "title": "You need scroll motion that respects reduced-motion"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Yes. The gsap-scrolltrigger skill is guidance, not the library. You add GSAP from the public gsap npm package and register the plugin once; the skill makes sure that setup and the animation code around it are correct.",
+        "q": "Do I have to install GSAP myself?"
+      },
+      {
+        "a": "Yes. gsap-scrolltrigger is framework-agnostic and works in plain JavaScript, React, Vue, or Svelte. For React cleanup it points you to the separate gsap-react skill so animations get torn down properly on unmount.",
+        "q": "Does it work outside React?"
+      },
+      {
+        "a": "No. The gsap-scrolltrigger skill covers refresh and cleanup, so it recalculates positions after layout changes and kills stale triggers when elements or pages swap out. That stops them firing on elements that no longer exist.",
+        "q": "Will the animations break on page changes?"
+      },
+      {
+        "a": "Yes. gsap-scrolltrigger targets GSAP 3, the current version, and uses recent APIs like clamp() from v3.12. The patterns follow GreenSock's official guidance rather than older tutorials.",
+        "q": "Is it up to date?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill/design-taste-frontend",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Design With Taste",
+    "description": {
+      "input": "Run /design-taste-frontend and describe the page — kind, audience, vibe, and any references.",
+      "short": "An anti-slop frontend skill. Your coding agent reads the brief, picks a design direction that fits, and ships interfaces that don't look templated or AI-generated.",
+      "output": "A full landing page that doesn't look templated. The demo shipped 8 sections with a custom palette, real type, and dark mode.",
+      "process": "It infers a design direction, maps it to a real design system, and runs a 50+ item anti-slop check — no AI-purple gradients, no default Inter."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/taste-skill/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - design-taste-frontend from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/taste-skill-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/taste-skill-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "high-end-visual-design",
+      "make-interfaces-feel-better"
+    ],
+    "sort_order": 19,
+    "created_at": "2026-06-26T13:07:36+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Describe the page you want, its purpose, audience, and vibe, and this reads the brief, infers a design direction that fits, and builds a full frontend that does not look templated. It is the general-purpose taste skill: rather than committing you to one fixed look, it decides on a direction and maps it to a real design system before writing code.\n\nThe anti-slop part is a checklist of more than fifty things it refuses to ship, no AI-purple gradients, no default Inter, no three-identical-cards feature row. In the demo it produced an eight-section landing page with a custom palette, real typography, and a working dark mode. You give it a sentence about what you are building; it gives back a page that reads as designed rather than defaulted.",
+    "when_to_use": [
+      {
+        "body": "Describe the page and it infers a real design direction, then ships a landing page that doesn't look generated.",
+        "title": "Your AI frontends all look templated"
+      },
+      {
+        "body": "It reads the audience and vibe, maps them to a design system, and builds without you specifying every choice.",
+        "title": "You want the design decided for you from the brief"
+      },
+      {
+        "body": "A 50-plus item anti-slop check bans purple gradients and default Inter before delivery.",
+        "title": "You keep seeing the same AI design tells"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No, that is what it prevents. design-taste-frontend runs a 50-plus item anti-slop check, banning tells like AI-purple gradients and default Inter, so the interface does not read as templated.",
+        "q": "Will the result look like a generic AI template?"
+      },
+      {
+        "a": "No. design-taste-frontend reads your brief and picks a direction that fits, then maps it to a real design system. You can name one yourself, but it will choose a fitting one if you do not.",
+        "q": "Do I have to pick the design direction?"
+      },
+      {
+        "a": "Yes. design-taste-frontend ships working interfaces, not mockups, with your coding agent writing the code against the chosen design system.",
+        "q": "Does it actually build the frontend?"
+      }
+    ]
+  },
+  {
+    "id": "coreyhaines31/marketingskills/marketing-council",
+    "collection_id": "coreyhaines31/marketingskills",
+    "name": "Ask Marketing Legends",
+    "description": {
+      "short": "Put a marketing decision before a simulated board of legendary marketers: each argues from their documented frameworks, the disagreements get mapped, and a chair's synthesis picks your next move."
+    },
+    "reference_file": "https://github.com/coreyhaines31/marketingskills/blob/main/skills/marketing-council/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - marketing-council from https://github.com/coreyhaines31/marketingskills",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/marketing-council-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/marketing-council-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [],
+    "sort_order": null,
+    "created_at": "2026-07-14T15:05:06.714653+00:00",
+    "use_cases": [
+      "Research"
+    ],
+    "long_description": "You bring a marketing decision, a pricing change, a launch plan, a landing page, and get it argued out by a simulated board of legendary marketers: Seth Godin, David Ogilvy, Eugene Schwartz, April Dunford, Alex Hormozi, Byron Sharp, and six more. It seats 3 to 5 advisors suited to your question, always including one deliberate dissenter, and each gives a take built from their documented frameworks, not generic advice with a famous name attached.\n\nThe most useful part is the disagreement map. It names 2 to 4 real conflicts between the takes, the trade-off underneath each one, and what evidence would settle it. A chair's synthesis then fits a recommendation to your stage and constraints.\n\nEvery session is labeled as simulation. Takes are grounded in each advisor's published work, and it never fabricates quotes.",
+    "when_to_use": [
+      {
+        "body": "Three to five advisors argue it out, a map of where they disagree shows the real trade-off, and a chair's synthesis picks the direction that fits your stage.",
+        "title": "You're torn between two marketing directions"
+      },
+      {
+        "body": "A repositioning, a pricing change, or a launch plan goes before the full council of 12, so you see every angle and the tripwire to watch before you commit.",
+        "title": "You're about to make a big bet"
+      },
+      {
+        "body": "Ask what Ogilvy would say about your headline or how Hormozi would rebuild your offer, and get a quick take grounded in what they actually wrote.",
+        "title": "You want a specific marketer's take"
+      },
+      {
+        "body": "The council always seats a dissenter, so you hear the strongest case against your plan before the market makes it for you.",
+        "title": "Your plan gets nodded through every review"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Anything with a real trade-off: positioning, a pricing change, a launch plan, a landing page rewrite, a rebrand, or where to spend an ad budget. marketing-council seats the advisors whose lenses fit the question and always adds one whose documented position cuts against where you are leaning.",
+        "q": "What kinds of marketing decisions can the council review?"
+      },
+      {
+        "a": "marketing-council ships a research dossier for each of its 12 advisors covering their frameworks, documented positions with sources, signature questions, and blind spots. Takes are anchored in that material, and a take that would survive with the name swapped is treated as a failure by the skill itself.",
+        "q": "How is this different from asking an AI to answer as a famous marketer?"
+      },
+      {
+        "a": "Yes. You can ask one advisor for a quick take, request specific names for a 3 to 5 seat session, or convene all 12. marketing-council always seats a designated dissenter by default, and you can add your own advisors by filling in the included dossier template.",
+        "q": "Can I choose which advisors are on the council?"
+      },
+      {
+        "a": "It can check. marketing-council offers an optional live research pass that uses web search or your installed research skills to pull what the seated advisors have actually written or said about your topic, folds it into their takes with citations, and trusts fresh sources over the shipped dossiers when they conflict.",
+        "q": "Does it know what these marketers have said recently?"
+      }
+    ]
+  },
+  {
+    "id": "emilkowalski/skills/apple-design",
+    "collection_id": "emilkowalski/skills",
+    "name": "Build Fluid Interfaces",
+    "description": {
+      "short": "Apple's approach to fluid, physical interfaces, translated for the web. Your agent builds gesture-driven UI with real springs, velocity handoff, and motion you can grab and reverse mid-flight."
+    },
+    "reference_file": "https://github.com/emilkowalski/skills/blob/main/skills/apple-design/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - apple-design from https://github.com/emilkowalski/skills",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/apple-design-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/apple-design-demo.jpg",
+    "kind": "Mode",
+    "related_slugs": [
+      "emil-design-eng"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-13T12:24:04.649417+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Teach your coding agent to build interfaces the way Apple does. Once installed, the skill loads on its own whenever the agent writes or reviews gesture-driven UI: spring animations, drag and swipe interactions, sheets and drawers, translucent materials, UI typography, and reduced-motion fallbacks. There is nothing to run or configure.\n\nThe knowledge is distilled from Apple's WWDC design talks, chiefly Designing Fluid Interfaces from 2018, and translated to the web platform: CSS, Pointer Events, requestAnimationFrame, and spring libraries like Motion. It carries the exact values Apple ships. A drawer spring is damping 0.8, response 0.3. Flicks land where momentum projects them, using the projection function from Apple's own sample code. Interrupted animations restart from the live on-screen value, so a closing sheet follows your finger the instant you grab it back.\n\nThe result is an agent that stops guessing at easings and spring parameters and starts making the calls a design engineer would.",
+    "when_to_use": [
+      {
+        "body": "Your agent swaps eased keyframes for springs tuned with the values Apple ships, damping 1.0 and a 0.3 to 0.4 second response for most UI, so motion settles like a real object instead of playing a canned clip.",
+        "title": "Your UI works but still feels like a computer"
+      },
+      {
+        "body": "The skill hands your agent the whole mechanic: 1:1 tracking from the grab point, velocity handoff at release, momentum projection to pick the snap target, and rubber-banding at the edges.",
+        "title": "You're building a swipe gesture or bottom sheet"
+      },
+      {
+        "body": "Your agent animates from the live on-screen value and carries the gesture's velocity through, so a half-closed sheet the user catches again follows the finger instead of snapping to its end state.",
+        "title": "Animations jump when the user grabs them mid-flight"
+      },
+      {
+        "body": "You get Apple's material system as backdrop-filter recipes, from blur and shadow weight that scales with surface size to vibrancy rules that keep text legible, with a solid fallback when the user prefers reduced transparency.",
+        "title": "Frosted glass panels look muddy or unreadable"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. apple-design is an independent skill that distills Apple's public WWDC design talks, chiefly Designing Fluid Interfaces from 2018, and translates them to web tech: CSS, Pointer Events, requestAnimationFrame, and spring libraries like Motion. It is not affiliated with or endorsed by Apple.",
+        "q": "Is apple-design official Apple documentation?"
+      },
+      {
+        "a": "Reach for apple-design when you are building gesture-driven UI: drag and swipe interactions, sheets, spring physics, velocity handoff, rubber-banding, translucent materials. emil-design-eng covers Emil's everyday animation and design guidance; apple-design goes deeper on Apple's fluid-interface system, with shipped damping and response values.",
+        "q": "When do I want apple-design instead of emil-design-eng?"
+      },
+      {
+        "a": "Yes. apple-design ships in emilkowalski/skills, an open-source collection under the MIT license, with no paid tier and no signup. The animations.dev course Emil links to is optional.",
+        "q": "Is it free to use?"
+      },
+      {
+        "a": "apple-design works with Claude Code, Cursor, and any agent that supports the skills format. One command installs the whole collection: npx skills@latest add emilkowalski/skills. Once installed, the agent consults it automatically whenever you build or review springs, gestures, materials, or UI typography.",
+        "q": "Which coding agents does apple-design work with?"
+      }
+    ]
+  },
+  {
+    "id": "emilkowalski/skills/emil-design-eng",
+    "collection_id": "emilkowalski/skills",
+    "name": "Make Interfaces Feel Right",
+    "description": {
+      "short": "Emil Kowalski's UI and animation taste, installed: your agent picks the right easing and duration, adds press feedback, and reviews UI code with before and after fixes."
+    },
+    "reference_file": "https://github.com/emilkowalski/skills/blob/main/skills/emil-design-eng/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - emil-design-eng from https://github.com/emilkowalski/skills",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/emil-design-eng-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/emil-design-eng-demo.jpg",
+    "kind": "Mode",
+    "related_slugs": [],
+    "sort_order": null,
+    "created_at": "2026-07-11T10:45:34.060038+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Ask your coding agent for an animation and get one a design engineer would ship. With this skill loaded, the agent answers Emil Kowalski's decision framework before writing any animation code: should this animate at all (keyboard-triggered actions never do), what is it for, which easing (ease-out for anything entering or exiting, never ease-in), and how fast (UI animations stay under 300ms, on custom curves because the default CSS easings are too weak).\n\nReviews change too. Ask for one and findings come back as a Before/After/Why markdown table, one row per issue, each fix paired with its reasoning. The component rules come from building Sonner and Vaul: buttons scale to 0.97 on press, nothing enters from scale(0), animate only transform and opacity, and reduced motion means gentler fades, not zero animation.",
+    "when_to_use": [
+      {
+        "body": "The component picks up the details that make it feel right, like ease-out entrances and press feedback, not the sluggish defaults agents reach for.",
+        "title": "You're building a dropdown, modal, or toast"
+      },
+      {
+        "body": "One question settles it: how often users see it. Keyboard actions get no animation, and what does animate stays under 300ms.",
+        "title": "You're not sure something should animate at all"
+      },
+      {
+        "body": "You get the specific fix, like scaling a popover from its trigger or masking a rough crossfade with a 2px blur.",
+        "title": "An interaction works but feels stiff"
+      },
+      {
+        "body": "Every issue lands in a before and after table, with fixes like ease-in swapped for ease-out and transition: all replaced with exact properties.",
+        "title": "You want UI code reviewed for motion mistakes"
+      }
+    ],
+    "faq": [
+      {
+        "a": "With emil-design-eng active, your agent makes the animation calls a design engineer would: ease-out on enter animations, UI durations under 300ms, scale press feedback on buttons, entrances from scale(0.95) instead of scale(0), and animations kept to transform and opacity. You stop correcting those defaults by hand.",
+        "q": "What actually changes in my coding agent's output?"
+      },
+      {
+        "a": "emil-design-eng guides your agent while it writes animation and UI code; review-animations audits motion code you already have, and it is built to flag by default rather than approve. Use both if you want guidance up front and a strict audit after.",
+        "q": "How is it different from review-animations?"
+      },
+      {
+        "a": "No. Most of emil-design-eng is plain CSS guidance: easing curves, durations, transform-origin, clip-path reveals, @starting-style entries. React and Motion (Framer Motion) appear where springs and gestures need JavaScript, and the same rules carry to vanilla JS or any framework.",
+        "q": "Do I need React or Framer Motion to use it?"
+      },
+      {
+        "a": "It is the required output format when emil-design-eng reviews UI code: a markdown table with one row per issue and Before, After, and Why columns. You see your code, the fix, and the reasoning at a glance, like why ease-in feels sluggish on a dropdown.",
+        "q": "What is the Before/After review table?"
+      }
+    ]
+  },
+  {
+    "id": "D4Vinci/Scrapling/scrapling-official",
+    "collection_id": "D4Vinci/Scrapling",
+    "name": "Scrape Any Website",
+    "description": {
+      "short": "Your agent scrapes what web fetch can't: stealth browsing clears Cloudflare, spiders run full crawls, pages come back as clean Markdown. The official skill from the Scrapling author."
+    },
+    "reference_file": "https://github.com/D4Vinci/Scrapling/blob/main/agent-skill/Scrapling-Skill/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - scrapling-official from https://github.com/D4Vinci/Scrapling",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/scrapling-official-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/scrapling-official-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [],
+    "sort_order": null,
+    "created_at": "2026-07-10T18:06:48.633182+00:00",
+    "use_cases": [
+      "Development",
+      "Research"
+    ],
+    "long_description": "Ask your agent to scrape a page and it works, including the pages that normally fail: JavaScript-heavy apps, sites behind Cloudflare, pages the built-in web fetch cannot reach. scrapling-official is the official Scrapling skill, written by the library author, and it triggers on its own whenever you ask to scrape, crawl, or extract data.\n\nUnder the hood the agent runs Scrapling's extract commands, escalating from a plain HTTP request to JS rendering to a stealth browser only as needed, and saves the result as clean Markdown, text, or HTML. Every scrape uses the ai-targeted flag, which keeps only the main content and strips hidden elements that could carry prompt injection.\n\nWhen you need more than one page, the skill's bundled docs teach the agent to write full Python scrapers and Scrapy-like spiders, no web searches required.",
+    "when_to_use": [
+      {
+        "body": "The skill steps up from plain HTTP to JS rendering to a stealth fetch and saves the page straight to Markdown.",
+        "title": "Your agent's built-in web fetch just failed"
+      },
+      {
+        "body": "The stealth fetcher gets past Turnstile and interstitial checks without a captcha service or an API key.",
+        "title": "The data you need sits behind Cloudflare"
+      },
+      {
+        "body": "The agent writes working Scrapling code from its bundled docs, a quick fetch or a full spider, with no web searches needed.",
+        "title": "You want the scraper written for you"
+      },
+      {
+        "body": "Every CLI scrape pulls just the main content, blocks ads to save tokens, and strips hidden elements that could carry prompt injection.",
+        "title": "Scraped pages are eating your context window"
+      }
+    ],
+    "faq": [
+      {
+        "a": "scrapling-official installs into coding agents such as Claude Code. It is the official skill, written by the library author and shipped inside the Scrapling repo, and everything runs locally on your machine.",
+        "q": "Which coding agents does it work with?"
+      },
+      {
+        "a": "No. scrapling-official gets past Cloudflare Turnstile and Interstitial pages through browser automation alone, so there is no solver service to pay for and no credentials or API keys to set up. Proxies and CDP endpoints are optional extras, not requirements.",
+        "q": "Do I need API keys or a captcha-solving service?"
+      },
+      {
+        "a": "scrapling-official guards against prompt injection by forcing the --ai-targeted flag on every CLI scrape, which extracts only the main content and sanitizes hidden page elements before they reach your agent. It also turns on ad blocking automatically to save tokens.",
+        "q": "Is it safe to let an agent read untrusted pages?"
+      },
+      {
+        "a": "No. scrapling-official triggers on its own when you ask your agent to scrape, crawl, or extract data, when the built-in web fetch fails, when a site has anti-bot protection, or when you ask for Python scraping code.",
+        "q": "Do I need a slash command to run it?"
+      }
+    ]
+  },
+  {
+    "id": "ML-SystemDesign/MLSystemDesign/ml-system-design-review",
+    "collection_id": "ML-SystemDesign/MLSystemDesign",
+    "name": "Review ML System Design",
+    "description": {
+      "short": "Point your agent at an ML design doc, a repo, or both and get a graded scorecard: a verdict, per-dimension grades, severity-ranked findings, and the cheapest high-impact fixes first."
+    },
+    "reference_file": "https://github.com/ML-SystemDesign/MLSystemDesign/blob/main/skills/ml-system-design-review/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - ml-system-design-review from https://github.com/ML-SystemDesign/MLSystemDesign",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/ml-system-design-review-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/ml-system-design-review-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "ai-stage-gate"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-09T20:25:01.425277+00:00",
+    "use_cases": [
+      "Research"
+    ],
+    "long_description": "You point it at an ML system design doc, a repo, or both. It maps the evidence first, then grades the design against the framework from Kravchenko and Babushkin's book instead of a generic checklist.\n\nIt compares intent with implementation, so a doc the code contradicts is a finding, and a useful repo behavior the doc never names is one too. LLM, RAG, foundation-model, fine-tuning, and agent systems get a first-class modern-AI review, not a classical-ML afterthought.\n\nYou get back a screenshot-friendly scorecard with a verdict, a per-dimension gradecard, and severity-ranked findings, plus the low-hanging fruit worth doing first, specific praise for choices worth keeping, and a prioritized fix plan you can paste straight into the doc.",
+    "when_to_use": [
+      {
+        "body": "Grade it against the book's framework and get a verdict, per-dimension grades, and the critical gaps before you sign off.",
+        "title": "You're reviewing an ML system design doc"
+      },
+      {
+        "body": "Review both together and surface exactly where the implementation contradicts the doc, in either direction.",
+        "title": "You have a design doc and a repo that may disagree"
+      },
+      {
+        "body": "Get a first-class modern-AI readiness check on retrieval, evaluation, guardrails, and unbounded behavior, not a classical-ML afterthought.",
+        "title": "You're designing an LLM, RAG, or agent system"
+      },
+      {
+        "body": "Review it repo-only, with assumptions and missing-doc risk flagged, so you see what the design never wrote down.",
+        "title": "You inherited a repo with no design doc"
+      }
+    ],
+    "faq": [
+      {
+        "a": "ml-system-design-review judges how good a design is; ai-stage-gate judges whether an AI product has earned its next investment. One grades the design, the other makes the gate decision. They are siblings in the same collection.",
+        "q": "How is this different from ai-stage-gate?"
+      },
+      {
+        "a": "No. ml-system-design-review stands alone and works without the book. It applies the ML System Design framework by Kravchenko and Babushkin, so the Manning book goes deeper on the same ideas if you want it.",
+        "q": "Do I need the book to use it?"
+      },
+      {
+        "a": "Yes. ml-system-design-review first asks where the doc lives, and only if there is none does it run repo-only, labeling its assumptions and the missing-doc risk at the top of the report.",
+        "q": "Can it review a repo that has no design doc?"
+      },
+      {
+        "a": "Yes. ml-system-design-review is open source and MIT-licensed with no paid tier. It runs locally in Claude Code and other Agent Skills consumers, against your own design and code.",
+        "q": "Is it free to use?"
+      }
+    ]
+  },
+  {
+    "id": "obra/superpowers/brainstorming",
+    "collection_id": "obra/superpowers",
+    "name": "Brainstorm Ideas",
+    "description": {
+      "short": "Before your coding agent writes a line of code, it talks through what you're actually building and turns it into a design spec you approve, so you never ship the wrong thing fast."
+    },
+    "reference_file": "https://github.com/obra/superpowers/blob/main/skills/brainstorming/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - brainstorming from https://github.com/obra/superpowers",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/brainstorming-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/brainstorming-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [],
+    "sort_order": null,
+    "created_at": "2026-07-09T12:06:38.81732+00:00",
+    "use_cases": [
+      "Development"
+    ],
+    "long_description": "Brainstorming stops your coding agent from jumping straight to code. You describe an idea; it explores the project, then asks one question at a time to pin down purpose, constraints, and success criteria, proposing two or three approaches with a clear recommendation.\n\nOnce you agree on a direction, it presents the design in bite-sized sections for your sign-off, writes the spec to a dated design doc, commits it, and reviews it for gaps before handing off to planning. You get a validated spec you actually read, not a pile of code built on a guess.",
+    "when_to_use": [
+      {
+        "body": "Describe the idea and get a design you've signed off on before any code is written.",
+        "title": "You're about to build something new"
+      },
+      {
+        "body": "Force a design conversation first, so you don't discover the misunderstanding after it's already built.",
+        "title": "Your agent codes before it understands the ask"
+      },
+      {
+        "body": "It flags a sprawling idea, breaks it into scoped sub-projects, and refines them one at a time.",
+        "title": "The request is vague or too big for one spec"
+      },
+      {
+        "body": "It writes a committed design doc covering architecture, data flow, and testing that feeds straight into an implementation plan.",
+        "title": "You need a spec you can hand off"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. The brainstorming skill only produces a design spec and stops. It hands off to a planning skill, and no implementation happens until you've approved the design.",
+        "q": "Does it write any code?"
+      },
+      {
+        "a": "A dated design doc committed to your repo, covering architecture, components, data flow, error handling, and testing. It's short for simple projects and fuller for nuanced ones.",
+        "q": "What do I end up with?"
+      },
+      {
+        "a": "No. Brainstorming asks one question at a time, prefers multiple choice, and scales the design to the project, from a few sentences to a couple hundred words per section.",
+        "q": "Do I have to answer a long questionnaire?"
+      },
+      {
+        "a": "Yes. Brainstorming runs as its own skill, though it's built to flow into the writing-plans skill once your design is approved.",
+        "q": "Can I use it without the rest of Superpowers?"
+      }
+    ]
+  },
+  {
+    "id": "ML-SystemDesign/MLSystemDesign/ai-stage-gate",
+    "collection_id": "ML-SystemDesign/MLSystemDesign",
+    "name": "Review AI Product Idea",
+    "description": {
+      "short": "Run a stage-gate review on any AI product and get a Go, Conditional, or Kill decision backed by a scored readiness table, the top blocker, and the next-stage investment to release."
+    },
+    "reference_file": "https://github.com/ML-SystemDesign/MLSystemDesign/blob/main/skills/ai-stage-gate/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - ai-stage-gate from https://github.com/ML-SystemDesign/MLSystemDesign",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/ai-stage-gate-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/ai-stage-gate-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [],
+    "sort_order": null,
+    "created_at": "2026-07-09T11:26:36.901134+00:00",
+    "use_cases": [
+      "Research"
+    ],
+    "long_description": "You describe where your AI product is and what evidence you have. The skill locates it on a six-stage process, scores the current gate's required deliverables and transition criteria as Met, Partial, Not met, or Unknown, and reads off a traffic-light decision: Go, Conditional, or Kill.\n\nIt works from a gate deck, a repo, telemetry, or any mix, and applies dual value-and-technical validation with data, ethics, and alignment checks at every gate. LLM, RAG, and agent products get an extra modern-AI readiness row.\n\nYou get back a screenshot-ready gate scorecard with the top blocker, the conditions to advance and who owns them, and the recommended next-stage spend, followed by concrete comments and an ordered path to a clean Go.",
+    "when_to_use": [
+      {
+        "body": "Get an evidence-based gate call, not a gut feel, with the single blocker holding it back and the conditions to clear it.",
+        "title": "You need a Go or Kill decision on an AI product"
+      },
+      {
+        "body": "See the readiness table your committee will test and the ordered path to a clean Go before you present.",
+        "title": "You're defending a gate review soon"
+      },
+      {
+        "body": "Score several initiatives at once into one portfolio matrix and see which to fund, which to recycle, and which to kill.",
+        "title": "You're triaging a backlog of AI ideas"
+      },
+      {
+        "body": "Locate the product on the six-stage process and find out which deliverables and criteria are still Partial or Unknown.",
+        "title": "You can't tell if you're ready to advance"
+      }
+    ],
+    "faq": [
+      {
+        "a": "ml-system-design-review judges how good a design is; ai-stage-gate judges whether an AI product has earned its next investment. One grades the design, the other makes the gate decision. They are siblings in the same collection.",
+        "q": "How is this different from ml-system-design-review?"
+      },
+      {
+        "a": "No. ai-stage-gate grades whatever evidence you have, a gate deck, a repo, telemetry, or any mix, and marks anything missing as Unknown so the decision shows exactly what it rested on.",
+        "q": "Does it need a formal gate deck to work?"
+      },
+      {
+        "a": "A traffic-light gate decision: Go, Conditional, or Kill, with stage-specific variants like Pivot, Recycle, or Limited Go. The call is computed from a readiness table with veto logic, never an average.",
+        "q": "What decision does it return?"
+      },
+      {
+        "a": "Yes. ai-stage-gate is open source and MIT-licensed with no paid tier. It runs locally in Claude Code and other Agent Skills consumers, against your own product evidence.",
+        "q": "Is it free to use?"
+      }
+    ]
+  },
+  {
+    "id": "conorbronsdon/avoid-ai-writing/avoid-ai-writing",
+    "collection_id": "conorbronsdon/avoid-ai-writing",
+    "name": "Strip AI Tells",
+    "description": {
+      "short": "Audit any draft for the tells that give AI writing away, rewrite them out ('delve', em dashes, inflated significance, and more), and score how clean it reads on a 0-100 scale."
+    },
+    "reference_file": "https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - avoid-ai-writing from https://github.com/conorbronsdon/avoid-ai-writing",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/avoid-ai-writing-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/avoid-ai-writing-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "humanizer",
+      "stop-slop"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-08T14:35:53.678978+00:00",
+    "use_cases": [
+      "Writing"
+    ],
+    "long_description": "Paste a draft and this skill finds the patterns that make text read as machine-written, rewrites them, and can score the result. It quotes each issue, hands back a clean version, then runs a second pass to catch tells that survived the first edit.\n\nIt knows 51 documented patterns and a 109-word replacement table across three tiers, so 'leverage' becomes 'use', copula-dodging ('serves as') becomes 'is', and em dashes, inflated significance, and vague attributions come out. You can flag only without rewriting (detect mode), edit a file in place, set a voice like blunt or warm or technical, and get a runnable 0-100 score for how AI the writing reads.",
+    "when_to_use": [
+      {
+        "body": "Flag the tells and rewrite them so it sounds like you, not a model.",
+        "title": "Your draft reads like AI wrote it"
+      },
+      {
+        "body": "Detect mode quotes every AI-ism and rates severity, leaving published or third-party writing untouched.",
+        "title": "You want to audit without changing the text"
+      },
+      {
+        "body": "Run the bundled 0-100 detector to answer 'how AI does this read?' with a number you can check in CI.",
+        "title": "You need a score, not an opinion"
+      },
+      {
+        "body": "Point it at a draft file and it makes minimal, targeted edits, leaving the already-human passages alone.",
+        "title": "You're cleaning a file in place"
+      }
+    ],
+    "faq": [
+      {
+        "a": "It goes past a one-shot rewrite: a structured audit with quoted issues, a second corrective pass, 51 documented patterns, voice and context profiles, and a deterministic 0-100 score. Detect-only and edit-in-place modes are built in.",
+        "q": "How is this different from other AI-writing cleaners?"
+      },
+      {
+        "a": "Your call. Rewrite mode returns a clean copy, detect mode only flags issues, and edit mode makes minimal in-place edits to a file you name, leaving human passages alone.",
+        "q": "Will it change my file, or just suggest edits?"
+      },
+      {
+        "a": "Yes. It is one agentskills.io SKILL.md, so it runs in Claude Code, Cursor, OpenClaw, Hermes, and Codex. A ported Cursor rule is included.",
+        "q": "Does it work outside Claude Code?"
+      },
+      {
+        "a": "Yes, MIT-licensed and fully local. No API keys and no paid tier, and the bundled detector is zero-dependency, running in Node or the browser.",
+        "q": "Is it free?"
+      }
+    ]
+  },
+  {
+    "id": "zarazhangrui/frontend-slides/frontend-slides",
+    "collection_id": "zarazhangrui/frontend-slides",
+    "name": "Build Slide Decks",
+    "description": {
+      "input": "Describe your talk, pitch, or lecture — or hand it a PowerPoint file — and invoke /frontend-slides.",
+      "short": "Turn a brief or a .pptx into a distinctive, animation-rich HTML slide deck that runs in any browser with zero dependencies.",
+      "output": "One self-contained HTML file: fixed 16:9, inline CSS/JS, well-commented, no build tools. It opens straight in your browser, and can be exported to PDF or deployed.",
+      "process": "It asks about your content, generates 3 visual style previews so you pick a direction by seeing it (drawing on 12 curated presets and 34 bold templates), then writes the full deck in your chosen style — deliberately avoiding generic AI-slop aesthetics."
+    },
+    "reference_file": "https://github.com/zarazhangrui/frontend-slides/blob/main/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - frontend-slides from https://github.com/zarazhangrui/frontend-slides",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/frontend-slides-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/frontend-slides-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "design-taste-frontend",
+      "brandkit"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-07T09:23:03.750137+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Describe your talk, pitch, or lecture, or hand it a PowerPoint file, and it builds a distinctive, animation-rich slide deck as a single HTML file. No build tools, no dependencies; it opens straight in any browser and exports to PDF or deploys as-is.\n\nRather than asking you to describe an aesthetic in words, it shows you three visual style previews drawn from 12 curated presets and 34 bold templates, and you pick the direction by looking at it. Then it writes the whole deck in that style, fixed 16:9, inline CSS and JS, well commented, and deliberately steers around the generic AI-slop look most generated slides land on. Feed it a .pptx and it keeps your images and content while giving the deck a real design. It ships as a Claude Code plugin and reads in other agents with filesystem access.",
+    "when_to_use": [
+      {
+        "body": "Describe your talk and get a distinctive, animation-rich HTML deck that runs in any browser.",
+        "title": "You need slides that don't look generic"
+      },
+      {
+        "body": "Hand it a .pptx and it rebuilds the deck as one self-contained HTML file with no build tools.",
+        "title": "You have a PowerPoint to convert"
+      },
+      {
+        "body": "It generates 3 style previews so you choose a direction by seeing it, then writes the full deck.",
+        "title": "You want to pick the look before it's built"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. frontend-slides asks about your content, then generates three visual style previews so you pick a direction by seeing it. You choose a look rather than starting from a blank slide.",
+        "q": "Do I have to design the slides myself?"
+      },
+      {
+        "a": "Yes. frontend-slides works from a brief or a .pptx file, turning either into an animation-rich HTML deck. You can bring an existing presentation instead of writing one from scratch.",
+        "q": "Can it convert an existing PowerPoint?"
+      },
+      {
+        "a": "Nothing extra. frontend-slides outputs an HTML deck that runs in any browser with zero dependencies, so you can present it anywhere without a build step or an app.",
+        "q": "What do I need to run the finished deck?"
+      }
+    ]
+  },
+  {
+    "id": "nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max",
+    "collection_id": "nextlevelbuilder/ui-ux-pro-max-skill",
+    "name": "Build Professional Interfaces",
+    "description": {
+      "input": "Launch /ui-ux-pro-max with what you are building — \"a landing page for my beauty spa\" — or let it auto-activate on any task that touches look, feel, or interaction.",
+      "short": "Give your coding agent UI/UX design taste: every interface starts from a tailored design system drawn from 50+ styles, 161 palettes, and 57 font pairings across 10 stacks, not guesswork.",
+      "output": "A finished UI built to a coherent, industry-appropriate design system — pattern, style, colors, typography, effects, anti-patterns filtered out — with the design system itself saved for reuse across sessions.",
+      "process": "The skill first generates a design system from its databases — 161 product types, 67 UI styles, 161 color palettes, 57 font pairings — applying 161 industry reasoning rules, then holds the build to it, down to a pre-delivery UX checklist."
+    },
+    "reference_file": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/main/.claude/skills/ui-ux-pro-max/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - ui-ux-pro-max from https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/ui-ux-pro-max-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/ui-ux-pro-max-demo.jpg",
+    "kind": "Mode",
+    "related_slugs": [
+      "design-taste-frontend",
+      "high-end-visual-design"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-06T08:08:44.30385+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Tell it what you are building, \"a landing page for my beauty spa,\" or just let it switch on whenever a task touches look, feel, or interaction, and it gives your agent a tailored design system to build from instead of guessing. Every interface starts from a coherent spec rather than whatever the model would default to.\n\nIt assembles that spec from its own databases: 161 product types, 67 UI styles, 161 color palettes, and 57 font pairings, filtered through 161 industry reasoning rules so a fintech dashboard and a spa page do not come out looking the same. Then it holds the build to that system, colors, type, effects, and anti-patterns, down to a UX checklist before delivery. The generated system is saved, so it stays consistent the next time you come back to the project.",
+    "when_to_use": [
+      {
+        "body": "It starts every interface from a tailored design system instead of guessing at colors and type.",
+        "title": "Your agent builds UI without any design taste"
+      },
+      {
+        "body": "It generates the system from its databases, then saves it so later work stays consistent.",
+        "title": "You want the design system reused across sessions"
+      },
+      {
+        "body": "It auto-activates on any task that touches UI and holds the build to a pre-delivery checklist.",
+        "title": "You want look and feel handled automatically"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. As a mode, ui-ux-pro-max activates only when a task touches how something looks, feels, moves, or is used, and stays out of backend, database, and DevOps work. You can also call it directly for a design pass.",
+        "q": "Does it kick in on every task?"
+      },
+      {
+        "a": "It writes it. ui-ux-pro-max generates a design system, then builds the interface to it with real colors, fonts, spacing, and states, and finishes with a pre-delivery checklist that catches accessibility and other UX problems.",
+        "q": "Does it write the code or just advise?"
+      },
+      {
+        "a": "The open-source ui-ux-pro-max in this repo is the full UI/UX intelligence: styles, palettes, font pairings, and stack guidelines. A separate premium tier adds brand identity, logos, slides, and AI image generation. You do not need premium for standard UI work.",
+        "q": "What do I get free versus paid?"
+      },
+      {
+        "a": "Yes. ui-ux-pro-max gives you dials for variance, motion, and density, and saves the design system with per-page overrides, so you can push toward minimal or bold and adjust individual pages without redoing everything.",
+        "q": "Can I control the style?"
+      }
+    ]
+  },
+  {
+    "id": "heygen-com/hyperframes/pr-to-video",
+    "collection_id": "heygen-com/hyperframes",
+    "name": "Turn a PR Into a Video",
+    "description": {
+      "input": "A PR URL, an owner/repo#N ref, or \"this PR\" in a checked-out repo, plus a quick brief (angle, length, aspect — sensible defaults offered).",
+      "short": "Turn any GitHub pull request into a narrated code-change explainer video, built straight from the real diff, commits, and files. Paste a PR URL or run it in the repo.",
+      "output": "A rendered MP4 explainer scaled to the PR's size (sweet spot 30–90s) — changelog, feature reveal, fix, or refactor walkthrough — featuring real diff snippets and an optional contributor credits close.",
+      "process": "Fetches the PR via the gh CLI, ingests the diff, commits, and contributors, storyboards the change as a narrative rather than a file-by-file read-aloud, then builds each frame as a time-coded shot sequence with narration and music."
+    },
+    "reference_file": "https://github.com/heygen-com/hyperframes/blob/main/skills/pr-to-video/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - pr-to-video from https://github.com/heygen-com/hyperframes",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/pr-to-video-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/pr-to-video-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "website-to-video",
+      "hyperframes"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-05T11:16:22.741269+00:00",
+    "use_cases": [
+      "Video",
+      "Development"
+    ],
+    "long_description": "Point it at a GitHub pull request and get back a narrated video that explains the change, built straight from the real diff. You pass a PR URL, an owner/repo#N ref, or just \"this PR\" in a checked-out repo, pick an angle if you want (changelog, feature reveal, fix, or refactor), and it handles the rest.\n\nIt reads the PR through the gh CLI, then storyboards the change as a story rather than a file-by-file read-aloud, so viewers follow what actually happened instead of scrolling a diff. Real code snippets from the diff animate on screen, it generates narration and music to match, and an optional credits frame thanks the contributors. The finished MP4 scales to the size of the change, with a sweet spot around 30 to 90 seconds.",
+    "when_to_use": [
+      {
+        "body": "Point it at the PR and get a narrated explainer built straight from the real diff.",
+        "title": "You want to show off a merged pull request"
+      },
+      {
+        "body": "Turn a feature, fix, or refactor into a 30 to 90 second walkthrough with real code snippets.",
+        "title": "A changelog entry deserves more than text"
+      },
+      {
+        "body": "The video scales to the PR's size and can close with a contributor credits card.",
+        "title": "You want to credit the contributors"
+      }
+    ],
+    "faq": [
+      {
+        "a": "A pull request. pr-to-video takes a GitHub PR URL, or runs inside the checked-out repo, then builds the video from that PR. You do not assemble any footage yourself.",
+        "q": "What do I need to give it?"
+      },
+      {
+        "a": "No. pr-to-video reads the real diff, commits, and contributors through the gh CLI, so the explainer reflects the actual code change. Nothing about it is invented.",
+        "q": "Does it make up what changed?"
+      },
+      {
+        "a": "No. pr-to-video storyboards the change as a narrative with narration and music, told as time-coded shots rather than reading each file aloud. It explains what the PR does and why.",
+        "q": "Is it just a file-by-file readout?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill/redesign-existing-projects",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Redesign an Interface",
+    "description": {
+      "input": "Point it at an existing website or app (any CSS framework or vanilla CSS) and ask for a redesign.",
+      "short": "Redesign an existing site or app to premium quality without a rewrite. It audits the current design, flags generic AI patterns, and fixes them in any CSS framework without breaking functionality.",
+      "output": "Upgraded typography, color, layout, motion, and states applied in place, working with your existing stack and without breaking functionality.",
+      "process": "Scans the codebase to find the framework and styling method, audits it against a long checklist of generic AI tells — purple/blue gradients, three-card feature rows, default fonts, missing hover/empty/error states — then applies targeted fixes in a low-risk order."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/redesign-skill/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - redesign-existing-projects from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/redesign-existing-projects-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/redesign-existing-projects-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "high-end-visual-design",
+      "make-interfaces-feel-better"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-03T20:27:59.19064+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Point it at a site or app you already have and it makes the interface read as premium without a rewrite. It works in place, so whether you are on Tailwind, a component library, or vanilla CSS, it keeps your stack and your functionality intact and upgrades the parts that make a project look generic.\n\nFirst it scans the codebase to learn the framework and how styling is done, then audits it against a long list of the usual AI tells: purple and blue gradients, the three-identical-cards feature row, default fonts, and missing hover, empty, and error states. It applies targeted fixes to typography, color, layout, motion, and those missing states, working in a low-risk order so nothing breaks along the way. You get the same product, redesigned, not a rebuild.",
+    "when_to_use": [
+      {
+        "body": "Point it at your existing project and it upgrades typography, color, layout, and motion in place.",
+        "title": "You have a site that looks generic"
+      },
+      {
+        "body": "It works with your current framework and applies fixes without breaking functionality.",
+        "title": "You want a fresh look without a rewrite"
+      },
+      {
+        "body": "It audits against common AI tells and adds the states and polish in a low-risk order.",
+        "title": "Your UI is missing hover and error states"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. redesign-existing-projects upgrades your current site or app to premium quality without a rewrite. It audits what you have, flags generic AI patterns, and fixes them in place.",
+        "q": "Do I have to rebuild my site?"
+      },
+      {
+        "a": "No. redesign-existing-projects applies targeted fixes in a low-risk order and keeps functionality intact, so the redesign changes the look without breaking behavior.",
+        "q": "Will it break how my site works?"
+      },
+      {
+        "a": "Yes. redesign-existing-projects scans the codebase to detect your framework and styling method first, then fixes within it, so it adapts to any CSS framework rather than forcing a new one.",
+        "q": "Does it work with my CSS setup?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill/full-output-enforcement",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Force Complete Output",
+    "description": {
+      "input": "Invoke it on any task where a partial answer is a broken answer - a full file, a batch of components, an exhaustive list.",
+      "short": "Stop your coding agent from truncating. You get the whole file and every component in full, with no placeholder stubs or \"rest of code here\" shortcuts.",
+      "output": "Complete, runnable output with nothing elided - and a clean [PAUSED - X of Y complete] handoff you resume with \"continue\" when the work spans multiple messages.",
+      "process": "It locks the deliverable count up front, bans every placeholder pattern (// ... , // TODO, \"rest follows the same pattern\"), and writes at full quality to a clean breakpoint when a response nears the token limit."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/output-skill/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - full-output-enforcement from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/full-output-enforcement-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/full-output-enforcement-demo.jpg",
+    "kind": "Mode",
+    "related_slugs": [
+      "image-to-code",
+      "clone-website"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-03T20:24:25.850398+00:00",
+    "use_cases": [
+      "Development"
+    ],
+    "long_description": "Turn it on for any task where a half-answer is a broken answer, a whole file, a full batch of components, an exhaustive list, and it stops your agent from quietly truncating. It locks the number of deliverables up front, then bans every placeholder pattern it might otherwise reach for: no // ... , no // TODO, no \"the rest follows the same pattern.\"\n\nWhen a response genuinely gets long enough to bump the token limit, it does not cut a corner or stub the remainder. It writes at full quality up to a clean breakpoint, hands you a plain [PAUSED, X of Y complete] marker, and picks up exactly where it left off when you say continue. So a large generation arrives whole across a few messages instead of arriving looking finished but missing half its body.",
+    "when_to_use": [
+      {
+        "body": "Keep it on and get the whole thing, every component, with no placeholder stubs.",
+        "title": "Your agent keeps truncating the file"
+      },
+      {
+        "body": "It locks the deliverable count up front so nothing gets silently dropped from the batch.",
+        "title": "You're scaffolding many files at once"
+      },
+      {
+        "body": "It writes at full quality to a clean [PAUSED] breakpoint you resume with \"continue\".",
+        "title": "A response is going to run past the token limit"
+      }
+    ],
+    "faq": [
+      {
+        "a": "full-output-enforcement stops your coding agent from truncating, so you get whole files and every component in full instead of placeholder stubs or \"rest of code here\" shortcuts.",
+        "q": "What does it fix?"
+      },
+      {
+        "a": "full-output-enforcement locks the number of deliverables up front and bans placeholder patterns. When a response nears the token limit, it writes at full quality to a clean breakpoint rather than trailing off.",
+        "q": "How does it avoid cutting off mid-file?"
+      },
+      {
+        "a": "No, it is a mode you leave on. full-output-enforcement holds through a whole task, such as scaffolding an API layer, so every handler comes back as a complete file for as long as it runs.",
+        "q": "Is it a one-time command?"
+      }
+    ]
+  },
+  {
+    "id": "pbakaus/impeccable/impeccable",
+    "collection_id": "pbakaus/impeccable",
+    "name": "Craft Impeccable Interfaces",
+    "description": {
+      "input": "Run /impeccable with a command and target (audit, critique, polish, bolder, animate, and 18 more) or just describe the interface you want fixed.",
+      "short": "Turn AI-generated frontends that scream 'a model made this' into production-grade, on-brand UI. Craft, audit, polish, or animate websites, dashboards, and app components.",
+      "output": "Ready-to-ship frontend code with the AI tells removed: committed color/type/motion choices, verified contrast, and a reusable design system.",
+      "process": "Loads your project's design context, routes to the right one of 23 commands, applies 45 deterministic anti-pattern rules plus craft guidance, and can iterate live in the browser."
+    },
+    "reference_file": "https://github.com/pbakaus/impeccable/blob/main/.claude/skills/impeccable/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - impeccable from https://github.com/pbakaus/impeccable",
+    "tools": [
+      {
+        "name": "Bash(npx impeccable *)",
+        "blocking": false
+      },
+      {
+        "name": "Bash(node .claude/skills/impeccable/scripts/*)",
+        "blocking": false
+      }
+    ],
+    "preview_video": "https://media.surfskills.surf/skills/impeccable-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/impeccable-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "design-taste-frontend",
+      "make-interfaces-feel-better"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-03T20:15:15.154136+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Run it with a command and a target, audit, critique, polish, bolder, animate, and 18 others, or just describe the interface you want fixed, and it turns frontend that obviously came from a model into production-grade, on-brand UI. It loads your project's design context first, so a fix knows your audience, brand lane, and type rather than guessing.\n\nBehind the commands sit 45 deterministic anti-pattern rules that flag the usual tells, Inter for everything, purple gradients, cards nested in cards, low-contrast gray text, with no LLM call needed to catch them. It commits real color, type, and motion choices, verifies contrast, and can iterate live in the browser until it looks right. You end up with ready-to-ship code and a reusable design system, plus a 23-command vocabulary you share with your agent.",
+    "when_to_use": [
+      {
+        "body": "It removes the AI tells and commits real color, type, and motion choices for production.",
+        "title": "Your frontend screams a model made it"
+      },
+      {
+        "body": "Pick a command like audit, polish, bolder, or animate and it routes to the right one of 23.",
+        "title": "You want a specific fix, not a full redo"
+      },
+      {
+        "body": "It loads your project's design context and can iterate in the browser as it applies its anti-pattern rules.",
+        "title": "You want to see changes live"
+      }
+    ],
+    "faq": [
+      {
+        "a": "impeccable turns AI-generated frontends that look machine-made into production-grade, on-brand interfaces. You can craft, audit, polish, or animate websites, dashboards, and app components with it.",
+        "q": "What does impeccable do to my UI?"
+      },
+      {
+        "a": "Yes. impeccable loads your project's design context first, then applies its craft rules on top, so the polish matches your existing look instead of imposing a generic style.",
+        "q": "Does it respect my project's brand?"
+      },
+      {
+        "a": "impeccable applies 45 deterministic anti-pattern rules and routes your request to one of 23 commands, so the same problem gets the same fix. It can also iterate live in the browser.",
+        "q": "How consistent are its fixes?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill/minimalist-ui",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Build a Minimal Interface",
+    "description": {
+      "input": "Install it next to your coding agent and describe the frontend to build or redesign — the minimalist editorial direction is already set.",
+      "short": "Turn a generic AI frontend into a warm, editorial minimal interface: monochrome palette, strong type contrast, flat bento grids, and muted pastel accents. No gradients, no heavy shadows.",
+      "output": "Frontend code (HTML / React / Tailwind / Vue) with document-style calm — massive whitespace, crisp 8–12px radii, flat cards, ultra-diffuse shadows, and staggered scroll-fade entries; nothing looks templated.",
+      "process": "Enforces one system: warm monochrome canvas (#FFFFFF / #F7F6F3), off-black charcoal text, editorial serif headings against a geometric sans and monospace meta, asymmetric bento grids with 1px #EAEAEA borders, and muted pastel accents used only for tags. Bans Inter/Roboto, drop shadows, gradients, pill buttons, and SaaS copy clichés."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/minimalist-skill/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - minimalist-ui from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/minimalist-ui-demo-v2.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/minimalist-ui-demo-v2.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "design-taste-frontend",
+      "industrial-brutalist-ui"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-03T19:33:48.138457+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Describe the frontend you want and it builds a warm, editorial minimalist interface, the direction is already set. Think document-style calm: a bone-and-charcoal monochrome canvas, generous whitespace, flat bento cards, and borders so light they barely register. No gradients, no heavy drop shadows, no pill buttons.\n\nThe whole build runs on one committed system. A warm white or off-white canvas with off-black charcoal text, editorial serif headings played against a geometric sans and a monospace for meta, asymmetric bento grids ruled with 1px hairline borders, and muted pastel accents used only on tags. Type gets a serif, sans, and mono contrast instead of Inter for everything, and content fades in on a gentle stagger as you scroll. Point it at a new page or an existing one and it makes the result read as edited rather than templated.",
+    "when_to_use": [
+      {
+        "body": "Describe the frontend and get warm monochrome code: serif-and-sans contrast, flat bento grids, near-invisible borders.",
+        "title": "You want a calm, editorial minimal look"
+      },
+      {
+        "body": "The direction is set, so it enforces massive whitespace, flat cards, and ultra-diffuse shadows.",
+        "title": "You already know you want minimalist"
+      },
+      {
+        "body": "It bans Inter, drop shadows, gradients, and pill buttons, using muted accents only for tags.",
+        "title": "You want minimal without looking templated"
+      }
+    ],
+    "faq": [
+      {
+        "a": "minimalist-ui turns a generic frontend into a warm, editorial minimal interface, with a monochrome palette, strong type contrast, flat bento grids, and muted pastel accents used only for tags. No gradients or heavy shadows.",
+        "q": "What style does it apply?"
+      },
+      {
+        "a": "Yes. minimalist-ui restyles the interface you already have onto its system, from a warm off-white canvas to editorial serif headings against a geometric sans. You do not start over.",
+        "q": "Does it work on my existing frontend?"
+      },
+      {
+        "a": "minimalist-ui bans Inter and Roboto, drop shadows, gradients, pill buttons, and SaaS copy cliches. It keeps the look restrained rather than defaulting to the usual AI frontend patterns.",
+        "q": "What does it refuse to use?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill/imagegen-frontend-mobile",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Mock Up a Mobile App",
+    "description": {
+      "input": "Install it next to your agent and describe the app: platform, category, and how many screens you want. It generates images only — it never writes code.",
+      "short": "Generate premium mobile app mockups: app-native screens and full flows in clean phone frames, with readable type and one design system across every screen. Images only, no code.",
+      "output": "A coherent set of mobile screen images inside clean, evenly-framed phone mockups: art-directed, content-first, multi-screen consistent, comfortably readable, with none of the usual AI-app tells (fake chart spam, purple-blue gradients, phone-shaped websites).",
+      "process": "Locks an internal design bible first — platform mode (iOS / Android / cross-platform), a committed visual direction, palette, typography, texture, and a signature component set — then renders each screen fresh (never cropped), safe-area aware, in a logical screen-to-screen flow."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/imagegen-frontend-mobile/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - imagegen-frontend-mobile from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/mobile-app-screens-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/mobile-app-screens-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "imagegen-frontend-web",
+      "image-to-code"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-03T19:30:25.22054+00:00",
+    "use_cases": [
+      "Design",
+      "Images"
+    ],
+    "long_description": "Describe the app, its platform, category, and how many screens you want, and it generates a set of mobile screen concepts as polished images inside clean, evenly framed phone mockups. It produces images only and never writes code, so this is for figuring out and showing what the app should look like before anyone builds it.\n\nTo keep every screen part of the same product, it locks an internal design bible first: the platform mode of iOS, Android, or cross-platform, a committed visual direction, palette, type, texture, and a signature set of components. Then it renders each screen fresh and safe-area aware in a logical flow, so the login, home, and detail views feel like one app. It steers hard away from the usual AI-app tells: fake chart spam, purple-blue gradients, and websites crammed into a phone frame.",
+    "when_to_use": [
+      {
+        "body": "Describe the app and get clean phone mockups across a full flow, images only.",
+        "title": "You need mobile screen concepts, not code"
+      },
+      {
+        "body": "It locks a design bible first so the whole flow stays consistent, not screen-by-screen guesses.",
+        "title": "You want every screen in one design system"
+      },
+      {
+        "body": "It avoids the tells: chart spam, purple gradients, and phone-shaped websites.",
+        "title": "AI app mockups usually look fake"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. imagegen-frontend-mobile generates mockup images only, showing app screens in clean phone frames. It is for visual comps, so there is no code in the output.",
+        "q": "Does it produce code?"
+      },
+      {
+        "a": "imagegen-frontend-mobile renders whole flows, with each screen drawn fresh and kept in a logical order under one design system. You see how screens connect, not just an isolated frame.",
+        "q": "Do I get a single screen or a full flow?"
+      },
+      {
+        "a": "Yes. imagegen-frontend-mobile locks a platform mode first, whether iOS, Android, or cross-platform, and stays safe-area aware. The mockups follow the platform you pick.",
+        "q": "Can I target iOS or Android specifically?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill/high-end-visual-design",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Build High-End Interface",
+    "description": {
+      "input": "Install it beside your coding agent and describe the interface to build or redesign — the premium design language is already loaded.",
+      "short": "Make an AI-built frontend read like a $150k agency site. This skill sets the exact fonts, spacing, shadows, and motion that feel expensive and bans the cheap defaults that give AI away.",
+      "output": "Frontend code that reads as Awwwards-tier — haptic nested cards, staggered scroll reveals, magnetic hover physics, GPU-safe transforms — instead of a template with nice fonts. A pre-output checklist blocks every banned default before delivery.",
+      "process": "Rolls a variance engine to pick one vibe (ethereal glass, editorial luxury, or soft structuralism) and one layout (asymmetric bento, Z-axis cascade, or editorial split), then enforces the system: premium type (Geist / Clash Display / PP Editorial, never Inter or Arial), double-bezel nested cards, button-in-button CTAs, py-24+ whitespace, and custom cubic-bezier motion."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/soft-skill/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - high-end-visual-design from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/high-end-visual-design-demo-v2.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/high-end-visual-design-demo-v2.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "design-taste-frontend",
+      "impeccable"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-03T19:29:03.91471+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Describe the interface you want and get frontend code that reads like a high-end agency built it, not a template with nicer fonts. The premium design language loads with the skill, so the fonts, spacing, shadows, card structure, and motion that make a site feel expensive are already decided.\n\nBefore it writes any code it rolls a variance engine to pick one look (ethereal glass, editorial luxury, or soft structuralism) and one layout (asymmetric bento, stacked Z-axis cards, or an editorial split), so two builds never come out identical. Then it enforces the details: premium type like Geist or PP Editorial instead of Inter or Arial, double-bezel nested cards, oversized whitespace, magnetic hover physics, and staggered scroll reveals on custom easing curves. A checklist at the end blocks every cheap default before the code ships.",
+    "when_to_use": [
+      {
+        "body": "Describe the interface and get code that reads like an agency build: premium fonts, real motion, deep whitespace.",
+        "title": "You want a frontend that looks expensive"
+      },
+      {
+        "body": "It bans Inter and Arial outright and blocks the usual template look with a pre-output checklist.",
+        "title": "Cheap AI defaults keep sneaking in"
+      },
+      {
+        "body": "A variance engine picks a fresh vibe and layout, from editorial luxury to asymmetric bento.",
+        "title": "You want variety, not the same layout every time"
+      }
+    ],
+    "faq": [
+      {
+        "a": "high-end-visual-design sets the exact fonts, spacing, shadows, and motion that read as expensive, and bans the cheap defaults that give an AI build away. It tunes the visual system, not your content.",
+        "q": "What does it actually change?"
+      },
+      {
+        "a": "No. high-end-visual-design rolls a variance engine that commits to one vibe, like ethereal glass or editorial luxury, and one layout, so different projects diverge instead of sharing a house look.",
+        "q": "Will every site it makes look identical?"
+      },
+      {
+        "a": "Yes. high-end-visual-design uses premium typefaces such as Geist, Clash Display, and PP Editorial, and refuses Inter or Arial. It applies details like nested cards and custom easing to match.",
+        "q": "Does it pick specific fonts?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill/industrial-brutalist-ui",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Build Industrial Interface",
+    "description": {
+      "input": "Install it next to your coding agent and describe the frontend to build or redesign — the brutalist direction is already decided.",
+      "short": "Turn a generic AI frontend into a raw industrial interface: rigid Swiss grids, extreme type contrast, utilitarian color, and analog grit like scanlines. Feels like a declassified blueprint.",
+      "output": "Frontend code with mechanical precision — 90° corners, visible compartment lines, ASCII framing and telemetry markers; no gradients, no soft shadows, no consumer-UI defaults.",
+      "process": "Locks the build to one of two archetypes — Swiss industrial print (light) or tactical CRT telemetry (dark) — and enforces the system: 1px blueprint grids, clamp()-scaled uppercase grotesques, monospace micro-type, hazard-red as the only accent, scanline and dither textures."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/brutalist-skill/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - industrial-brutalist-ui from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/industrial-brutalist-ui-demo-v2.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/industrial-brutalist-ui-demo-v2.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "minimalist-ui",
+      "design-taste-frontend"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-03T18:21:00.940784+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Describe the frontend you want and it builds it as a raw, Swiss-industrial interface, the brutalist direction is already decided, so you get blueprint grids, massive uppercase type, a single hazard-red accent, and not one rounded corner. It is the opposite of soft consumer UI: 90-degree corners, visible compartment lines, ASCII framing, and telemetry markers, with no gradients and no diffuse shadows.\n\nIt commits to one of two archetypes and holds the whole build to it: Swiss industrial print on a light canvas, or tactical CRT telemetry on a dark one. From there it enforces the system, 1px blueprint grids, clamp-scaled uppercase grotesques, monospace micro-type, hazard-red as the only accent, and scanline or dither texture, so the result looks engineered rather than styled. Use it on a fresh build or to strip the polish off a generic one.",
+    "when_to_use": [
+      {
+        "body": "Describe the frontend and get Swiss-industrial code: blueprint grids, massive uppercase type, one hazard-red accent.",
+        "title": "You want a raw industrial look, not soft consumer UI"
+      },
+      {
+        "body": "The direction is decided, so it enforces 90-degree corners, monospace micro-type, and zero rounded edges.",
+        "title": "You already know you want brutalist"
+      },
+      {
+        "body": "It bans gradients and soft shadows and holds the build to a tactical or Swiss-print archetype.",
+        "title": "Generic AI styling keeps softening your design"
+      }
+    ],
+    "faq": [
+      {
+        "a": "industrial-brutalist-ui turns a generic frontend into a raw industrial interface, with rigid Swiss grids, extreme type contrast, utilitarian color, and analog grit like scanlines. It reads like a declassified blueprint.",
+        "q": "What kind of look does it create?"
+      },
+      {
+        "a": "industrial-brutalist-ui restyles an existing frontend, locking the build to one of two archetypes: Swiss industrial print for light or tactical CRT telemetry for dark. You bring the interface; it applies the system.",
+        "q": "Does it build from scratch or restyle what I have?"
+      },
+      {
+        "a": "It is opinionated. industrial-brutalist-ui enforces specifics like 1px blueprint grids, uppercase grotesques, monospace micro-type, and hazard-red as the only accent. The result is deliberately uniform to the aesthetic.",
+        "q": "How locked-in is the style?"
+      }
+    ]
+  },
+  {
+    "id": "Panniantong/Agent-Reach/agent-reach",
+    "collection_id": "Panniantong/Agent-Reach",
+    "name": "Research Anything Across 15 Platforms",
+    "description": {
+      "input": "Run /agent-reach with a research question, a topic, a platform name, or any URL — in English or Chinese. Six channels work with zero configuration; login-backed platforms reuse your browser session.",
+      "short": "Turn one research request into parallel pulls from 15 platforms including Twitter, Reddit, YouTube, GitHub, Bilibili, Xiaohongshu, and LinkedIn, each routed through whichever backend works right now.",
+      "output": "The raw internet content itself: search results, posts and comment threads, article text, job listings, repo and PR data, video subtitles, and podcast transcripts — collected and ready for you to synthesize.",
+      "process": "Checks channel health with `agent-reach doctor --json`, picks each platform's active backend (OpenCLI, per-platform CLIs, or direct APIs) from its routing table, collects from multiple platforms in parallel, and follows built-in retry chains instead of guessing when a command fails."
+    },
+    "reference_file": "https://github.com/Panniantong/Agent-Reach/blob/main/agent_reach/skill/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - agent-reach from https://github.com/Panniantong/Agent-Reach",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/agent-reach-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/agent-reach-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "last30days",
+      "tweak-evaluate"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-03T12:44:41.256256+00:00",
+    "use_cases": [
+      "Research"
+    ],
+    "long_description": "Ask one research question, or name a platform or paste a URL, in English or Chinese, and it pulls the actual content from up to 15 platforms at once: Twitter, Reddit, YouTube, GitHub, Bilibili, Xiaohongshu, LinkedIn, and more. Instead of a wall of HTML or a 403, you get the real material, posts and comment threads, article text, job listings, repo and PR data, video subtitles, and podcast transcripts, ready to synthesize.\n\nThe routing is what keeps it working. For each platform it picks whichever backend is live right now, an OpenCLI channel, a per-platform CLI, or a direct API, from a routing table, and follows built-in retry chains when one path fails rather than giving up. Six channels run with zero setup; the login-backed ones reuse your existing browser session. Run agent-reach doctor to see exactly what is healthy.",
+    "when_to_use": [
+      {
+        "body": "One request pulls posts, threads, and transcripts from 15 platforms in parallel.",
+        "title": "You need raw content from many platforms at once"
+      },
+      {
+        "body": "It routes each platform through whichever backend works right now and retries instead of guessing.",
+        "title": "One platform's API keeps failing"
+      },
+      {
+        "body": "It reaches Twitter, Reddit, and GitHub alongside Bilibili, Xiaohongshu, and more.",
+        "title": "You're researching across English and Chinese sources"
+      }
+    ],
+    "faq": [
+      {
+        "a": "agent-reach checks each channel's health first and routes to whichever backend is working right now, following built-in retry chains when a command fails. It adapts instead of stopping at the first error.",
+        "q": "What happens when a platform blocks access?"
+      },
+      {
+        "a": "No. agent-reach collects from multiple platforms in parallel from a single request, so one question fans out across sources like Reddit, Twitter, and YouTube at once rather than in sequence.",
+        "q": "Does it pull from platforms one at a time?"
+      },
+      {
+        "a": "agent-reach keeps a routing table and picks each platform's active backend, whether OpenCLI, a per-platform CLI, or a direct API. It chooses the path that works rather than guessing one.",
+        "q": "How does it decide how to reach each platform?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill/image-to-code",
+    "collection_id": "Leonxlnx/taste-skill",
+    "name": "Design the Image, Then Build It",
+    "description": {
+      "input": "Run /image-to-code with a plain-language brief: the kind of site, the vibe, and how many sections you want (e.g. a premium landing page, dark and editorial, 6 sections).",
+      "short": "Design the website as an image first, then build it to match. Your agent art-directs section references, then codes a frontend from them instead of guessing straight into markup.",
+      "output": "A set of premium, section-specific design reference images plus faithful frontend code built from them, with a clean, spacious, laptop-readable hero and a coherent extracted design system.",
+      "process": "It flips the usual order: it generates a large, readable reference image per section first, deeply reads each one for typography, spacing, color, buttons, and layout, then implements the frontend to match. Fresh section renders instead of cropped fragments, extra detail images when a section is unclear, and hard rules against AI slop, nested box-in-box UI, and cluttered heroes."
+    },
+    "reference_file": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/image-to-code-skill/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - image-to-code from https://github.com/Leonxlnx/taste-skill",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/image-to-code-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/image-to-code-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "imagegen-frontend-web",
+      "clone-website"
+    ],
+    "sort_order": null,
+    "created_at": "2026-07-01T16:30:27.671326+00:00",
+    "use_cases": [
+      "Design"
+    ],
+    "long_description": "Give it a brief, the kind of site, the vibe, the number of sections, and it designs the site as pictures first, then writes the frontend to match. This flips the usual order. Instead of a coding agent guessing markup straight into a freeform layout, it generates a large, readable reference image for each section, studies that image for its typography, spacing, color, buttons, and layout, and only then implements the code.\n\nBecause the design decisions are made and reviewed as images before any code exists, the result holds together: a spacious, laptop-readable hero and a coherent design system pulled from the renders. It renders each section fresh rather than cropping one tall mockup, adds detail images where a section is ambiguous, and enforces hard rules against AI slop, boxes nested in boxes, and cluttered heroes.",
+    "when_to_use": [
+      {
+        "body": "It generates a reference image per section first, then builds the frontend to match.",
+        "title": "You want to see the design before it's coded"
+      },
+      {
+        "body": "Designing as a picture first means the layout, type, and spacing are decided before a line of code.",
+        "title": "Coding straight from a prompt gives you guesswork"
+      },
+      {
+        "body": "Hand it a reference render and it reads the typography, color, and layout and implements them faithfully.",
+        "title": "You have a design image to build from"
+      }
+    ],
+    "faq": [
+      {
+        "a": "image-to-code designs each section as a readable reference image first, then codes the frontend to match it. That order stops the agent guessing straight into markup and drifting off design.",
+        "q": "How is this different from building straight into code?"
+      },
+      {
+        "a": "You can hand image-to-code a design image, or let it generate a fresh reference per section. Either way it reads the typography, spacing, color, and layout closely before writing any code.",
+        "q": "Do I need to supply the image?"
+      },
+      {
+        "a": "image-to-code produces frontend code that matches the references, with hard rules against AI slop, nested box-in-box UI, and cluttered heroes. You end with a built interface, not just the pictures.",
+        "q": "What do I get at the end?"
+      }
+    ]
+  },
+  {
+    "id": "heygen-com/hyperframes/motion-graphics",
+    "collection_id": "heygen-com/hyperframes",
+    "name": "Make a Motion Graphic",
+    "description": {
+      "input": "Run /motion-graphics with the line, number, data, or logo you want animated — or a link, tweet, or news article to pull from.",
+      "short": "Make a short, silent motion graphic where motion is the message: kinetic type, a stat count-up, a chart hit, or a logo sting, usually under 10 seconds. Exports to MP4 or a transparent overlay.",
+      "output": "A finished ~3–30s motion graphic rendered to MP4, or a transparent overlay (WebM/MOV) you can drop onto other footage.",
+      "process": "It plans the shot and decides if it needs to source real material, sources assets when needed, then designs and builds the piece by reusing HyperFrames catalog blocks plus animation rules — one dominant motion idea, no narration."
+    },
+    "reference_file": "https://github.com/heygen-com/hyperframes/blob/main/skills/motion-graphics/SKILL.md",
+    "install_command": "Install the skill or give me an instruction how to install it - motion-graphics from https://github.com/heygen-com/hyperframes",
+    "tools": [],
+    "preview_video": "https://media.surfskills.surf/skills/motion-graphics-demo.mp4",
+    "preview_image": "https://media.surfskills.surf/skills/motion-graphics-demo.jpg",
+    "kind": "Action",
+    "related_slugs": [
+      "hyperframes",
+      "illo"
+    ],
+    "sort_order": null,
+    "created_at": "2026-06-29T08:15:16.408965+00:00",
+    "use_cases": [
+      "Video"
+    ],
+    "long_description": "Hand it the thing you want animated, a line of text, a number, a chart, a logo, or even a tweet or headline to pull from, and get back a short motion graphic where the movement carries the whole message. No voiceover, no scenes, just one dominant motion idea: a stat counting up, a headline snapping into place, a logo sting, a lower-third.\n\nMost pieces run under ten seconds. You can render to a standard MP4 or to a transparent overlay in WebM or MOV that drops straight onto other footage. Under the hood it plans the single shot, sources any real material it needs, then builds the animation from HyperFrames catalog blocks and motion rules, so it looks designed rather than defaulted.",
+    "when_to_use": [
+      {
+        "body": "Get a silent motion graphic under 10 seconds, like a kinetic headline, a stat count-up, or a logo sting.",
+        "title": "You need a short animated graphic, not a full video"
+      },
+      {
+        "body": "Hand it the stat, text, or logo and it builds a single focused motion piece rendered to MP4.",
+        "title": "You want to animate one number or line"
+      },
+      {
+        "body": "It can export a transparent WebM or MOV, not just a flat MP4.",
+        "title": "You need an overlay to drop onto other footage"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Short ones. motion-graphics builds a silent motion graphic usually under 10 seconds, like a stat count-up, a chart hit, or a logo sting. It is built around one dominant motion idea, not a full narrated video.",
+        "q": "How long a clip does it make?"
+      },
+      {
+        "a": "Yes. motion-graphics exports to MP4 or to a transparent overlay, so you can drop the animation on top of existing video or a live scene. You choose the format when you build it.",
+        "q": "Can I lay it over my own footage?"
+      },
+      {
+        "a": "No. motion-graphics is silent by design, where the motion carries the message rather than narration. For a narrated piece you would use a different HyperFrames workflow.",
+        "q": "Does it include a voiceover?"
+      }
+    ]
+  }
+]

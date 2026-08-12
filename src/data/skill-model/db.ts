@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { getCollection } from "astro:content";
 import {
   type Collection,
   type DirectorySkill,
@@ -11,15 +11,15 @@ import {
 } from "./types";
 import { type DirectoryEntry, skillSlugFromId } from "./index";
 
-// Supabase-backed source for the catalog (Discover, /s/**, sitemap). Rows are
-// mapped back to the SAME Collection / DirectorySkill / DirectoryEntry shapes the
-// static model used, so every downstream view-model and component is reused
-// unchanged — only the *source* moves from a static array to an async fetch.
+// Frozen catalog source (Discover, /s/**, sitemap, llms.txt). Rows live in two
+// content collections (src/data/catalog/*.json, defined in src/content.config.ts)
+// and are mapped back to the SAME Collection / DirectorySkill / DirectoryEntry
+// shapes the app already used, so every downstream view-model and component is
+// reused unchanged — only the *source* moved (Supabase -> build-time JSON).
 //
 // Enum-ish columns store the canonical enum KEY strings ("Action", "Design",
-// "Research"). They're hand-editable in Studio, so mapping is defensive: an unknown
-// key is dropped (arrays) or the whole row is skipped-and-logged (kind), never
-// allowed to surface as `undefined` and 500 a page.
+// "Research"). Mapping stays defensive: an unknown key is dropped (arrays) or the
+// whole row is skipped-and-logged (kind), never allowed to surface as `undefined`.
 
 interface CollectionRow {
   id: string;
@@ -162,21 +162,33 @@ export interface Directory {
   skillsBySlug: Map<string, DirectorySkill>;
 }
 
-/** Single fetch primitive: two selects, mapped into the familiar aggregates. */
-export async function loadDirectory(supabase: SupabaseClient): Promise<Directory> {
-  const [collectionsRes, skillsRes] = await Promise.all([
-    supabase.from("collections").select("*"),
-    supabase
-      .from("skills")
-      .select("*")
-      .order("sort_order", { ascending: true, nullsFirst: false })
-      .order("created_at", { ascending: false }),
+// Reproduce the ordering the Supabase query guaranteed: sort_order ascending with
+// nulls last, then created_at descending. Content collections don't preserve any
+// source order, so the sort has to be explicit here.
+const compareSkillRows = (a: SkillRow, b: SkillRow): number => {
+  const sa = a.sort_order;
+  const sb = b.sort_order;
+  if (sa !== sb) {
+    if (sa === null || sa === undefined) return 1;
+    if (sb === null || sb === undefined) return -1;
+    return sa - sb;
+  }
+  return b.created_at.localeCompare(a.created_at);
+};
+
+/** Single load primitive: two content collections, mapped into the familiar aggregates. */
+export async function loadDirectory(): Promise<Directory> {
+  const [collectionEntries, skillEntries] = await Promise.all([
+    getCollection("collections"),
+    getCollection("skills"),
   ]);
-  if (collectionsRes.error) throw collectionsRes.error;
-  if (skillsRes.error) throw skillsRes.error;
+  const collectionRows = collectionEntries.map((e) => e.data) as CollectionRow[];
+  const skillRows = (skillEntries.map((e) => e.data) as SkillRow[]).sort(
+    compareSkillRows,
+  );
 
   const collectionsByIdRaw = new Map<string, Collection>();
-  for (const row of (collectionsRes.data ?? []) as CollectionRow[]) {
+  for (const row of collectionRows) {
     collectionsByIdRaw.set(row.id, mapCollection(row));
   }
 
@@ -186,7 +198,7 @@ export async function loadDirectory(supabase: SupabaseClient): Promise<Directory
   const skillsBySlug = new Map<string, DirectorySkill>();
   const grouped: Record<string, DirectorySkill[]> = {};
 
-  for (const row of (skillsRes.data ?? []) as SkillRow[]) {
+  for (const row of skillRows) {
     const skill = mapSkill(row);
     if (!skill) continue;
     const collection = collectionsByIdRaw.get(row.collection_id);
@@ -232,16 +244,13 @@ export const resolveRelatedEntries = (dir: Directory, id: string): DirectoryEntr
       relatedSkillSlugs: [],
     }));
 
-export async function loadSkill(
-  supabase: SupabaseClient,
-  id: string,
-): Promise<{
+export async function loadSkill(id: string): Promise<{
   skill: DirectorySkill;
   collection: Collection;
   related: DirectoryEntry[];
   availableIds: Set<string>;
 } | null> {
-  const dir = await loadDirectory(supabase);
+  const dir = await loadDirectory();
   const skill = dir.skillsById[id];
   if (!skill) return null;
   const collection = dir.collectionsById[skill.collection]?.collection;
@@ -250,9 +259,8 @@ export async function loadSkill(
 }
 
 export async function loadCollection(
-  supabase: SupabaseClient,
   id: string,
 ): Promise<{ collection: Collection; skills: DirectorySkill[] } | null> {
-  const dir = await loadDirectory(supabase);
+  const dir = await loadDirectory();
   return dir.collectionsById[id] ?? null;
 }

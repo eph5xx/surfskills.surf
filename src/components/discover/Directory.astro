@@ -5,8 +5,8 @@ import FacetOptions from "./FacetOptions.astro";
 import ActiveChips from "./ActiveChips.astro";
 import DirectoryCard from "./DirectoryCard.astro";
 
-// Items + facets are fetched per request by the page (discover.astro) from
-// Supabase and threaded in, so this shell stays presentational.
+// Items + facets are built at build time by the page (discover.astro) from the
+// frozen catalog snapshot and threaded in, so this shell stays presentational.
 interface Props {
   items: DirectoryItem[];
   facets: FacetDef[];
