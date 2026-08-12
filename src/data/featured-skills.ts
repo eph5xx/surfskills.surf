@@ -1,14 +1,14 @@
 import { SkillUseCase } from "./skill-model/types";
 
 // Code-driven data for the homepage "examples" showcase (SkillShowcase). This is
-// intentionally INDEPENDENT of the Supabase catalog — the showcase must never
-// break when the DB changes — and is the explicit allowlist of which skills get
-// featured (add/remove an entry by hand).
+// intentionally INDEPENDENT of the main catalog — the showcase is an explicit
+// hand-maintained allowlist of which skills get featured (add/remove an entry by
+// hand).
 //
 // Only the fields `toSkillCard` actually reads are kept (see ./skill-card); the
-// full catalog lives in Supabase and is fetched by ./skill-model/db.ts for the
-// Discover and /s/** pages. Order here drives render order: the first entry with
-// a video becomes the large spotlight card.
+// full catalog is a frozen build-time snapshot loaded by ./skill-model/db.ts for
+// the Discover and /s/** pages. Order here drives render order: the first entry
+// with a video becomes the large spotlight card.
 
 export interface FeaturedSkill {
   id: string;

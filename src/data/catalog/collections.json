@@ -1,0 +1,1497 @@
+[
+  {
+    "id": "coreyhaines31/marketingskills",
+    "name": "Marketing Skills for AI Agents",
+    "short_description": "Turn your AI coding agent into a growth team with marketing skills for conversion optimization, copywriting, SEO, ads, and analytics, each carrying frameworks a senior marketer actually uses.",
+    "repository_url": "https://github.com/coreyhaines31/marketingskills",
+    "website_url": "https://marketing-skills.com",
+    "external_links": [],
+    "author_name": "Corey Haines",
+    "author_url": "https://github.com/coreyhaines31",
+    "author_avatar_url": "https://github.com/coreyhaines31.png",
+    "license": "MIT",
+    "github_stars": 38949,
+    "updated_at": "2026-07-13",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/coreyhaines31/marketingskills",
+    "skills": [
+      "coreyhaines31/marketingskills/ab-testing",
+      "coreyhaines31/marketingskills/ad-creative",
+      "coreyhaines31/marketingskills/ads",
+      "coreyhaines31/marketingskills/ai-seo",
+      "coreyhaines31/marketingskills/analytics",
+      "coreyhaines31/marketingskills/aso",
+      "coreyhaines31/marketingskills/churn-prevention",
+      "coreyhaines31/marketingskills/co-marketing",
+      "coreyhaines31/marketingskills/cold-email",
+      "coreyhaines31/marketingskills/community-marketing",
+      "coreyhaines31/marketingskills/competitor-profiling",
+      "coreyhaines31/marketingskills/competitors",
+      "coreyhaines31/marketingskills/content-strategy",
+      "coreyhaines31/marketingskills/copy-editing",
+      "coreyhaines31/marketingskills/copywriting",
+      "coreyhaines31/marketingskills/cro",
+      "coreyhaines31/marketingskills/customer-research",
+      "coreyhaines31/marketingskills/directory-submissions",
+      "coreyhaines31/marketingskills/emails",
+      "coreyhaines31/marketingskills/free-tools",
+      "coreyhaines31/marketingskills/image",
+      "coreyhaines31/marketingskills/launch",
+      "coreyhaines31/marketingskills/lead-magnets",
+      "coreyhaines31/marketingskills/marketing-council",
+      "coreyhaines31/marketingskills/marketing-ideas",
+      "coreyhaines31/marketingskills/marketing-loops",
+      "coreyhaines31/marketingskills/marketing-plan",
+      "coreyhaines31/marketingskills/marketing-psychology",
+      "coreyhaines31/marketingskills/offers",
+      "coreyhaines31/marketingskills/onboarding",
+      "coreyhaines31/marketingskills/paywalls",
+      "coreyhaines31/marketingskills/popups",
+      "coreyhaines31/marketingskills/pricing",
+      "coreyhaines31/marketingskills/product-marketing",
+      "coreyhaines31/marketingskills/programmatic-seo",
+      "coreyhaines31/marketingskills/prospecting",
+      "coreyhaines31/marketingskills/public-relations",
+      "coreyhaines31/marketingskills/referrals",
+      "coreyhaines31/marketingskills/revops",
+      "coreyhaines31/marketingskills/sales-enablement",
+      "coreyhaines31/marketingskills/schema",
+      "coreyhaines31/marketingskills/seo-audit",
+      "coreyhaines31/marketingskills/signup",
+      "coreyhaines31/marketingskills/site-architecture",
+      "coreyhaines31/marketingskills/sms",
+      "coreyhaines31/marketingskills/social",
+      "coreyhaines31/marketingskills/video"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "Point your coding agent at a marketing problem and it works from the same playbooks a senior marketer would use. The collection covers the full funnel: SEO audits and programmatic pages, landing-page conversion, copywriting, paid ads, analytics setup, launches, pricing, and retention.\n\nEach skill carries real frameworks rather than generic advice, and they share context through a product-marketing profile every other skill reads first, so the copy matches your positioning and the CRO matches your audience. Install the whole set or pull a single skill like cro or seo-audit. Works in Claude Code, Cursor, Codex, and any agent that supports the Agent Skills spec.",
+    "when_to_use": [
+      {
+        "body": "One agent for the full funnel, from the SEO and content that bring people in to the pricing, onboarding, and retention that keep them.",
+        "title": "You're the whole marketing team"
+      },
+      {
+        "body": "Cover SEO, content, paid ads, and social from one place instead of a different expert for each.",
+        "title": "You need traffic and can't hire a specialist per channel"
+      },
+      {
+        "body": "Fix signup, onboarding, pricing, and paywalls, then cut churn and turn the users you keep into referrals.",
+        "title": "Visitors show up but don't convert or stick around"
+      },
+      {
+        "body": "Positioning, a launch plan, competitor and pricing research, and the sales and outreach assets to back it.",
+        "title": "You're taking a product to market"
+      }
+    ],
+    "faq": [
+      {
+        "a": "You can use any skill on its own. In Marketing Skills for AI Agents, the product-marketing skill acts as shared context the others read first for your positioning, but each skill still works independently when you invoke it.",
+        "q": "Can I use one skill on its own, or do I need the whole set?"
+      },
+      {
+        "a": "Yes. Marketing Skills for AI Agents is open-source under the MIT license with no paid tier. You can install the full set or a single skill at no cost.",
+        "q": "Is Marketing Skills free?"
+      },
+      {
+        "a": "Marketing Skills works with Claude Code, OpenAI Codex, Cursor, Windsurf, and any agent that supports the Agent Skills spec. You add the skills to your project and the agent applies the right one when it spots a marketing task.",
+        "q": "Which agents does it work with?"
+      },
+      {
+        "a": "You need a coding agent such as Claude Code or Cursor, but not much more. Marketing Skills is built for founders and marketers, and the repo links a companion Coding for Marketers guide if the terminal is new to you.",
+        "q": "Do I need to be technical to use these?"
+      }
+    ]
+  },
+  {
+    "id": "hardikpandya/stop-slop",
+    "name": "Stop Slop",
+    "short_description": "Strip the phrases and rhythms that mark writing as AI-generated so drafts read like a person wrote them. It rewrites against concrete banned-pattern rules and scores the result for human voice.",
+    "repository_url": "https://github.com/hardikpandya/stop-slop",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Hardik Pandya",
+    "author_url": "https://github.com/hardikpandya",
+    "author_avatar_url": "https://github.com/hardikpandya.png",
+    "license": "MIT",
+    "github_stars": 13743,
+    "updated_at": "2026-03-17",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/hardikpandya/stop-slop",
+    "skills": [
+      "hardikpandya/stop-slop/stop-slop"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "Stop Slop teaches your agent to catch and remove the patterns that mark writing as AI-generated. It rewrites prose against concrete rules: banned phrases and throat-clearing openers, structural cliches like binary contrasts and dramatic fragmentation, and sentence-level bans on em dashes and staccato fragments.\n\nThen it scores the result from 1 to 10 on five dimensions of human voice: directness, rhythm, trust, authenticity, and density. Anything below the threshold gets another pass. Add it as a skill in Claude Code or any LLM that reads the SKILL.md format.",
+    "when_to_use": [
+      {
+        "body": "It rewrites against concrete banned-pattern rules so drafts read like a person wrote them.",
+        "title": "Your writing has that AI smell"
+      },
+      {
+        "body": "It grades the result so you can tell whether the slop is actually gone.",
+        "title": "You want a human-voice score before publishing"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Stop Slop rewrites against concrete banned-pattern rules covering throat-clearing openers, em dashes, and business jargon, then scores the result out of 10 for human voice rather than relying on a vague instruction.",
+        "q": "How is Stop Slop different from just asking the model to sound human?"
+      },
+      {
+        "a": "Stop Slop is a single Markdown skill. You add the folder as a skill in Claude Code, upload SKILL.md to a Claude Project, or include it in your API system prompt so the reference files load on demand.",
+        "q": "How do I use Stop Slop?"
+      },
+      {
+        "a": "Yes. Stop Slop is open-source under the MIT license with no paid tier, and it runs inside whatever model or agent you already use.",
+        "q": "Is Stop Slop free?"
+      }
+    ]
+  },
+  {
+    "id": "blader/humanizer",
+    "name": "Humanizer",
+    "short_description": "Paste AI-sounding text and get it back reading like a person wrote it. Humanizer catches 33 documented tells from Wikipedia's \"Signs of AI writing\" guide, and can match your voice from a sample.",
+    "repository_url": "https://github.com/blader/humanizer",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Siqi Chen",
+    "author_url": "https://github.com/blader",
+    "author_avatar_url": "https://github.com/blader.png",
+    "license": "MIT",
+    "github_stars": 28966,
+    "updated_at": "2026-06-07",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/blader/humanizer",
+    "skills": [
+      "blader/humanizer/humanizer"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "You paste writing that reads like a chatbot produced it, and Humanizer rewrites it to sound like a person. Same meaning, same length, minus the tells: em dash pileups, the rule of three, inflated significance, and the stock AI vocabulary.\n\nIt works from Wikipedia's \"Signs of AI writing\" guide, checking your text against 33 specific patterns and running a second audit pass to catch anything the first rewrite missed. Give it a few paragraphs of your own work and it matches your rhythm and word choices instead of settling for generic clean copy. It is plain Markdown, so it runs in Claude Code, Cursor, or any agent that reads skills.",
+    "when_to_use": [
+      {
+        "body": "Paste it and get copy back that sounds like a person, with the 33 known tells stripped out.",
+        "title": "Your draft reads like AI wrote it"
+      },
+      {
+        "body": "Give it a sample of your writing and it matches your voice instead of flattening it.",
+        "title": "You want it to sound like you, not a bot"
+      },
+      {
+        "body": "It scores a draft for the specific patterns that flag text as machine-generated.",
+        "title": "You need to vet writing before it ships"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Yes. Humanizer is an open-source agent skill under the MIT license with no paid tier. You install it once and run it on as much text as you want.",
+        "q": "Is Humanizer free to use?"
+      },
+      {
+        "a": "Humanizer is a plain Markdown skill, so it runs in any harness that reads agent skills, including Claude Code, Cursor, Codex, and Copilot. You install it with npx skills add blader/humanizer or as a Claude Code plugin.",
+        "q": "Which agents and editors does Humanizer work with?"
+      },
+      {
+        "a": "No. Humanizer is an instruction file that runs inside the agent you already use, so your text goes only where that agent already sends it. The skill adds no service or account of its own.",
+        "q": "Does my text get sent anywhere new?"
+      }
+    ]
+  },
+  {
+    "id": "Panniantong/Agent-Reach",
+    "name": "Agent Reach",
+    "short_description": "Give your AI agent read and search access to 15 platforms, including Twitter, Reddit, YouTube, Bilibili, GitHub, and RSS, from one paste-to-install command with free, self-checking backends.",
+    "repository_url": "https://github.com/Panniantong/Agent-Reach",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Pnant",
+    "author_url": "https://github.com/Panniantong",
+    "author_avatar_url": "https://github.com/Panniantong.png",
+    "license": "MIT",
+    "github_stars": 55599,
+    "updated_at": "2026-07-03",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/Panniantong/Agent-Reach",
+    "skills": [
+      "Panniantong/Agent-Reach/agent-reach"
+    ],
+    "created_at": "2026-07-03T12:44:41.015507+00:00",
+    "long_description": "Agent Reach gives your AI agent read and search access to 15 internet platforms from a single paste-to-install command. Twitter/X, Reddit, YouTube, Xiaohongshu, Bilibili, GitHub, RSS, and semantic web search all become things the agent can actually read, instead of returning a wall of HTML or a 403.\n\nEach platform routes through an ordered list of free backends, so when one access method breaks the project switches to the next and you feel nothing. Cookies stay local, the tools are open source, and running agent-reach doctor tells you exactly what works and how to fix what doesn't. Compatible with any agent that can run shell commands, including Claude Code, Cursor, and OpenClaw.",
+    "when_to_use": [
+      {
+        "body": "Give it read and search access to Twitter, Reddit, YouTube, GitHub, RSS, and more from one install.",
+        "title": "Your agent can't see past its own context"
+      },
+      {
+        "body": "Free, self-checking backends handle the platform access, so you paste one command and go.",
+        "title": "You want live data without wiring up APIs"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Agent Reach gives your agent read and search access to 15 platforms, including Twitter, Reddit, YouTube, Bilibili, GitHub, and RSS, from one paste-to-install command.",
+        "q": "Which platforms does Agent Reach cover?"
+      },
+      {
+        "a": "No. Agent Reach uses free, self-checking backends, so platforms like Reddit and YouTube work without paying for official APIs. It installs its command-line tools with pip.",
+        "q": "Do I need paid API keys?"
+      },
+      {
+        "a": "Agent Reach needs Python 3.10 or newer, and your agent must be allowed to run shell commands like pip install, since the skill installs and drives its own command-line tools.",
+        "q": "What do I need to run it?"
+      },
+      {
+        "a": "Yes. Agent Reach is open-source under the MIT license, and its backends are free to use.",
+        "q": "Is Agent Reach free?"
+      }
+    ]
+  },
+  {
+    "id": "mvanhorn/last30days-skill",
+    "name": "Last30Days",
+    "short_description": "Research any topic across Reddit, X, YouTube, TikTok, Hacker News, and GitHub at once, then get one grounded brief ranked by what people actually engage with, not editorial picks.",
+    "repository_url": "https://github.com/mvanhorn/last30days-skill",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Matt Van Horn",
+    "author_url": "https://github.com/mvanhorn",
+    "author_avatar_url": "https://github.com/mvanhorn.png",
+    "license": "MIT",
+    "github_stars": 51858,
+    "updated_at": "2026-06-27",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/mvanhorn/last30days-skill",
+    "skills": [
+      "mvanhorn/last30days-skill/last30days"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "Last30Days researches any topic or person across the places editors don't reach: Reddit, X, YouTube, TikTok, Hacker News, Polymarket, GitHub, and more, all searched in parallel. Instead of ranking by SEO, it scores what it finds by what real people actually engaged with, upvotes, likes, views, and prediction-market odds backed by money, then an agent judge synthesizes it into one grounded brief.\n\nThe result is the last-30-days truth a Google search misses: what someone is really working on this month, how a product is landing, what the community has already figured out. Ask for an HTML brief and it saves a self-contained file you can drop into Slack or Notion. Zero config to start; a setup wizard unlocks the gated sources in about 30 seconds.",
+    "when_to_use": [
+      {
+        "body": "Search Reddit, X, YouTube, TikTok, Hacker News, and GitHub at once and get one brief ranked by actual engagement.",
+        "title": "You need a real read on a topic, not editorial picks"
+      },
+      {
+        "body": "Pull recent signal from six platforms into a single grounded summary.",
+        "title": "You're checking what people think right now"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Last30Days searches Reddit, X, YouTube, TikTok, Hacker News, GitHub, and Polymarket at once, then ranks results by real engagement like upvotes, likes, and market odds rather than editorial picks.",
+        "q": "Which platforms does Last30Days search?"
+      },
+      {
+        "a": "Last30Days runs with zero config for Reddit, Hacker News, Polymarket, and GitHub. A 30-second setup wizard unlocks X, YouTube, and TikTok when you want them.",
+        "q": "Do I need API keys or setup?"
+      },
+      {
+        "a": "Last30Days installs in Claude Code with /plugin marketplace add mvanhorn/last30days-skill, or in Codex, Cursor, Copilot, Gemini CLI, and 50+ other Agent Skills hosts with npx skills add mvanhorn/last30days-skill -g.",
+        "q": "Which agents does it work with?"
+      },
+      {
+        "a": "Yes. Last30Days is open-source under the MIT license with no paid tier.",
+        "q": "Is Last30Days free?"
+      }
+    ]
+  },
+  {
+    "id": "virgiliojr94/book-to-skill",
+    "name": "book-to-skill",
+    "short_description": "Turn any technical book or folder of docs into a structured agent skill your agent loads on demand: a compact core plus per-chapter files and a cheatsheet. It answers at a fraction of the tokens.",
+    "repository_url": "https://github.com/virgiliojr94/book-to-skill",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Virgilio Junior",
+    "author_url": "https://github.com/virgiliojr94",
+    "author_avatar_url": "https://github.com/virgiliojr94.png",
+    "license": "MIT",
+    "github_stars": 8564,
+    "updated_at": "2026-06-26",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/virgiliojr94/book-to-skill",
+    "skills": [
+      "virgiliojr94/book-to-skill/book-to-skill"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "book-to-skill turns a technical book, a docs folder, or a stack of sources into a structured skill your agent loads on demand. Point it at a PDF, EPUB, or folder and it distills the material into a compact core file plus per-chapter files, a glossary, a patterns doc, and a cheatsheet, keeping the structure rather than flattening it into a summary.\n\nOnce installed, you ask about a topic and the agent reads the right chapter and answers from the real content, with no hallucination and no digging through a PDF. Answering one question costs 24 to 51 times fewer tokens than dumping the whole book into context. The same extraction works on internal docs, brand systems, and specs, and it runs in Claude Code, GitHub Copilot CLI, and Amp.",
+    "when_to_use": [
+      {
+        "body": "Turn any technical book or folder of docs into a skill it loads on demand.",
+        "title": "You want your agent to know a specific book or doc set"
+      },
+      {
+        "body": "A compact core plus per-chapter files answer at a fraction of the tokens.",
+        "title": "You need the knowledge without the token cost"
+      }
+    ],
+    "faq": [
+      {
+        "a": "book-to-skill turns PDF, EPUB, DOCX, Markdown, HTML, RTF, and MOBI sources into an agent skill, so a book or a folder of docs becomes a compact core plus per-chapter files and a cheatsheet.",
+        "q": "What file formats can it read?"
+      },
+      {
+        "a": "book-to-skill produces a standard Agent Skill your agent loads on demand, and it works with GitHub Copilot CLI, Amp, and Claude Code.",
+        "q": "Which agents does it work with?"
+      },
+      {
+        "a": "Yes. book-to-skill is open-source under the MIT license. A standalone pip install book-to-skill gives you just the text extractor if you want the engine on its own.",
+        "q": "Is book-to-skill free?"
+      }
+    ]
+  },
+  {
+    "id": "supermemoryai/supermemory",
+    "name": "Supermemory",
+    "short_description": "Give your AI lasting memory. One API adds fact extraction, live user profiles, and hybrid RAG search over your own data. Ranked #1 on LongMemEval, LoCoMo, and ConvoMem benchmarks.",
+    "repository_url": "https://github.com/supermemoryai/supermemory",
+    "website_url": "https://supermemory.ai",
+    "external_links": [],
+    "author_name": "supermemory",
+    "author_url": "https://github.com/supermemoryai",
+    "author_avatar_url": "https://github.com/supermemoryai.png",
+    "license": "MIT",
+    "github_stars": 28349,
+    "updated_at": "2026-06-27",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/supermemoryai/supermemory",
+    "skills": [
+      "supermemoryai/supermemory/supermemory"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "Supermemory gives your AI persistent memory behind a single API, so it stops forgetting everything between conversations. It learns facts as you talk, keeps live user profiles that blend stable details with recent activity, and runs full RAG over your knowledge base, all from one call with no vector database or embedding pipeline to set up.\n\nIt handles the hard parts of memory: temporal changes, contradictions, and forgetting information that has expired. Connectors sync from Google Drive, Gmail, Notion, and GitHub, and multi-modal extractors read PDFs, images, and video. It ranks #1 on the LongMemEval, LoCoMo, and ConvoMem benchmarks, and you can call the API, use the app, or self-host it.",
+    "when_to_use": [
+      {
+        "body": "One API adds fact extraction, live user profiles, and search over your own data.",
+        "title": "Your AI forgets everything between sessions"
+      },
+      {
+        "body": "Hybrid RAG search that ranks first on LongMemEval, LoCoMo, and ConvoMem.",
+        "title": "You need memory that retrieves the right thing"
+      }
+    ],
+    "faq": [
+      {
+        "a": "You can do both. Supermemory is open-source under the MIT license and runs locally with npx supermemory local, and there is also a hosted API if you prefer not to run it yourself.",
+        "q": "Can I self-host Supermemory, or is it a paid service?"
+      },
+      {
+        "a": "You can connect Supermemory over MCP, install the SDK with npm install supermemory or pip install supermemory, or run it locally so the Memory API is available at localhost:6767.",
+        "q": "How do I add it to my AI?"
+      },
+      {
+        "a": "Not if you self-host. Running Supermemory locally keeps documents, memories, and search on your own machine, while the hosted option stores them in Supermemory's cloud behind an API key.",
+        "q": "Does my data leave my machine?"
+      },
+      {
+        "a": "Supermemory extracts facts from conversations, builds live user profiles, and runs hybrid RAG search over your own data, so your AI keeps context instead of forgetting between sessions.",
+        "q": "What does Supermemory actually do?"
+      }
+    ]
+  },
+  {
+    "id": "ML-SystemDesign/MLSystemDesign",
+    "name": "Machine Learning System Design",
+    "short_description": "Agent skills that bring the ML System Design framework to your AI coding agent: grade a design doc or repo, then decide whether an AI product has earned its next gate.",
+    "repository_url": "https://github.com/ML-SystemDesign/MLSystemDesign",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "ML-SystemDesign",
+    "author_url": "https://github.com/ML-SystemDesign",
+    "author_avatar_url": "https://github.com/ML-SystemDesign.png",
+    "license": "MIT",
+    "github_stars": 775,
+    "updated_at": "2026-07-08",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/ML-SystemDesign/MLSystemDesign",
+    "skills": [
+      "ML-SystemDesign/MLSystemDesign/ai-stage-gate",
+      "ML-SystemDesign/MLSystemDesign/ml-system-design-review"
+    ],
+    "created_at": "2026-07-09T11:26:36.6391+00:00",
+    "long_description": "Point your AI coding agent at an ML or AI system design and get the framework from Kravchenko and Babushkin's book applied for you, not a generic checklist.\n\nOne skill reviews a design doc, a repo, or both and returns a verdict, a stage-aware gradecard, severity-ranked findings, and a prioritized fix plan. Another runs a stage-gate review and reaches an evidence-based Go, Conditional, or Kill decision for an AI product. The repo also ships the book's design-doc templates, a review checklist, and worked example documents.\n\nYou get concrete, shareable output you can paste into a design doc or a gate deck, grounded in what your design or repo actually shows.",
+    "when_to_use": [
+      {
+        "body": "Grade a design doc, a repo, or both against the book's framework and get findings, a gradecard, and the cheap fixes worth doing first.",
+        "title": "You're reviewing an ML or AI system design"
+      },
+      {
+        "body": "Run a stage-gate review and get an evidence-based decision with the top blocker and the exact next-stage investment to release.",
+        "title": "You need a Go or Kill call at an AI product gate"
+      },
+      {
+        "body": "Use the same rubrics, templates, and worked examples the book teaches, run by your agent against your own design instead of on paper.",
+        "title": "You're applying the book to a real project"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Machine Learning System Design ships two agent skills, one for design review and one for AI stage-gate decisions, plus the book's design-doc templates, a review checklist, and worked example design documents.",
+        "q": "What's included in this collection?"
+      },
+      {
+        "a": "No. One install, npx skills add ML-SystemDesign/MLSystemDesign, brings the whole set. You can then invoke any skill on its own without the rest.",
+        "q": "Do I install each skill separately?"
+      },
+      {
+        "a": "No. The skills stand alone and work without the book. They apply the ML System Design framework by Kravchenko and Babushkin, so the Manning book goes deeper on the same concepts if you want it.",
+        "q": "Do I need the book to use these skills?"
+      },
+      {
+        "a": "Yes. Machine Learning System Design is MIT-licensed and free to use. You run the skills locally in your own agent, against your own designs.",
+        "q": "Is it free and open source?"
+      }
+    ]
+  },
+  {
+    "id": "Egonex-AI/Understand-Anything",
+    "name": "Understand Anything",
+    "short_description": "Understand any codebase fast. It maps every file, function, and dependency into an interactive graph you can explore, so a new repo stops being a wall of unfamiliar files.",
+    "repository_url": "https://github.com/Egonex-AI/Understand-Anything",
+    "website_url": "https://understand-anything.com",
+    "external_links": [
+      "https://www.skills.sh/Egonex-AI/Understand-Anything",
+      "https://claudemarketplaces.com/skills/Egonex-AI/Understand-Anything"
+    ],
+    "author_name": "Egonex",
+    "author_url": "https://github.com/Egonex-AI",
+    "author_avatar_url": "https://github.com/Egonex-AI.png",
+    "license": "MIT",
+    "github_stars": 73748,
+    "updated_at": "2026-06-20",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/Egonex-AI/Understand-Anything",
+    "skills": [
+      "Egonex-AI/Understand-Anything/understand",
+      "Egonex-AI/Understand-Anything/understand-chat",
+      "Egonex-AI/Understand-Anything/understand-dashboard",
+      "Egonex-AI/Understand-Anything/understand-diff",
+      "Egonex-AI/Understand-Anything/understand-domain",
+      "Egonex-AI/Understand-Anything/understand-explain",
+      "Egonex-AI/Understand-Anything/understand-knowledge",
+      "Egonex-AI/Understand-Anything/understand-onboard"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "Understand Anything turns a codebase you have never seen into an interactive map you can explore. Point it at a project and a multi-agent pipeline reads every file, function, class, and dependency, then builds a knowledge graph and a dashboard where each node carries a plain-English summary and its relationships.\n\nFrom there you can search by name or by meaning, follow guided tours ordered by dependency, and run diff impact analysis to see what a change touches before you commit. The same pipeline works on a Karpathy-style wiki or knowledge base, not just source code. It installs as a plugin for Claude Code, Codex, Cursor, Copilot, and Gemini CLI.",
+    "when_to_use": [
+      {
+        "body": "Map every file, function, and dependency into a graph you can explore before you touch anything.",
+        "title": "You just joined a project and it's a wall of files"
+      },
+      {
+        "body": "Ask questions, get explanations, and see how a domain or feature works across the repo.",
+        "title": "You need to understand code without reading it blind"
+      },
+      {
+        "body": "See the change against the map so an unfamiliar area stops being a guess.",
+        "title": "A diff or PR touches code you don't know"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Understand Anything maps every file, function, and dependency in a codebase into an interactive graph you can explore, search, and question. It reads your repo without changing any of your code.",
+        "q": "What does Understand Anything produce?"
+      },
+      {
+        "a": "Understand Anything works with Claude Code, Codex, Cursor, Copilot, and Gemini CLI. In Claude Code you install it with /plugin marketplace add Egonex-AI/Understand-Anything.",
+        "q": "Which agents does it work with?"
+      },
+      {
+        "a": "Yes. Understand Anything is open-source under the MIT license with no paid tier, and there is a live demo on understand-anything.com if you want to see it first.",
+        "q": "Is Understand Anything free?"
+      },
+      {
+        "a": "Yes, that is the point of it. You aim Understand Anything at a repo you do not know and it turns the wall of unfamiliar files into a graph you can navigate before touching anything.",
+        "q": "Can it handle a large, unfamiliar repository?"
+      }
+    ]
+  },
+  {
+    "id": "rebelytics/one-skill-to-rule-them-all",
+    "name": "One Skill to Rule Them All",
+    "short_description": "A meta-skill that watches your real work sessions and turns the corrections it catches into new and better skills, so your whole skill library keeps improving as you use it.",
+    "repository_url": "https://github.com/rebelytics/one-skill-to-rule-them-all",
+    "website_url": "https://www.rebelytics.com/task-observer/",
+    "external_links": [],
+    "author_name": "Eoghan Henn",
+    "author_url": "https://github.com/rebelytics",
+    "author_avatar_url": "https://github.com/rebelytics.png",
+    "license": "CC-BY-4.0",
+    "github_stars": 997,
+    "updated_at": "2026-05-24",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/rebelytics/one-skill-to-rule-them-all",
+    "skills": [
+      "rebelytics/one-skill-to-rule-them-all/task-observer"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "One Skill to Rule Them All is a meta-skill that makes your whole skill library improve as you work. It runs alongside your sessions and watches for two things: repeating patterns worth turning into a new skill, and corrections or preferences that show an existing skill could be clearer.\n\nAt the end of a session it produces a structured log of what it noticed, which skills are affected, and specific suggested edits. You review and approve, so you stay in control of what changes. It watches itself too, capturing improvements to its own method. In one three-month stretch it logged and applied over 600 improvements across 40 skills. Built for Claude, with community adaptations for Codex and others.",
+    "when_to_use": [
+      {
+        "body": "It watches your sessions and turns the fixes into reusable skills.",
+        "title": "You keep correcting your agent the same way"
+      },
+      {
+        "body": "Every correction it catches becomes a better skill for next time.",
+        "title": "You want your skill library to improve as you work"
+      }
+    ],
+    "faq": [
+      {
+        "a": "No. One Skill to Rule Them All watches your sessions and produces recommendations you review and approve. It never edits your skills directly, so you stay in control of what changes.",
+        "q": "Does it change my skills automatically?"
+      },
+      {
+        "a": "One Skill to Rule Them All runs alongside your work, spots repeating patterns and drafts new skills from them, and notices your corrections to suggest updates to existing skills, including itself.",
+        "q": "What does it actually do?"
+      },
+      {
+        "a": "One Skill to Rule Them All is built for Claude Code, and users have integrated it into Hermes and Openclaw setups too, so it works with autonomous agents. It is released under the CC BY 4.0 license.",
+        "q": "Which agents does it work with?"
+      }
+    ]
+  },
+  {
+    "id": "Leonxlnx/taste-skill",
+    "name": "Taste Skill",
+    "short_description": "Give your agent design taste. It reads the brief, infers the right visual direction, and ships frontend interfaces that do not look templated or generic.",
+    "repository_url": "https://github.com/Leonxlnx/taste-skill",
+    "website_url": "https://tasteskill.dev",
+    "external_links": [
+      "https://www.skills.sh/Leonxlnx/taste-skill",
+      "https://claudemarketplaces.com/skills/Leonxlnx/taste-skill"
+    ],
+    "author_name": "Leon Lin & blueemi",
+    "author_url": "https://github.com/Leonxlnx",
+    "author_avatar_url": "https://github.com/Leonxlnx.png",
+    "license": "MIT",
+    "github_stars": 62764,
+    "updated_at": "2026-06-20",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/Leonxlnx/taste-skill",
+    "skills": [
+      "Leonxlnx/taste-skill/brandkit",
+      "Leonxlnx/taste-skill/industrial-brutalist-ui",
+      "Leonxlnx/taste-skill/gpt-taste",
+      "Leonxlnx/taste-skill/image-to-code",
+      "Leonxlnx/taste-skill/imagegen-frontend-mobile",
+      "Leonxlnx/taste-skill/imagegen-frontend-web",
+      "Leonxlnx/taste-skill/minimalist-ui",
+      "Leonxlnx/taste-skill/full-output-enforcement",
+      "Leonxlnx/taste-skill/redesign-existing-projects",
+      "Leonxlnx/taste-skill/high-end-visual-design",
+      "Leonxlnx/taste-skill/stitch-design-taste",
+      "Leonxlnx/taste-skill/design-taste-frontend-v1",
+      "Leonxlnx/taste-skill/design-taste-frontend"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "Taste Skill is an anti-slop frontend toolkit for AI agents. Instead of producing the templated look every model defaults to, the agent reads your brief, infers a design direction, and tunes three dials for variance, motion, and density before it writes any code.\n\nThe set spans a range of looks and jobs: a minimalist editorial style, high-end visual design, industrial brutalism, a redesign-audit pass for existing projects, and an output-enforcement skill for when a model ships half-finished work. Separate image-generation skills produce reference boards for web, mobile, and brand kits that you hand to the build. Each skill does one job, and they install through the skills CLI into Codex, Cursor, or Claude Code.",
+    "when_to_use": [
+      {
+        "body": "It reads the brief, picks a visual direction, and ships frontends that don't look generic.",
+        "title": "Your agent builds interfaces that look templated"
+      },
+      {
+        "body": "Image-generation skills produce web, mobile, and brand-kit frames to design against.",
+        "title": "You want a reference board before you build"
+      },
+      {
+        "body": "Bring a current UI up to a higher visual bar instead of starting from scratch.",
+        "title": "You're redesigning an existing project"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Taste Skill is a set of thirteen portable agent skills that upgrade AI-built interfaces, plus image-generation skills for reference boards like web, mobile, and brand kits.",
+        "q": "What's included in Taste Skill?"
+      },
+      {
+        "a": "Yes. The npx skills CLI scans the repo's skills folder, so you can add one with a command like npx skills add https://github.com/Leonxlnx/taste-skill --skill design-taste-frontend instead of the whole set.",
+        "q": "Can I install just one skill?"
+      },
+      {
+        "a": "Taste Skill uses the Agent Skills format and works with Codex, Cursor, and Claude Code. You hand the design frames to whichever agent implements the interface.",
+        "q": "Which agents does it work with?"
+      },
+      {
+        "a": "Yes. Taste Skill is open-source under the MIT license with no paid tier.",
+        "q": "Is Taste Skill free?"
+      }
+    ]
+  },
+  {
+    "id": "pbakaus/impeccable",
+    "name": "Impeccable",
+    "short_description": "Design guidance for AI coding agents that strips the AI tells out of frontend work. One skill packs 23 commands, a browser detector, and 45 deterministic rules you can run on any UI.",
+    "repository_url": "https://github.com/pbakaus/impeccable",
+    "website_url": "https://impeccable.style",
+    "external_links": [],
+    "author_name": "Paul Bakaus",
+    "author_url": "https://github.com/pbakaus",
+    "author_avatar_url": "https://github.com/pbakaus.png",
+    "license": "Apache-2.0",
+    "github_stars": 46183,
+    "updated_at": "2026-07-03",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/pbakaus/impeccable",
+    "skills": [
+      "pbakaus/impeccable/impeccable"
+    ],
+    "created_at": "2026-07-03T20:15:15.016499+00:00",
+    "long_description": "Impeccable is design guidance for AI coding agents, built to strip the tells out of AI-generated frontend design: Inter for everything, purple gradients, cards nested in cards, gray text on colored backgrounds. It installs as one skill with 23 commands that form a shared design vocabulary with your agent, from polish and audit to bolder, quieter, and animate.\n\nA one-time init writes your product and design context so every later command knows the audience, brand lane, and type. Underneath, 45 deterministic detector rules plus a CLI and browser extension flag anti-patterns with no LLM and no API key. Run npx impeccable install, then /impeccable init inside your agent.",
+    "when_to_use": [
+      {
+        "body": "45 deterministic rules strip the tells out of agent-built UI.",
+        "title": "Your frontend has the AI look"
+      },
+      {
+        "body": "A built-in detector inspects the running page so the fixes are grounded, not guessed.",
+        "title": "You want to check a UI in the real browser"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Impeccable is one skill with 23 commands like polish, audit, and critique, a browser detector, and 45 deterministic rules that flag AI tells in frontend design. A setup command writes your product and design context for later commands to read.",
+        "q": "What's included in Impeccable?"
+      },
+      {
+        "a": "No. Impeccable's CLI and browser extension run the 45 deterministic detector rules with no LLM and no API key. Only the optional critique commands call a model.",
+        "q": "Do the checks need an API key?"
+      },
+      {
+        "a": "From your project root you run npx impeccable install, then /impeccable init inside your AI coding tool. init asks whether the surface is brand or product and writes design context every later command reads.",
+        "q": "How do I install Impeccable?"
+      },
+      {
+        "a": "Yes. Impeccable is open-source under the Apache 2.0 license with no paid tier.",
+        "q": "Is Impeccable free?"
+      }
+    ]
+  },
+  {
+    "id": "zarazhangrui/frontend-slides",
+    "name": "Frontend Slides",
+    "short_description": "Turn a brief or a PowerPoint file into an animation-rich HTML slide deck. You pick your look from visual previews, and every deck is one zero-dependency file that runs in any browser.",
+    "repository_url": "https://github.com/zarazhangrui/frontend-slides",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Zara Zhang",
+    "author_url": "https://github.com/zarazhangrui",
+    "author_avatar_url": "https://github.com/zarazhangrui.png",
+    "license": "MIT",
+    "github_stars": 25448,
+    "updated_at": "2026-06-23",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/zarazhangrui/frontend-slides",
+    "skills": [
+      "zarazhangrui/frontend-slides/frontend-slides"
+    ],
+    "created_at": "2026-07-07T09:23:03.623368+00:00",
+    "long_description": "Frontend Slides turns a brief or an existing PowerPoint file into a polished, animation-rich HTML presentation, without you writing any CSS or JavaScript. It uses a show-don't-tell approach to design: rather than asking you to describe an aesthetic, it generates visual previews and lets you pick the one you like.\n\nEvery deck comes out as a single file with inline CSS and JS, zero dependencies, and runs in any browser. The bundled styles deliberately avoid the generic AI look, and PowerPoint conversion preserves your images and content. It is packaged as a Claude Code plugin, and the core skill can be read by other coding agents with filesystem access.",
+    "when_to_use": [
+      {
+        "body": "Turn a brief or a PowerPoint into an animation-rich HTML deck you pick the look for.",
+        "title": "You need a deck that doesn't look like default slides"
+      },
+      {
+        "body": "Every deck is one zero-dependency HTML file that opens in any browser.",
+        "title": "You want slides that run anywhere"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Frontend Slides turns a brief or a PowerPoint file into an animation-rich HTML deck. Each deck is a single file with inline CSS and JavaScript, fixed at 16:9, that runs in any browser with no build tools.",
+        "q": "What do I get out of Frontend Slides?"
+      },
+      {
+        "a": "Frontend Slides is packaged as a Claude Code plugin you add with /plugin marketplace add https://github.com/zarazhangrui/frontend-slides. Other agents with filesystem and shell access can read its SKILL.md directly.",
+        "q": "How do I install it?"
+      },
+      {
+        "a": "Yes. Frontend Slides is open-source under the MIT license with no paid tier, and it can also convert existing PowerPoint files while preserving their images and content.",
+        "q": "Is Frontend Slides free?"
+      }
+    ]
+  },
+  {
+    "id": "DietrichGebert/ponytail",
+    "name": "Ponytail",
+    "short_description": "Make your AI agent write only the code a task needs. A decision ladder gates every addition, and review and audit commands find over-engineering you shipped. Around 54% less code on one benchmark.",
+    "repository_url": "https://github.com/DietrichGebert/ponytail",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "DietrichGebert",
+    "author_url": "https://github.com/DietrichGebert",
+    "author_avatar_url": "https://github.com/DietrichGebert.png",
+    "license": "MIT",
+    "github_stars": 81830,
+    "updated_at": "2026-06-24",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/DietrichGebert/ponytail",
+    "skills": [
+      "DietrichGebert/ponytail/ponytail",
+      "DietrichGebert/ponytail/ponytail-review",
+      "DietrichGebert/ponytail/ponytail-audit",
+      "DietrichGebert/ponytail/ponytail-debt",
+      "DietrichGebert/ponytail/ponytail-gain",
+      "DietrichGebert/ponytail/ponytail-help"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "Ponytail makes your AI agent write only the code a task actually needs. Before it adds anything, it runs a short decision ladder: does this need to exist, is it already in the codebase, does the standard library or the platform already do it. The result is smaller diffs. On a real agentic benchmark editing a FastAPI and React repo, it cut about 54% of the code an unguided agent wrote, without dropping validation, error handling, security, or accessibility.\n\nThe bundled review, audit, and debt commands turn the same eye on code you have already shipped, finding the over-engineering to strip out. It installs as a plugin for Claude Code, Codex, and around 16 other agents.",
+    "when_to_use": [
+      {
+        "body": "A decision ladder gates every addition so you get the minimal change, not a new framework.",
+        "title": "Your agent writes more code than the task needs"
+      },
+      {
+        "body": "Review and audit commands surface the abstraction and dead weight someone already shipped.",
+        "title": "You inherited an over-engineered codebase"
+      },
+      {
+        "body": "It tracks the debt removed and the reduction gained so the savings are visible, not vibes.",
+        "title": "You want the cleanup to be measurable"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Ponytail is a set of six skills built around a decision ladder that gates every addition your agent makes, plus review and audit commands that catch over-engineering already in your code.",
+        "q": "What's included in Ponytail?"
+      },
+      {
+        "a": "Yes. Ponytail is open-source under the MIT license with no paid tier. You install it once and it works across your agent's tasks.",
+        "q": "Is Ponytail free?"
+      },
+      {
+        "a": "Ponytail works with 16 agents, including Claude Code, Codex, and Copilot. In Claude Code you add it with /plugin marketplace add DietrichGebert/ponytail.",
+        "q": "Which agents does Ponytail work with?"
+      },
+      {
+        "a": "No. Ponytail keeps the safety guards in place while it trims code, and its own benchmark notes that a bare 'write one-liners' prompt drops a guard where Ponytail does not.",
+        "q": "Does writing less code make the output less safe?"
+      }
+    ]
+  },
+  {
+    "id": "heygen-com/hyperframes",
+    "name": "HyperFrames",
+    "short_description": "Turn HTML and seekable animations into a deterministic MP4. HyperFrames is an open-source framework you drive from the CLI or an AI coding agent that writes the composition and renders it for you.",
+    "repository_url": "https://github.com/heygen-com/hyperframes",
+    "website_url": null,
+    "external_links": [
+      "https://www.skills.sh/heygen-com/hyperframes",
+      "https://claudemarketplaces.com/skills/heygen-com/hyperframes"
+    ],
+    "author_name": "HeyGen",
+    "author_url": "https://github.com/heygen-com",
+    "author_avatar_url": "https://github.com/heygen-com.png",
+    "license": "Apache-2.0",
+    "github_stars": 34658,
+    "updated_at": "2026-07-05",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/heygen-com/hyperframes",
+    "skills": [
+      "heygen-com/hyperframes/embedded-captions",
+      "heygen-com/hyperframes/faceless-explainer",
+      "heygen-com/hyperframes/figma",
+      "heygen-com/hyperframes/general-video",
+      "heygen-com/hyperframes/hyperframes-animation",
+      "heygen-com/hyperframes/hyperframes-cli",
+      "heygen-com/hyperframes/hyperframes-core",
+      "heygen-com/hyperframes/hyperframes-creative",
+      "heygen-com/hyperframes/hyperframes-keyframes",
+      "heygen-com/hyperframes/hyperframes-media",
+      "heygen-com/hyperframes/hyperframes-registry",
+      "heygen-com/hyperframes/hyperframes",
+      "heygen-com/hyperframes/media-use",
+      "heygen-com/hyperframes/motion-graphics",
+      "heygen-com/hyperframes/music-to-video",
+      "heygen-com/hyperframes/pr-to-video",
+      "heygen-com/hyperframes/product-launch-video",
+      "heygen-com/hyperframes/remotion-to-hyperframes",
+      "heygen-com/hyperframes/slideshow",
+      "heygen-com/hyperframes/talking-head-recut",
+      "heygen-com/hyperframes/website-to-video"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "HyperFrames turns your coding agent into a video producer. You describe the video you want and it writes the composition as plain HTML, CSS, and seekable animation, then renders a deterministic MP4 that comes out the same every time.\n\nThe skills teach agents the production loop that generic web docs miss: plan the video, write valid markup, wire the animation, add media, lint, preview, and render. They route by intent, so a product promo, a PR walkthrough, a captioned talking head, or a beat-synced music video each pick up the right workflow. It runs locally with the CLI or on AWS Lambda for scale, and the engine is open source under Apache 2.0.",
+    "when_to_use": [
+      {
+        "body": "Describe what you want and it composes the HTML and renders a finished MP4, no timeline app.",
+        "title": "You need a video and don't have a video editor"
+      },
+      {
+        "body": "A product page, a website, a GitHub PR, an article, or a music track becomes a narrated or beat-synced video.",
+        "title": "You have source material to turn into video"
+      },
+      {
+        "body": "Add cinematic captions or lower-thirds and callouts synced to the audio.",
+        "title": "You have footage that needs captions or overlay cards"
+      },
+      {
+        "body": "A short kinetic-type, stat, or logo piece, or a full presentation, from the same HTML pipeline.",
+        "title": "You need a quick motion graphic or a slide deck"
+      }
+    ],
+    "faq": [
+      {
+        "a": "HyperFrames needs Node.js 22 or newer and FFmpeg installed. From there you drive it from the CLI with npx hyperframes, or let an AI coding agent write the composition and render it for you.",
+        "q": "What do I need to run HyperFrames?"
+      },
+      {
+        "a": "Yes. HyperFrames is open-source under the Apache 2.0 license with no paid tier. You run it locally and render as many videos as you want.",
+        "q": "Is HyperFrames free?"
+      },
+      {
+        "a": "No. You can install the full HyperFrames set with npx skills add heygen-com/hyperframes --full-depth --all, or add a single skill with the --skill flag when you only need one.",
+        "q": "Do I have to install every skill?"
+      },
+      {
+        "a": "No. HyperFrames works as a standalone CLI you drive yourself, and the agent skills are an optional layer for when you want the composition written for you.",
+        "q": "Do I need an AI agent to use it?"
+      }
+    ]
+  },
+  {
+    "id": "JCodesMore/ai-website-cloner-template",
+    "name": "AI Website Cloner Template",
+    "short_description": "Point an AI coding agent at any URL and rebuild the site as clean, real code, section by section. A pre-scaffolded Next.js and Tailwind template ships the clone-website skill ready to run.",
+    "repository_url": "https://github.com/JCodesMore/ai-website-cloner-template",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "JCodesMore",
+    "author_url": "https://github.com/JCodesMore",
+    "author_avatar_url": "https://github.com/JCodesMore.png",
+    "license": "MIT",
+    "github_stars": 28054,
+    "updated_at": "2026-06-01",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/JCodesMore/ai-website-cloner-template",
+    "skills": [
+      "JCodesMore/ai-website-cloner-template/clone-website"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "The AI Website Cloner Template is a pre-scaffolded Next.js project that rebuilds any website as clean, modern code. It ships the /clone-website skill on top of Next.js 16, Tailwind v4, and shadcn/ui, so you start from a working base instead of an empty repo.\n\nPoint it at a URL and your agent inspects the live site, extracts design tokens and assets, writes exact component specs down to computed CSS values, then dispatches parallel builder agents in git worktrees to reconstruct each section and run a visual diff against the original. Recommended with Claude Code and Opus 4.8, and supported across Codex, Cursor, Copilot, and more.",
+    "when_to_use": [
+      {
+        "body": "Point the agent at any URL and get the site back as real code, section by section.",
+        "title": "You want to rebuild a site as clean code"
+      },
+      {
+        "body": "A pre-scaffolded Next.js and Tailwind template ships the clone skill ready to run.",
+        "title": "You need a running start, not a blank repo"
+      }
+    ],
+    "faq": [
+      {
+        "a": "On the repo's GitHub page you click Use this template to make your own copy, rather than cloning it directly. Then you install dependencies, start your agent, and run /clone-website against a URL.",
+        "q": "How do I start using the AI Website Cloner Template?"
+      },
+      {
+        "a": "The AI Website Cloner Template recommends Claude Code with Opus 4.8 for the best results, but it works with a range of AI coding agents that can read the clone-website skill.",
+        "q": "Which agents work best with it?"
+      },
+      {
+        "a": "The AI Website Cloner Template rebuilds a target site as clean Next.js and Tailwind code, section by section, after your agent extracts the design tokens and assets and writes component specs.",
+        "q": "What do I get out of it?"
+      },
+      {
+        "a": "Yes. The AI Website Cloner Template is open-source under the MIT license, so you can copy it, clone any site with it, and keep the generated code at no cost.",
+        "q": "Is it free?"
+      }
+    ]
+  },
+  {
+    "id": "mattpocock/skills",
+    "name": "Skills For Real Engineers",
+    "short_description": "The agent skills Matt Pocock uses every day for real engineering. You get opinionated workflows for planning, debugging, code review, and architecture, not vibe coding.",
+    "repository_url": "https://github.com/mattpocock/skills",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Matt Pocock",
+    "author_url": "https://github.com/mattpocock",
+    "author_avatar_url": "https://github.com/mattpocock.png",
+    "license": "MIT",
+    "github_stars": 167764,
+    "updated_at": "2026-06-25",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/mattpocock/skills",
+    "skills": [
+      "mattpocock/skills/design-an-interface",
+      "mattpocock/skills/qa",
+      "mattpocock/skills/request-refactor-plan",
+      "mattpocock/skills/ubiquitous-language",
+      "mattpocock/skills/ask-matt",
+      "mattpocock/skills/codebase-design",
+      "mattpocock/skills/diagnosing-bugs",
+      "mattpocock/skills/domain-modeling",
+      "mattpocock/skills/grill-with-docs",
+      "mattpocock/skills/implement",
+      "mattpocock/skills/improve-codebase-architecture",
+      "mattpocock/skills/prototype",
+      "mattpocock/skills/resolving-merge-conflicts",
+      "mattpocock/skills/setup-matt-pocock-skills",
+      "mattpocock/skills/tdd",
+      "mattpocock/skills/to-issues",
+      "mattpocock/skills/to-prd",
+      "mattpocock/skills/triage",
+      "mattpocock/skills/decision-mapping",
+      "mattpocock/skills/loop-me",
+      "mattpocock/skills/review",
+      "mattpocock/skills/writing-beats",
+      "mattpocock/skills/writing-fragments",
+      "mattpocock/skills/writing-shape",
+      "mattpocock/skills/git-guardrails-claude-code",
+      "mattpocock/skills/migrate-to-shoehorn",
+      "mattpocock/skills/scaffold-exercises",
+      "mattpocock/skills/setup-pre-commit",
+      "mattpocock/skills/edit-article",
+      "mattpocock/skills/obsidian-vault",
+      "mattpocock/skills/grill-me",
+      "mattpocock/skills/grilling",
+      "mattpocock/skills/handoff",
+      "mattpocock/skills/teach",
+      "mattpocock/skills/writing-great-skills"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "These are the agent skills Matt Pocock uses for real engineering, built to fix the common ways coding agents go wrong. The centerpiece is the grilling session: before you build, the agent interrogates you about what you actually want, closing the gap that produces the wrong thing. Others build a shared project vocabulary that cuts agent verbosity, tighten feedback loops, and cover planning, debugging, code review, and architecture.\n\nThe skills are small, composable, and easy to adapt rather than a heavy process that takes over your workflow, and they work with any model. Run one setup command, pick the skills and agents you want, and make them your own.",
+    "when_to_use": [
+      {
+        "body": "Grilling sessions make it ask the hard questions up front so the plan matches your intent.",
+        "title": "Your agent didn't build what you actually wanted"
+      },
+      {
+        "body": "Turn a rough idea into a PRD, issues, and a design the agent can execute.",
+        "title": "You're planning a feature before writing code"
+      },
+      {
+        "body": "Structured workflows for diagnosing bugs, refactoring, and reviewing instead of vibe coding.",
+        "title": "You're deep in a bug or a messy codebase"
+      },
+      {
+        "body": "Opinionated skills for TDD, domain modeling, and clear technical writing.",
+        "title": "You want your agent to write like an engineer"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Skills For Real Engineers is a set of 35 agent skills Matt Pocock uses daily, with opinionated workflows for planning, debugging, code review, and architecture. They are built to be small, composable, and easy to adapt.",
+        "q": "What's included in Skills For Real Engineers?"
+      },
+      {
+        "a": "No. When you run npx skills@latest add mattpocock/skills you pick the skills you want and the agents to install them on. The setup step /setup-matt-pocock-skills then configures your issue tracker and preferences.",
+        "q": "Do I have to install all 35 skills?"
+      },
+      {
+        "a": "Skills For Real Engineers work with any model and with agents like Claude Code and Codex. They avoid owning the whole process, so you keep control and can resolve issues yourself.",
+        "q": "Which models and agents do they work with?"
+      },
+      {
+        "a": "Yes. Skills For Real Engineers is open-source under the MIT license with no paid tier.",
+        "q": "Is it free?"
+      }
+    ]
+  },
+  {
+    "id": "nextlevelbuilder/ui-ux-pro-max-skill",
+    "name": "UI UX Pro Max",
+    "short_description": "Design intelligence for AI coding agents. Searchable databases of UI styles, color palettes, font pairings, and UX rules turn one line about your product into a complete, tailored design system.",
+    "repository_url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+    "website_url": "https://uupm.cc",
+    "external_links": [],
+    "author_name": "Next Level Builder",
+    "author_url": "https://github.com/nextlevelbuilder",
+    "author_avatar_url": "https://github.com/nextlevelbuilder.png",
+    "license": "MIT",
+    "github_stars": 104987,
+    "updated_at": "2026-07-04",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+    "skills": [
+      "nextlevelbuilder/ui-ux-pro-max-skill/banner-design",
+      "nextlevelbuilder/ui-ux-pro-max-skill/brand",
+      "nextlevelbuilder/ui-ux-pro-max-skill/design-system",
+      "nextlevelbuilder/ui-ux-pro-max-skill/design",
+      "nextlevelbuilder/ui-ux-pro-max-skill/slides",
+      "nextlevelbuilder/ui-ux-pro-max-skill/ui-styling",
+      "nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max",
+      "nextlevelbuilder/ui-ux-pro-max-skill/banner-design",
+      "nextlevelbuilder/ui-ux-pro-max-skill/brand",
+      "nextlevelbuilder/ui-ux-pro-max-skill/design-system",
+      "nextlevelbuilder/ui-ux-pro-max-skill/design",
+      "nextlevelbuilder/ui-ux-pro-max-skill/slides",
+      "nextlevelbuilder/ui-ux-pro-max-skill/ui-styling"
+    ],
+    "created_at": "2026-07-06T08:08:44.160054+00:00",
+    "long_description": "UI UX Pro Max gives your coding agent design intelligence to draw on instead of guessing. Under the hood are searchable databases of UI styles, color palettes, font pairings, chart types, and UX rules, queried with a hybrid BM25 and regex engine.\n\nDescribe your product in a line and its design system generator runs parallel searches across those databases and returns a complete, tailored spec: a layout pattern, a named style with matching colors and typography, motion and spacing tokens, and a pre-delivery checklist of anti-patterns to avoid. It supports more than twenty stacks from React and Next.js to SwiftUI and Flutter, and works in Claude Code, Cursor, and Windsurf.",
+    "when_to_use": [
+      {
+        "body": "It turns a short brief into tailored styles, palettes, and font pairings.",
+        "title": "You want a full design system from one line about your product"
+      },
+      {
+        "body": "Searchable databases of UI styles and UX rules back every choice.",
+        "title": "Your agent needs design taste, not guesses"
+      },
+      {
+        "body": "Banners, slides, and branded components built on the same system.",
+        "title": "You're designing a specific asset"
+      }
+    ],
+    "faq": [
+      {
+        "a": "UI UX Pro Max gives your agent searchable databases of UI styles, color palettes, font pairings, and UX rules, so one line about your product turns into a tailored design system.",
+        "q": "What's included in UI UX Pro Max?"
+      },
+      {
+        "a": "UI UX Pro Max ships a Python-based CLI. You install it in Claude Code with /plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill, or run it with npx ui-ux-pro-max-cli without a global install.",
+        "q": "What do I need to run it?"
+      },
+      {
+        "a": "Yes. UI UX Pro Max is open-source under the MIT license with no paid tier. Donations through PayPal are optional and support development.",
+        "q": "Is UI UX Pro Max free?"
+      },
+      {
+        "a": "Instead of relying on the model's defaults, UI UX Pro Max reasons over curated databases of 67 UI styles and its 161 design rules, so the output is a specific design system rather than the same generic look.",
+        "q": "How is it different from a generic design prompt?"
+      }
+    ]
+  },
+  {
+    "id": "obra/superpowers",
+    "name": "Superpowers",
+    "short_description": "Turn your coding agent into a disciplined engineer: it designs before it codes, writes plans you can actually read, and runs test-driven work through review, on its own.",
+    "repository_url": "https://github.com/obra/superpowers",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Jesse Vincent",
+    "author_url": "https://github.com/obra",
+    "author_avatar_url": "https://github.com/obra.png",
+    "license": "MIT",
+    "github_stars": 253530,
+    "updated_at": "2026-07-06",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/obra/superpowers",
+    "skills": [
+      "obra/superpowers/brainstorming",
+      "obra/superpowers/dispatching-parallel-agents",
+      "obra/superpowers/executing-plans",
+      "obra/superpowers/finishing-a-development-branch",
+      "obra/superpowers/receiving-code-review",
+      "obra/superpowers/requesting-code-review",
+      "obra/superpowers/subagent-driven-development",
+      "obra/superpowers/systematic-debugging",
+      "obra/superpowers/test-driven-development",
+      "obra/superpowers/using-git-worktrees",
+      "obra/superpowers/using-superpowers",
+      "obra/superpowers/verification-before-completion",
+      "obra/superpowers/writing-plans",
+      "obra/superpowers/writing-skills"
+    ],
+    "created_at": "2026-07-09T12:06:38.544367+00:00",
+    "long_description": "Superpowers is a complete development methodology for your coding agent, built from composable skills that trigger automatically as you work. Instead of jumping straight to code, your agent stops to understand what you're building, turns the conversation into a spec you approve, and writes an implementation plan detailed enough for a junior engineer to follow.\n\nFrom there it runs the work through subagent-driven development: one agent per task, a review after each, true red/green TDD, and a final pass over the whole branch. Other skills cover debugging by root cause, git worktrees, code review, and finishing a branch cleanly. Because the skills fire at the right moment on their own, you get the discipline without babysitting the process.",
+    "when_to_use": [
+      {
+        "body": "Design, plan, build, and review as one connected flow instead of a rush straight to code you have to unwind later.",
+        "title": "You want your agent to work like a senior engineer"
+      },
+      {
+        "body": "It draws the idea out into a spec you approve, then a plan clear enough to hand to a junior engineer, before a line of code.",
+        "title": "You're starting something new and want it built right"
+      },
+      {
+        "body": "True red/green TDD, subagents that follow the plan task by task, and a review after each one keep the speed without the mess.",
+        "title": "Your agent writes code fast and skips the tests"
+      },
+      {
+        "body": "Root-cause debugging, code review, a verification pass, and a clean branch finish keep quality up when it's tempting to patch and move on.",
+        "title": "You need to debug or ship without cutting corners"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Yes. Superpowers is an MIT-licensed open-source plugin with zero third-party dependencies. You install it into your own coding agent and run it locally.",
+        "q": "Is Superpowers free?"
+      },
+      {
+        "a": "Superpowers works with Claude Code, Codex, Cursor, Antigravity, GitHub Copilot CLI, and several others. You install it once per harness you use.",
+        "q": "Which coding agents does it work with?"
+      },
+      {
+        "a": "No. Superpowers loads a session-start bootstrap so its skills trigger automatically at the right moment, like brainstorming before you write any code.",
+        "q": "Do I have to run commands to use the skills?"
+      },
+      {
+        "a": "Yes. The Superpowers skills are composable and can trigger on their own, though they're designed to hand off to each other across the design, plan, build, and review flow.",
+        "q": "Can I use one skill without the rest?"
+      }
+    ]
+  },
+  {
+    "id": "conorbronsdon/avoid-ai-writing",
+    "name": "Avoid AI Writing",
+    "short_description": "A portable writing skill that audits and rewrites text to strip AI tells ('delve', em dashes, inflated significance, and dozens more), then scores how clean it reads with a runnable 0-100 detector.",
+    "repository_url": "https://github.com/conorbronsdon/avoid-ai-writing",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Conor Bronsdon",
+    "author_url": "https://github.com/conorbronsdon",
+    "author_avatar_url": "https://github.com/conorbronsdon.png",
+    "license": "MIT",
+    "github_stars": 2324,
+    "updated_at": "2026-07-08",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/conorbronsdon/avoid-ai-writing",
+    "skills": [
+      "conorbronsdon/avoid-ai-writing/avoid-ai-writing"
+    ],
+    "created_at": "2026-07-08T14:35:53.47146+00:00",
+    "long_description": "Avoid AI Writing is a skill for making machine-written text read like a person wrote it. You hand it a draft and it flags the AI tells, rewrites them, and can score the result, so 'delve', 'seamless', em dashes, and inflated significance stop giving your work away.\n\nIt runs anywhere your agent does, from Claude Code and Cursor to OpenClaw. Under the hood it carries a 109-word replacement table across three tiers, 51 documented pattern categories, voice and context profiles (blunt for a memo, casual for a post), and a deterministic detector that turns the flags into a single 0-100 score you can check in code.",
+    "when_to_use": [
+      {
+        "body": "Flag the AI tells and rewrite them so the text sounds like a person, not a model.",
+        "title": "Your draft reads like AI wrote it"
+      },
+      {
+        "body": "Detect mode quotes every AI-ism and rates its severity, leaving published or someone else's writing untouched.",
+        "title": "You want to audit without changing the text"
+      },
+      {
+        "body": "Score any draft 0-100 with the bundled detector, so 'is this too AI?' has an answer you can check.",
+        "title": "You want a number, not a vibe"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Yes. Avoid AI Writing is open-source (MIT) with no paid tier. It runs locally through your agent with no API keys, and the detector is zero-dependency.",
+        "q": "Is Avoid AI Writing free?"
+      },
+      {
+        "a": "It runs a structured audit that quotes each issue, rewrites, then does a second corrective pass. It carries 51 documented patterns, a tiered word table, and voice and context profiles, instead of a one-shot guess.",
+        "q": "How is it different from a 'make this sound human' prompt?"
+      },
+      {
+        "a": "Any agent that reads the agentskills.io SKILL.md format, including Claude Code, Cursor, OpenClaw, Hermes, and Codex. A ported Cursor rule ships in the repo.",
+        "q": "Which agents does it work with?"
+      },
+      {
+        "a": "Your choice of mode. Rewrite returns a clean copy, detect only flags issues by severity, and edit makes minimal in-place edits to a file you name, leaving already-human passages alone.",
+        "q": "Does it change my text or just flag it?"
+      }
+    ]
+  },
+  {
+    "id": "D4Vinci/Scrapling",
+    "name": "Scrapling",
+    "short_description": "Adaptive web scraping for Python: fetchers that bypass Cloudflare Turnstile, selectors that survive site redesigns, and a spider framework that scales from one request to a full crawl.",
+    "repository_url": "https://github.com/D4Vinci/Scrapling",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "Karim shoair",
+    "author_url": "https://github.com/D4Vinci",
+    "author_avatar_url": "https://github.com/D4Vinci.png",
+    "license": "BSD-3-Clause",
+    "github_stars": 69354,
+    "updated_at": "2026-07-08",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/D4Vinci/Scrapling",
+    "skills": [
+      "D4Vinci/Scrapling/scrapling-official"
+    ],
+    "created_at": "2026-07-10T18:06:48.449923+00:00",
+    "long_description": "Scrapling is an adaptive web scraping framework for Python that gives your coding agent a full scraping stack: fast HTTP fetching that impersonates real browser fingerprints, full browser automation, and a stealth mode that clears Cloudflare Turnstile through automation alone, no captcha service or API keys.\n\nIts parser survives redesigns. Save an element once and Scrapling relocates it by similarity after the layout changes, so your selectors stop rotting. Selection works by CSS, XPath, BeautifulSoup-style calls, text, or regex, at speeds in the same tier as Parsel and lxml.\n\nWhen one page is not enough, the Scrapy-like spider framework runs concurrent crawls with per-domain throttling, pause and resume from checkpoints, and JSON or JSONL export. A CLI saves any page straight to Markdown, and an MCP server plugs the whole thing into AI tools.",
+    "when_to_use": [
+      {
+        "body": "One free toolkit covers the whole job, from fast HTTP grabs to full browser automation, with a CLI and MCP server the agent can drive directly.",
+        "title": "You're picking a scraping stack for your coding agent"
+      },
+      {
+        "body": "Save an element once and Scrapling relocates it after the layout changes, so you stop rewriting selectors.",
+        "title": "Your scrapers break every time the site redesigns"
+      },
+      {
+        "body": "Scrapy-like spiders handle concurrent crawls with per-domain throttling, plus pause on Ctrl+C and resume from a checkpoint.",
+        "title": "You need the whole site, not one page"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Yes. Scrapling is free and open source under the BSD-3-Clause license, with no paid tier. You install it with pip and run everything on your own machine.",
+        "q": "Is Scrapling free to use?"
+      },
+      {
+        "a": "Python 3.10 or newer. You install Scrapling with pip, then run scrapling install once to download the browsers the dynamic and stealth fetchers use. A Docker image covers machines without Python.",
+        "q": "What do I need to run it?"
+      },
+      {
+        "a": "Scrapling keeps a familiar Scrapy and BeautifulSoup style API but parses hundreds of times faster than BeautifulSoup, in the same speed tier as Parsel and lxml. A bundled guide covers migration from BeautifulSoup, and an integration runs the parser inside your existing Scrapy projects.",
+        "q": "How is it different from BeautifulSoup or Scrapy?"
+      },
+      {
+        "a": "Scrapling is published for educational and research use, and compliance stays with you: scraping and privacy laws still apply, and so do each site's terms. Spiders honor robots.txt automatically when you set robots_txt_obey=True.",
+        "q": "Is it legal to scrape websites with it?"
+      }
+    ]
+  },
+  {
+    "id": "emilkowalski/skills",
+    "name": "Skills for Design Engineers",
+    "short_description": "Skills that teach your coding agent Emil Kowalski's animation and design taste: the right easing, timing, and UI details from his years at Vercel and Linear.",
+    "repository_url": "https://github.com/emilkowalski/skills",
+    "website_url": "https://emilkowal.ski/skill",
+    "external_links": [],
+    "author_name": "Emil Kowalski",
+    "author_url": "https://github.com/emilkowalski",
+    "author_avatar_url": "https://github.com/emilkowalski.png",
+    "license": "MIT",
+    "github_stars": 12042,
+    "updated_at": "2026-07-11",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/emilkowalski/skills",
+    "skills": [
+      "emilkowalski/skills/animation-vocabulary",
+      "emilkowalski/skills/apple-design",
+      "emilkowalski/skills/emil-design-eng",
+      "emilkowalski/skills/improve-animations",
+      "emilkowalski/skills/review-animations"
+    ],
+    "created_at": "2026-07-11T10:45:33.791478+00:00",
+    "long_description": "Skills that teach your coding agent design taste. Agents get UI working but fumble the small choices that make it feel right: ease-in on an enter animation when it should be ease-out, or a menu that pops in from scale(0). The set catalogs those mistakes and their fixes, drawn from Emil Kowalski's years as a design engineer at Vercel and Linear and from building the Sonner toast library (13M+ weekly downloads) and the Vaul drawer.\n\nOne install covers the whole loop. Your agent makes sharper animation and design calls as it builds, reviews finished motion against a strict craft bar, turns 'the bouncy popover thing' into the exact term to prompt with, and brings Apple's WWDC design principles to the web.",
+    "when_to_use": [
+      {
+        "body": "Agents pick ease-in for entrances and animate actions that should be instant. These skills catch the small mistakes and give your agent the fix.",
+        "title": "Your agent's UI works but feels off"
+      },
+      {
+        "body": "Get a clear call on whether it should animate, then the easing and duration that fit, from button presses to swipe-to-dismiss.",
+        "title": "You're animating a component and every value is a guess"
+      },
+      {
+        "body": "A strict pass flags issues like ease-in entrances and scale(0) reveals, each with a before and after fix.",
+        "title": "Animation code needs review before it ships"
+      },
+      {
+        "body": "Describe the effect in plain words and get its exact term, so your next prompt asks for the right thing.",
+        "title": "You know the motion you want but can't name it"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Each skill in emilkowalski/skills works on its own, so you can lean on one and ignore the rest. emil-design-eng gives everyday animation and design guidance, review-animations strictly audits motion code, animation-vocabulary names effects you can only describe, and apple-design translates Apple's WWDC principles to the web.",
+        "q": "Do I need the whole set, or can I use just one skill?"
+      },
+      {
+        "a": "Claude Code, Cursor, and any other agent that supports the skills format. You run one command, npx skills@latest add emilkowalski/skills, and every skill in the collection installs at once.",
+        "q": "Which coding agents do the skills work with?"
+      },
+      {
+        "a": "Yes. emilkowalski/skills is open source under the MIT license, with no paid tier and no signup; the animations.dev course it links to is optional.",
+        "q": "Is the collection free to use?"
+      },
+      {
+        "a": "Yes, and the emilkowalski/skills README is upfront about it: AI amplifies design expertise, it does not replace it. The skills catalog the small mistakes agents make, like picking ease-in for an enter animation, so your output improves while your own taste stays the ceiling.",
+        "q": "Do I still need to learn design if my agent has these skills?"
+      }
+    ]
+  },
+  {
+    "id": "eph5xx/tweakidea",
+    "name": "TweakIdea",
+    "short_description": "Get an honest read on your startup idea. 14 independent evaluators score your pitch, each running its own live web research, so you see where it is weak before you build.",
+    "repository_url": "https://github.com/eph5xx/tweakidea",
+    "website_url": null,
+    "external_links": [],
+    "author_name": "eph5xx",
+    "author_url": "https://github.com/eph5xx",
+    "author_avatar_url": "https://github.com/eph5xx.png",
+    "license": "MIT",
+    "github_stars": 44,
+    "updated_at": "2026-04-30",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/eph5xx/tweakidea",
+    "skills": [
+      "eph5xx/tweakidea/tweak-evaluate",
+      "eph5xx/tweakidea/tweak:analyze-hn-post",
+      "eph5xx/tweakidea/tweak:browse-hn",
+      "eph5xx/tweakidea/tweak:diff",
+      "eph5xx/tweakidea/tweak:improve",
+      "eph5xx/tweakidea/tweak:list",
+      "eph5xx/tweakidea/tweak:share",
+      "eph5xx/tweakidea/tweak:show"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "TweakIdea gives your startup idea an honest second opinion in about ten minutes. Describe the idea and 14 independent evaluators score it across weighted dimensions like pain intensity, willingness to pay, and founder-market fit. Each one runs its own web research and cites sources, then the results merge into a scorecard with a verdict, letter-graded evidence, and a shareable HTML report.\n\nIt also surfaces every untested assumption in your pitch, so you know what to validate next, and generates three concrete rewrites aimed at the weakest dimensions. A second set of commands mines Hacker News for emerging problems worth turning into ideas. Runs in Claude Code.",
+    "when_to_use": [
+      {
+        "body": "14 evaluators score it with live web research so you see the weak spots before you build.",
+        "title": "You have a startup idea and want an honest read"
+      },
+      {
+        "body": "Every untested assumption in the pitch gets surfaced so you know what to validate next.",
+        "title": "You want to know what you haven't tested"
+      },
+      {
+        "body": "Rewrite it, diff the scores, and share the report to get real feedback.",
+        "title": "You're refining an idea across versions"
+      },
+      {
+        "body": "Browse HN and run any post through the same scorecard.",
+        "title": "You're mining Hacker News for ideas"
+      }
+    ],
+    "faq": [
+      {
+        "a": "TweakIdea runs 14 evaluators in parallel, one per dimension, and each does its own live web search and cites sources. You get a structured scorecard you can revisit and share instead of a single paragraph.",
+        "q": "How is TweakIdea different from just asking ChatGPT?"
+      },
+      {
+        "a": "TweakIdea returns a scorecard with a GO, PIVOT, or STOP verdict, a 14-dimension breakdown of what is strong and weak, an assumption ledger of untested claims, and a shareable HTML report.",
+        "q": "What do I get back?"
+      },
+      {
+        "a": "Yes. TweakIdea is open-source under the MIT license and free to run. You start it with npx tweakidea, or /tweak:evaluate inside Claude Code.",
+        "q": "Is TweakIdea free?"
+      },
+      {
+        "a": "TweakIdea returns a full report in about 10 minutes, since the 14 evaluators research and score in parallel rather than one after another.",
+        "q": "How long does an evaluation take?"
+      }
+    ]
+  },
+  {
+    "id": "greensock/gsap-skills",
+    "name": "GSAP Skills",
+    "short_description": "Official GreenSock skills that teach your coding agent to write GSAP correctly: the core API, timelines, ScrollTrigger, plugins, and React, Vue, and Svelte, plus performance and cleanup.",
+    "repository_url": "https://github.com/greensock/gsap-skills",
+    "website_url": null,
+    "external_links": [
+      "https://www.skills.sh/greensock/gsap-skills",
+      "https://claudemarketplaces.com/skills/greensock/gsap-skills"
+    ],
+    "author_name": "GreenSock",
+    "author_url": "https://github.com/greensock",
+    "author_avatar_url": "https://github.com/greensock.png",
+    "license": "MIT",
+    "github_stars": 11426,
+    "updated_at": "2026-04-21",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/greensock/gsap-skills",
+    "skills": [
+      "greensock/gsap-skills/gsap-core",
+      "greensock/gsap-skills/gsap-timeline",
+      "greensock/gsap-skills/gsap-scrolltrigger",
+      "greensock/gsap-skills/gsap-plugins",
+      "greensock/gsap-skills/gsap-utils",
+      "greensock/gsap-skills/gsap-react",
+      "greensock/gsap-skills/gsap-performance",
+      "greensock/gsap-skills/gsap-frameworks"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "The official GreenSock skills teach your coding agent to write GSAP the way it is meant to be written. Ask for an animation and instead of guessing, the agent reaches for the correct API: tweens and timelines, ScrollTrigger for scroll-linked motion, the plugin set, framework integration for React, Vue, and Svelte, and the performance patterns that keep it smooth.\n\nEvery GSAP plugin is now free, including SplitText and MorphSVG, so the skills cover the whole library with no Club membership or auth token. They install through the skills CLI and work in Claude Code, Cursor, Codex, Windsurf, Copilot, and 40+ other agents.",
+    "when_to_use": [
+      {
+        "body": "It learns the real API, timelines, and plugins like SplitText and MorphSVG so animations come out the way GSAP is meant to be written.",
+        "title": "Your agent writes GSAP that fights the library"
+      },
+      {
+        "body": "ScrollTrigger, pinning, and scrub set up right on the first pass instead of by trial and error.",
+        "title": "You're building scroll-driven motion"
+      },
+      {
+        "body": "Performance patterns that keep motion fluid without you profiling by hand.",
+        "title": "Animation is smooth on desktop and janky on phones"
+      },
+      {
+        "body": "The framework lifecycle and cleanup handled so animations don't leak or double-fire.",
+        "title": "You're adding GSAP to React, Vue, or Svelte"
+      }
+    ],
+    "faq": [
+      {
+        "a": "GSAP Skills is a set of eight official skills that teach your agent correct GSAP usage, including the core API, timelines, ScrollTrigger, plugins, and framework integration for React, Vue, and Svelte.",
+        "q": "What's included in GSAP Skills?"
+      },
+      {
+        "a": "No. GSAP is 100% free after Webflow's acquisition, including every plugin such as SplitText and MorphSVG, and GSAP Skills is open-source under MIT. You install everything from the public gsap npm package with no membership or auth token.",
+        "q": "Do I need a paid GSAP plan or Club membership?"
+      },
+      {
+        "a": "Yes. Each skill in GSAP Skills sits in its own folder, so you can copy only the ones you need, such as ScrollTrigger or React, into your agent's skill directory. Running npx skills add installs the full set at once.",
+        "q": "Can I install just one skill instead of all eight?"
+      },
+      {
+        "a": "GSAP Skills uses the Agent Skills format and works through the skills CLI with Claude Code, Cursor, Codex, Windsurf, Copilot, and 40+ other agents. You install it with npx skills add https://github.com/greensock/gsap-skills.",
+        "q": "Which agents does GSAP Skills work with?"
+      }
+    ]
+  },
+  {
+    "id": "jakubkrehel/make-interfaces-feel-better",
+    "name": "Make Interfaces Feel Better",
+    "short_description": "Sixteen design-engineering rules your agent applies to any UI component. They cover the small details that compound into an interface that feels right instead of templated.",
+    "repository_url": "https://github.com/jakubkrehel/make-interfaces-feel-better",
+    "website_url": "https://jakub.kr/writing/details-that-make-interfaces-feel-better",
+    "external_links": [
+      "https://www.skills.sh/jakubkrehel/make-interfaces-feel-better",
+      "https://claudemarketplaces.com/skills/jakubkrehel/make-interfaces-feel-better"
+    ],
+    "author_name": "Jakub Krehel",
+    "author_url": "https://github.com/jakubkrehel",
+    "author_avatar_url": "https://github.com/jakubkrehel.png",
+    "license": null,
+    "github_stars": 2316,
+    "updated_at": "2026-04-19",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/jakubkrehel/make-interfaces-feel-better",
+    "skills": [
+      "jakubkrehel/make-interfaces-feel-better/make-interfaces-feel-better"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "Make Interfaces Feel Better teaches your coding agent the small design-engineering details that separate a polished interface from a rough one. It is built from Jakub Krehel's article on the subject, turned into rules the agent applies whenever it builds or reviews a UI component.\n\nThe details are the ones easy to skip: balanced text wrapping, concentric border radius on nested elements, tabular numbers for values that change, interruptible animations, optical alignment, and shadows instead of hard borders. Install it once and the agent folds them in automatically, or invoke it directly on a component. Works in Claude Code, Codex, and other agents.",
+    "when_to_use": [
+      {
+        "body": "Sixteen design-engineering rules add the small details that make an interface feel considered.",
+        "title": "Your UI works but feels templated"
+      },
+      {
+        "body": "Apply the rules to any component so the polish is consistent instead of one-off.",
+        "title": "Your agent ships generic-looking components"
+      }
+    ],
+    "faq": [
+      {
+        "a": "Make Interfaces Feel Better packs sixteen design-engineering rules your agent applies to UI work, covering details like balanced text wrapping, concentric border radius, tabular numbers, and interruptible animations.",
+        "q": "What does Make Interfaces Feel Better cover?"
+      },
+      {
+        "a": "You install Make Interfaces Feel Better with npx skills add jakubkrehel/make-interfaces-feel-better. Your agent then applies the rules automatically when building UI, or you invoke it directly with /make-interfaces-feel-better.",
+        "q": "How do I use it?"
+      },
+      {
+        "a": "Yes. Make Interfaces Feel Better is a free, open-source agent skill based on the article 'Details that make interfaces feel better,' and it works in Claude Code, Codex, and other agents.",
+        "q": "Is it free?"
+      }
+    ]
+  },
+  {
+    "id": "tmchow/illo-skill",
+    "name": "illo",
+    "short_description": "Generate original, print-style editorial illustrations for articles and blogs, each a scene where a recurring mascot acts out the idea. Pick from ten built-in looks or design your own character.",
+    "repository_url": "https://github.com/tmchow/illo-skill",
+    "website_url": "https://illo-skill.com",
+    "external_links": [],
+    "author_name": "Trevin Chow",
+    "author_url": "https://github.com/tmchow",
+    "author_avatar_url": "https://github.com/tmchow.png",
+    "license": "MIT",
+    "github_stars": 272,
+    "updated_at": "2026-06-23",
+    "install_command": "Install this skill collection or give me an instruction how to install it: https://github.com/tmchow/illo-skill",
+    "skills": [
+      "tmchow/illo-skill/illo"
+    ],
+    "created_at": "2026-06-28T09:42:35.957734+00:00",
+    "long_description": "illo generates original editorial illustrations for articles and blog posts, the kind where a recurring mascot character acts out the idea instead of a stock photo. Give it a line like \"we replatform with zero downtime\" and it composes a single-metaphor scene around your character.\n\nPick one of ten bundled looks, from riso and blueprint to woodcut and clay, or design your own character with the built-in builder. It renders through two backends: your Codex CLI, which is free for subscribers and needs no API key, or OpenRouter as a universal fallback with model choice. Installs as a native plugin for Claude Code, Codex, Gemini CLI, and more.",
+    "when_to_use": [
+      {
+        "body": "Generate original editorial illustrations where a recurring mascot acts out the idea.",
+        "title": "Your article needs art that isn't stock"
+      },
+      {
+        "body": "Pick from ten built-in looks or design your own character and reuse it.",
+        "title": "You want a consistent illustration style across posts"
+      }
+    ],
+    "faq": [
+      {
+        "a": "It depends on the backend. illo renders through your Codex CLI with gpt-image-2, which is free for Codex subscribers and needs no API key, or through OpenRouter as a paid fallback when you do not have Codex.",
+        "q": "Do I need an API key or paid plan for illo?"
+      },
+      {
+        "a": "illo ships ten built-in looks, including riso, blueprint, woodcut, clay, and gouache, each starring a recurring mascot that acts out your idea. You can also design your own character and palette.",
+        "q": "What illustration styles can I use?"
+      },
+      {
+        "a": "In Claude Code you add illo with /plugin marketplace add tmchow/illo-skill then /plugin install illo@illo-skill. Codex and Cursor have their own install commands in the repo.",
+        "q": "How do I install illo?"
+      },
+      {
+        "a": "Yes. illo is open-source under the MIT license. Your only cost is image generation, which is free on a Codex subscription or paid per image through OpenRouter.",
+        "q": "Is the skill free?"
+      }
+    ]
+  }
+]

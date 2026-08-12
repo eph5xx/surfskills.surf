@@ -3,36 +3,28 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import CollectionPage from "@/components/collection/CollectionPage.astro";
-import { loadCollection } from "@/data/skill-model/db";
+import { loadDirectory } from "@/data/skill-model/db";
 import { buildDirectoryItems, type DirectoryItem } from "@/data/directory";
 import { skillSlugFromId, type DirectoryEntry } from "@/data/skill-model";
 import { absoluteUrl } from "@/lib/seo";
-import { setCatalogCache, notFoundPage, NO_STORE } from "@/lib/cache";
 
-// SSR (was prerendered): one page per directory collection, read from Supabase per
-// request and cached at the edge. Collections live under /s/ keyed by their full id
-// ("owner/repo", e.g. /s/greensock/gsap-skills). The 2-segment route here is
-// distinct from the 3-segment skill route under /s/.
-export const prerender = false;
+// Static: one page per directory collection, prerendered from the frozen catalog
+// snapshot. Collections live under /s/ keyed by their full id ("owner/repo", e.g.
+// /s/greensock/gsap-skills). The 2-segment route here is distinct from the
+// 3-segment skill route under /s/. getStaticPaths enumerates exactly the
+// collections that have at least one live skill — matching the pages that
+// resolved before.
+export const prerender = true;
 
-const { owner, repo } = Astro.params;
-const id = `${owner}/${repo}`;
-
-let loaded: Awaited<ReturnType<typeof loadCollection>>;
-try {
-  loaded = await loadCollection(Astro.locals.supabase, id);
-} catch (err) {
-  console.error(`[collection] failed to load "${id}"`, err);
-  return new Response("Catalog temporarily unavailable", {
-    status: 503,
-    headers: { "Cache-Control": NO_STORE },
+export async function getStaticPaths() {
+  const dir = await loadDirectory();
+  return Object.values(dir.collectionsById).map(({ collection, skills }) => {
+    const [owner, repo] = collection.id.split("/");
+    return { params: { owner, repo }, props: { collection, skills } };
   });
 }
 
-if (!loaded) return await notFoundPage(Astro.locals);
-
-const { collection, skills: liveSkills } = loaded;
-setCatalogCache(Astro.response.headers);
+const { collection, skills: liveSkills } = Astro.props;
 
 // Roster = every skill the repo ships, rendered as the same DirectoryCard the
 // Discover grid and skill-page "Pairs well with" use. Live skills (we have a page)

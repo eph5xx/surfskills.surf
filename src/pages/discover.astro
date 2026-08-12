@@ -5,24 +5,13 @@ import Directory from "@/components/discover/Directory.astro";
 import Footer from "@/components/Footer.astro";
 import { loadDirectory } from "@/data/skill-model/db";
 import { buildDirectoryItems, buildFacets } from "@/data/directory";
-import { setCatalogCache, NO_STORE } from "@/lib/cache";
 
-// SSR: the catalog is read from Supabase per request (cached at the edge), so new
-// skills appear without a redeploy. On a DB error we render an empty directory and
-// keep the response uncached rather than 500.
-export const prerender = false;
+// Static: the catalog is a frozen build-time snapshot (content collections).
+export const prerender = true;
 
-let items: ReturnType<typeof buildDirectoryItems> = [];
-let facets: ReturnType<typeof buildFacets> = [];
-try {
-  const dir = await loadDirectory(Astro.locals.supabase);
-  items = buildDirectoryItems(dir.entries, dir.availableIds);
-  facets = buildFacets(items);
-  setCatalogCache(Astro.response.headers);
-} catch (err) {
-  console.error("[discover] failed to load catalog", err);
-  Astro.response.headers.set("Cache-Control", NO_STORE);
-}
+const dir = await loadDirectory();
+const items = buildDirectoryItems(dir.entries, dir.availableIds);
+const facets = buildFacets(items);
 
 // Honest social-proof stat: skills + distinct collections. Stars are per-collection,
 // so summing them across skills would double-count — counts are the truthful axis.

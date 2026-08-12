@@ -5,10 +5,10 @@ import {
   SkillUseCase,
 } from "./types";
 
-// Shared shapes and label maps for the skill catalog. The catalog data itself now
-// lives in Supabase (fetched by ./db.ts for Discover and /s/**); the homepage uses
-// its own code-driven set (../featured-skills). What remains here is the structure
-// and the enum→label maps that both worlds depend on.
+// Shared shapes and label maps for the skill catalog. The catalog data itself is
+// a frozen build-time snapshot (loaded by ./db.ts for Discover and /s/**); the
+// homepage uses its own code-driven set (../featured-skills). What remains here is
+// the structure and the enum→label maps that both worlds depend on.
 
 export interface DirectoryEntry {
   collection: Collection;

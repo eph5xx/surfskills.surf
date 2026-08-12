@@ -1,37 +1,15 @@
-import { createServerClient, parseCookieHeader } from "@supabase/ssr";
 import { defineMiddleware } from "astro:middleware";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   // Middleware also runs while prerendering static pages at build time, where
-  // there is no live request or Cloudflare runtime — skip entirely.
+  // there is no live request or Cloudflare runtime — skip entirely. The catalog
+  // is now a frozen build-time snapshot (content collections), so no per-request
+  // client is created here anymore.
   if (context.isPrerendered) return next();
 
-  // Astro's internal image endpoint proxies static assets; it needs no
-  // client and returns a fetch() passthrough whose headers are immutable.
+  // Astro's internal image endpoint proxies static assets; it returns a fetch()
+  // passthrough whose headers are immutable.
   if (context.url.pathname.startsWith("/_image")) return next();
-
-  // Per-request Supabase client for the catalog (Discover, /s/**, sitemap,
-  // llms.txt). Auth was removed, so this is an anonymous, read-only client: it
-  // never establishes a session, so no auth Set-Cookie ever lands here.
-  const supabase = createServerClient(
-    import.meta.env.PUBLIC_SUPABASE_URL,
-    import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-    {
-      cookies: {
-        getAll() {
-          return parseCookieHeader(context.request.headers.get("Cookie") ?? "").map(
-            ({ name, value }) => ({ name, value: value ?? "" }),
-          );
-        },
-        setAll() {
-          // Anonymous read-only client: it makes no auth calls, so Supabase
-          // never asks to write a session cookie. Nothing to persist.
-        },
-      },
-    },
-  );
-
-  context.locals.supabase = supabase;
 
   const response = await next();
   // Catalog pages opt INTO edge caching by setting their own public

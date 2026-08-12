@@ -1,13 +1,10 @@
 import type { APIRoute } from "astro";
 import { loadDirectory } from "@/data/skill-model/db";
 import { absoluteUrl } from "@/lib/seo";
-import { PUBLIC_CATALOG_CACHE, NO_STORE } from "@/lib/cache";
 import { posts } from "@/data/blog";
 
-// SSR (was prerendered): the catalog half of the sitemap is read from Supabase per
-// request and cached at the edge, so newly added skills/collections show up in the
-// sitemap without a redeploy.
-export const prerender = false;
+// Static: prerendered at build time from the frozen catalog snapshot.
+export const prerender = true;
 
 const STATIC_PATHS = [
   "/",
@@ -18,21 +15,14 @@ const STATIC_PATHS = [
   "/cookies",
 ];
 
-export const GET: APIRoute = async ({ site, locals }) => {
+export const GET: APIRoute = async ({ site }) => {
   const origin = site ?? "https://surfskills.surf";
 
-  let catalogPaths: string[] = [];
-  let cacheControl = PUBLIC_CATALOG_CACHE;
-  try {
-    const dir = await loadDirectory(locals.supabase);
-    catalogPaths = [
-      ...Object.keys(dir.collectionsById).map((id) => `/s/${id}`),
-      ...Object.keys(dir.skillsById).map((id) => `/s/${id}`),
-    ];
-  } catch (err) {
-    console.error("[sitemap] failed to load catalog", err);
-    cacheControl = NO_STORE; // serve the static paths but don't cache a partial sitemap
-  }
+  const dir = await loadDirectory();
+  const catalogPaths = [
+    ...Object.keys(dir.collectionsById).map((id) => `/s/${id}`),
+    ...Object.keys(dir.skillsById).map((id) => `/s/${id}`),
+  ];
 
   const urls = [...STATIC_PATHS, ...posts.map((post) => post.href), ...catalogPaths]
     .map((path) => absoluteUrl(origin, path))
@@ -45,7 +35,6 @@ export const GET: APIRoute = async ({ site, locals }) => {
   return new Response(body, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",
-      "Cache-Control": cacheControl,
     },
   });
 };
