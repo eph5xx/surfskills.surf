@@ -50,16 +50,6 @@
   --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Header auth CTA toggle — `.is-authed` is set pre-paint in BaseLayout.
-   Unlayered on purpose: must beat DaisyUI's `.btn` and Tailwind's `hidden`/
-   `sm:inline` (any @layer loses to unlayered rules). */
-html:not(.is-authed) .auth-authed {
-  display: none;
-}
-html.is-authed .auth-anon {
-  display: none;
-}
-
 @layer base {
   html {
     scroll-behavior: smooth;

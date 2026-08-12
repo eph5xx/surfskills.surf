@@ -69,16 +69,14 @@ const isCurrent = (href: string) =>
           ))
         }
       </nav>
-      {/* Auth CTA. Both states ship statically; the pre-paint script in
-          BaseLayout toggles `is-authed` on <html> so CSS picks one, no flash. */}
-      <a href="/account" class="auth-authed btn btn-sm rounded-full">Account</a>
+      <a href="/discover" class="btn btn-sm rounded-full">Account</a>
       <a
-        href="/login"
-        class="auth-anon link link-hover hidden rounded text-[15px] font-semibold hover:text-primary focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-base-100 sm:inline"
+        href="/discover"
+        class="link link-hover hidden rounded text-[15px] font-semibold hover:text-primary focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-base-100 sm:inline"
       >
         Log in
       </a>
-      <a href="/login" class="auth-anon btn btn-primary btn-sm rounded-full">Join for free</a>
+      <a href="/discover" class="btn btn-primary btn-sm rounded-full">Join for free</a>
     </div>
   </nav>
 </header>

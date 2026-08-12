@@ -13,10 +13,8 @@ type Runtime = import('@astrojs/cloudflare').Runtime<Env>;
 
 declare namespace App {
   interface Locals extends Runtime {
-    /** Per-request Supabase client bound to the visitor's session cookies. */
+    /** Per-request anonymous Supabase client for read-only catalog queries. */
     supabase: import('@supabase/supabase-js').SupabaseClient;
-    /** Verified from the session JWT in middleware; null when signed out. */
-    user: { id: string; email: string | null } | null;
   }
 }
 
