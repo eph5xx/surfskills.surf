@@ -32,11 +32,11 @@ Two distinct channels — don't mix them up:
 
 ### Rendering model: static by default, SSR opt-in
 
-`astro.config.mjs` keeps `output: 'static'`; marketing/blog/legal pages prerender. DB-backed and session-dependent pages opt into SSR individually with `export const prerender = false`: `/discover`, `/s/[owner]/[repo]`, `/s/[owner]/[repo]/[skill]`, `/account`, auth routes, `sitemap.xml.ts`, `llms.txt.ts`. URLs never have trailing slashes (`trailingSlash: 'never'` + `build.format: 'file'` — both are needed so static output serves `/discover` without a redirect, matching canonicals/sitemap).
+`astro.config.mjs` keeps `output: 'static'`; marketing/blog/legal pages prerender. DB-backed pages opt into SSR individually with `export const prerender = false`: `/discover`, `/s/[owner]/[repo]`, `/s/[owner]/[repo]/[skill]`, `sitemap.xml.ts`, `llms.txt.ts`. URLs never have trailing slashes (`trailingSlash: 'never'` + `build.format: 'file'` — both are needed so static output serves `/discover` without a redirect, matching canonicals/sitemap).
 
 ### Middleware and caching (`src/middleware.ts`, `src/lib/cache.ts`)
 
-Middleware creates a per-request Supabase client on `locals.supabase` bound to the visitor's cookies. Routes matched by `isPublicCatalogRoute` (home, `/discover`, `/s/**`, `/sitemap.xml`, `/llms.txt`) skip the auth round-trip entirely (`locals.user = null`) so auth Set-Cookie headers never land in publicly cached responses — **new public catalog routes must be added to that list**. Everything else gets `locals.user` verified from the session JWT.
+Middleware creates a per-request anonymous Supabase client on `locals.supabase` for read-only catalog queries. Auth was removed, so it verifies no session and sets no `locals.user`; the client makes no auth calls, so no auth Set-Cookie can leak into a cached response.
 
 Caching is opt-in: middleware defaults every response to `private, no-store`; SSR catalog pages set `PUBLIC_CATALOG_CACHE` (1h fresh + 1d stale-while-revalidate at the edge) **only on a successful 200**. Misses and loader failures must use `NO_STORE`/`notFound()` from `src/lib/cache.ts` so a bad response never sticks at the edge. Catalog changes therefore appear within ~1h without a redeploy.
 
@@ -53,11 +53,11 @@ The client-side directory engine is framework-free and **facet-agnostic**: it di
 
 ### Auth
 
-Supabase auth (magic link + OAuth) via `src/pages/api/auth/*` and `src/pages/auth/*`. Post-login redirects go through `sanitizeNext` in `src/lib/auth.ts` (same-site path check that prevents open redirects) — use it for any new `?next=` handling.
+None. User accounts, login, and Supabase auth were removed (the site is a read-only catalog). Supabase is used only for anonymous catalog reads.
 
 ### Analytics
 
-Client-side PostHog is gated behind the cookie-consent banner (`CookieConsent.astro` + `PostHog.astro`). Server-side captures use `captureEvent` in `src/lib/posthog-server.ts`, which wraps the fetch in `ctx.waitUntil` (an unawaited fetch is cancelled when the Worker returns) and never throws.
+Client-side PostHog is gated behind the cookie-consent banner (`CookieConsent.astro` + `PostHog.astro`). There is no server-side capture.
 
 ### Conventions
 
