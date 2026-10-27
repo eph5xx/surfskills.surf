@@ -13,8 +13,8 @@ export default defineConfig({
   // (from discover.html) with no redirect, matching our canonical + sitemap (no slash).
   trailingSlash: 'never',
   build: { format: 'file' },
-  // Output stays 'static': marketing + skill/collection pages prerender; auth/billing
-  // pages opt into SSR individually with `export const prerender = false`.
+  // Output stays 'static': marketing/blog/legal pages prerender; the homepage and
+  // the Supabase-backed catalog routes opt into SSR with `export const prerender = false`.
   adapter: cloudflare({
     // Makes wrangler.jsonc bindings and .dev.vars secrets available on
     // Astro.locals.runtime.env during `astro dev`.
