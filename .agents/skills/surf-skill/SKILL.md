@@ -5,7 +5,7 @@ description: Builds a batch of "skill of the day" cards for surfskills.surf, end
 
 # Surf Skill: skill of the day
 
-> Steps 1–3 (Pick, Plan, Run) are built. Steps 4–6 are scaffolds: each says what it must do, but none is implemented yet.
+> Steps 1–4 (Pick, Plan, Run, Card) are built. Steps 5–6 are scaffolds: each says what it must do, but neither is implemented yet.
 
 You are the orchestrator. You build cards one after another until the batch is done. You never do a step's work yourself.
 
@@ -14,7 +14,7 @@ You are the orchestrator. You build cards one after another until the batch is d
 - **Never stop.** Don't ask the user anything and don't wait for approval. If something is unclear, make the safest choice, note it in the status log, and keep going.
 - **One sub-agent per step.** Launch every step as a fresh sub-agent (in Claude Code, the Agent tool). It sees none of this session.
 - **Small prompts.** Give each sub-agent only three absolute paths: its step file in `references/`, the card folder, and its output schema in `assets/`. Pick creates the card folder, so it gets `cards/` instead.
-- **Check every output.** After a step, validate its JSON against its schema. Invalid output counts as a failure. After Plan, `node scripts/plan-check.mjs <card>` must also print `ok`. After Run, its reply must be `run: ok` and `run.json` must exist.
+- **Check every output.** After a step, validate its JSON against its schema. Invalid output counts as a failure. After Plan, `node scripts/plan-check.mjs <card>` must also print `ok`. After Run, its reply must be `run: ok` and `run.json` must exist. After Card, `node scripts/card-check.mjs <card>` must print `ok`.
 - **Long scripts in the background.** Run's `run-agent.mjs` takes up to 11 minutes. Its sub-agent starts it in the background and waits for it, so a tool-call timeout never cuts the run short.
 
 ## Input
@@ -34,7 +34,7 @@ One folder per card in `cards/` at the project root, named `<owner>__<repo>__<sk
 | 1. Pick | [references/1-pick/README.md](references/1-pick/README.md) | trending lists, catalog, `cards/` | a new card folder with `pick.json`, `skill/` |
 | 2. Plan | [references/2-plan/README.md](references/2-plan/README.md) | `pick.json`, `skill/` | `plan.json`, `inputs/` |
 | 3. Run | [references/3-run/README.md](references/3-run/README.md) | `plan.json`, `skill/`, `inputs/` | `hosts.json`, `result/`, `run.log`, `run.jsonl`, `review/`, `run.json` |
-| 4. Card | [references/4-card.md](references/4-card.md) | `pick.json`, `plan.json`, `run.json`, `result/`, `run.log`, `skill/` | `card.json` |
+| 4. Card | [references/4-card/README.md](references/4-card/README.md) | `pick.json`, `skill/` (and the repo README for a new collection) | `card.json` |
 | 5. Video | [references/5-video.md](references/5-video.md) | `pick.json`, `plan.json`, `run.json`, `result/`, `inputs/` | `video.json`, `video/` |
 | 6. Publish | [references/6-publish.md](references/6-publish.md) | `pick.json`, `card.json`, `video.json`, `video/` | a dated row in Supabase |
 
