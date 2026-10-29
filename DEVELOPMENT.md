@@ -21,7 +21,7 @@ These decisions replace anything below that conflicts with them.
 
 - **Cards are built locally.** A local skill builds cards in a weekly batch (for example 7 at a time) using my own AI subscription. Building cards uses no paid API key and no server.
 - **Candidate pick is part of the skill.** Picking candidates with agent-builder-index is the skill's first step. The candidate tool doesn't need its own deployment for now.
-- **No queue table.** Skills of the day go into one table, each with its date. A skill whose date hasn't come yet stays hidden on the site. There is no separate queue.
+- **Queue table for now (`skill_queue`).** Publish puts each finished card into a private `skill_queue` table in Supabase, with its date and ready-made `skills` and `collections` rows. Moving queued cards onto the site comes with the website track. This may be redesigned later.
 - **Website track stays as planned.** Daily pages (`/day/YYYY-MM-DD`), a "skill of the day" homepage, an archive of past days, and date labels for existing skills.
 - **No X auto-posting for now.** The X account, posting and author tagging are on hold. The site is the only place a new skill appears.
 - **Run uses agy's sandbox on the Mac, not a container.** The demo run uses the Antigravity CLI (`agy`) inside its own macOS sandbox with session-only lockdown settings, approved hosts only, and a self-test before each batch. This replaces the throwaway containers below.
