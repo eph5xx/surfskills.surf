@@ -45,3 +45,7 @@ media/how-it-works/renders/
 media/how-it-works/.debug/
 # hyperframes generation workspace (final web clips live under public/)
 videos/
+
+# local-only: Supabase CLI state and private dev notes
+supabase/.temp/
+DEVELOPMENT.md
