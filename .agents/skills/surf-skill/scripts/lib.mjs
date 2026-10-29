@@ -220,6 +220,27 @@ export async function sbSelect(env, table, query = "") {
   return res.json();
 }
 
+// --- JSON Schema ------------------------------------------------------------
+
+/**
+ * Validate `data` against `assets/<name>.schema.json` -> list of errors (empty = valid).
+ * Without ajv installed, only checks the top-level required fields, with a warning.
+ */
+export async function validateSchema(name, data) {
+  const schema = readJSON(join(SKILL_ROOT, "assets", `${name}.schema.json`));
+  let Ajv2020;
+  try {
+    Ajv2020 = (await import("ajv/dist/2020.js")).default;
+  } catch {
+    log("warning: ajv not found; checking required fields only");
+    const missing = (schema.required || []).filter((k) => !(data && typeof data === "object" && k in data));
+    return missing.length ? [`missing: ${missing.join(", ")}`] : [];
+  }
+  // The schemas use type unions like ["string", "integer"]; strict mode would warn on every run.
+  const check = new Ajv2020({ allErrors: true, allowUnionTypes: true }).compile(schema);
+  return check(data) ? [] : check.errors.map((e) => `${e.instancePath || "/"} ${e.message}`);
+}
+
 // --- SKILL.md ---------------------------------------------------------------
 
 /**

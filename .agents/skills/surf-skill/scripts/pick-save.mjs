@@ -10,7 +10,6 @@ import { listFiles } from "./pick-check.mjs";
 import {
   CARDS_DIR,
   PICK_DIR,
-  SKILL_ROOT,
   cardDirName,
   existsSync,
   featuredSkillIds,
@@ -18,6 +17,7 @@ import {
   log,
   parseArgs,
   readJSON,
+  validateSchema,
   writeJSON,
 } from "./lib.mjs";
 
@@ -42,20 +42,6 @@ function findInPools(skillId) {
     }
   }
   return null;
-}
-
-async function validate(pick) {
-  const schema = readJSON(join(SKILL_ROOT, "assets", "pick.schema.json"));
-  let Ajv2020;
-  try {
-    Ajv2020 = (await import("ajv/dist/2020.js")).default;
-  } catch {
-    log("warning: ajv not found; checking required fields only");
-    const missing = schema.required.filter((k) => !(k in pick));
-    return missing.length ? [`missing: ${missing.join(", ")}`] : [];
-  }
-  const check = new Ajv2020({ allErrors: true }).compile(schema);
-  return check(pick) ? [] : check.errors.map((e) => `${e.instancePath || "/"} ${e.message}`);
 }
 
 async function main() {
@@ -83,7 +69,7 @@ async function main() {
     why,
     hype: repo.hype,
   };
-  const errors = await validate(pick);
+  const errors = await validateSchema("pick", pick);
   if (errors.length) die(`pick.json would be invalid:\n  ${errors.join("\n  ")}`);
 
   // Copy what was checked: the skill folder minus nested skill folders and symlinks.
