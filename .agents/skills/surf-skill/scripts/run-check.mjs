@@ -13,13 +13,24 @@
 // Usage: node run-check.mjs <card>
 // Last line: `ok: …` (exit 0), `failed: …` (exit 1) or `blocked: …` (exit 3).
 
-import { spawn } from "node:child_process";
-import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { homedir } from "node:os";
+import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { extname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { listFiles } from "./pick-check.mjs";
-import { EXIT, copyOut, existsSync, join, log, parseFrontmatter, readJSON, realTmp, writeJSON } from "./lib.mjs";
+import {
+  EXIT,
+  copyOut,
+  existsSync,
+  findChrome,
+  join,
+  launchChrome,
+  loadPage,
+  log,
+  parseFrontmatter,
+  readJSON,
+  shoot,
+  writeJSON,
+} from "./lib.mjs";
 
 const IMAGE_EXT = /\.(png|jpe?g|webp|gif|svg)$/i;
 const MAX_OVERVIEW = 12_000;
@@ -120,136 +131,6 @@ function evidence(card, plan, name, agentInfo) {
 
 // --- screenshots ------------------------------------------------------------
 
-function findChrome() {
-  if (process.env.SURF_CHROME) return process.env.SURF_CHROME;
-  const pw = join(homedir(), "Library", "Caches", "ms-playwright");
-  if (existsSync(pw)) {
-    const dirs = readdirSync(pw)
-      .filter((d) => /^chromium_headless_shell-\d+$/.test(d))
-      .sort((a, b) => b.split("-")[1] - a.split("-")[1]);
-    for (const d of dirs) {
-      for (const sub of readdirSync(join(pw, d))) {
-        for (const bin of ["chrome-headless-shell", "headless_shell"]) {
-          const p = join(pw, d, sub, bin);
-          if (existsSync(p)) return p;
-        }
-      }
-    }
-  }
-  for (const p of ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "/Applications/Chromium.app/Contents/MacOS/Chromium"]) {
-    if (existsSync(p)) return p;
-  }
-  return null;
-}
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-/** Headless Chromium with a fresh profile; DNS resolves only the approved hosts. */
-async function launchChrome(bin, hosts) {
-  const profile = mkdtempSync(join(realTmp(), "surf-chrome-"));
-  const rules = ["MAP * ~NOTFOUND", ...hosts.map((h) => `EXCLUDE ${h}`)].join(", ");
-  const args = [
-    "--headless", "--remote-debugging-port=0", `--user-data-dir=${profile}`, `--host-resolver-rules=${rules}`,
-    "--no-first-run", "--no-default-browser-check", "--disable-extensions", "--disable-sync", "--disable-background-networking",
-    "--disable-component-update", "--disable-default-apps", "--hide-scrollbars", "--mute-audio", "--force-color-profile=srgb",
-    "about:blank",
-  ];
-  const child = spawn(bin, args, { stdio: ["ignore", "ignore", "pipe"] });
-  const exited = new Promise((res) => child.once("exit", res));
-  const kill = async () => {
-    child.kill("SIGKILL");
-    await Promise.race([exited, sleep(5000)]);
-    try {
-      rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
-    } catch (e) {
-      log(`could not remove the Chromium profile ${profile}: ${e.message}`);
-    }
-  };
-  let wsUrl;
-  try {
-    wsUrl = await new Promise((res, rej) => {
-      let err = "";
-      const t = setTimeout(() => rej(new Error(`Chromium did not start: ${err.slice(0, 300)}`)), 20_000);
-      child.stderr.on("data", (d) => {
-        err += d;
-        const m = err.match(/DevTools listening on (ws:\/\/\S+)/);
-        if (m) {
-          clearTimeout(t);
-          res(m[1]);
-        }
-      });
-      child.on("exit", () => rej(new Error(`Chromium exited: ${err.slice(0, 300)}`)));
-    });
-  } catch (e) {
-    await kill();
-    throw e;
-  }
-  const port = new URL(wsUrl).port;
-  const list = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
-  const page = list.find((t) => t.type === "page");
-  const sock = new WebSocket(page.webSocketDebuggerUrl);
-  await new Promise((res, rej) => {
-    sock.onopen = res;
-    sock.onerror = () => rej(new Error("CDP connection failed"));
-  });
-  let id = 0;
-  const waiting = new Map();
-  const listeners = [];
-  sock.onmessage = (m) => {
-    const msg = JSON.parse(m.data);
-    if (msg.id && waiting.has(msg.id)) {
-      const { res, rej } = waiting.get(msg.id);
-      waiting.delete(msg.id);
-      msg.error ? rej(new Error(msg.error.message)) : res(msg.result);
-    } else if (msg.method) for (const l of listeners) l(msg);
-  };
-  const send = (method, params = {}) =>
-    new Promise((res, rej) => {
-      const i = ++id;
-      waiting.set(i, { res, rej });
-      sock.send(JSON.stringify({ id: i, method, params }));
-    });
-  return {
-    send,
-    on: (fn) => listeners.push(fn),
-    async close() {
-      try {
-        sock.close();
-      } catch {
-        /* closed */
-      }
-      await kill();
-    },
-  };
-}
-
-async function loadPage(cdp, url) {
-  const loaded = new Promise((res) => {
-    cdp.on((m) => m.method === "Page.loadEventFired" && res());
-    setTimeout(res, 20_000);
-  });
-  await cdp.send("Page.navigate", { url });
-  await loaded;
-  await sleep(1500);
-  // Scroll through once so reveal-on-scroll content shows, then back to the top.
-  const r = await cdp.send("Runtime.evaluate", {
-    awaitPromise: true,
-    returnByValue: true,
-    expression: `(async () => {
-      const h = () => document.documentElement.scrollHeight;
-      for (let y = 0; y < h() && y < ${MAX_OVERVIEW}; y += 500) { scrollTo(0, y); await new Promise(r => setTimeout(r, 120)); }
-      scrollTo(0, 0); await new Promise(r => setTimeout(r, 900));
-      return { height: h(), title: document.title };
-    })()`,
-  });
-  return r.result.value || {};
-}
-
-async function shoot(cdp, path, params = {}) {
-  const r = await cdp.send("Page.captureScreenshot", { format: "png", ...params });
-  writeFileSync(path, Buffer.from(r.data, "base64"));
-}
-
 async function pageShots(chrome, file, shotsDir, hosts) {
   const cdp = await launchChrome(chrome, hosts);
   const consoleErrors = [];
@@ -268,13 +149,13 @@ async function pageShots(chrome, file, shotsDir, hosts) {
     for (const m of ["Page.enable", "Runtime.enable", "Log.enable", "Network.enable"]) await cdp.send(m);
     const url = pathToFileURL(file).href;
     await cdp.send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
-    const info = await loadPage(cdp, url);
+    const info = await loadPage(cdp, url, MAX_OVERVIEW);
     await shoot(cdp, join(shotsDir, "desktop.png"));
     const h = Math.max(900, Math.min(info.height || 900, MAX_OVERVIEW));
     const scale = h > 6000 ? 0.5 : 1;
     await shoot(cdp, join(shotsDir, "overview.png"), { captureBeyondViewport: true, clip: { x: 0, y: 0, width: 1440, height: h, scale } });
     await cdp.send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
-    await loadPage(cdp, url);
+    await loadPage(cdp, url, MAX_OVERVIEW);
     await shoot(cdp, join(shotsDir, "mobile.png"));
     return {
       title: info.title || "",

@@ -25,6 +25,8 @@ These decisions replace anything below that conflicts with them.
 - **Website track stays as planned.** Daily pages (`/day/YYYY-MM-DD`), a "skill of the day" homepage, an archive of past days, and date labels for existing skills.
 - **No X auto-posting for now.** The X account, posting and author tagging are on hold. The site is the only place a new skill appears.
 - **Run uses agy's sandbox on the Mac, not a container.** The demo run uses the Antigravity CLI (`agy`) inside its own macOS sandbox with session-only lockdown settings, approved hosts only, and a self-test before each batch. This replaces the throwaway containers below.
+- **One video per card, made reliable instead of picked.** Video makes a single version, with no human choosing between options. Code draws a fixed brand frame (the command, its caption, an end card with the skill's name); an AI author makes only the 6-second result part, from a storyboard planned on the real captures. Strict code checks, then a reviewer AI on a different model scoring stills at tile size, send problems back to the author for up to three rounds. A card whose video never passes is dropped. Both AIs run as locked agy, like Run's reviewer, so no container is needed.
+- **HyperFrames is used as a tool, never copied.** Video renders with HyperFrames (Apache-2.0) through `npx`, pinned to one version, so its license asks nothing of this repo. The fonts ship with their OFL license, and GSAP is downloaded at run time and checked against a pinned hash, not committed.
 - **Alerts by email, kept light.** I want an alert when only a few dated skills are left, or when something breaks. Email or something just as simple, with no heavy setup. One option is a small Cloudflare cron that counts the remaining future-dated skills and sends an email.
 ### Pipeline decomposition
 
@@ -122,10 +124,10 @@ Each piece has one job and one output. The tag says who does it: code, AI, or AI
    - 4.1 Write (AI): title, description, tweet → card text.
    - 4.2 Check (code): length limits, no banned words, author handle found → pass or fail.
 5. **Video**
-   - 5.1 Capture (code, container): turn the result into footage. A web page gets a scroll recording, text gets before and after, images get a slideshow → raw footage.
+   - 5.1 Capture (code): turn the result into footage. A web page gets a scroll recording, text gets before and after, images get a slideshow → raw footage.
    - 5.2 Storyboard (AI): 10 seconds of title, then the result, then the skill's name → storyboard.
-   - 5.3 Compose (AI, container): a HyperFrames page that follows the storyboard → composition.
-   - 5.4 Render (code, container): the page becomes an MP4 and a cover image → video.
+   - 5.3 Compose (AI): a HyperFrames page that follows the storyboard → composition.
+   - 5.4 Render (code): the page becomes an MP4 and a cover image → video.
    - 5.5 Check (code): about 10 seconds long, no blank frames, under the size limit → pass or fail.
 6. **Publish**
    - 6.1 Approve (you): look at the card and video → yes or no.
@@ -160,7 +162,6 @@ No key files exist locally yet. The logins above cover setup. These keys are for
 
 Still open:
 
-- **Video sandbox** key: depends on which sandbox the video track picks.
 - **Alerts**: for example a Telegram bot token.
 
 To start, the website and candidate pick tracks only need keys 1–3. The logins cover most of that. The R2 access key is the only one to make by hand, and only the worker needs it.

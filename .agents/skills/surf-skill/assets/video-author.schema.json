@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "video author output",
+  "description": "The result part of the preview video: markup, CSS and timeline code that video-build.mjs inserts into assets/video/frame.html.",
+  "type": "object",
+  "required": ["markup", "css", "timeline_js", "notes"],
+  "additionalProperties": false,
+  "properties": {
+    "markup": { "description": "HTML placed inside #result. No script, style, link, iframe or media tags.", "type": "string", "minLength": 20, "maxLength": 20000 },
+    "css": { "description": "CSS for the markup. Scope every selector under #result.", "type": "string", "maxLength": 20000 },
+    "timeline_js": { "description": "Body of function (tl, R): tl.set / tl.to / tl.fromTo calls between R.start and R.end.", "type": "string", "minLength": 20, "maxLength": 12000 },
+    "notes": { "description": "What changed since the last round, or the idea, in two sentences.", "type": "string", "maxLength": 600 }
+  }
+}

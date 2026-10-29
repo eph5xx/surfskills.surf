@@ -2,22 +2,25 @@
 // anywhere `node` does. Helpers are copied from the local create-surf-skill
 // scripts on purpose: those skills are gitignored, this one is committed.
 
-import { execFileSync, spawn } from "node:child_process";
+import { execFile, execFileSync, spawn } from "node:child_process";
 import { createHash, randomBytes } from "node:crypto";
 import {
   copyFileSync,
   existsSync,
   lstatSync,
   mkdirSync,
+  mkdtempSync,
   readdirSync,
   readFileSync,
   realpathSync,
   renameSync,
   rmSync,
+  statSync,
   writeFileSync,
 } from "node:fs";
+import { createServer } from "node:http";
 import { homedir, tmpdir } from "node:os";
-import { dirname, extname, join, resolve } from "node:path";
+import { dirname, extname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -552,16 +555,18 @@ export function spawnAgyStream({ cwd, settingsPath, logFile, env, onEvent, extra
 }
 
 /**
- * One locked-down, single-turn agy run with structured output (stand-in, reviewer).
- * Resolves to { ok, output, error, blocked }.
+ * One locked-down, single-turn agy run with structured output (stand-in, reviewer,
+ * video storyboard, author and reviewer). `model` is an `agy models` id; without it
+ * agy uses its default. Resolves to { ok, output, error, blocked }.
  */
-export function agyJson({ cwd, prompt, schemaPath, timeoutS = 180 }) {
+export function agyJson({ cwd, prompt, schemaPath, timeoutS = 180, model }) {
   const settingsPath = join(cwd, "..", `settings-${randomBytes(3).toString("hex")}.json`);
   writeJSON(settingsPath, lockedSettings());
   const tmp = join(cwd, ".tmp");
   mkdirSync(tmp, { recursive: true });
   const args = [
     "--sandbox", "--disable-slash-commands", "--settings", settingsPath,
+    ...(model ? ["--model", model] : []),
     "--json-schema", schemaPath, "--output-format", "json",
     "--print-timeout", `${timeoutS}s`, "-p", prompt,
   ];
@@ -637,4 +642,325 @@ export function copyOut(src, dest, prefix = "result") {
   };
   walk(src, "");
   return { files, dropped };
+}
+
+// --- Headless Chromium over CDP ----------------------------------------------
+//
+// Raw DevTools Protocol over Node's WebSocket: no Playwright, no Puppeteer.
+// Used by Run's screenshots and by Video's capture and composition checks.
+
+export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/** A headless Chromium binary: SURF_CHROME, Playwright's headless shell, or Chrome. */
+export function findChrome() {
+  if (process.env.SURF_CHROME) return process.env.SURF_CHROME;
+  const pw = join(homedir(), "Library", "Caches", "ms-playwright");
+  if (existsSync(pw)) {
+    const dirs = readdirSync(pw)
+      .filter((d) => /^chromium_headless_shell-\d+$/.test(d))
+      .sort((a, b) => b.split("-")[1] - a.split("-")[1]);
+    for (const d of dirs) {
+      for (const sub of readdirSync(join(pw, d))) {
+        for (const bin of ["chrome-headless-shell", "headless_shell"]) {
+          const p = join(pw, d, sub, bin);
+          if (existsSync(p)) return p;
+        }
+      }
+    }
+  }
+  for (const p of ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "/Applications/Chromium.app/Contents/MacOS/Chromium"]) {
+    if (existsSync(p)) return p;
+  }
+  return null;
+}
+
+/**
+ * Headless Chromium with a fresh profile; DNS resolves only the approved hosts
+ * (IP literals such as 127.0.0.1 skip DNS). Returns { send, on, close }.
+ */
+export async function launchChrome(bin, hosts) {
+  const profile = mkdtempSync(join(realTmp(), "surf-chrome-"));
+  const rules = ["MAP * ~NOTFOUND", ...hosts.map((h) => `EXCLUDE ${h}`)].join(", ");
+  const args = [
+    "--headless", "--remote-debugging-port=0", `--user-data-dir=${profile}`, `--host-resolver-rules=${rules}`,
+    "--no-first-run", "--no-default-browser-check", "--disable-extensions", "--disable-sync", "--disable-background-networking",
+    "--disable-component-update", "--disable-default-apps", "--hide-scrollbars", "--mute-audio", "--force-color-profile=srgb",
+    "about:blank",
+  ];
+  const child = spawn(bin, args, { stdio: ["ignore", "ignore", "pipe"] });
+  const exited = new Promise((res) => child.once("exit", res));
+  const kill = async () => {
+    child.kill("SIGKILL");
+    await Promise.race([exited, sleep(5000)]);
+    try {
+      rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+    } catch (e) {
+      log(`could not remove the Chromium profile ${profile}: ${e.message}`);
+    }
+  };
+  let wsUrl;
+  try {
+    wsUrl = await new Promise((res, rej) => {
+      let err = "";
+      const t = setTimeout(() => rej(new Error(`Chromium did not start: ${err.slice(0, 300)}`)), 20_000);
+      child.stderr.on("data", (d) => {
+        err += d;
+        const m = err.match(/DevTools listening on (ws:\/\/\S+)/);
+        if (m) {
+          clearTimeout(t);
+          res(m[1]);
+        }
+      });
+      child.on("exit", () => rej(new Error(`Chromium exited: ${err.slice(0, 300)}`)));
+    });
+  } catch (e) {
+    await kill();
+    throw e;
+  }
+  const port = new URL(wsUrl).port;
+  const list = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
+  const page = list.find((t) => t.type === "page");
+  const sock = new WebSocket(page.webSocketDebuggerUrl);
+  await new Promise((res, rej) => {
+    sock.onopen = res;
+    sock.onerror = () => rej(new Error("CDP connection failed"));
+  });
+  let id = 0;
+  const waiting = new Map();
+  const listeners = [];
+  sock.onmessage = (m) => {
+    const msg = JSON.parse(m.data);
+    if (msg.id && waiting.has(msg.id)) {
+      const { res, rej } = waiting.get(msg.id);
+      waiting.delete(msg.id);
+      msg.error ? rej(new Error(msg.error.message)) : res(msg.result);
+    } else if (msg.method) for (const l of listeners) l(msg);
+  };
+  const send = (method, params = {}) =>
+    new Promise((res, rej) => {
+      const i = ++id;
+      waiting.set(i, { res, rej });
+      sock.send(JSON.stringify({ id: i, method, params }));
+    });
+  return {
+    send,
+    on: (fn) => listeners.push(fn),
+    async close() {
+      try {
+        sock.close();
+      } catch {
+        /* closed */
+      }
+      await kill();
+    },
+  };
+}
+
+/**
+ * Open `url`, wait for load, scroll through once (up to `maxScroll` px) so
+ * reveal-on-scroll content shows, then return to the top. -> { height, title }.
+ */
+export async function loadPage(cdp, url, maxScroll = 12_000) {
+  const loaded = new Promise((res) => {
+    cdp.on((m) => m.method === "Page.loadEventFired" && res());
+    setTimeout(res, 20_000);
+  });
+  await cdp.send("Page.navigate", { url });
+  await loaded;
+  await sleep(1500);
+  const r = await cdp.send("Runtime.evaluate", {
+    awaitPromise: true,
+    returnByValue: true,
+    expression: `(async () => {
+      const h = () => document.documentElement.scrollHeight;
+      for (let y = 0; y < h() && y < ${maxScroll}; y += 500) { scrollTo(0, y); await new Promise(r => setTimeout(r, 120)); }
+      scrollTo(0, 0); await new Promise(r => setTimeout(r, 900));
+      return { height: h(), title: document.title };
+    })()`,
+  });
+  return r.result.value || {};
+}
+
+/** Page.captureScreenshot into `path` (png unless params.format says otherwise). */
+export async function shoot(cdp, path, params = {}) {
+  const r = await cdp.send("Page.captureScreenshot", { format: "png", ...params });
+  writeFileSync(path, Buffer.from(r.data, "base64"));
+}
+
+// --- Video: tools ------------------------------------------------------------
+//
+// Video renders with HyperFrames (Apache-2.0, Copyright 2026 HeyGen, Inc.), run
+// as a pinned tool through npx. None of its files are copied into this skill.
+
+/** Pinned: the newest release at least two weeks old when Video was built. */
+export const HYPERFRAMES_VERSION = "0.8.162";
+// GSAP runs inside the composition. Downloaded once, checked, never committed.
+const GSAP = {
+  version: "3.14.2",
+  sha256: "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+};
+export const VIDEO_CACHE = join(CARDS_DIR, ".video");
+/** agy models for Video. The reviewer is a different model, so it doesn't share the author's blind spots. */
+export const VIDEO_MODELS = {
+  author: process.env.SURF_VIDEO_AUTHOR_MODEL || "claude-opus-5-5-high",
+  reviewer: process.env.SURF_VIDEO_REVIEW_MODEL || "gemini-4-argon-high",
+};
+
+/** The text under `## <heading>` in a markdown file, up to the next `## ` heading. */
+export function mdSection(path, heading) {
+  const md = readFileSync(path, "utf8");
+  const k = md.indexOf(`\n## ${heading}\n`);
+  if (k < 0) throw new Error(`${path} has no "## ${heading}" section`);
+  const rest = md.slice(k + heading.length + 5);
+  const end = rest.search(/\n## /);
+  return (end < 0 ? rest : rest.slice(0, end)).trim();
+}
+
+/**
+ * Run a command; resolves to { code, stdout, stderr, timedOut }. On timeout the
+ * whole process group is killed.
+ */
+export function runCmd(cmd, args, { cwd, env = process.env, timeoutS = 300 } = {}) {
+  return new Promise((res) => {
+    const child = spawn(cmd, args, { cwd, env, stdio: ["ignore", "pipe", "pipe"], detached: true });
+    let stdout = "";
+    let stderr = "";
+    let timedOut = false;
+    child.stdout.on("data", (d) => {
+      if (stdout.length < 2_000_000) stdout += d;
+    });
+    child.stderr.on("data", (d) => {
+      if (stderr.length < 200_000) stderr += d;
+    });
+    const t = setTimeout(() => {
+      timedOut = true;
+      try {
+        process.kill(-child.pid, "SIGKILL");
+      } catch {
+        /* gone */
+      }
+    }, timeoutS * 1000);
+    child.on("error", (e) => {
+      clearTimeout(t);
+      res({ code: null, stdout, stderr: stderr + e.message, timedOut });
+    });
+    child.on("close", (code) => {
+      clearTimeout(t);
+      res({ code, stdout, stderr, timedOut });
+    });
+  });
+}
+
+/** A secret-free environment for HyperFrames, with its telemetry off. */
+function hyperframesEnv() {
+  const keep = ["HOME", "USER", "LOGNAME", "PATH", "SHELL", "LANG", "LC_ALL", "TMPDIR"];
+  const env = {};
+  for (const k of keep) if (process.env[k]) env[k] = process.env[k];
+  return { ...env, HYPERFRAMES_NO_TELEMETRY: "1", DO_NOT_TRACK: "1", NO_COLOR: "1" };
+}
+
+/** `npx hyperframes@<pinned> <args>` in `cwd`. */
+export function hyperframes(args, cwd, timeoutS = 300) {
+  return runCmd("npx", ["--yes", `hyperframes@${HYPERFRAMES_VERSION}`, ...args], { cwd, env: hyperframesEnv(), timeoutS });
+}
+
+/** Run ffmpeg quietly; throws with its last stderr lines when it fails. */
+export async function ffmpeg(args, timeoutS = 300) {
+  const r = await runCmd("ffmpeg", ["-hide_banner", "-loglevel", "error", "-y", ...args], { timeoutS });
+  if (r.code !== 0) throw new Error(`ffmpeg failed: ${(r.stderr || "").trim().split("\n").slice(-3).join(" ")}`);
+  return r;
+}
+
+/** { duration, width, height, fps, audio, bytes } of a media file. */
+export async function ffprobe(file) {
+  const r = await runCmd("ffprobe", ["-v", "error", "-show_streams", "-show_format", "-of", "json", file], { timeoutS: 60 });
+  if (r.code !== 0) throw new Error(`ffprobe failed on ${file}: ${r.stderr.trim().slice(0, 200)}`);
+  const j = JSON.parse(r.stdout);
+  const v = (j.streams || []).find((s) => s.codec_type === "video") || {};
+  const [n, d] = String(v.avg_frame_rate || "0/1").split("/").map(Number);
+  return {
+    duration: Number(j.format?.duration || v.duration || 0),
+    width: v.width || 0,
+    height: v.height || 0,
+    fps: d ? n / d : 0,
+    audio: (j.streams || []).some((s) => s.codec_type === "audio"),
+    bytes: statSync(file).size,
+  };
+}
+
+/** Which video tools are missing: [] when ffmpeg, ffprobe and npx all run. */
+export function missingVideoTools() {
+  return ["ffmpeg", "ffprobe", "npx"].filter((t) => {
+    try {
+      execFileSync(t, [t === "npx" ? "--version" : "-version"], { stdio: "ignore", timeout: 30_000 });
+      return false;
+    } catch {
+      return true;
+    }
+  });
+}
+
+/** Path to the cached, checksum-verified gsap.min.js; downloads it on first use. */
+export async function ensureGsap() {
+  const path = join(VIDEO_CACHE, `gsap-${GSAP.version}.min.js`);
+  const ok = (buf) => createHash("sha256").update(buf).digest("hex") === GSAP.sha256;
+  if (existsSync(path) && ok(readFileSync(path))) return path;
+  const res = await fetch(`https://cdn.jsdelivr.net/npm/gsap@${GSAP.version}/dist/gsap.min.js`);
+  if (!res.ok) throw new Error(`GSAP download failed: ${res.status} ${res.statusText}`);
+  const buf = Buffer.from(await res.arrayBuffer());
+  if (!ok(buf)) throw new Error(`GSAP ${GSAP.version} does not match its pinned checksum`);
+  mkdirSync(VIDEO_CACHE, { recursive: true });
+  writeFileSync(path, buf);
+  return path;
+}
+
+const MIME = {
+  ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json",
+  ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif",
+  ".svg": "image/svg+xml", ".ttf": "font/ttf", ".woff": "font/woff", ".woff2": "font/woff2",
+};
+
+/**
+ * Serve `dir` read-only on 127.0.0.1 (fonts don't load from file:// pages).
+ * Resolves to { origin, close }.
+ */
+export function serveDir(dir) {
+  const root = realpathSync(dir);
+  const server = createServer((req, res) => {
+    let rel;
+    try {
+      rel = decodeURIComponent(new URL(req.url, "http://x").pathname);
+    } catch {
+      res.writeHead(400).end();
+      return;
+    }
+    const abs = resolve(root, "." + (rel.endsWith("/") ? rel + "index.html" : rel));
+    if (abs !== root && !abs.startsWith(root + sep)) return res.writeHead(403).end();
+    if (!existsSync(abs) || !statSync(abs).isFile()) return res.writeHead(404).end();
+    res.writeHead(200, { "Content-Type": MIME[extname(abs).toLowerCase()] || "application/octet-stream" });
+    res.end(readFileSync(abs));
+  });
+  return new Promise((res) => {
+    server.listen(0, "127.0.0.1", () => {
+      const { port } = server.address();
+      res({ origin: `http://127.0.0.1:${port}`, close: () => new Promise((r) => server.close(r)) });
+    });
+  });
+}
+
+/** What every Video script needs to know about a card: the command, the skill, the result type. */
+export function videoTask(card) {
+  const plan = readJSON(join(card, "plan.json"));
+  const pick = readJSON(join(card, "pick.json"));
+  const skillMd = join(card, "skill", "SKILL.md");
+  const { data } = existsSync(skillMd) ? parseFrontmatter(readFileSync(skillMd, "utf8")) : { data: null };
+  const owner = pick.skill_id.split("/")[0];
+  return {
+    command: plan.task.title,
+    skill_name: (data?.name || pick.skill_id.split("/").pop()).slice(0, 40),
+    owner,
+    by: `by ${owner}`,
+    skill_description: (data?.description || "").slice(0, 500),
+    result_type: plan.deliverable.type,
+  };
 }

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "video review verdict",
+  "description": "The video reviewer's scores for one draft. video-build.mjs passes a draft only when every score is 4 or 5.",
+  "type": "object",
+  "required": ["value", "readable", "looks", "honest", "fixes", "cover_at", "summary"],
+  "additionalProperties": false,
+  "$defs": {
+    "score": {
+      "type": "object",
+      "required": ["score", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "score": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "reason": { "description": "One or two sentences naming what you saw.", "type": "string", "maxLength": 400 }
+      }
+    }
+  },
+  "properties": {
+    "value": { "description": "The skill's value is clear within the first seconds of the result.", "$ref": "#/$defs/score" },
+    "readable": { "description": "Every word reads at tile size; one idea at a time.", "$ref": "#/$defs/score" },
+    "looks": { "description": "Attractive, calm, on-brand, nothing broken or cramped.", "$ref": "#/$defs/score" },
+    "honest": { "description": "Shows the real result, typical not cherry-picked, nothing invented.", "$ref": "#/$defs/score" },
+    "fixes": {
+      "description": "The most important concrete changes, most important first. Empty when nothing needs fixing.",
+      "type": "array",
+      "maxItems": 5,
+      "items": { "type": "string", "maxLength": 300 }
+    },
+    "cover_at": { "description": "The time in seconds (3.2 to 8.9) of the frame that makes the best cover.", "type": "number", "minimum": 3.2, "maximum": 8.9 },
+    "summary": { "description": "One sentence on the draft as a whole.", "type": "string", "maxLength": 300 }
+  }
+}
