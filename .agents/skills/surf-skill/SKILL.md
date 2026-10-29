@@ -1,11 +1,11 @@
 ---
 name: surf-skill
-description: Builds a batch of "skill of the day" cards for surfskills.surf, end to end and without stopping. Picks a never-featured skill, plans and runs a demo task in a throwaway container, writes the card text, makes the preview video, and publishes the card with its date. Use when asked to build skill-of-the-day cards, fill the upcoming days, or run the card pipeline.
+description: Builds a batch of "skill of the day" cards for surfskills.surf, end to end and without stopping. Picks a never-featured skill, plans and runs a demo task in a locked-down agent sandbox, writes the card text, makes the preview video, and publishes the card with its date. Use when asked to build skill-of-the-day cards, fill the upcoming days, or run the card pipeline.
 ---
 
 # Surf Skill: skill of the day
 
-> Steps 1–2 (Pick, Plan) are built. Steps 3–6 are scaffolds: each says what it must do, but none is implemented yet.
+> Steps 1–3 (Pick, Plan, Run) are built. Steps 4–6 are scaffolds: each says what it must do, but none is implemented yet.
 
 You are the orchestrator. You build cards one after another until the batch is done. You never do a step's work yourself.
 
@@ -14,7 +14,8 @@ You are the orchestrator. You build cards one after another until the batch is d
 - **Never stop.** Don't ask the user anything and don't wait for approval. If something is unclear, make the safest choice, note it in the status log, and keep going.
 - **One sub-agent per step.** Launch every step as a fresh sub-agent (in Claude Code, the Agent tool). It sees none of this session.
 - **Small prompts.** Give each sub-agent only three absolute paths: its step file in `references/`, the card folder, and its output schema in `assets/`. Pick creates the card folder, so it gets `cards/` instead.
-- **Check every output.** After a step, validate its JSON against its schema. Invalid output counts as a failure. After Plan, `node scripts/plan-check.mjs <card>` must also print `ok`.
+- **Check every output.** After a step, validate its JSON against its schema. Invalid output counts as a failure. After Plan, `node scripts/plan-check.mjs <card>` must also print `ok`. After Run, its reply must be `run: ok` and `run.json` must exist.
+- **Long scripts in the background.** Run's `run-agent.mjs` takes up to 11 minutes. Its sub-agent starts it in the background and waits for it, so a tool-call timeout never cuts the run short.
 
 ## Input
 
@@ -32,7 +33,7 @@ One folder per card in `cards/` at the project root, named `<owner>__<repo>__<sk
 | --- | --- | --- | --- |
 | 1. Pick | [references/1-pick/README.md](references/1-pick/README.md) | trending lists, catalog, `cards/` | a new card folder with `pick.json`, `skill/` |
 | 2. Plan | [references/2-plan/README.md](references/2-plan/README.md) | `pick.json`, `skill/` | `plan.json`, `inputs/` |
-| 3. Run | [references/3-run.md](references/3-run.md) | `plan.json`, `skill/`, `inputs/` | `run.json`, `result/`, `run.log` |
+| 3. Run | [references/3-run/README.md](references/3-run/README.md) | `plan.json`, `skill/`, `inputs/` | `hosts.json`, `result/`, `run.log`, `run.jsonl`, `review/`, `run.json` |
 | 4. Card | [references/4-card.md](references/4-card.md) | `pick.json`, `plan.json`, `run.json`, `result/`, `run.log`, `skill/` | `card.json` |
 | 5. Video | [references/5-video.md](references/5-video.md) | `pick.json`, `plan.json`, `run.json`, `result/`, `inputs/` | `video.json`, `video/` |
 | 6. Publish | [references/6-publish.md](references/6-publish.md) | `pick.json`, `card.json`, `video.json`, `video/` | a dated row in Supabase |
@@ -55,7 +56,16 @@ Until the batch has enough published cards:
 - A failed step is retried once, in a new sub-agent.
 - A second failure drops the card. Mark it dropped and start a new card from Pick.
 - If Plan replies `can't run: <reason>` (for example the skill needs a paid account), drop the card right away, without a retry, and log the reason. Plan writes no files in that case.
-- Stop only when the batch is done or Pick finds no candidates left.
+- Run replies one of four ways:
+
+  | Reply | Means | Do |
+  | --- | --- | --- |
+  | `run: ok` | Everything passed. | Continue with Card and Video. |
+  | `failed: <why>` | A code check failed, the run timed out, or agy crashed. | Retry once, as above. |
+  | `bad result: <why>` | The AI review failed the result. | Drop the card right away, without a retry, and log the reason. |
+  | `blocked: <why>` | The lockdown self-test failed, agy isn't logged in, or its quota ran out. | Stop the batch. Keep the card (never drop it), log the reason, and say so in the summary. It resumes from Run next time. |
+
+- Stop only when the batch is done, Pick finds no candidates left, or Run replies `blocked:`.
 
 ## Status log
 

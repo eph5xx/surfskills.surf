@@ -5,7 +5,7 @@ Decide one short demo task for the skill: what the agent is told, the sample fil
 - **Reads:** `pick.json`, `skill/`.
 - **Writes:** `plan.json` (`assets/plan.schema.json`) and sample files in `inputs/`. Nothing else.
 
-You are the planner: one agent, one plan. Run's agent will see only your prompt, the skill and `inputs/`. It runs once, alone, in a throwaway container, with no one to answer it. Video then films what it made.
+You are the planner: one agent, one plan. Run's agent will see only your prompt, the skill and `inputs/`. It runs once, alone, in a locked-down sandbox; a stand-in answers its questions only from your prompt and `inputs/`. Video then films what it made.
 
 Run the scripts from the surf-skill folder (two levels up from this file).
 

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "hosts.json",
+  "description": "Every host named in skill/, inputs/ and the prompt, and whether Run may reach it. Written by run-hosts.mjs.",
+  "type": "object",
+  "required": ["card", "updated_at", "hosts"],
+  "additionalProperties": false,
+  "properties": {
+    "card": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "hosts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["host", "status", "by", "reason", "count", "found_in"],
+        "additionalProperties": false,
+        "properties": {
+          "host": { "description": "Exact hostname, lower case, no port.", "type": "string" },
+          "status": { "enum": ["allow", "deny", "pending"] },
+          "by": { "description": "Who decided: the code rules, the AI review, or nobody yet.", "enum": ["rule", "review", "none"] },
+          "reason": { "type": "string" },
+          "count": { "description": "How many times it appears.", "type": "integer", "minimum": 1 },
+          "found_in": {
+            "description": "Up to three places it appears, one per file.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["file", "line", "context"],
+              "additionalProperties": false,
+              "properties": {
+                "file": { "type": "string" },
+                "line": { "type": "integer" },
+                "context": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

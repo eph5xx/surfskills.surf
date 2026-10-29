@@ -41,7 +41,7 @@ The plan is agent-neutral: the title reads like a slash command, but the prompt 
 2. **Answers to every question the skill's flow would ask.** Read the flow and answer each question up front (audience, tone, length, style…), so the skill never needs to stop.
 3. **The paths.** Every input path it should read (`inputs/brief.md`), and every `result/` path it must write: the deliverable and every file a check looks at. Paths are relative to the working folder.
 4. **"No one will answer questions. When something is unclear, decide, and note the choice in your final reply."**
-5. **"No API keys are set."** Say what to skip if the skill has optional key-only steps.
+5. **"No API keys are set. If the skill would make images through an API, make them with your built-in image tool instead; skip other key-only steps."** Word for word. Run's agent has a built-in image tool but no keys.
 6. **"Finish within 10 minutes."**
 
 Where the skill leaves a choice (a theme, a layout, a format), let it choose; that is part of the demo. Where the result must be one self-contained file for Video, say so (for a page: all CSS and JS inline in the `.html`, no build step).
@@ -82,7 +82,7 @@ No photos yet.
 {
   "task": {
     "title": "/hallmark a landing page for a Lisbon bakery",
-    "prompt": "/hallmark a landing page for a Lisbon bakery\n\nThe bakery's notes are in inputs/brief.md. Use only the facts in it.\n\nAnswers to your questions: material: the brief only, no photos, so use stand-ins from the photo library; audience: locals and tourists in Alfama; use: visit the shop, and pre-order a box by phone; tone: warm editorial. Go ahead.\n\nSave the page as result/index.html, one self-contained file with all CSS in a <style> block and no build step.\n\nNo one will answer questions. When something is unclear, decide, and note the choice in your final reply. No API keys are set, so skip the comp step. Finish within 10 minutes."
+    "prompt": "/hallmark a landing page for a Lisbon bakery\n\nThe bakery's notes are in inputs/brief.md. Use only the facts in it.\n\nAnswers to your questions: material: the brief only, no photos, so use stand-ins from the photo library; audience: locals and tourists in Alfama; use: visit the shop, and pre-order a box by phone; tone: warm editorial. Go ahead.\n\nSave the page as result/index.html, one self-contained file with all CSS in a <style> block and no build step.\n\nNo one will answer questions. When something is unclear, decide, and note the choice in your final reply. No API keys are set. If the skill would make images through an API, make them with your built-in image tool instead; skip other key-only steps. Finish within 10 minutes."
   },
   "deliverable": { "path": "result/index.html", "type": "web_page" },
   "done": [

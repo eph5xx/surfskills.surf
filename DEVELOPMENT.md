@@ -24,6 +24,7 @@ These decisions replace anything below that conflicts with them.
 - **No queue table.** Skills of the day go into one table, each with its date. A skill whose date hasn't come yet stays hidden on the site. There is no separate queue.
 - **Website track stays as planned.** Daily pages (`/day/YYYY-MM-DD`), a "skill of the day" homepage, an archive of past days, and date labels for existing skills.
 - **No X auto-posting for now.** The X account, posting and author tagging are on hold. The site is the only place a new skill appears.
+- **Run uses agy's sandbox on the Mac, not a container.** The demo run uses the Antigravity CLI (`agy`) inside its own macOS sandbox with session-only lockdown settings, approved hosts only, and a self-test before each batch. This replaces the throwaway containers below.
 - **Alerts by email, kept light.** I want an alert when only a few dated skills are left, or when something breaks. Email or something just as simple, with no heavy setup. One option is a small Cloudflare cron that counts the remaining future-dated skills and sends an email.
 ### Pipeline decomposition
 

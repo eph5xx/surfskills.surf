@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "review verdict",
+  "description": "The AI reviewer's verdict on Run's result. Every criterion must pass.",
+  "type": "object",
+  "required": ["task_done", "not_broken", "skill_used", "video_ready", "summary"],
+  "additionalProperties": false,
+  "$defs": {
+    "criterion": {
+      "type": "object",
+      "required": ["verdict", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "verdict": { "enum": ["pass", "fail"] },
+        "reason": { "description": "One or two sentences, naming what you saw.", "type": "string", "maxLength": 400 }
+      }
+    }
+  },
+  "properties": {
+    "task_done": { "description": "The deliverable does what the task asked, with the facts from the inputs.", "$ref": "#/$defs/criterion" },
+    "not_broken": { "description": "Nothing is visibly broken: layout, missing images, error text, empty sections, garbled characters.", "$ref": "#/$defs/criterion" },
+    "skill_used": { "description": "The agent really used the skill: the evidence and the result show its flow, not a generic answer.", "$ref": "#/$defs/criterion" },
+    "video_ready": { "description": "Good enough to show in a short demo video: a viewer would be impressed, not confused.", "$ref": "#/$defs/criterion" },
+    "summary": { "description": "One sentence on the result as a whole.", "type": "string", "maxLength": 300 }
+  }
+}
