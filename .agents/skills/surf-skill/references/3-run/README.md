@@ -34,9 +34,11 @@ The skill is a stranger's code, so the agent runs locked down:
 
 The self-test (`run-selftest.mjs`) runs agy with the same settings and tries to read a canary file in the home folder, write outside the workspace, list `~/projects` and `~/.cache`, and reach a host that isn't approved. Every attempt must fail.
 
-## Time limit
+## Limits
 
-The agent gets 10 minutes; agy is killed at 11. If the deliverable exists when time is up, the run goes on to the checks and the review, which judge whether it is finished (`timed_out` in `run.json`). Without the deliverable, the run fails.
+The agent gets 10 minutes and 1.5M tokens (input + cache reads + output, summed over its model calls), whichever comes first; agy is killed at 11 minutes. If the deliverable exists when a limit is hit, the run goes on to the checks and the review, which judge whether it is finished (`timed_out` or `stopped_at_token_limit` in `run.json`, with the counts in `usage`). Without the deliverable, the run fails.
+
+The run notes tell the agent to skip any step the sandbox blocks (browser or render modes, package installs, unreachable hosts) instead of looking for workarounds, and never to search outside its folder or debug the skill's own scripts. Those detours are what burn tokens.
 
 ## Questions
 
@@ -56,7 +58,7 @@ One line, the last line of the script that stopped, or `run: ok`:
 | Reply | When |
 | --- | --- |
 | `run: ok` | Every script passed. |
-| `failed: <why>` | A code check failed, the run timed out, or agy crashed. |
+| `failed: <why>` | A code check failed, the run hit its time or token limit before writing the deliverable, or agy crashed. |
 | `bad result: <why>` | The review failed. |
 | `blocked: <why>` | The self-test failed, agy isn't logged in, or the quota ran out. |
 

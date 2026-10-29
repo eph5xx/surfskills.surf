@@ -35,6 +35,21 @@
     "duration_s": { "type": "integer", "minimum": 0 },
     "turns": { "description": "Agent turns, including answered questions and the nudge.", "type": "integer", "minimum": 1 },
     "timed_out": { "description": "The agent was stopped at the 10-minute limit after writing the deliverable.", "type": "boolean" },
+    "stopped_at_token_limit": { "description": "The agent was stopped at the token limit after writing the deliverable.", "type": "boolean" },
+    "usage": {
+      "description": "Tokens the agent's model calls used. total = input + cache reads + output; limit is the cap.",
+      "type": "object",
+      "required": ["input_tokens", "cache_read_tokens", "output_tokens", "thinking_tokens", "total", "limit"],
+      "additionalProperties": false,
+      "properties": {
+        "input_tokens": { "type": "integer", "minimum": 0 },
+        "cache_read_tokens": { "type": "integer", "minimum": 0 },
+        "output_tokens": { "type": "integer", "minimum": 0 },
+        "thinking_tokens": { "type": "integer", "minimum": 0 },
+        "total": { "type": "integer", "minimum": 0 },
+        "limit": { "type": "integer", "minimum": 1 }
+      }
+    },
     "questions": {
       "description": "Questions the agent asked and the stand-in's answers.",
       "type": "array",

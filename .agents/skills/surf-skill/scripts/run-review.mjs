@@ -57,6 +57,7 @@ async function main() {
     deliverable: plan.deliverable,
     questions: agent.questions,
     stopped_at_time_limit: !!agent.timed_out,
+    stopped_at_token_limit: !!agent.stopped_at_token_limit,
   });
 
   const shotList = checks.shots.map((s) => s.replace(/^review\//, "")).join(", ") || "none";
@@ -92,6 +93,8 @@ async function main() {
     duration_s: agent.duration_s,
     turns: agent.turns,
     timed_out: !!agent.timed_out,
+    stopped_at_token_limit: !!agent.stopped_at_token_limit,
+    ...(agent.usage ? { usage: agent.usage } : {}),
     questions: agent.questions,
     images_generated: agent.images_generated,
     hosts: agent.hosts,

@@ -21,6 +21,8 @@ import {
 
 const LIMIT_MS = 10 * 60_000;
 const KILL_MS = 11 * 60_000;
+// Tokens the agent may process: input + cache reads + output, summed over its model calls.
+const TOKEN_LIMIT = 1_500_000;
 const MAX_EXTRA_TURNS = 3;
 const NUDGE = "Please continue and finish the task now. Save the result where the task says, in result/.";
 
@@ -94,7 +96,11 @@ function runNotes(ws, name) {
     "  It saves outside this folder, so each image you make is copied into generated/ under the same file name within a few seconds.",
     "  Copy the ones you use from generated/ into result/ and link them from there.",
     "- Shell commands run in a sandbox: only this folder is writable and only some websites are reachable.",
-    "  Package installs and headless browsers don't work here; skip steps that need them instead of trying workarounds.",
+    "- If a step fails because of the sandbox (a blocked command, a missing browser, a package install, an unreachable host),",
+    "  skip it, say so in one line in your final message, and move on. Don't retry it or look for workarounds.",
+    "- Don't install packages, don't search outside this folder (no `find /`, `mdfind`, home or global folders),",
+    "  and don't read or debug the skill's own scripts to get around a failure.",
+    "- Skip browser or render modes of the skill's checks; run them in their plain mode if they have one.",
     "- Write the deliverable early, then improve it. The run stops after 10 minutes.",
   ].join("\n");
 }
@@ -209,6 +215,9 @@ async function main() {
   let nudged = false;
   let finished = false;
   let timedOut = false;
+  let overBudget = false;
+  const usage = { input_tokens: 0, cache_read_tokens: 0, output_tokens: 0, thinking_tokens: 0 };
+  const tokensUsed = () => usage.input_tokens + usage.cache_read_tokens + usage.output_tokens;
   let blocked = null;
   let crash = null;
   let busy = Promise.resolve();
@@ -291,6 +300,16 @@ async function main() {
       if (s?.conversation_id) conversations.add(s.conversation_id);
       for (const a of s?.subagent_info?.subagents || []) if (a.conversation_id) conversations.add(a.conversation_id);
       transcript.event(ev);
+      // Each finished model call reports its usage once.
+      if (s?.step_type === "agent_response" && s.state === "DONE" && s.usage) {
+        for (const k of Object.keys(usage)) usage[k] += s.usage[k] || 0;
+        if (!overBudget && !timedOut && tokensUsed() > TOKEN_LIMIT) {
+          overBudget = true;
+          transcript.add("BUDGET", `${tokensUsed()} tokens used, over the ${TOKEN_LIMIT} limit; stopping agy`);
+          finish();
+          agent.kill("SIGTERM");
+        }
+      }
       if (ev.event === "result") busy = busy.then(() => onTurnEnd(ev.result)).catch((e) => {
         crash = `turn handling crashed: ${e.message}`;
         finish();
@@ -302,6 +321,7 @@ async function main() {
   agent.send(firstMessage);
 
   const soft = setTimeout(() => {
+    if (overBudget) return;
     timedOut = true;
     transcript.add("TIMEOUT", "10 minutes are up; stopping agy");
     finish();
@@ -337,16 +357,18 @@ async function main() {
   writeFileSync(join(card, "run.log"), transcript.lines.join("\n") + "\n");
   rmSync(run.dir, { recursive: true, force: true });
 
-  if (!blocked && !crash && !finished && !timedOut && done.code !== 0) {
+  const stopped = timedOut || overBudget;
+  if (!blocked && !crash && !finished && !stopped && done.code !== 0) {
     const msg = (done.stderr || "").trim().slice(0, 300);
     blocked = blockedReason(msg);
     if (!blocked) crash = `agy exited with code ${done.code}${msg ? `: ${msg}` : ""}`;
   }
-  // A timeout after the deliverable exists goes on to the checks and the review,
+  // Hitting a limit after the deliverable exists goes on to the checks and the review,
   // which judge whether it is finished; without the deliverable it fails.
   const delivered = existsSync(join(card, plan.deliverable.path));
-  const status = blocked ? "blocked" : (timedOut && !delivered) || (crash && !timedOut) ? "failed" : "ok";
-  const why = blocked || (timedOut && !delivered ? "timed out after 10 minutes" : !timedOut ? crash : null) || null;
+  const limitWhy = timedOut ? "timed out after 10 minutes" : `stopped at the token limit (${TOKEN_LIMIT})`;
+  const status = blocked ? "blocked" : (stopped && !delivered) || (crash && !stopped) ? "failed" : "ok";
+  const why = blocked || (stopped && !delivered ? limitWhy : !stopped ? crash : null) || null;
   mkdirSync(join(card, "review"), { recursive: true });
   writeJSON(join(card, "review", "agent.json"), {
     status,
@@ -355,6 +377,8 @@ async function main() {
     duration_s: duration,
     turns,
     timed_out: timedOut,
+    stopped_at_token_limit: overBudget,
+    usage: { ...usage, total: tokensUsed(), limit: TOKEN_LIMIT },
     questions,
     images_generated: copiedImages.size,
     skill_expanded: expanded ? expanded[1] : null,
@@ -366,9 +390,10 @@ async function main() {
   if (status === "blocked") out(`blocked: ${why}`, EXIT.blocked);
   if (status === "failed") out(`failed: ${why}`, EXIT.failed);
   out(
-    `ok: ${files.length} file(s) in result/, ${turns} turn(s), ${questions.length} question(s), ${copiedImages.size} image(s), ${duration}s` +
+    `ok: ${files.length} file(s) in result/, ${turns} turn(s), ${questions.length} question(s), ${copiedImages.size} image(s), ${duration}s, ${(tokensUsed() / 1e6).toFixed(2)}M tokens` +
       (dropped.length ? `, ${dropped.length} file(s) dropped` : "") +
       (timedOut ? "; stopped at the 10-minute limit after writing the deliverable" : "") +
+      (overBudget ? "; stopped at the token limit after writing the deliverable" : "") +
       (delivered ? "" : `; ${plan.deliverable.path} was not written`),
     EXIT.ok,
   );

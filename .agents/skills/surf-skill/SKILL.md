@@ -61,7 +61,7 @@ Until the batch has enough published cards:
   | Reply | Means | Do |
   | --- | --- | --- |
   | `run: ok` | Everything passed. | Continue with Card and Video. |
-  | `failed: <why>` | A code check failed, the run timed out, or agy crashed. | Retry once, as above. |
+  | `failed: <why>` | A code check failed, the run hit its time or token limit before writing the deliverable, or agy crashed. | Retry once, as above. |
   | `bad result: <why>` | The AI review failed the result. | Drop the card right away, without a retry, and log the reason. |
   | `blocked: <why>` | The lockdown self-test failed, agy isn't logged in, or its quota ran out. | Stop the batch. Keep the card (never drop it), log the reason, and say so in the summary. It resumes from Run next time. |
 
