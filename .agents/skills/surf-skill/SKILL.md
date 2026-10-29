@@ -5,7 +5,7 @@ description: Builds a batch of "skill of the day" cards for surfskills.surf, end
 
 # Surf Skill: skill of the day
 
-> Scaffold. Each step says what it must do, but none is implemented yet.
+> Step 1 (Pick) is built. Steps 2–6 are scaffolds: each says what it must do, but none is implemented yet.
 
 You are the orchestrator. You build cards one after another until the batch is done. You never do a step's work yourself.
 
@@ -13,7 +13,7 @@ You are the orchestrator. You build cards one after another until the batch is d
 
 - **Never stop.** Don't ask the user anything and don't wait for approval. If something is unclear, make the safest choice, note it in the status log, and keep going.
 - **One sub-agent per step.** Launch every step as a fresh sub-agent (in Claude Code, the Agent tool). It sees none of this session.
-- **Small prompts.** Give each sub-agent only three absolute paths: its step file in `references/`, the card folder, and its output schema in `assets/`.
+- **Small prompts.** Give each sub-agent only three absolute paths: its step file in `references/`, the card folder, and its output schema in `assets/`. Pick creates the card folder, so it gets `cards/` instead.
 - **Check every output.** After a step, validate its JSON against its schema. Invalid output counts as a failure.
 
 ## Input
@@ -22,13 +22,15 @@ You are the orchestrator. You build cards one after another until the batch is d
 
 ## Card folder
 
-One folder per card in `cards/` at the project root, named `<owner>__<repo>__<skill>`. Pick creates it. All later steps read and write inside it.
+One folder per card in `cards/` at the project root, named `<owner>__<repo>__<skill>`. Pick creates it. All later steps read and write inside it. Any card folder, published or dropped, counts as featured, so Pick never picks that skill again.
+
+`cards/.pick/` is Pick's cache: the daily candidate pools and the downloaded repos. It is not a card.
 
 ## Steps
 
 | Step | Instructions | Reads | Writes |
 | --- | --- | --- | --- |
-| 1. Pick | [references/1-pick.md](references/1-pick.md) | `cards/` (to avoid repeats) | `pick.json`, `skill/` |
+| 1. Pick | [references/1-pick/README.md](references/1-pick/README.md) | trending lists, catalog, `cards/` | a new card folder with `pick.json`, `skill/` |
 | 2. Plan | [references/2-plan.md](references/2-plan.md) | `pick.json`, `skill/` | `plan.json`, `inputs/` |
 | 3. Run | [references/3-run.md](references/3-run.md) | `plan.json`, `skill/`, `inputs/` | `run.json`, `result/`, `run.log` |
 | 4. Card | [references/4-card.md](references/4-card.md) | `pick.json`, `plan.json`, `run.json`, `result/`, `run.log`, `skill/` | `card.json` |

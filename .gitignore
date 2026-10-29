@@ -37,6 +37,9 @@ pnpm-debug.log*
 !.agents/skills/surf-skill/
 skills-lock.json
 
+# surf-skill card folders: downloaded third-party skill code and run output
+cards/
+
 # hyperframes working renders (final web clips are committed under public/how/)
 media/how-it-works/renders/
 media/how-it-works/.debug/
