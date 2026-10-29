@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "pick.json",
+  "type": "object",
+  "required": [
+    "skill_id",
+    "path",
+    "commit"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "skill_id": {
+      "description": "Catalog id: owner/repo/skill.",
+      "type": "string",
+      "pattern": "^[^/]+/[^/]+/[^/]+$"
+    },
+    "path": {
+      "description": "Skill folder in the repo. Empty when SKILL.md is at the root.",
+      "type": "string"
+    },
+    "commit": {
+      "description": "Commit the files in skill/ were taken from.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  }
+}

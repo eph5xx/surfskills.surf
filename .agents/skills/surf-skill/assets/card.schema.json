@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "card.json",
+  "type": "object",
+  "required": [
+    "name",
+    "short_description",
+    "long_description",
+    "when_to_use",
+    "faq",
+    "kind",
+    "use_cases"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "description": "Display name, an outcome like 'Make a Video'.",
+      "type": "string",
+      "maxLength": 40
+    },
+    "short_description": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "long_description": {
+      "description": "Markdown.",
+      "type": "string",
+      "maxLength": 2500
+    },
+    "when_to_use": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": [
+          "title",
+          "body"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "faq": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": [
+          "q",
+          "a"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "a": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "kind": {
+      "enum": [
+        "Action",
+        "Mode",
+        "Knowledge",
+        "Router"
+      ]
+    },
+    "use_cases": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "Design",
+          "Video",
+          "Images",
+          "Writing",
+          "SEO",
+          "Development",
+          "Research",
+          "Meta"
+        ]
+      }
+    },
+    "collection_description": {
+      "description": "Only needed when the repo isn't on the site yet.",
+      "type": "string",
+      "maxLength": 160
+    }
+  }
+}

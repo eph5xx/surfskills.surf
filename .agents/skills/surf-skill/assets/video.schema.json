@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "video.json",
+  "type": "object",
+  "required": [
+    "video",
+    "cover"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "video": {
+      "description": "About 10 seconds.",
+      "type": "string",
+      "pattern": "\\.mp4$"
+    },
+    "cover": {
+      "type": "string",
+      "pattern": "\\.(webp|png|jpg)$"
+    }
+  }
+}

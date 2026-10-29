@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "run.json",
+  "type": "object",
+  "required": [
+    "files"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "files": {
+      "description": "Result files copied out of the container.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^result/"
+      }
+    }
+  }
+}

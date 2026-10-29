@@ -30,8 +30,11 @@ pnpm-debug.log*
 
 .claude/skills
 
-# agent skills installed via `skills` CLI (local only)
-.agents/
+# agent skills installed via `skills` CLI (local only), except our own surf-skill
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/surf-skill/
 skills-lock.json
 
 # hyperframes working renders (final web clips are committed under public/how/)
