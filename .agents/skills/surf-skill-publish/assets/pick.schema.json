@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "pick.json",
+  "type": "object",
+  "required": ["skill_id", "repo", "path", "commit", "source", "in_catalog", "why"],
+  "additionalProperties": false,
+  "properties": {
+    "skill_id": {
+      "description": "Catalog id: owner/repo/skill. The skill segment is the frontmatter name, else the folder name.",
+      "type": "string",
+      "pattern": "^[^/]+/[^/]+/[^/]+$"
+    },
+    "repo": {
+      "description": "GitHub owner/repo, canonical casing.",
+      "type": "string",
+      "pattern": "^[^/]+/[^/]+$"
+    },
+    "path": {
+      "description": "Skill folder in the repo. Empty when SKILL.md is at the root.",
+      "type": "string"
+    },
+    "commit": {
+      "description": "Commit the files in skill/ were taken from.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "source": {
+      "description": "Where the candidate came from: the trending lists, or the catalog fallback.",
+      "enum": ["trending", "catalog"]
+    },
+    "in_catalog": {
+      "description": "The repo is already a collection on surfskills.surf. Null when the catalog could not be read.",
+      "type": ["boolean", "null"]
+    },
+    "why": {
+      "description": "The picker's reason, 1-3 sentences.",
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 600
+    },
+    "hype": {
+      "description": "Trending signals at pick time. Null for catalog picks.",
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "trendshift_daily": { "description": "Position on trendshift.io today (1 = top).", "type": "integer" },
+        "trendshift_weekly": { "description": "Position on trendshift.io this week.", "type": "integer" },
+        "github_stars_today": { "description": "Stars gained today, from github.com/trending.", "type": ["integer", "null"] },
+        "github_stars_week": { "description": "Stars gained this week, from github.com/trending.", "type": ["integer", "null"] }
+      }
+    }
+  }
+}

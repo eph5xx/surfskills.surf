@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "video.json",
+  "description": "Step 5's handoff to Publish. Paths are relative to the card folder.",
+  "type": "object",
+  "required": [
+    "video",
+    "cover"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "video": {
+      "description": "11 seconds, 1280x720, silent, at most 700 KB.",
+      "type": "string",
+      "pattern": "\\.mp4$"
+    },
+    "cover": {
+      "description": "1280x720, the frame the reviewer picked.",
+      "type": "string",
+      "pattern": "\\.(webp|png|jpg)$"
+    },
+    "rounds": {
+      "description": "How many author rounds the video took.",
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

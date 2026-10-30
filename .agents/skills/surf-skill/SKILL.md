@@ -12,7 +12,7 @@ You are the orchestrator. You build cards one after another until the batch is d
 ## Rules
 
 - **Never stop.** Don't ask the user anything. If something is unclear, make the safest choice, log it, and keep going.
-- **One fresh sub-agent per step** (in Claude Code, the Agent tool). Its prompt is two absolute paths: the step's README and the card folder. Pick gets only its README.
+- **One fresh sub-agent per step** (in Claude Code, the Agent tool). Its prompt is two absolute paths: the step skill's SKILL.md and the card folder. Pick gets only its SKILL.md.
 - **Trust the check, not the reply.** A step passed only when it replied `ok:` and `node scripts/state.mjs check <card> <step>` prints `ok`.
 - **Log every step:** `node scripts/state.mjs log <card> <step> <done|failed|dropped|blocked> "<why>"`. Use `-` as the card for Pick before it has one.
 
@@ -22,12 +22,14 @@ Batch size: how many cards to publish. Default 7.
 
 ## Steps
 
-1. [Pick](references/1-pick/README.md)
-2. [Plan](references/2-plan/README.md)
-3. [Run](references/3-run/README.md)
-4. [Card](references/4-card/README.md)
-5. [Video](references/5-video/README.md)
-6. [Publish](references/6-publish/README.md)
+Each step is its own skill, in a sibling folder of this one.
+
+1. Pick: [surf-skill-pick](../surf-skill-pick/SKILL.md)
+2. Plan: [surf-skill-plan](../surf-skill-plan/SKILL.md)
+3. Run: [surf-skill-run](../surf-skill-run/SKILL.md)
+4. Card: [surf-skill-card](../surf-skill-card/SKILL.md)
+5. Video: [surf-skill-video](../surf-skill-video/SKILL.md)
+6. Publish: [surf-skill-publish](../surf-skill-publish/SKILL.md)
 
 ## Loop
 
