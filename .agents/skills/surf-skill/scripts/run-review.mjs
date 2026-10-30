@@ -4,15 +4,16 @@
 // Copies the reviewer's material (review/shots, review/result, evidence, page
 // info, the task) into a fresh folder in $TMPDIR, runs agy there with no
 // commands, no network and no MCP, and checks its verdict against
-// assets/review.schema.json. Writes the final run.json.
+// assets/review.schema.json. Writes the final run.json, only when the review passes.
 //
 // Usage: node run-review.mjs <card>
-// Last line: `run: ok` (exit 0), `bad result: …` (exit 2), `failed: …` (exit 1)
+// Last line: `ok` (exit 0), `drop: …` (exit 2), `failed: …` (exit 1)
 // or `blocked: …` (exit 3).
 
 import { cpSync, readFileSync, rmSync } from "node:fs";
 import { resolve } from "node:path";
-import { EXIT, SKILL_ROOT, agyJson, existsSync, join, log, makeRunDir, readJSON, validateSchema, writeJSON } from "./lib.mjs";
+import { EXIT, SKILL_ROOT, existsSync, join, log, readJSON, validateSchema, writeJSON } from "./shared/core.mjs";
+import { agyJson, makeRunDir } from "./shared/agy.mjs";
 
 const CRITERIA = ["task_done", "not_broken", "skill_used", "video_ready"];
 
@@ -85,8 +86,13 @@ async function main() {
   const verdictErrors = await validateSchema("review", r.output);
   if (verdictErrors.length) out(`failed: the reviewer's verdict is invalid: ${verdictErrors.join("; ")}`, EXIT.failed);
 
+  for (const c of CRITERIA) log(`${r.output[c].verdict === "pass" ? "pass" : "FAIL"} ${c}: ${r.output[c].reason}`);
+  // A dropped card gets no run.json: the output exists only when the step succeeded.
   const failedCriteria = CRITERIA.filter((c) => r.output[c].verdict !== "pass");
-  const review = { verdict: failedCriteria.length ? "bad" : "ok", ...r.output };
+  if (failedCriteria.length) {
+    out(`drop: ${failedCriteria.map((c) => `${c}: ${r.output[c].reason}`).join("; ")}`, EXIT.drop);
+  }
+  const review = { verdict: "ok", ...r.output };
   const runJson = {
     files: agent.files,
     agent: agent.agent,
@@ -106,12 +112,7 @@ async function main() {
   const runErrors = await validateSchema("run", runJson);
   if (runErrors.length) out(`failed: run.json is invalid: ${runErrors.join("; ")}`, EXIT.failed);
   writeJSON(join(card, "run.json"), runJson);
-
-  for (const c of CRITERIA) log(`${r.output[c].verdict === "pass" ? "pass" : "FAIL"} ${c}: ${r.output[c].reason}`);
-  if (failedCriteria.length) {
-    out(`bad result: ${failedCriteria.map((c) => `${c}: ${r.output[c].reason}`).join("; ")}`, EXIT.bad);
-  }
-  out("run: ok", EXIT.ok);
+  out("ok", EXIT.ok);
 }
 
 main().catch((e) => {

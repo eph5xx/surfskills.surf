@@ -16,32 +16,25 @@
 // Usage: node video-build.mjs <card>   (up to 25 minutes: run it in the background)
 //        node video-build.mjs <card> --finish <n>   finish round n's draft as a person
 //        approved it: no AI calls, no new rounds.
-// Last line: `video: ok …` (exit 0), `failed: …` (exit 1) or `blocked: …` (exit 3).
+// Last line: `ok: …` (exit 0), `failed: …` (exit 1) or `blocked: …` (exit 3).
 
 import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { checkComposition, checkFragment, checkMp4, VIDEO } from "./video-check.mjs";
+import { VIDEO_MODELS, ensureGsap, ffmpeg, ffprobe, hyperframes, missingVideoTools, videoTask } from "./video-lib.mjs";
 import {
   EXIT,
   SKILL_ROOT,
-  VIDEO_MODELS,
-  agyJson,
-  ensureGsap,
   existsSync,
-  ffmpeg,
-  ffprobe,
-  findChrome,
-  hyperframes,
   join,
   log,
-  makeRunDir,
   mdSection,
-  missingVideoTools,
   readJSON,
   validateSchema,
-  videoTask,
   writeJSON,
-} from "./lib.mjs";
+} from "./shared/core.mjs";
+import { agyJson, makeRunDir } from "./shared/agy.mjs";
+import { findChrome } from "./shared/chrome.mjs";
 
 const MAX_ROUNDS = 3;
 const LIMIT_S = 22 * 60; // no new round starts after this, minus a round's worst case
@@ -283,7 +276,7 @@ async function finish(ctx, round, review, rounds, chosenBy) {
   writeJSON(join(ctx.card, "video.json"), videoJson);
   const kb = Math.round((await ffprobe(demo)).bytes / 1024);
   const how = scores ? `scores ${SCORES.map((k) => `${k} ${scores[k]}`).join(", ")}` : "not reviewed";
-  out(`video: ok (round ${round}, chosen by ${chosenBy}, ${kb} KB, ${how})`, EXIT.ok);
+  out(`ok: (round ${round}, chosen by ${chosenBy}, ${kb} KB, ${how})`, EXIT.ok);
 }
 
 /** Total review score, for picking the best draft; unreviewed drafts rank last. */

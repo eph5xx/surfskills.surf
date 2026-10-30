@@ -13,11 +13,28 @@
 
 import { closeSync, copyFileSync, lstatSync, mkdirSync, openSync, readdirSync, readFileSync, readSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { listFiles } from "./pick-check.mjs";
+import { COPY, copyOut, selftestProblem } from "./run-lib.mjs";
 import {
-  AGY_BRAIN, COPY, EXIT, SKILL_ROOT, copyOut, agyEnv, agyJson, agyVersion, blockedReason, existsSync, join, log, makeRunDir,
-  parseFrontmatter, readJSON, runSettings, selftestProblem, spawnAgyStream, writeJSON,
-} from "./lib.mjs";
+  EXIT,
+  SKILL_ROOT,
+  existsSync,
+  join,
+  listFiles,
+  log,
+  parseFrontmatter,
+  readJSON,
+  writeJSON,
+} from "./shared/core.mjs";
+import {
+  AGY_BRAIN,
+  agyEnv,
+  agyJson,
+  agyVersion,
+  blockedReason,
+  makeRunDir,
+  runSettings,
+  spawnAgyStream,
+} from "./shared/agy.mjs";
 
 const LIMIT_MS = 10 * 60_000;
 const KILL_MS = 11 * 60_000;

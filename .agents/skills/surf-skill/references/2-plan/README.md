@@ -12,7 +12,7 @@ Run the scripts from the surf-skill folder (two levels up from this file).
 ## What to do
 
 1. **Read the skill (you + code).** Read `skill/SKILL.md`, then the references and scripts it points to for the flow you will use. Run `node scripts/pick-check.mjs <card>/skill` for its flags. Learn what it asks the user, what it needs and what it makes.
-2. **Gate (you).** The skill can't run if the task needs any of these: a paid account, an API key, a login, private data, special hardware, or a desktop app. An optional key is fine, but the task must avoid every step that needs it. If no task is left, stop and reply `can't run: <reason>` (see Reply).
+2. **Gate (you).** The skill can't run if the task needs any of these: a paid account, an API key, a login, private data, special hardware, or a desktop app. An optional key is fine, but the task must avoid every step that needs it. If no task is left, stop and reply `drop: can't run: <reason>` (see Reply).
 3. **Choose the task (you).** Follow [task.md](task.md): one typical task with a visible result, done in 10 minutes on the free path.
 4. **Write the inputs (you).** Small, realistic text files in `inputs/`, as [task.md](task.md) describes.
 5. **Write `plan.json` (you).** The title, the prompt, the deliverable and the checks. [checks.md](checks.md) says which checks every plan needs, including the skill-specific one.
@@ -27,8 +27,8 @@ Run the scripts from the surf-skill folder (two levels up from this file).
 
 ## Reply
 
-- **Plan written:** `plan: <task.title>`, then one line per check, then any choice you made that the orchestrator should know about.
-- **Can't run:** `can't run: <one sentence>`, naming what the skill needs that we don't have. Write no files. If you already wrote some, delete `plan.json` and `inputs/` first.
+- **Plan written:** `ok: <task.title>`, then one line per check, then any choice you made that the orchestrator should know about.
+- **Can't run:** `drop: can't run: <one sentence>`, naming what the skill needs that we don't have. Write no files. If you already wrote some, delete `plan.json` and `inputs/` first.
 
 ## Done when
 

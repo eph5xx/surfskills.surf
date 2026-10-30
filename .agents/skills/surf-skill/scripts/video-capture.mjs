@@ -17,22 +17,9 @@
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import {
-  EXIT,
-  existsSync,
-  ffmpeg,
-  ffprobe,
-  findChrome,
-  join,
-  launchChrome,
-  loadPage,
-  log,
-  missingVideoTools,
-  readJSON,
-  shoot,
-  sleep,
-  writeJSON,
-} from "./lib.mjs";
+import { ffmpeg, ffprobe, missingVideoTools } from "./video-lib.mjs";
+import { EXIT, existsSync, join, log, readJSON, sleep, writeJSON } from "./shared/core.mjs";
+import { findChrome, launchChrome, loadPage, shoot } from "./shared/chrome.mjs";
 
 const MAX_PAGE = 9000; // px of page height kept in page.jpg and the sections
 const MAX_SECTIONS = 8;

@@ -8,10 +8,11 @@
 //
 // Usage (debug): node pick-check.mjs <local skill folder>   -> checkSkill result
 
-import { lstatSync, readdirSync, readFileSync } from "node:fs";
-import { basename, join, relative } from "node:path";
+import { readFileSync } from "node:fs";
+import { basename, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PICK_DIR, downloadFiles, downloadRepo, gh, log, parseFrontmatter } from "./lib.mjs";
+import { PICK_DIR, listFiles, log, parseFrontmatter } from "./shared/core.mjs";
+import { downloadFiles, downloadRepo, gh } from "./shared/github.mjs";
 
 // A repo is an app that happens to ship a skill when both hold: few of its files
 // are skill files, and it has real code outside the skill folders. Tune from the
@@ -230,20 +231,6 @@ export function checkSkill(files) {
     flags,
     reasons,
   };
-}
-
-/** Regular files and symlinks under `dir`, minus folders listed in `skip`. */
-export function listFiles(dir, skip = new Set(), root = dir, acc = []) {
-  for (const ent of readdirSync(dir, { withFileTypes: true })) {
-    const abs = join(dir, ent.name);
-    const rel = relative(root, abs).split("\\").join("/");
-    if (ent.isSymbolicLink()) acc.push({ rel, abs, size: 0, symlink: true });
-    else if (ent.isDirectory()) {
-      if (ent.name === ".git" || ent.name === "node_modules" || skip.has(abs)) continue;
-      listFiles(abs, skip, root, acc);
-    } else if (ent.isFile()) acc.push({ rel, abs, size: lstatSync(abs).size, symlink: false });
-  }
-  return acc;
 }
 
 /** Folders (repo-relative, "" = root) that hold a SKILL.md. */

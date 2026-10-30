@@ -5,7 +5,8 @@
 // Usage (debug): node pick-catalog.mjs   -> prints the list as JSON
 
 import { fileURLToPath } from "node:url";
-import { log, sbSelect, supabaseEnv } from "./lib.mjs";
+import { log } from "./shared/core.mjs";
+import { sbSelect, supabaseEnv } from "./shared/supabase.mjs";
 
 /** -> [{ repo, description, hype: null }], most-starred first. */
 export async function catalogRepos() {

@@ -9,7 +9,7 @@
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { repoOnSite, siteNames, skillFrontmatter } from "./card-facts.mjs";
-import { existsSync, join, log, readJSON, validateSchema } from "./lib.mjs";
+import { existsSync, join, log, readJSON, validateSchema } from "./shared/core.mjs";
 
 // The same split the skill and collection pages use for their meta description.
 const SENTENCE_END = /(?<=[.!?])\s/;

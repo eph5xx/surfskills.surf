@@ -13,8 +13,7 @@
 
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { listFiles } from "./pick-check.mjs";
-import { existsSync, join, log, readJSON, validateSchema, writeJSON } from "./lib.mjs";
+import { existsSync, join, listFiles, log, readJSON, validateSchema, writeJSON } from "./shared/core.mjs";
 
 const URL_HOST = /\b(?:https?|wss?):\/\/([^\s/"'`<>()[\]{}\\,;|?#]+)/gi;
 // Protocol-relative URLs in HTML and CSS: src="//cdn…", url(//fonts…).

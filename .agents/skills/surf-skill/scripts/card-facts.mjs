@@ -8,7 +8,9 @@
 import { mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PICK_DIR, existsSync, gh, join, log, parseFrontmatter, readJSON, sbSelect, supabaseEnv } from "./lib.mjs";
+import { PICK_DIR, existsSync, join, log, parseFrontmatter, readJSON } from "./shared/core.mjs";
+import { gh } from "./shared/github.mjs";
+import { sbSelect, supabaseEnv } from "./shared/supabase.mjs";
 
 /**
  * What the site has now: { reachable, skills: [{id,name}], collections: [{id,name}] }.

@@ -13,20 +13,9 @@
 import { readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  EXIT,
-  existsSync,
-  ffprobe,
-  findChrome,
-  join,
-  launchChrome,
-  log,
-  readJSON,
-  runCmd,
-  serveDir,
-  sleep,
-  validateSchema,
-} from "./lib.mjs";
+import { ffprobe, serveDir } from "./video-lib.mjs";
+import { EXIT, existsSync, join, log, readJSON, runCmd, sleep, validateSchema } from "./shared/core.mjs";
+import { findChrome, launchChrome } from "./shared/chrome.mjs";
 
 /** What the frame promises the author, and what the checks hold them to. */
 export const VIDEO = {

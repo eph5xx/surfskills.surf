@@ -16,7 +16,7 @@ Run the scripts from the surf-skill folder (two levels up from this file).
 3. **Self-test (code).** Run `node scripts/run-selftest.mjs`. It proves the lockdown still holds; a pass is cached per agy version, so it is usually instant. Anything but `ok` means stop: reply `blocked:` with its line.
 4. **Run the agent (code).** Run `node scripts/run-agent.mjs <card>` **in the background** (it takes up to 11 minutes, longer than most tool calls wait), and wait for it to finish. It sets up a fresh workspace, runs agy with the plan's prompt, answers the agent's questions through a stand-in, copies out `result/`, and deletes the workspace.
 5. **Check (code).** Run `node scripts/run-check.mjs <card>`. It runs every check in `plan.json` `done`, then takes the screenshots and gathers the evidence for the review.
-6. **Review (code + AI).** Run `node scripts/run-review.mjs <card>`. An AI reviewer judges the result on four criteria ([review.md](review.md)) and the script writes `run.json`.
+6. **Review (code + AI).** Run `node scripts/run-review.mjs <card>`. An AI reviewer judges the result on four criteria ([review.md](review.md)) and the script writes `run.json` only if the review passes.
 
 Stop at the first script that doesn't print `ok`, and reply with its last line (see Reply).
 
@@ -53,17 +53,17 @@ When a turn ends and the deliverable doesn't exist yet, a stand-in AI reads the 
 
 ## Reply
 
-One line, the last line of the script that stopped, or `run: ok`:
+One line, the last line of the script that stopped, or `ok`:
 
 | Reply | When |
 | --- | --- |
-| `run: ok` | Every script passed. |
+| `ok` | Every script passed. |
 | `failed: <why>` | A code check failed, the run hit its time or token limit before writing the deliverable, or agy crashed. |
-| `bad result: <why>` | The review failed. |
+| `drop: <why>` | The review failed. |
 | `blocked: <why>` | The self-test failed, agy isn't logged in, or the quota ran out. |
 
 Add one line with any host decision the orchestrator should know about.
 
 ## Done when
 
-`run-review.mjs` printed `run: ok`.
+`run-review.mjs` printed `ok`.
