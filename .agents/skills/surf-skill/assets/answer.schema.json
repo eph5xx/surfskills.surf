@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "stand-in answer",
+  "description": "The stand-in's reply when the agent stops before the deliverable exists.",
+  "type": "object",
+  "required": ["is_question", "answer"],
+  "additionalProperties": false,
+  "properties": {
+    "is_question": { "description": "True when the agent asked the user something or waits for a choice or approval.", "type": "boolean" },
+    "answer": { "description": "The user's answer; empty when is_question is false.", "type": "string", "maxLength": 1500 }
+  }
+}

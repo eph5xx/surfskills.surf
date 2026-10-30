@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "plan.json",
+  "type": "object",
+  "required": [
+    "task",
+    "deliverable",
+    "done"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "task": {
+      "type": "object",
+      "required": [
+        "title",
+        "prompt"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "description": "Short label, shown in the video.",
+          "type": "string",
+          "maxLength": 80
+        },
+        "prompt": {
+          "description": "Exactly what the agent is told.",
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    },
+    "deliverable": {
+      "type": "object",
+      "required": [
+        "path",
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "description": "Where the agent must save the main result.",
+          "type": "string",
+          "pattern": "^result/"
+        },
+        "type": {
+          "description": "Decides how Video films it: scroll, before/after, or slideshow.",
+          "enum": [
+            "web_page",
+            "text",
+            "image"
+          ]
+        },
+        "before": {
+          "description": "Input shown as 'before' in a before/after video.",
+          "type": "string",
+          "pattern": "^inputs/"
+        }
+      }
+    },
+    "done": {
+      "description": "Checks code runs on the result. All must pass.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "check",
+          "path"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "check": {
+            "enum": [
+              "exists",
+              "contains",
+              "differs",
+              "min_bytes",
+              "valid_html"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^result/"
+          },
+          "value": {
+            "description": "Text for contains, input file for differs, size for min_bytes.",
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
