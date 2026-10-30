@@ -559,6 +559,34 @@ export function spawnAgyStream({ cwd, settingsPath, logFile, env, onEvent, extra
  * video storyboard, author and reviewer). `model` is an `agy models` id; without it
  * agy uses its default. Resolves to { ok, output, error, blocked }.
  */
+/**
+ * The folder's file list for a locked run. It can't run `ls`, and a model that guesses
+ * paths outside the folder hits a denied read, which ends a headless run with no answer.
+ */
+function folderNote(cwd) {
+  const files = [];
+  const walk = (dir, rel) => {
+    for (const ent of readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+      if (!rel && ent.name === ".tmp") continue;
+      const r = rel ? `${rel}/${ent.name}` : ent.name;
+      if (ent.isDirectory()) walk(join(dir, ent.name), r);
+      else if (ent.isFile() && files.length < 200) files.push(r);
+    }
+  };
+  walk(cwd, "");
+  return [
+    "",
+    "",
+    "## Your files",
+    "",
+    `Your folder is ${cwd}. Everything you need is in it; these are all its files:`,
+    ...files.map((f) => `- ${f}`),
+    "",
+    "You can only read files. Commands, the web and writes are off, so don't try them.",
+    "Open only the files listed here. Never open or guess paths outside this folder: a denied read ends your session with no answer.",
+  ].join("\n");
+}
+
 export function agyJson({ cwd, prompt, schemaPath, timeoutS = 180, model }) {
   const settingsPath = join(cwd, "..", `settings-${randomBytes(3).toString("hex")}.json`);
   writeJSON(settingsPath, lockedSettings());
@@ -568,7 +596,7 @@ export function agyJson({ cwd, prompt, schemaPath, timeoutS = 180, model }) {
     "--sandbox", "--disable-slash-commands", "--settings", settingsPath,
     ...(model ? ["--model", model] : []),
     "--json-schema", schemaPath, "--output-format", "json",
-    "--print-timeout", `${timeoutS}s`, "-p", prompt,
+    "--print-timeout", `${timeoutS}s`, "-p", prompt + folderNote(cwd),
   ];
   return new Promise((res) => {
     const child = spawn(AGY, args, { cwd, env: agyEnv(tmp), stdio: ["ignore", "pipe", "pipe"], detached: true });
@@ -800,9 +828,9 @@ const GSAP = {
   sha256: "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
 };
 export const VIDEO_CACHE = join(CARDS_DIR, ".video");
-/** agy models for Video. The reviewer is a different model, so it doesn't share the author's blind spots. */
+/** agy models for Video: Gemini only, so Video draws on the same agy quota as Run. Flash as reviewer wandered outside its folder; a denied read ends a headless run. */
 export const VIDEO_MODELS = {
-  author: process.env.SURF_VIDEO_AUTHOR_MODEL || "claude-opus-5-5-high",
+  author: process.env.SURF_VIDEO_AUTHOR_MODEL || "gemini-4-argon-high",
   reviewer: process.env.SURF_VIDEO_REVIEW_MODEL || "gemini-4-argon-high",
 };
 

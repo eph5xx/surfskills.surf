@@ -2,7 +2,7 @@
 
 After a draft passes every code check, an AI reviewer scores it. `video-build.mjs` sends it the brief below, word for word, with its folder. Its answer must match [video-review.schema.json](../../assets/video-review.schema.json).
 
-The reviewer is a separate agy run with no commands, no network, no MCP and no writes, on a different model from the author, so it doesn't share the author's blind spots. The draft passes only when **every score is 4 or 5**; code decides that from the scores. Otherwise its fixes go back to the author for the next round.
+The reviewer is a separate agy run with no commands, no network, no MCP and no writes, in a fresh session that sees only the stills and the real result, not the author's reasoning. The review advises: its fixes go back to the author for the next round, and the build keeps the draft with the best total score. When every score is 4 or 5 the build stops early. Only an honest score of 2 or lower keeps a draft out; code decides all of this from the scores.
 
 ## Reviewer brief
 
@@ -33,4 +33,4 @@ Then:
 - **cover_at**: the time, between 3.2 and 8.9 s, of the frame that makes the best cover still at tile size. Usually one of the tile times.
 - **summary**: one sentence on the draft as a whole.
 
-Be strict. A 4 means you'd publish it as is. When you're unsure, score lower and say why: a draft costs a minute to redo, a bad video on the site costs the skill its visitors.
+Score honestly. A 4 means you'd publish it as is. When you're unsure, score lower and say why: your fixes guide the next round, and a clear, concrete fix is worth more than a low score.

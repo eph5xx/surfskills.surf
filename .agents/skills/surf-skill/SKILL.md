@@ -69,8 +69,8 @@ Until the batch has enough published cards:
 
   | Reply | Means | Do |
   | --- | --- | --- |
-  | `video: ok …` | A draft passed the checks and the review. | Continue with Publish once Card is done. |
-  | `failed: <why>` | No draft passed in three rounds, or a capture, render or check failed. | Retry once, as above. A second failure drops the card: never publish a card without its video. |
+  | `video: ok …` | The best draft that passed the code checks is finished. | Continue with Publish once Card is done. |
+  | `failed: <why>` | No draft passed the code checks in three rounds, every draft was scored dishonest, or a capture, render or check failed. The reviewer otherwise only advises. | Retry once, as above. A second failure drops the card: never publish a card without its video. |
   | `blocked: <why>` | agy isn't logged in or its quota ran out, or a video tool is missing. | Stop the batch. Keep the card, log the reason, and say so in the summary. It resumes from Video next time. |
 
 - Publish replies one of three ways:
