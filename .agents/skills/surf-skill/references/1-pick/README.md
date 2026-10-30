@@ -3,7 +3,7 @@
 Find one skill that is getting hype right now, passes the basic checks, and is worth featuring. Save it as a new card.
 
 - **Reads:** the trending lists, our catalog (fallback), `cards/` (what was already featured).
-- **Writes:** `cards/<owner>__<repo>__<skill>/` with `pick.json` (`assets/pick.schema.json`) and the skill's files in `skill/`.
+- **Writes:** `cards/<owner>__<repo>__<skill>/` with `pick.json` (`assets/pick.schema.json`) and the skill's files in `skill/`. Every card folder, published or dropped, counts as featured, so that skill is never picked again. `cards/.pick/` is your cache (candidate pools, downloaded repos), not a card.
 
 You are the picker: one agent, one decision. Scripts fetch and check; you judge.
 
@@ -24,6 +24,11 @@ Run the scripts from the surf-skill folder (two levels up from this file).
 - Pick only skills listed in a digest. `pick-save` refuses skills that failed the checks or already have a card.
 - Don't edit the pool or the digest by hand. To refetch the lists, add `--refresh`.
 
+## Reply
+
+- **Saved:** `ok: <card folder>` (the absolute path `pick-save` printed), then the skill id and your why.
+- **Nothing left:** `blocked: no candidates left`, then one sentence on why.
+
 ## Done when
 
-`pick-save` printed the card folder. Reply with the skill id and your why. Or reply `no candidates` with one sentence on why.
+`pick-save` printed the card folder.

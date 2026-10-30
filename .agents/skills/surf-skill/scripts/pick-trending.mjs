@@ -8,7 +8,7 @@
 // Usage (debug): node pick-trending.mjs   -> prints the merged list as JSON
 
 import { fileURLToPath } from "node:url";
-import { log } from "./lib.mjs";
+import { log } from "./shared/core.mjs";
 
 const UA = "Mozilla/5.0 (compatible; surfskills-pick/1.0; +https://surfskills.surf)";
 

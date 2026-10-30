@@ -37,10 +37,10 @@ The script's last line:
 
 | Reply | When |
 | --- | --- |
-| `published: YYYY-MM-DD` | The card is queued for that day. |
+| `ok: published YYYY-MM-DD` | The card is queued for that day. |
 | `failed: <why>` | An input is missing or invalid, the skill is already live, an upload or insert failed. |
 | `blocked: <why>` | The Supabase or wrangler login is missing, or the `skill_queue` table doesn't exist. |
 
 ## Done when
 
-`publish.mjs` printed `published:` and `publish.json` exists.
+`publish.mjs` printed `ok: published` and `publish.json` exists.

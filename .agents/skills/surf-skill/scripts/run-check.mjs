@@ -16,21 +16,9 @@
 import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
 import { extname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { listFiles } from "./pick-check.mjs";
-import {
-  EXIT,
-  copyOut,
-  existsSync,
-  findChrome,
-  join,
-  launchChrome,
-  loadPage,
-  log,
-  parseFrontmatter,
-  readJSON,
-  shoot,
-  writeJSON,
-} from "./lib.mjs";
+import { copyOut } from "./run-lib.mjs";
+import { EXIT, existsSync, join, listFiles, log, parseFrontmatter, readJSON, writeJSON } from "./shared/core.mjs";
+import { findChrome, launchChrome, loadPage, shoot } from "./shared/chrome.mjs";
 
 const IMAGE_EXT = /\.(png|jpe?g|webp|gif|svg)$/i;
 const MAX_OVERVIEW = 12_000;

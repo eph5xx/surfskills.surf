@@ -12,21 +12,19 @@
 
 import { cpSync, rmSync } from "node:fs";
 import { resolve } from "node:path";
+import { VIDEO_MODELS, videoTask } from "./video-lib.mjs";
 import {
   EXIT,
   SKILL_ROOT,
-  VIDEO_MODELS,
-  agyJson,
   existsSync,
   join,
   log,
-  makeRunDir,
   mdSection,
   readJSON,
   validateSchema,
-  videoTask,
   writeJSON,
-} from "./lib.mjs";
+} from "./shared/core.mjs";
+import { agyJson, makeRunDir } from "./shared/agy.mjs";
 
 const STYLE = join(SKILL_ROOT, "references", "5-video", "style.md");
 const MAX_CAPTION_WORDS = 6;

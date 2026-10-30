@@ -6,20 +6,19 @@
 
 import { copyFileSync, mkdirSync, readdirSync, rmSync, statSync } from "node:fs";
 import { dirname } from "node:path";
-import { listFiles } from "./pick-check.mjs";
+import { cardDirName, featuredSkillIds } from "./pick-lib.mjs";
 import {
   CARDS_DIR,
   PICK_DIR,
-  cardDirName,
   existsSync,
-  featuredSkillIds,
   join,
+  listFiles,
   log,
   parseArgs,
   readJSON,
   validateSchema,
   writeJSON,
-} from "./lib.mjs";
+} from "./shared/core.mjs";
 
 function die(msg) {
   log(msg);

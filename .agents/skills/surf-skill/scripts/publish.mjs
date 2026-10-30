@@ -4,7 +4,7 @@
 // live here; the queue row holds ready `skills` / `collections` rows for later.
 //
 // Prints the reply as its last line:
-//   published: YYYY-MM-DD  (exit 0)
+//   ok: published YYYY-MM-DD  (exit 0)
 //   failed: <why>          (exit 1)
 //   blocked: <why>         (exit 3)  Supabase or wrangler login missing, or no queue table
 //
@@ -19,20 +19,16 @@ import {
   PICK_DIR,
   PROJECT_ROOT,
   existsSync,
-  gh,
   join,
   log,
   parseArgs,
   parseFrontmatter,
   readJSON,
-  sbInsert,
-  sbPatch,
-  sbSelect,
-  supabaseEnv,
-  supabaseSecretKey,
   validateSchema,
   writeJSON,
-} from "./lib.mjs";
+} from "./shared/core.mjs";
+import { gh } from "./shared/github.mjs";
+import { sbInsert, sbPatch, sbSelect, supabaseEnv, supabaseSecretKey } from "./shared/supabase.mjs";
 
 const BUCKET = "surfskills-media";
 const MEDIA_ORIGIN = "https://media.surfskills.surf";
@@ -385,7 +381,7 @@ async function publish(card, dryRun) {
   out(`  skill: ${pick.skill_id}${collection ? ` (+ collection ${collection.id})` : ""}`);
   out(`  video: ${urls.video}`);
   out(`  cover: ${urls.cover}`);
-  out(`published: ${date}`);
+  out(`ok: published ${date}`);
 }
 
 async function main() {

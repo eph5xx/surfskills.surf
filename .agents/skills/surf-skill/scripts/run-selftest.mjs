@@ -16,10 +16,17 @@
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { homedir } from "node:os";
+import { RUN_CACHE, SELFTEST_CACHE, selftestProblem } from "./run-lib.mjs";
+import { EXIT, join, log, parseArgs, realTmp, writeJSON } from "./shared/core.mjs";
 import {
-  EXIT, RUN_CACHE, SELFTEST_CACHE, agyEnv, agyVersion, blockedReason, join, log, makeRunDir, parseArgs, realTmp,
-  runSettings, selftestProblem, settingsHash, spawnAgyStream, writeJSON,
-} from "./lib.mjs";
+  agyEnv,
+  agyVersion,
+  blockedReason,
+  makeRunDir,
+  runSettings,
+  settingsHash,
+  spawnAgyStream,
+} from "./shared/agy.mjs";
 
 const APPROVED = "en.wikipedia.org";
 const UNAPPROVED = "https://example.org";

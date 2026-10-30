@@ -25,7 +25,7 @@ Run the scripts from the surf-skill folder (two levels up from this file).
 
 ## Reply
 
-`card: <name>`, then one line with the kind and use cases, one line saying whether collection copy was written (and its name), and any choice the orchestrator should know about (for example, a name changed to avoid a clash).
+`ok: <name>`, then one line with the kind and use cases, one line saying whether collection copy was written (and its name), and any choice the orchestrator should know about (for example, a name changed to avoid a clash).
 
 ## Done when
 

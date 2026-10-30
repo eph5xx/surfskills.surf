@@ -12,18 +12,8 @@ import { writeFileSync } from "node:fs";
 import { catalogIndex, catalogRepos } from "./pick-catalog.mjs";
 import { scanRepo } from "./pick-check.mjs";
 import { hypeScore, trendingRepos } from "./pick-trending.mjs";
-import {
-  PICK_DIR,
-  existsSync,
-  featuredSkillIds,
-  join,
-  log,
-  mapLimit,
-  parseArgs,
-  readJSON,
-  today,
-  writeJSON,
-} from "./lib.mjs";
+import { featuredSkillIds } from "./pick-lib.mjs";
+import { PICK_DIR, existsSync, join, log, mapLimit, parseArgs, readJSON, today, writeJSON } from "./shared/core.mjs";
 
 export function poolPath(source, date = today()) {
   return join(PICK_DIR, `${date}-${source}.json`);

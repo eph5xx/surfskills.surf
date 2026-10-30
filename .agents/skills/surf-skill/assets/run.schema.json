@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "run.json",
-  "description": "What Run did and found. Written by run-review.mjs once the code checks pass and the AI review has a verdict.",
+  "description": "What Run did and found. Written by run-review.mjs only when the code checks and the AI review both pass.",
   "type": "object",
   "required": ["files", "agent", "duration_s", "turns", "timed_out", "questions", "images_generated", "hosts", "dropped_files", "checks", "shots", "review"],
   "additionalProperties": false,
@@ -113,7 +113,7 @@
       "required": ["verdict", "task_done", "not_broken", "skill_used", "video_ready", "summary"],
       "additionalProperties": false,
       "properties": {
-        "verdict": { "description": "ok when all four criteria pass, else bad.", "enum": ["ok", "bad"] },
+        "verdict": { "description": "Always ok: a failed review drops the card and writes no run.json.", "const": "ok" },
         "task_done": { "$ref": "#/$defs/criterion" },
         "not_broken": { "$ref": "#/$defs/criterion" },
         "skill_used": { "$ref": "#/$defs/criterion" },

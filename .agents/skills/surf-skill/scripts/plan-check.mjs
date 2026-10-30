@@ -9,8 +9,7 @@
 
 import { readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
-import { listFiles } from "./pick-check.mjs";
-import { existsSync, join, log, parseFrontmatter, readJSON, validateSchema } from "./lib.mjs";
+import { existsSync, join, listFiles, log, parseFrontmatter, readJSON, validateSchema } from "./shared/core.mjs";
 
 const UA = "Mozilla/5.0 (compatible; surfskills-plan/1.0; +https://surfskills.surf)";
 const URL_TIMEOUT_MS = 10_000;

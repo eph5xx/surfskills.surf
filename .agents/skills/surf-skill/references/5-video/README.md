@@ -15,7 +15,7 @@ Run the scripts from the surf-skill folder (two levels up from this file).
 2. **Storyboard (code + AI).** Run `node scripts/video-storyboard.mjs <card>`. An AI looks at the captures and plans the result part: the takeaway, a starting pattern, one to three shots with captions, and the cover moment. It writes `video/storyboard.json`.
 3. **Build (code + AI).** Run `node scripts/video-build.mjs <card>` **in the background** (it takes up to 25 minutes, longer than most tool calls wait), and wait for it to finish. In up to three rounds, an author AI writes the result part, code checks it, HyperFrames renders a draft, and a reviewer AI scores it and suggests fixes. Problems and fixes go back to the author. It finishes with the best draft that passed the code checks (early, once every score is 4 or 5): it renders the final video, shrinks it, takes the cover and writes `video.json`.
 
-Stop at the first script that doesn't print `ok` or `video: ok`, and reply with its last line (see Reply).
+Stop at the first script that doesn't print `ok`, and reply with its last line (see Reply).
 
 ## How a video is made reliable
 
@@ -49,14 +49,14 @@ Capture takes about 15 seconds and the storyboard about a minute. A build round 
 
 ## Reply
 
-One line, the last line of the script that stopped, or the build's `video: ok …` line:
+One line, the last line of the script that stopped, or the build's `ok: …` line:
 
 | Reply | When |
 | --- | --- |
-| `video: ok …` | The best draft that passed every code check is finished, and `video.json` is written. |
+| `ok: …` | The best draft that passed every code check is finished, and `video.json` is written. |
 | `failed: <why>` | Capture or the storyboard failed, no draft passed the code checks in three rounds, the reviewer found every draft dishonest, a render failed, or the finished video broke a check. |
 | `blocked: <why>` | agy isn't logged in or its quota ran out, Chromium, ffmpeg or npx is missing, or the HyperFrames or GSAP download failed. |
 
 ## Done when
 
-`video-build.mjs` printed `video: ok` and `video.json` exists. `node scripts/video-check.mjs <card>` re-checks the finished video at any time.
+`video-build.mjs` printed `ok:` and `video.json` exists. `node scripts/video-check.mjs <card>` re-checks the finished video at any time.
