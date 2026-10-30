@@ -31,11 +31,11 @@
       "$ref": "#/$defs/faq"
     },
     "kind": {
-      "description": "How you work with the skill. See references/4-card/classify.md.",
+      "description": "How you work with the skill. See surf-skill-card/references/classify.md.",
       "enum": ["Action", "Mode", "Knowledge", "Router"]
     },
     "use_cases": {
-      "description": "What the skill is used for. See references/4-card/classify.md.",
+      "description": "What the skill is used for. See surf-skill-card/references/classify.md.",
       "type": "array",
       "minItems": 1,
       "maxItems": 2,

@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "card.json",
+  "description": "The page text for one skill, plus its collection's when the repo isn't on the site yet. Limits follow the live cards. Plain text everywhere: the site prints every field as-is.",
+  "type": "object",
+  "required": ["name", "short_description", "long_description", "when_to_use", "faq", "kind", "use_cases"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "description": "Display name: an outcome in Title Case, like 'Humanize AI Writing'. Not the slug.",
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 40
+    },
+    "short_description": {
+      "description": "The line under the title and on the Discover card. One or two sentences.",
+      "type": "string",
+      "minLength": 100,
+      "maxLength": 200
+    },
+    "long_description": {
+      "$ref": "#/$defs/long_description"
+    },
+    "when_to_use": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/when_to_use_item" }
+    },
+    "faq": {
+      "$ref": "#/$defs/faq"
+    },
+    "kind": {
+      "description": "How you work with the skill. See surf-skill-card/references/classify.md.",
+      "enum": ["Action", "Mode", "Knowledge", "Router"]
+    },
+    "use_cases": {
+      "description": "What the skill is used for. See surf-skill-card/references/classify.md.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["Design", "Video", "Images", "Writing", "SEO", "Development", "Research", "Meta"]
+      }
+    },
+    "collection": {
+      "description": "The collection page for the repo. Required when the repo isn't on the site yet, absent when it is.",
+      "type": "object",
+      "required": ["name", "short_description", "long_description", "when_to_use", "faq"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "The project's own name, as its README calls it.",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "short_description": {
+          "type": "string",
+          "minLength": 100,
+          "maxLength": 200
+        },
+        "long_description": {
+          "$ref": "#/$defs/long_description"
+        },
+        "when_to_use": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/when_to_use_item" }
+        },
+        "faq": {
+          "$ref": "#/$defs/faq"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "long_description": {
+      "description": "Plain text, 2-3 paragraphs separated by one blank line. The first sentence is the meta description.",
+      "type": "string",
+      "minLength": 400,
+      "maxLength": 1200
+    },
+    "when_to_use_item": {
+      "type": "object",
+      "required": ["title", "body"],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "description": "A situation the reader is in.",
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 70
+        },
+        "body": {
+          "description": "One sentence: what the skill does for them there.",
+          "type": "string",
+          "minLength": 40,
+          "maxLength": 240
+        }
+      }
+    },
+    "faq": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["q", "a"],
+        "additionalProperties": false,
+        "properties": {
+          "q": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 90,
+            "pattern": "\\?$"
+          },
+          "a": {
+            "type": "string",
+            "minLength": 60,
+            "maxLength": 400
+          }
+        }
+      }
+    }
+  }
+}

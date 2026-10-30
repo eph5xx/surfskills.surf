@@ -2,6 +2,9 @@
 // files and subprocesses. Node built-ins only, so the scripts run anywhere `node` does.
 // Nothing here knows about any step. A step script imports only from shared/ and
 // from its own <step>-*.mjs files.
+//
+// Each surf-skill* skill carries its own copy of the shared/ files it uses, and the
+// copies must stay identical: change one, change them all.
 
 import { spawn } from "node:child_process";
 import { existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";

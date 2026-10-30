@@ -30,11 +30,12 @@ pnpm-debug.log*
 
 .claude/skills
 
-# agent skills installed via `skills` CLI (local only), except our own surf-skill
+# agent skills installed via `skills` CLI (local only), except our own surf-skill skills
 .agents/*
 !.agents/skills/
 .agents/skills/*
 !.agents/skills/surf-skill/
+!.agents/skills/surf-skill-*/
 skills-lock.json
 
 # surf-skill card folders: downloaded third-party skill code and run output

@@ -16,13 +16,14 @@ import { appendFileSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, resolve } from "node:path";
 import { CARDS_DIR, EXIT, SKILL_ROOT, existsSync, join, log, readJSON, validateSchema } from "./shared/core.mjs";
 
+// `skill` is the step's sibling skill folder, where its checker lives.
 const STEPS = {
-  pick: { out: "pick.json", reads: [] },
-  plan: { out: "plan.json", reads: ["pick"], check: "plan-check.mjs" },
-  run: { out: "run.json", reads: ["plan"] },
-  card: { out: "card.json", reads: ["pick"], check: "card-check.mjs" },
-  video: { out: "video.json", reads: ["run"], check: "video-check.mjs" },
-  publish: { out: "publish.json", reads: ["card", "video"] },
+  pick: { skill: "surf-skill-pick", out: "pick.json", reads: [] },
+  plan: { skill: "surf-skill-plan", out: "plan.json", reads: ["pick"], check: "plan-check.mjs" },
+  run: { skill: "surf-skill-run", out: "run.json", reads: ["plan"] },
+  card: { skill: "surf-skill-card", out: "card.json", reads: ["pick"], check: "card-check.mjs" },
+  video: { skill: "surf-skill-video", out: "video.json", reads: ["run"], check: "video-check.mjs" },
+  publish: { skill: "surf-skill-publish", out: "publish.json", reads: ["card", "video"] },
 };
 // Launch order; steps in one stage run at the same time.
 const STAGES = [["plan"], ["run"], ["card", "video"], ["publish"]];
@@ -44,7 +45,7 @@ function upstream(step) {
 
 /** null when `step` is done for `card`, else why not. */
 async function problem(card, step) {
-  const { out: file, check } = STEPS[step];
+  const { skill, out: file, check } = STEPS[step];
   const path = join(card, file);
   if (!existsSync(path)) return `${file} is missing`;
   let data;
@@ -61,7 +62,7 @@ async function problem(card, step) {
     if (statSync(upstream).mtimeMs > statSync(path).mtimeMs) return `${STEPS[r].out} changed after ${file} was written`;
   }
   if (check) {
-    const r = spawnSync(process.execPath, [join(SKILL_ROOT, "scripts", check), card], { encoding: "utf8" });
+    const r = spawnSync(process.execPath, [join(SKILL_ROOT, "..", skill, "scripts", check), card], { encoding: "utf8" });
     if (r.status !== 0) {
       const said = (r.stdout || r.stderr || `exit ${r.status}`).trim().split("\n").map((l) => l.trim()).join("; ");
       return `${check}: ${said.slice(0, 500)}`;
