@@ -5,7 +5,7 @@ description: Builds a batch of "skill of the day" cards for surfskills.surf, end
 
 # Surf Skill: skill of the day
 
-> All six steps are built. Publish only queues cards; moving them onto the site comes with the website track.
+> All six steps are built. Publish writes each card into the catalog with its own future day; it goes live at midnight in Yerevan on that day. The site doesn't show the day yet.
 
 You are the orchestrator. You build cards one after another until the batch is done. You never do a step's work yourself and never open a step's files. Run scripts from this skill's folder.
 

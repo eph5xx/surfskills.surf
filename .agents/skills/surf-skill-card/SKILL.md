@@ -16,7 +16,7 @@ Run the scripts from this skill's folder.
 
 ## What to do
 
-1. **Facts (code).** Run `node scripts/card-facts.mjs <card>`. It prints the skill's frontmatter, whether the repo is already on the site, the names already taken, and for a new repo its description, license, homepage and the path of its README.
+1. **Facts (code).** Run `node scripts/card-facts.mjs <card>`. It prints the skill's frontmatter, whether the repo is already in the catalog, the names already taken (live or scheduled), and for a new repo its description, license, homepage and the path of its README.
 2. **Read (you).** Read `skill/SKILL.md`, then the references and scripts it points to for its main flow. Note what the user gives it, what it does and what they get back, with the concrete numbers and artifacts. If the repo is new, read the README too.
 3. **Write (you).** Write `card.json` in the card folder, following [copy.md](copy.md) for the text and [classify.md](classify.md) for `kind` and `use_cases`. Add `collection` only when `card-facts` says to.
 4. **Check (code).** Run `node scripts/card-check.mjs <card>`. Fix what it lists and run it again until it prints `ok`.

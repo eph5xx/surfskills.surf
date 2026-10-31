@@ -10,16 +10,17 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PICK_DIR, existsSync, join, log, parseFrontmatter, readJSON } from "./shared/core.mjs";
 import { gh } from "./shared/github.mjs";
-import { sbSelect, supabaseEnv } from "./shared/supabase.mjs";
+import { sbSelect, supabaseSecretEnv } from "./shared/supabase.mjs";
 
 /**
- * What the site has now: { reachable, skills: [{id,name}], collections: [{id,name}] }.
- * reachable = false (and empty lists) when Supabase can't be read.
+ * What the catalog has, live or scheduled: { reachable, skills: [{id,name}], collections: [{id,name}] }.
+ * Read with the secret key, since RLS hides scheduled rows. reachable = false
+ * (and empty lists) when Supabase or the secret key is unavailable.
  */
 export async function siteNames() {
-  const env = supabaseEnv();
-  if (!env) return { reachable: false, why: "PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_PUBLISHABLE_KEY not set", skills: [], collections: [] };
   try {
+    const env = supabaseSecretEnv();
+    if (!env) return { reachable: false, why: "PUBLIC_SUPABASE_URL not set", skills: [], collections: [] };
     const [skills, collections] = await Promise.all([
       sbSelect(env, "skills", "select=id,name"),
       sbSelect(env, "collections", "select=id,name"),

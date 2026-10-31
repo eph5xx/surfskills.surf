@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "publish.json",
-  "description": "Receipt written by scripts/publish.mjs once the card is queued.",
+  "description": "Receipt written by scripts/publish.mjs once the card is in skills with its day.",
   "type": "object",
   "required": ["publish_on", "video_url", "cover_url", "collection_queued", "queued_at"],
   "additionalProperties": false,
   "properties": {
     "publish_on": {
-      "description": "The day the card goes live (UTC).",
+      "description": "The card's skills.day: it goes live at midnight in Yerevan on this day.",
       "type": "string",
       "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
     },
@@ -20,7 +20,7 @@
       "pattern": "^https://media\\.surfskills\\.surf/skills/.+\\.(webp|png|jpg)$"
     },
     "collection_queued": {
-      "description": "The queue row also holds a new collection row.",
+      "description": "Publish also inserted a new collection row.",
       "type": "boolean"
     },
     "queued_at": {

@@ -47,6 +47,8 @@ Caching is opt-in: middleware defaults every response to `private, no-store`; SS
 
 Both worlds render cards through the shared `toSkillCard` (`skill-card.ts`). Schema migrations live in `supabase/migrations/`.
 
+**Skill of the day.** Every skill has a unique `skills.day`. RLS lets the publishable key see a skill only when `day <= public.surf_today()` (today's date in `Asia/Yerevan`), and a collection only once one of its skills is visible; future-day rows go live on their own, with no cron. The surf-skill pipeline (`.agents/skills/surf-skill-*`) writes rows with future days and reads the catalog with the secret key so it sees scheduled rows too.
+
 ### Discover filtering (`src/scripts/directory-engine.ts`)
 
 The client-side directory engine is framework-free and **facet-agnostic**: it discovers facet groups from `data-*` attributes in the DOM. Adding a new filter field is a one-line data change in `FACET_REGISTRY` in `src/data/directory.ts` — never an engine change.
