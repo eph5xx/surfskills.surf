@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-// Publish a finished card: upload its video and cover to R2 and queue it in
-// Supabase's private `skill_queue` table with the first free date. Nothing goes
-// live here; the queue row holds ready `skills` / `collections` rows for later.
+// Publish a finished card: upload its video and cover to R2 and write it into
+// Supabase's `skills` table with the first free day after today. The read policy
+// hides a skill until its day starts in Yerevan, so nothing goes live here.
 //
 // Prints the reply as its last line:
 //   ok: published YYYY-MM-DD  (exit 0)
 //   failed: <why>          (exit 1)
-//   blocked: <why>         (exit 3)  Supabase or wrangler login missing, or no queue table
+//   blocked: <why>         (exit 3)  Supabase or wrangler login missing, or no skills.day column
 //
 // Usage: node publish.mjs <card folder> [--dry-run]
 
@@ -28,12 +28,14 @@ import {
   writeJSON,
 } from "./shared/core.mjs";
 import { gh } from "./shared/github.mjs";
-import { sbInsert, sbPatch, sbSelect, supabaseEnv, supabaseSecretKey } from "./shared/supabase.mjs";
+import { sbInsert, sbPatch, sbSelect, supabaseSecretEnv } from "./shared/supabase.mjs";
 
 const BUCKET = "surfskills-media";
 const MEDIA_ORIGIN = "https://media.surfskills.surf";
 const CACHE_CONTROL = "public, max-age=31536000, immutable";
-const QUEUE = "skill_queue";
+// Must match public.surf_today() in supabase/migrations/20261031120000_skill_day.sql.
+const SITE_TZ = "Asia/Yerevan";
+const DAY_MIGRATION = "supabase/migrations/20261031120000_skill_day.sql";
 const MEDIA = {
   video: { exts: { ".mp4": "video/mp4" }, maxBytes: 5 * 1024 * 1024 },
   cover: { exts: { ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp" }, maxBytes: 2 * 1024 * 1024 },
@@ -207,9 +209,23 @@ function addDays(iso, n) {
   return d.toISOString().slice(0, 10);
 }
 
-/** First day from tomorrow (UTC) that no queue row holds. */
-function firstFreeDate(taken) {
-  let d = addDays(new Date().toISOString().slice(0, 10), 1);
+/** Today's date in SITE_TZ, YYYY-MM-DD. */
+function siteToday() {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: SITE_TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+}
+
+/** Midnight of `day` in SITE_TZ as an ISO timestamp with its offset, e.g. 2026-11-01T00:00:00+04:00. */
+function siteMidnight(day) {
+  const name = new Intl.DateTimeFormat("en-US", { timeZone: SITE_TZ, timeZoneName: "longOffset" })
+    .formatToParts(new Date(`${day}T12:00:00Z`))
+    .find((p) => p.type === "timeZoneName").value;
+  const m = /GMT([+-]\d{2}:\d{2})?/.exec(name);
+  return `${day}T00:00:00${m?.[1] || "+00:00"}`;
+}
+
+/** First day after today that no skill holds. */
+function firstFreeDay(taken, today) {
+  let d = addDays(today, 1);
   while (taken.has(d)) d = addDays(d, 1);
   return d;
 }
@@ -254,37 +270,32 @@ async function publish(card, dryRun) {
   const video = await readValid(card, "video.json", "video");
   const files = { video: mediaFile(card, video.video, "video"), cover: mediaFile(card, video.cover, "cover") };
 
-  const pub = supabaseEnv();
-  if (!pub) throw block("PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_PUBLISHABLE_KEY are not set (.env)");
   let secret;
   try {
-    secret = { url: pub.url, key: supabaseSecretKey(pub.url) };
+    secret = supabaseSecretEnv();
   } catch (e) {
     throw e.blocked ? block(e.message) : e;
   }
+  if (!secret) throw block("PUBLIC_SUPABASE_URL is not set (.env)");
 
-  // Live catalog, publishable key: the same view the site has.
-  let liveSkills, liveCollections;
+  // Secret key: scheduled skills are hidden from the publishable key.
+  let skills, collections;
   try {
-    [liveSkills, liveCollections] = await Promise.all([
-      sbSelect(pub, "skills", "select=id"),
-      sbSelect(pub, "collections", "select=id"),
+    [skills, collections] = await Promise.all([
+      sbSelect(secret, "skills", "select=id,collection_id,day"),
+      sbSelect(secret, "collections", "select=id"),
     ]);
   } catch (e) {
-    throw fail(`can't read the live catalog: ${e.message.split("\n")[0]}`);
-  }
-  if (liveSkills.some((s) => lower(s.id) === lower(pick.skill_id))) throw fail(`${pick.skill_id} is already live on the site`);
-
-  let queue;
-  try {
-    queue = await sbSelect(secret, QUEUE, "select=skill_id,publish_on");
-  } catch (e) {
-    if (e.status === 404 || e.code === "PGRST205" || e.code === "42P01") {
-      throw block(`the ${QUEUE} table doesn't exist; apply supabase/migrations/20261029120000_skill_queue.sql`);
-    }
+    if (e.code === "42703") throw block(`skills has no day column; apply ${DAY_MIGRATION}`);
     if (e.status === 401 || e.status === 403) throw block(`the secret key was refused (${e.status})`);
-    throw fail(`can't read ${QUEUE}: ${e.message.split("\n")[0]}`);
+    throw fail(`can't read the catalog: ${e.message.split("\n")[0]}`);
   }
+
+  const today = siteToday();
+  const existing = skills.find((r) => r.id === pick.skill_id) || skills.find((r) => lower(r.id) === lower(pick.skill_id));
+  if (existing && existing.day <= today) throw fail(`${existing.id} is already live (since ${existing.day})`);
+  // A rename in casing would orphan media and links, so the row keeps its own id.
+  if (existing && existing.id !== pick.skill_id) throw fail(`scheduled as ${existing.id}, but pick.json says ${pick.skill_id}`);
 
   let meta;
   try {
@@ -293,10 +304,10 @@ async function publish(card, dryRun) {
     throw fail(`GitHub repo ${pick.repo}: ${e.message}`);
   }
 
-  const liveCollection = liveCollections.find((c) => lower(c.id) === lower(pick.repo));
+  const knownCollection = collections.find((c) => lower(c.id) === lower(pick.repo));
   let collection = null;
-  if (!liveCollection) {
-    if (!data.collection) throw fail(`${pick.repo} is not on the site, so card.json needs "collection"`);
+  if (!knownCollection) {
+    if (!data.collection) throw fail(`${pick.repo} is not in the catalog, so card.json needs "collection"`);
     collection = await collectionRow({ pick, card: data, meta });
   }
 
@@ -310,20 +321,20 @@ async function publish(card, dryRun) {
   const skill = skillRow({
     pick,
     card: data,
-    collectionId: liveCollection ? liveCollection.id : pick.repo,
+    collectionId: knownCollection ? knownCollection.id : pick.repo,
     branch: meta.default_branch,
     skillFile: skillFileName(card, pick),
     videoUrl: urls.video,
     coverUrl: urls.cover,
   });
+  const withDay = (day) => ({ ...skill, day, created_at: siteMidnight(day) });
 
-  const existing = queue.find((q) => q.skill_id === pick.skill_id) || queue.find((q) => lower(q.skill_id) === lower(pick.skill_id));
-  const taken = new Set(queue.map((q) => q.publish_on));
-  let date = existing ? existing.publish_on : firstFreeDate(taken);
+  const taken = new Set(skills.map((r) => r.day));
+  let day = existing ? existing.day : firstFreeDay(taken, today);
 
   if (dryRun) {
-    out(JSON.stringify({ publish_on: date, already_queued: !!existing, r2: keys, urls, skill, collection }, null, 2));
-    out(`dry run: would ${existing ? "update" : "queue"} ${pick.skill_id} for ${date}${collection ? " with a new collection" : ""}`);
+    out(JSON.stringify({ day, today, already_scheduled: !!existing, r2: keys, urls, skill: withDay(day), collection }, null, 2));
+    out(`dry run: would ${existing ? "update" : "insert"} ${pick.skill_id} for ${day}${collection ? " with a new collection" : ""}`);
     return;
   }
 
@@ -338,38 +349,47 @@ async function publish(card, dryRun) {
     if (!(await headOk(urls[k], 5))) throw fail(`${urls[k]} does not answer 200 after upload`);
   }
 
-  const patchRow = async (skillId) => {
-    const rows = await sbPatch(secret, QUEUE, eq("skill_id", skillId), { skill, collection });
-    if (!rows.length) throw fail(`the queue row for ${skillId} vanished during the update`);
-    return rows[0].publish_on;
+  // Updates leave `day` alone; a skill that went live in the meantime is not touched.
+  const updateRow = async () => {
+    const { day: _d, created_at: _c, ...fields } = withDay(day);
+    const rows = await sbPatch(secret, "skills", `${eq("id", pick.skill_id)}&day=gt.${today}`, fields);
+    if (!rows.length) throw fail(`${pick.skill_id} went live or vanished during the update`);
+    return rows[0].day;
   };
 
   if (existing) {
-    // A rename in casing would break the row's id check, so the row keeps its own id.
-    if (existing.skill_id !== pick.skill_id) throw fail(`queued as ${existing.skill_id}, but pick.json says ${pick.skill_id}`);
-    date = await patchRow(existing.skill_id);
+    day = await updateRow();
   } else {
+    if (collection) {
+      try {
+        await sbInsert(secret, "collections", [collection]);
+      } catch (e) {
+        // Another run added it first; collections are never updated here.
+        if (e.code !== "23505") throw fail(`collection insert failed: ${e.message.split("\n")[0]} ${e.detail || ""}`.trim());
+        collection = null;
+      }
+    }
     let done = false;
     for (let i = 0; i < MAX_DATE_TRIES && !done; i++) {
       try {
-        await sbInsert(secret, QUEUE, [{ skill_id: pick.skill_id, publish_on: date, skill, collection }]);
+        await sbInsert(secret, "skills", [withDay(day)]);
         done = true;
       } catch (e) {
-        if (e.code !== "23505") throw fail(`queue insert failed: ${e.message.split("\n")[0]} ${e.detail || ""}`.trim());
-        if (/skill_queue_pkey|skill_id/.test(e.detail || "")) {
-          date = await patchRow(pick.skill_id);
-          done = true;
+        if (e.code !== "23505") throw fail(`skill insert failed: ${e.message.split("\n")[0]} ${e.detail || ""}`.trim());
+        if (/skills_day_key|Key \(day\)/.test(e.detail || "")) {
+          taken.add(day);
+          day = firstFreeDay(taken, today);
         } else {
-          taken.add(date);
-          date = firstFreeDate(taken);
+          day = await updateRow();
+          done = true;
         }
       }
     }
-    if (!done) throw fail(`no free date after ${MAX_DATE_TRIES} tries`);
+    if (!done) throw fail(`no free day after ${MAX_DATE_TRIES} tries`);
   }
 
   const receipt = {
-    publish_on: date,
+    publish_on: day,
     video_url: urls.video,
     cover_url: urls.cover,
     collection_queued: !!collection,
@@ -381,7 +401,7 @@ async function publish(card, dryRun) {
   out(`  skill: ${pick.skill_id}${collection ? ` (+ collection ${collection.id})` : ""}`);
   out(`  video: ${urls.video}`);
   out(`  cover: ${urls.cover}`);
-  out(`ok: published ${date}`);
+  out(`ok: published ${day}`);
 }
 
 async function main() {

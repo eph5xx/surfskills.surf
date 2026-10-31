@@ -1,4 +1,5 @@
-// Supabase over PostgREST: reads with the publishable key, writes with the secret key.
+// Supabase over PostgREST: the publishable key sees only live rows; the secret key
+// sees scheduled ones too and is the only one that can write.
 
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
@@ -93,6 +94,20 @@ export function supabaseSecretKey(url) {
     throw err;
   }
   return key.api_key;
+}
+
+/**
+ * { url, key } with the secret key, for reads that must see scheduled skills
+ * (RLS hides them from the publishable key). Null when PUBLIC_SUPABASE_URL is
+ * unset; throws like supabaseSecretKey() when there is no secret key.
+ */
+export function supabaseSecretEnv() {
+  const env = { ...process.env };
+  loadEnvFile(join(PROJECT_ROOT, ".env"), env);
+  loadEnvFile(join(PROJECT_ROOT, ".dev.vars"), env);
+  if (!env.PUBLIC_SUPABASE_URL) return null;
+  const url = env.PUBLIC_SUPABASE_URL.replace(/\/+$/, "");
+  return { url, key: supabaseSecretKey(url) };
 }
 
 function writeHeaders(env, prefer) {
