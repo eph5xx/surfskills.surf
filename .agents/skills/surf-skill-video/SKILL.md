@@ -36,14 +36,14 @@ One video per card, with no human pick, so every part that can go wrong is check
 
 The result came from a stranger's skill, so anything that reads it is locked down:
 
-- **Both AIs** are separate agy runs with no commands, no network, no MCP and no writes, each in a fresh folder in `$TMPDIR` that holds only copies of its material. They answer in JSON checked against a schema. Both are Gemini, never Claude, so Video uses the same agy quota as Run: both default to `gemini-4-argon-high` (`SURF_VIDEO_AUTHOR_MODEL`, `SURF_VIDEO_REVIEW_MODEL`).
+- **Both AIs** are separate agy runs with no commands, no network, no MCP and no writes, each in a fresh folder in `$TMPDIR` that holds only copies of its material. They answer in JSON checked against a schema. They are Gemini, never Claude, so Video uses the same agy quota as Run. The storyboard and the reviewer default to `gemini-4-argon-high`, the author to `gemini-4-argon-medium`: on high, the author thinks so long that it runs past its 8 minutes whenever Gemini is slow (`SURF_VIDEO_STORYBOARD_MODEL`, `SURF_VIDEO_AUTHOR_MODEL`, `SURF_VIDEO_REVIEW_MODEL`).
 - **Capture** uses local headless Chromium with a fresh profile, where only the hosts approved in Run resolve, on Run's checked copy of the result.
 - **The author's code** is checked before it is ever rendered, and the checks reject any way to load or send something outside `media/`.
 - **HyperFrames** ([Apache-2.0](https://github.com/heygen-com/hyperframes), Copyright 2026 HeyGen, Inc.) runs as a tool through `npx`, pinned to one version, with telemetry off and no secrets in its environment. None of its files are part of this skill. GSAP is downloaded once into `cards/.video/` and checked against a pinned hash. The fonts in `assets/video/fonts/` ship with their license, `OFL.txt`.
 
 ## Time limit
 
-Capture takes about 15 seconds and the storyboard about a minute. A build round takes 3 to 7 minutes; no new round starts after about 16 minutes, so the whole build ends within 25.
+Capture takes about 15 seconds and the storyboard about a minute. A build round takes 5 to 10 minutes; no new round starts after about 16 minutes, so the whole build ends within 25. The author gets 8 minutes a turn and the reviewer 7. A turn that hits its limit isn't asked again in that round, since it would think just as long; the next round tries again.
 
 ## Rules
 
