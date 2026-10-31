@@ -107,10 +107,12 @@ export function blockedReason(text) {
 /**
  * Start agy in stream-json mode. Returns { child, send(text), end(), done } where
  * `done` resolves to { code, signal, lines }. `onEvent` gets every parsed event.
+ * `model` is an `agy models` id.
  */
-export function spawnAgyStream({ cwd, settingsPath, logFile, env, onEvent, extraArgs = [] }) {
+export function spawnAgyStream({ cwd, settingsPath, logFile, env, onEvent, model, extraArgs = [] }) {
   const args = [
     "--sandbox", "--settings", settingsPath,
+    ...(model ? ["--model", model] : []),
     "--input-format", "stream-json", "--output-format", "stream-json",
     ...(logFile ? ["--log-file", logFile] : []),
     ...extraArgs,
@@ -204,8 +206,8 @@ function folderNote(cwd) {
 
 /**
  * One locked-down, single-turn agy run with structured output (stand-in, reviewer,
- * video storyboard, author and reviewer). `model` is an `agy models` id; without it
- * agy uses its default. Resolves to { ok, output, error, blocked }.
+ * video storyboard, author and reviewer). `model` is an `agy models` id; every caller
+ * passes one so no run falls back to agy's default. Resolves to { ok, output, error, blocked }.
  */
 
 export function agyJson({ cwd, prompt, schemaPath, timeoutS = 180, model }) {

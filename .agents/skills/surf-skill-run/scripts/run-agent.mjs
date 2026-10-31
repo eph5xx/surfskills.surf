@@ -13,7 +13,7 @@
 
 import { closeSync, copyFileSync, lstatSync, mkdirSync, openSync, readdirSync, readFileSync, readSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { COPY, copyOut, selftestProblem } from "./run-lib.mjs";
+import { COPY, RUN_MODELS, copyOut, selftestProblem } from "./run-lib.mjs";
 import {
   EXIT,
   SKILL_ROOT,
@@ -289,7 +289,7 @@ async function main() {
     if (hasDeliverable() || extra >= MAX_EXTRA_TURNS) return finish();
     const sdir = join(meta, `standin-${turns}`);
     mkdirSync(sdir, { recursive: true });
-    const a = await agyJson({ cwd: sdir, prompt: standInPrompt(plan, inputs, r.response || ""), schemaPath: join(SKILL_ROOT, "assets", "answer.schema.json"), timeoutS: 120 });
+    const a = await agyJson({ cwd: sdir, prompt: standInPrompt(plan, inputs, r.response || ""), schemaPath: join(SKILL_ROOT, "assets", "answer.schema.json"), timeoutS: 120, model: RUN_MODELS.standIn });
     if (!a.ok) {
       if (a.blocked) {
         blocked = a.blocked;
@@ -316,6 +316,7 @@ async function main() {
     settingsPath,
     logFile: join(meta, "agy.log"),
     env: agyEnv(join(ws, ".tmp")),
+    model: RUN_MODELS.agent,
     extraArgs: ["--print-timeout", `${LIMIT_MS / 1000}s`],
     onEvent(ev) {
       if (ev.event === "init" && ev.conversation_id) conversations.add(ev.conversation_id);

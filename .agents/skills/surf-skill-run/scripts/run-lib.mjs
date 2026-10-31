@@ -9,7 +9,14 @@ export const RUN_CACHE = join(CARDS_DIR, ".run");
 
 export const SELFTEST_CACHE = join(RUN_CACHE, "selftest.json");
 
-/** null when a passing self-test is cached for this agy version and lockdown, else why not. */
+/** agy models for Run. The self-test runs on the agent's model, so changing it re-runs the self-test. */
+export const RUN_MODELS = {
+  agent: process.env.SURF_RUN_AGENT_MODEL || "gemini-3.8-flash-high",
+  standIn: process.env.SURF_RUN_STANDIN_MODEL || "gemini-3.8-flash-low",
+  reviewer: process.env.SURF_RUN_REVIEW_MODEL || "gemini-3.8-flash-high",
+};
+
+/** null when a passing self-test is cached for this agy version, agent model and lockdown, else why not. */
 export function selftestProblem(version = agyVersion()) {
   if (!existsSync(SELFTEST_CACHE)) return "no self-test has passed yet";
   let c;
@@ -20,6 +27,7 @@ export function selftestProblem(version = agyVersion()) {
   }
   if (!c.passed) return "the last self-test failed";
   if (c.agy_version !== version) return `agy changed (${c.agy_version} -> ${version})`;
+  if (c.agent_model !== RUN_MODELS.agent) return `the agent model changed (${c.agent_model || "none"} -> ${RUN_MODELS.agent})`;
   if (c.settings_hash !== settingsHash()) return "the lockdown settings changed";
   return null;
 }

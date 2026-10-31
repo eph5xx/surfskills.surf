@@ -4,7 +4,7 @@
 // One small agy run with the same settings as a real run. It tries to read a
 // canary file in the home folder, write outside the workspace, list ~/projects
 // and ~/.cache, and reach a host that isn't approved. Every attempt must fail. A pass is cached per
-// agy version and lockdown hash in cards/.run/selftest.json.
+// agy version, agent model and lockdown hash in cards/.run/selftest.json.
 //
 // Usage: node run-selftest.mjs [--force] [--weaken]
 //   --force   ignore the cache
@@ -16,7 +16,7 @@
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { homedir } from "node:os";
-import { RUN_CACHE, SELFTEST_CACHE, selftestProblem } from "./run-lib.mjs";
+import { RUN_CACHE, RUN_MODELS, SELFTEST_CACHE, selftestProblem } from "./run-lib.mjs";
 import { EXIT, join, log, parseArgs, realTmp, writeJSON } from "./shared/core.mjs";
 import {
   agyEnv,
@@ -43,7 +43,7 @@ async function main() {
   const version = agyVersion();
   const hash = settingsHash();
   if (!args.force && !args.weaken && !selftestProblem(version)) {
-    out(`ok (cached: agy ${version}, lockdown ${hash})`, EXIT.ok);
+    out(`ok (cached: agy ${version}, model ${RUN_MODELS.agent}, lockdown ${hash})`, EXIT.ok);
   }
 
   const home = homedir();
@@ -102,6 +102,7 @@ async function main() {
     settingsPath,
     logFile: join(run.meta, "agy.log"),
     env: agyEnv(join(run.ws, ".tmp")),
+    model: RUN_MODELS.agent,
     onEvent(ev) {
       const s = ev.step_update;
       if (s?.state && s.state !== "ACTIVE" && s.tool_info) {
@@ -162,14 +163,14 @@ async function main() {
   const passed = !escaped.length && !skipped.length && okFile;
   if (!args.weaken) {
     writeJSON(SELFTEST_CACHE, {
-      passed, agy_version: version, settings_hash: hash, at: new Date().toISOString(),
+      passed, agy_version: version, agent_model: RUN_MODELS.agent, settings_hash: hash, at: new Date().toISOString(),
       probes, workspace_write: okFile,
     });
   }
   if (escaped.length) out(`blocked: self-test: the sandbox let through ${escaped.join(", ")}`, EXIT.blocked);
   if (skipped.length) out(`blocked: self-test inconclusive: the agent didn't try ${skipped.join(", ")}`, EXIT.blocked);
   if (!okFile) out("blocked: self-test: the agent can't write to its own workspace", EXIT.blocked);
-  out(`ok: all ${Object.keys(probes).length} probes blocked (agy ${version}, lockdown ${hash}${args.weaken ? ", weakened, not cached" : ""})`, EXIT.ok);
+  out(`ok: all ${Object.keys(probes).length} probes blocked (agy ${version}, model ${RUN_MODELS.agent}, lockdown ${hash}${args.weaken ? ", weakened, not cached" : ""})`, EXIT.ok);
 }
 
 main().catch((e) => {
