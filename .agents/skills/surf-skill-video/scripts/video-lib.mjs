@@ -17,9 +17,15 @@ const GSAP = {
   sha256: "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
 };
 export const VIDEO_CACHE = join(CARDS_DIR, ".video");
-/** agy models for Video: Gemini only, so Video draws on the same agy quota as Run. Flash as reviewer wandered outside its folder; a denied read ends a headless run. */
+/**
+ * agy models for Video: Gemini only, so Video draws on the same agy quota as Run. Flash as reviewer
+ * wandered outside its folder; a denied read ends a headless run. The author is on medium: on high
+ * it thinks 39–46k tokens before answering, and Gemini runs anywhere from ~65 to ~135 tokens/s, so
+ * on a slow day high needs 10+ minutes and misses its 8. Medium thinks about half as much.
+ */
 export const VIDEO_MODELS = {
-  author: process.env.SURF_VIDEO_AUTHOR_MODEL || "gemini-4-argon-high",
+  storyboard: process.env.SURF_VIDEO_STORYBOARD_MODEL || "gemini-4-argon-high",
+  author: process.env.SURF_VIDEO_AUTHOR_MODEL || "gemini-4-argon-medium",
   reviewer: process.env.SURF_VIDEO_REVIEW_MODEL || "gemini-4-argon-high",
 };
 

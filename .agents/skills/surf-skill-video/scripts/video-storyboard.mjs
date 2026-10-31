@@ -3,7 +3,7 @@
 // storyboard brief in references/style.md; keep them in sync.
 //
 // Copies the captured media, facts and task into a fresh folder in $TMPDIR, runs agy
-// there locked down (no commands, no network, no writes) with the author model, and
+// there locked down (no commands, no network, no writes) with the storyboard model, and
 // checks its plan against assets/storyboard.schema.json and the media it names.
 // Writes video/storyboard.json.
 //
@@ -83,7 +83,7 @@ async function main() {
       prompt: prompt + again,
       schemaPath: join(SKILL_ROOT, "assets", "storyboard.schema.json"),
       timeoutS: 300,
-      model: VIDEO_MODELS.author,
+      model: VIDEO_MODELS.storyboard,
     });
     rmSync(run.dir, { recursive: true, force: true });
     if (!r.ok) {

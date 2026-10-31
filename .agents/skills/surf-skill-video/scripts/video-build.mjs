@@ -48,6 +48,9 @@ const TILE_TIMES = Array.from({ length: 9 }, (_, i) => Math.round((3.25 + i * 0.
 const REFS = join(SKILL_ROOT, "references");
 const ASSETS = join(SKILL_ROOT, "assets");
 
+/** agy stopped the turn at its time limit. Asking again thinks just as long, so the turn isn't retried. */
+const timedOut = (r) => /print timeout/i.test(r.error || "");
+
 const started = Date.now();
 const elapsed = () => (Date.now() - started) / 1000;
 
@@ -139,7 +142,8 @@ async function authorTurn(ctx, round, feedback) {
       readFileSync(join(REFS, "build-rules.md"), "utf8"),
       feedback ? `\nThis is round ${round}. Read previous/feedback.md first.` : "",
     ].join("\n");
-    // One retry: a single agy hiccup shouldn't cost a round.
+    // One retry: a single agy hiccup shouldn't cost a round. A timeout isn't a hiccup:
+    // a second try would use up the time the next round needs.
     let r;
     for (let attempt = 1; attempt <= 2; attempt++) {
       r = await agyJson({
@@ -156,6 +160,7 @@ async function authorTurn(ctx, round, feedback) {
       }
       if (r.blocked) return r;
       log(`author attempt ${attempt} failed: ${r.error.slice(0, 200)}`);
+      if (timedOut(r)) break;
     }
     return r;
   } finally {
@@ -190,7 +195,7 @@ async function reviewTurn(ctx, stillsDir) {
         cwd: ws,
         prompt: mdSection(join(REFS, "review.md"), "Reviewer brief"),
         schemaPath: join(ASSETS, "video-review.schema.json"),
-        timeoutS: 300,
+        timeoutS: 420, // its think is ~21k tokens: 3 minutes on a fast day, 6 on a slow one
         model: VIDEO_MODELS.reviewer,
       });
     } finally {
@@ -203,6 +208,7 @@ async function reviewTurn(ctx, stillsDir) {
       last = { ok: false, error: `invalid verdict: ${errs.join("; ")}` };
     }
     log(`reviewer attempt ${attempt} failed: ${last.error}`);
+    if (timedOut(last)) break;
   }
   return last;
 }
