@@ -18,15 +18,14 @@ const GSAP = {
 };
 export const VIDEO_CACHE = join(CARDS_DIR, ".video");
 /**
- * agy models for Video: Gemini only, so Video draws on the same agy quota as Run. Flash as reviewer
- * wandered outside its folder; a denied read ends a headless run. The author is on medium: on high
- * it thinks 39–46k tokens before answering, and Gemini runs anywhere from ~65 to ~135 tokens/s, so
- * on a slow day high needs 10+ minutes and misses its 8. Medium thinks about half as much.
+ * agy models for Video: Gemini only, so Video draws on the same agy quota as Run. Every role is
+ * on Flash high; each call is locked to a folder listing its files, since a denied read ends a
+ * headless run.
  */
 export const VIDEO_MODELS = {
-  storyboard: process.env.SURF_VIDEO_STORYBOARD_MODEL || "gemini-4-argon-high",
-  author: process.env.SURF_VIDEO_AUTHOR_MODEL || "gemini-4-argon-medium",
-  reviewer: process.env.SURF_VIDEO_REVIEW_MODEL || "gemini-4-argon-high",
+  storyboard: process.env.SURF_VIDEO_STORYBOARD_MODEL || "gemini-3.8-flash-high",
+  author: process.env.SURF_VIDEO_AUTHOR_MODEL || "gemini-3.8-flash-high",
+  reviewer: process.env.SURF_VIDEO_REVIEW_MODEL || "gemini-3.8-flash-high",
 };
 
 /** A secret-free environment for HyperFrames, with its telemetry off. */

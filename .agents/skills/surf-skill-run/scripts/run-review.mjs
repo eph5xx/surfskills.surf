@@ -14,6 +14,7 @@ import { cpSync, readFileSync, rmSync } from "node:fs";
 import { resolve } from "node:path";
 import { EXIT, SKILL_ROOT, existsSync, join, log, readJSON, validateSchema, writeJSON } from "./shared/core.mjs";
 import { agyJson, makeRunDir } from "./shared/agy.mjs";
+import { RUN_MODELS } from "./run-lib.mjs";
 
 const CRITERIA = ["task_done", "not_broken", "skill_used", "video_ready"];
 
@@ -77,7 +78,7 @@ async function main() {
     "Read them now, then give your verdict.",
   ].filter((l) => l !== "").join("\n");
 
-  const r = await agyJson({ cwd: rws, prompt, schemaPath: join(SKILL_ROOT, "assets", "review.schema.json"), timeoutS: 300 });
+  const r = await agyJson({ cwd: rws, prompt, schemaPath: join(SKILL_ROOT, "assets", "review.schema.json"), timeoutS: 300, model: RUN_MODELS.reviewer });
   rmSync(run.dir, { recursive: true, force: true });
   if (!r.ok) {
     if (r.blocked) out(`blocked: ${r.blocked}`, EXIT.blocked);

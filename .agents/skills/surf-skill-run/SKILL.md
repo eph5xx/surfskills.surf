@@ -18,7 +18,7 @@ Run the scripts from this skill's folder.
 
 1. **Hosts (code).** Run `node scripts/run-hosts.mjs <card>`. It lists every host named in the skill, the inputs and the prompt, and denies the ones the rules catch. [hosts.md](hosts.md) has the rules.
 2. **Decide hosts (you).** If it prints `pending:`, decide each listed host with [hosts.md](hosts.md), then save all decisions in one call: `node scripts/run-hosts.mjs <card> --allow fonts.googleapis.com:"fonts in the theme files" --deny github.com:"only a User-Agent string in theme.mjs"`. Repeat until it prints `ok:`.
-3. **Self-test (code).** Run `node scripts/run-selftest.mjs`. It proves the lockdown still holds; a pass is cached per agy version, so it is usually instant. Anything but `ok` means stop: reply `blocked:` with its line.
+3. **Self-test (code).** Run `node scripts/run-selftest.mjs`. It proves the lockdown still holds; a pass is cached per agy version and agent model, so it is usually instant. Anything but `ok` means stop: reply `blocked:` with its line.
 4. **Run the agent (code).** Run `node scripts/run-agent.mjs <card>` **in the background** (it takes up to 11 minutes, longer than most tool calls wait), and wait for it to finish. It sets up a fresh workspace, runs agy with the plan's prompt, answers the agent's questions through a stand-in, copies out `result/`, and deletes the workspace.
 5. **Check (code).** Run `node scripts/run-check.mjs <card>`. It runs every check in `plan.json` `done`, then takes the screenshots and gathers the evidence for the review.
 6. **Review (code + AI).** Run `node scripts/run-review.mjs <card>`. An AI reviewer judges the result on four criteria ([review.md](review.md)) and the script writes `run.json` only if the review passes.
@@ -35,6 +35,7 @@ The skill is a stranger's code, so the agent runs locked down:
 - **Images.** No API keys are set. Where the skill would call an image API, the agent uses agy's built-in image tool. That tool saves outside the workspace, so `run-agent` copies each new image into the workspace's `generated/` (real images only, 20 MB at most).
 - **Copy-out.** Only regular files under `result/`: no symlinks, at most 200 files, 50 MB in total, 20 MB per file, and only html, css, js, json, md, txt, csv, svg, png, jpg, webp, gif, mp4, pdf and font files. Anything else is dropped and recorded.
 - **Stand-in and reviewer.** Separate agy runs with no commands, no network, no MCP and no writes. The reviewer sees only its own copy of `review/`.
+- **Models.** Every agy call names its model, never agy's default: the agent and the reviewer run `gemini-3.8-flash-high`, the stand-in `gemini-3.8-flash-low` (`SURF_RUN_AGENT_MODEL`, `SURF_RUN_REVIEW_MODEL`, `SURF_RUN_STANDIN_MODEL`). The self-test runs on the agent's model, and a pass is cached per model too.
 - **Screenshots.** Local headless Chromium with a fresh profile, where only approved hosts resolve.
 
 The self-test (`run-selftest.mjs`) runs agy with the same settings and tries to read a canary file in the home folder, write outside the workspace, list `~/projects` and `~/.cache`, and reach a host that isn't approved. Every attempt must fail.
