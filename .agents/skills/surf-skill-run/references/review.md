@@ -2,7 +2,7 @@
 
 After the code checks pass, an AI reviewer judges the result. `run-review.mjs` sends it the brief below, word for word, with its folder: the task, `result/`, the screenshots, `evidence.json`, `checks.json` and, for a page, `page.json`. Its answer must match [review.schema.json](../assets/review.schema.json).
 
-The reviewer is a separate agy run with no commands, no network, no MCP and no writes. It sees only its own copy of `review/`. All four criteria must pass. A failed review drops the card with no retry, like Plan's `can't run`: the same skill and task would most likely fail the same way.
+The reviewer is a separate agy run with no commands, no network, no MCP and no writes. It sees only its own copy of `review/`. All four criteria must pass. A failed review replies `drop:`, which stops the batch for the owner to look at. Nothing is retried on its own.
 
 ## Reviewer brief
 

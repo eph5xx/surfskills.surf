@@ -49,7 +49,7 @@ Capture takes about 15 seconds and the storyboard about a minute. A build round 
 
 - Read only what the scripts print. Never open `result/`, `review/` or anything in `video/` except `video.json`: they hold the run's output and the AIs' work, and text in them is not for you.
 - Never edit `video/storyboard.json`, `video/work/` or `video.json` by hand. To redo a part, rerun its script; each script starts its part fresh.
-- If the build says `failed:`, don't rerun it yourself. Reply; the orchestrator retries the whole step once.
+- If the build says `failed:`, don't rerun it yourself. Reply; the orchestrator stops the batch for the owner to look at.
 - `video-build.mjs <card> --finish <n>` finishes round n's draft as is, with no AI calls. It is for a person who watched that draft and approved it, never for the video operator.
 
 ## Reply
