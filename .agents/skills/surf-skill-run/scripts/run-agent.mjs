@@ -102,7 +102,7 @@ function standInPrompt(plan, inputs, message) {
   ].join("\n");
 }
 
-function runNotes(ws, name) {
+function runNotes(ws, name, deliverable) {
   return [
     "",
     "---",
@@ -119,6 +119,12 @@ function runNotes(ws, name) {
     "  and don't read or debug the skill's own scripts to get around a failure.",
     "- Skip browser or render modes of the skill's checks; run them in their plain mode if they have one.",
     "- Write the deliverable early, then improve it. The run stops after 10 minutes.",
+    ...(deliverable?.type === "web_page"
+      ? [
+          "- The page is checked and filmed at 1440px wide and on a 390px-wide phone. Make both work: nothing runs off",
+          "  the screen, wide tables or boards scroll inside their own box or restack, and buttons and short labels stay on one line.",
+        ]
+      : []),
   ].join("\n");
 }
 
@@ -333,7 +339,7 @@ async function main() {
       });
     },
   });
-  const firstMessage = plan.task.prompt + "\n" + runNotes(ws, name);
+  const firstMessage = plan.task.prompt + "\n" + runNotes(ws, name, plan.deliverable);
   transcript.add("USER", firstMessage);
   agent.send(firstMessage);
 
