@@ -28,7 +28,6 @@ import { agyJson, makeRunDir } from "./shared/agy.mjs";
 
 const STYLE = join(SKILL_ROOT, "references", "style.md");
 const MAX_CAPTION_WORDS = 6;
-const ATTEMPTS = 2;
 
 function out(line, code) {
   process.stdout.write(line + "\n");
@@ -71,36 +70,29 @@ async function main() {
     mdSection(STYLE, "Storyboard brief"),
   ].join("\n");
 
-  let problems = [];
-  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
-    const run = makeRunDir(`storyboard-${card.split("/").pop()}`);
-    cpSync(join(work, "media"), join(run.ws, "media"), { recursive: true });
-    cpSync(join(work, "facts.json"), join(run.ws, "facts.json"));
-    writeJSON(join(run.ws, "task.json"), task);
-    const again = problems.length ? `\n\nYour last plan had these problems; fix them:\n${problems.map((p) => `- ${p}`).join("\n")}` : "";
-    const r = await agyJson({
-      cwd: run.ws,
-      prompt: prompt + again,
-      schemaPath: join(SKILL_ROOT, "assets", "storyboard.schema.json"),
-      timeoutS: 300,
-      model: VIDEO_MODELS.storyboard,
-    });
-    rmSync(run.dir, { recursive: true, force: true });
-    if (!r.ok) {
-      if (r.blocked) out(`blocked: ${r.blocked}`, EXIT.blocked);
-      problems = [`the storyboard AI did not answer: ${r.error}`];
-      continue;
-    }
-    problems = await problemsOf(r.output, work);
-    if (!problems.length) {
-      writeJSON(join(card, "video", "storyboard.json"), r.output);
-      log(`value: ${r.output.value}`);
-      for (const s of r.output.shots) log(`shot: ${s.asset} — ${s.caption || "(no caption)"}`);
-      out(`ok: ${r.output.pattern}, ${r.output.shots.length} shot(s)`, EXIT.ok);
-    }
-    for (const p of problems) log(`FAIL ${p}`);
+  // One call, no retry: a failed plan stops the step for the owner.
+  const run = makeRunDir(`storyboard-${card.split("/").pop()}`);
+  cpSync(join(work, "media"), join(run.ws, "media"), { recursive: true });
+  cpSync(join(work, "facts.json"), join(run.ws, "facts.json"));
+  writeJSON(join(run.ws, "task.json"), task);
+  const r = await agyJson({
+    cwd: run.ws,
+    prompt,
+    schemaPath: join(SKILL_ROOT, "assets", "storyboard.schema.json"),
+    timeoutS: 300,
+    model: VIDEO_MODELS.storyboard,
+  });
+  rmSync(run.dir, { recursive: true, force: true });
+  if (!r.ok) {
+    if (r.blocked) out(`blocked: ${r.blocked}`, EXIT.blocked);
+    out(`failed: the storyboard AI did not answer: ${r.error.slice(0, 300)}`, EXIT.failed);
   }
-  out(`failed: storyboard: ${problems.join("; ")}`, EXIT.failed);
+  const problems = await problemsOf(r.output, work);
+  if (problems.length) out(`failed: storyboard: ${problems.join("; ")}`, EXIT.failed);
+  writeJSON(join(card, "video", "storyboard.json"), r.output);
+  log(`value: ${r.output.value}`);
+  for (const s of r.output.shots) log(`shot: ${s.asset} — ${s.caption || "(no caption)"}`);
+  out(`ok: ${r.output.pattern}, ${r.output.shots.length} shot(s)`, EXIT.ok);
 }
 
 main().catch((e) => {
