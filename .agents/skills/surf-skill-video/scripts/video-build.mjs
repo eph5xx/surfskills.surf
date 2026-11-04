@@ -58,18 +58,24 @@ function commandSize(len) {
   return 64;
 }
 
+/** Mono caption size so the docked command fits its 1700 px pill on one line (mono advance is 0.6 em). */
+function dockSize(len) {
+  return Math.min(48, Math.floor(1700 / (0.6 * Math.max(1, len))));
+}
+
 /** Fill the frame's fixed slots; the result slots stay for the author's part. One pass, so values are never re-scanned. */
 function frameFor(task) {
   const command = task.command.length > 120 ? task.command.slice(0, 119) + "…" : task.command;
   const values = {
     COMMAND_SIZE: String(commandSize(command.length)),
+    DOCK_SIZE: String(dockSize(command.length)),
     NAME_SIZE: String(Math.min(150, Math.floor(1640 / (0.56 * Math.max(1, task.skill_name.length + 1))))),
     COMMAND: escapeHtml(command),
     SKILL_NAME: escapeHtml(task.skill_name),
     SKILL_BY: escapeHtml(task.by),
   };
   const frame = readFileSync(join(ASSETS, "video", "frame.html"), "utf8");
-  return frame.replace(/__(COMMAND_SIZE|NAME_SIZE|COMMAND|SKILL_NAME|SKILL_BY)__/g, (_, k) => values[k]);
+  return frame.replace(/__(COMMAND_SIZE|DOCK_SIZE|NAME_SIZE|COMMAND|SKILL_NAME|SKILL_BY)__/g, (_, k) => values[k]);
 }
 
 function assemble(frame, frag) {
