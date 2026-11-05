@@ -42,7 +42,7 @@ The self-test (`run-selftest.mjs`) runs agy with the same settings and tries to 
 
 ## Limits
 
-The agent gets 10 minutes and 1.5M tokens (input + cache reads + output, summed over its model calls), whichever comes first; agy is killed at 11 minutes. If the deliverable exists when a limit is hit, the run goes on to the checks and the review, which judge whether it is finished (`timed_out` or `stopped_at_token_limit` in `run.json`, with the counts in `usage`). Without the deliverable, the run fails.
+The agent gets 10 minutes and 15M tokens (input + cache reads + output, summed over its model calls), whichever comes first; agy is killed at 11 minutes. If the deliverable exists when a limit is hit, the run goes on to the checks and the review, which judge whether it is finished (`timed_out` or `stopped_at_token_limit` in `run.json`, with the counts in `usage`). Without the deliverable, the run fails.
 
 The run notes tell the agent to skip any step the sandbox blocks (browser or render modes, package installs, unreachable hosts) instead of looking for workarounds, and never to search outside its folder or debug the skill's own scripts. Those detours are what burn tokens.
 
