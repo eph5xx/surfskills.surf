@@ -39,7 +39,7 @@ import {
 const LIMIT_MS = 10 * 60_000;
 const KILL_MS = 11 * 60_000;
 // Tokens the agent may process: input + cache reads + output, summed over its model calls.
-const TOKEN_LIMIT = 1_500_000;
+const TOKEN_LIMIT = 15_000_000;
 const MAX_EXTRA_TURNS = 3;
 const NUDGE = "Please continue and finish the task now. Save the result where the task says, in result/.";
 
