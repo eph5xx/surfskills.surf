@@ -10,9 +10,10 @@ import { toSkillCard, type Skill } from "./skill-card";
 export type { Skill } from "./skill-card";
 
 export const author = {
-  name: "Sasha S.",
-  initial: "S",
+  name: "Aleksandr Sarantsev",
+  initial: "A",
   avatarBg: "#3D5A80",
+  url: "https://ephx.dev",
 };
 
 export const skills: Skill[] = featuredSkills.map((skill) =>

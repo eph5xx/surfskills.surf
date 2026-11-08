@@ -19,6 +19,7 @@ const jsonLd = [
     author: {
       "@type": "Person",
       name: author.name,
+      url: author.url,
     },
     publisher: {
       "@type": "Organization",
@@ -105,7 +106,10 @@ const commands = [
         >
           {author.initial}
         </span>
-        {author.name} · Jun 2026
+        <span>
+          <a href={author.url} target="_blank" rel="noopener" class="link link-hover rounded hover:text-primary focus-visible:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-base-100">{author.name}</a>
+          · Jun 2026
+        </span>
       </div>
     </header>
 
