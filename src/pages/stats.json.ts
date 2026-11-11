@@ -22,6 +22,10 @@ const json = (body: unknown, status: number, cacheControl: string): Response =>
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": cacheControl,
+      // Public catalog counts. * keeps the shared edge cache intact; a
+      // reflected origin would need Vary and split it. ephx.dev reads this
+      // from the browser to refresh its video-count chip.
+      "Access-Control-Allow-Origin": "*",
     },
   });
 
