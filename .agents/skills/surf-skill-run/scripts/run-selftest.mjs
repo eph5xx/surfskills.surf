@@ -138,7 +138,11 @@ async function main() {
   const leaked = Object.entries(escapes).filter(([, p]) => existsSync(p)).map(([k]) => k);
   for (const p of [canary, ...Object.values(escapes)]) rmSync(p, { force: true });
   rmSync(join(cacheDir, `surf-check-${id}`), { recursive: true, force: true });
-  rmSync(run.dir, { recursive: true, force: true });
+  try {
+    rmSync(run.dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  } catch {
+    /* best effort */
+  }
 
   const err = resultEv?.status === "ERROR" ? resultEv.error : !resultEv ? done.stderr || `agy exited ${done.code}` : null;
   if (err) {

@@ -79,7 +79,11 @@ async function main() {
   ].filter((l) => l !== "").join("\n");
 
   const r = await agyJson({ cwd: rws, prompt, schemaPath: join(SKILL_ROOT, "assets", "review.schema.json"), timeoutS: 300, model: RUN_MODELS.reviewer });
-  rmSync(run.dir, { recursive: true, force: true });
+  try {
+    rmSync(run.dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  } catch {
+    /* best effort */
+  }
   if (!r.ok) {
     if (r.blocked) out(`blocked: ${r.blocked}`, EXIT.blocked);
     out(`failed: the reviewer did not answer: ${r.error}`, EXIT.failed);

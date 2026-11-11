@@ -379,7 +379,11 @@ async function main() {
   for (const d of dropped) transcript.add("DROPPED", `${d.path}: ${d.reason}`);
   writeFileSync(join(card, "run.jsonl"), done.lines.join("\n") + "\n");
   writeFileSync(join(card, "run.log"), transcript.lines.join("\n") + "\n");
-  rmSync(run.dir, { recursive: true, force: true });
+  try {
+    rmSync(run.dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  } catch {
+    /* best effort */
+  }
 
   const stopped = timedOut || overBudget;
   if (!blocked && !crash && !finished && !stopped && done.code !== 0) {
