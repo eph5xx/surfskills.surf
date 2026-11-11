@@ -11,7 +11,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (context.url.pathname.startsWith("/_image")) return next();
 
   // Per-request Supabase client for the catalog (Discover, /s/**, sitemap,
-  // llms.txt). There is no auth, so this is an anonymous, read-only client with
+  // llms.txt, stats.json). There is no auth, so this is an anonymous, read-only client with
   // session handling off: it never reads or writes cookies, so nothing
   // user-specific can leak into an edge-cached response.
   context.locals.supabase = createClient(
