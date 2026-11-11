@@ -21,7 +21,7 @@ The rules the author's part of the video must follow. `video-build.mjs` sends th
 ## CSS
 
 - **(checked)** Every selector starts with `#result`, for example `#result .shot img`.
-- **(checked)** No `@` rules (`@import`, `@font-face`, `@keyframes`, `@media`), no `animation` or `transition`, no `url()` except `media/` files, no `image-set()`.
+- **(checked)** No `@` rules (`@import`, `@font-face`, `@keyframes`, `@media`), no `animation` or `transition`, no `transform` (HyperFrames lint rejects CSS `transform` on elements GSAP animates; set transforms with `tl.set` instead), no `url()` except `media/` files, no `image-set()`.
 - Fonts: only "Bricolage Grotesque" (600, 700), "Onest" (500, 600) and "JetBrains Mono". Others won't load.
 - Give every image an explicit width and height. To pan a tall image, put it in a fixed-size box with `overflow:hidden` and move the image with `y`.
 - Text on top of a picture gets a solid or nearly solid backing (a sand or paper pill or panel), never bare.
@@ -41,7 +41,7 @@ The rules the author's part of the video must follow. `video-build.mjs` sends th
 - **(checked)** Every tween starts at or after `R.start` and ends by `R.end`.
 - **(checked)** Animate only `opacity`, `x`, `y`, `xPercent`, `yPercent`, `scale`, `scaleX`, `scaleY`, `rotation`, `transformOrigin` and `clipPath`. Never `width`, `height`, `top`, `left`, colors or text.
 - **(checked)** Target only elements inside your markup, by selector string. No `window`, `document`, `gsap.*` calls, `tl.call`, `tl.add`, callbacks (`onComplete`…), timers, `Date`, `Math.random`, infinite `repeat`, or URLs.
-- Set every starting state in CSS (for example `opacity:0`) or with `tl.set(…, R.start)`, so nothing flashes before its entrance.
+- Set starting `opacity:0` in CSS, and set any starting transform (`x`, `y`, `scale`, `scaleX`, `transformOrigin`…) with `tl.set(…, R.start)` — never with CSS `transform`.
 - The payoff is on screen by about 4.0 s. The last state holds for at least 1 s before 9.0.
 
 ## What else is checked after building

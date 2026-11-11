@@ -82,7 +82,11 @@ async function main() {
     timeoutS: 300,
     model: VIDEO_MODELS.storyboard,
   });
-  rmSync(run.dir, { recursive: true, force: true });
+  try {
+    rmSync(run.dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  } catch {
+    /* best effort */
+  }
   if (!r.ok) {
     if (r.blocked) out(`blocked: ${r.blocked}`, EXIT.blocked);
     out(`failed: the storyboard AI did not answer: ${r.error.slice(0, 300)}`, EXIT.failed);

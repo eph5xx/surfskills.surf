@@ -59,6 +59,7 @@ const BANNED_CSS = [
   [/</, "a < character"],
   [/@[a-z-]+/i, "an @-rule (@import, @font-face, @keyframes, @media)"],
   [/\banimation\b|\btransition\b/i, "CSS animation or transition (animate with tl)"],
+  [/(?:^|[;{]\s*)transform\s*:/i, "CSS transform (set transforms with tl.set, not CSS)"],
   [/expression\s*\(|behavior\s*:|-moz-binding|javascript:/i, "script in CSS"],
   [/image-set|cross-fade|\belement\s*\(|\bsrc\s*\(|\\[0-9a-f]/i, "image-set, src() or escapes in CSS"],
   [/https?:|\/\/[a-z0-9]/i, "a URL"],

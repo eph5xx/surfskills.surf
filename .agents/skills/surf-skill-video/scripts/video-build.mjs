@@ -141,7 +141,11 @@ async function authorTurn(ctx) {
     const errs = await validateSchema("video-author", r.output);
     return errs.length ? { ok: false, error: `invalid answer: ${errs.join("; ")}` } : r;
   } finally {
-    rmSync(run.dir, { recursive: true, force: true });
+    try {
+      rmSync(run.dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+    } catch {
+      /* best effort */
+    }
   }
 }
 
@@ -176,7 +180,11 @@ async function reviewTurn(ctx, stillsDir) {
       model: VIDEO_MODELS.reviewer,
     });
   } finally {
-    rmSync(run.dir, { recursive: true, force: true });
+    try {
+      rmSync(run.dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+    } catch {
+      /* best effort */
+    }
   }
   if (!r.ok) return r;
   const errs = await validateSchema("video-review", r.output);
