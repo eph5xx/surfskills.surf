@@ -10,6 +10,8 @@
 
 <p align="center">
   <a href="https://surfskills.surf"><img src="https://img.shields.io/badge/surfskills.surf-live-DD6B4D" alt="surfskills.surf"></a>
+  <a href="https://surfskills.surf/discover"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fsurfskills.surf%2Fstats.json&query=%24.skills&label=skills&color=DD6B4D" alt="Skills in the catalog"></a>
+  <a href="https://surfskills.surf/discover"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fsurfskills.surf%2Fstats.json&query=%24.collections&label=collections&color=2A2C41" alt="Collections in the catalog"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2A2C41" alt="MIT license"></a>
 </p>
 
