@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { loadDirectory } from "@/data/skill-model/db";
 import { absoluteUrl } from "@/lib/seo";
-import { PUBLIC_CATALOG_CACHE, NO_STORE } from "@/lib/cache";
+import { EDGE_CATALOG_CACHE, NO_STORE } from "@/lib/cache";
 import { posts } from "@/data/blog";
 
 // SSR (was prerendered): the catalog half of the sitemap is read from Supabase per
@@ -22,7 +22,7 @@ export const GET: APIRoute = async ({ site, locals }) => {
   const origin = site ?? "https://surfskills.surf";
 
   let catalogPaths: string[] = [];
-  let cacheControl = PUBLIC_CATALOG_CACHE;
+  let cacheControl = EDGE_CATALOG_CACHE;
   try {
     const dir = await loadDirectory(locals.supabase);
     catalogPaths = [

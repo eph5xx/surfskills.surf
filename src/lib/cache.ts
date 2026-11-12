@@ -1,18 +1,32 @@
-// Edge-cache policy for the public, DB-backed catalog pages (Discover, /s/**,
-// sitemap). The catalog changes rarely, so we cache aggressively: fresh for an
-// hour, then serve stale for up to a day while a single background request
-// revalidates. A new skill therefore appears within ~1h with no redeploy; for
-// instant updates, purge the Cloudflare cache on write (see the plan follow-ups).
+// Cache policy for the public, DB-backed catalog pages.
 //
-// Tunable in one place. Pages apply it ONLY on a successful 200; misses (404) and
-// loader failures must use NO_STORE so a bad/empty response never sticks at the edge.
+// On Cloudflare Workers the Worker runs BEFORE the CDN cache, so a Cache-Control
+// header alone never makes Cloudflare store a Worker response. Two policies:
+//
+// - PUBLIC_CATALOG_CACHE: a hint for browsers and downstream caches only. Every
+//   request still runs the page and queries Supabase.
+// - EDGE_CATALOG_CACHE: the middleware stores the response in Cloudflare's Cache
+//   API (per data center) and serves it from there for 10 minutes, so Supabase is
+//   asked at most once per 10 min per location. The Cache API has no
+//   stale-while-revalidate, so none is set.
+//
+// Pages apply either ONLY on a successful 200; misses (404) and loader failures
+// must use NO_STORE so a bad/empty response never sticks at the edge.
 export const PUBLIC_CATALOG_CACHE = "public, s-maxage=3600, stale-while-revalidate=86400";
+
+/** Stored at the edge by the middleware (see top comment). Opt-in per page. */
+export const EDGE_CATALOG_CACHE = "public, s-maxage=600";
 
 export const NO_STORE = "private, no-store";
 
 /** Set the public catalog cache header on an Astro response. */
 export const setCatalogCache = (headers: Headers): void => {
   headers.set("Cache-Control", PUBLIC_CATALOG_CACHE);
+};
+
+/** Opt a successful response into the middleware's real edge cache. */
+export const setEdgeCatalogCache = (headers: Headers): void => {
+  headers.set("Cache-Control", EDGE_CATALOG_CACHE);
 };
 
 /** Re-wrap a rendered/fetched 404 body as a real 404 that is never cached,

@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { absoluteUrl } from "@/lib/seo";
-import { PUBLIC_CATALOG_CACHE, NO_STORE } from "@/lib/cache";
+import { EDGE_CATALOG_CACHE, NO_STORE } from "@/lib/cache";
 
 // SSR for the same reason as sitemap.xml.ts: counts and the latest skill are
 // read from Supabase per request and cached at the edge, so a newly live skill
@@ -73,6 +73,6 @@ export const GET: APIRoute = async ({ site, locals }) => {
       latest,
     },
     200,
-    PUBLIC_CATALOG_CACHE,
+    EDGE_CATALOG_CACHE,
   );
 };
