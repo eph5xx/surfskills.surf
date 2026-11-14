@@ -10,8 +10,9 @@ Reject a skill if any of these is true:
 
 1. **Skills aren't the repo's main product.** The repo is an app, a tool or a framework, and the skill only teaches an agent how to use it. The scripts drop obvious apps; you catch the rest.
 2. **It can't run in a throwaway container without accounts.** It needs a paid service, an API key, a login, private data, or special hardware. Start from the flags (`needs keys`, `mentions paid APIs`, `installs`), then read the SKILL.md. A key that is only optional is fine.
-3. **It isn't finished.** The steps are vague, it refers to files that aren't there, or it says "coming soon".
+3. **It isn't finished.** The steps are vague, it refers to files that aren't there (including `../` paths outside the skill folder that won't be copied into `skill/`), or it says "coming soon".
 4. **A flag points at a risk that the SKILL.md doesn't explain**, such as unknown hosts, reading the whole environment, or hidden text.
+5. **It leaves no verifiable mark.** Plan requires a literal string of at least 6 characters from inside the skill folder (a stamp, output template heading, front-matter key, CSS variable, class name, or script output) that the skill tells the agent to write into its output on every run. Reject pure prose coding or style guides that have no output template, script, or deterministic mark.
 
 ## Rank
 
@@ -32,7 +33,7 @@ Packs often have one or two finished skills and many thin ones. A finished skill
 ## How to look
 
 1. Read the digest. Shortlist 3–6 skills from names, descriptions, flags and hype. Don't open every skill in a 200-skill pack.
-2. Open each shortlisted SKILL.md (the digest's `Files` folder plus the skill folder). Glance at its references and scripts.
+2. Open each shortlisted SKILL.md (the digest's `Files` folder plus the skill folder). Glance at its references and scripts, and confirm all referenced files live inside the skill folder and there is a deterministic output mark Plan can check.
 3. Choose.
 
 ## Answer
