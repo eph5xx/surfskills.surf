@@ -11,6 +11,7 @@
 // Usage: node run-agent.mjs <card>
 // Last line: `ok: …` (exit 0), `failed: …` (exit 1) or `blocked: …` (exit 3).
 
+import { spawn } from "node:child_process";
 import { closeSync, copyFileSync, lstatSync, mkdirSync, openSync, readdirSync, readFileSync, readSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { COPY, RUN_MODELS, copyOut, selftestProblem } from "./run-lib.mjs";
@@ -53,6 +54,26 @@ const IMAGE_MAGIC = [
 function out(line, code) {
   process.stdout.write(line + "\n");
   process.exit(code);
+}
+
+/** Prevent macOS idle sleep while agy runs; returns a cleanup function. */
+function keepAwake() {
+  if (process.platform !== "darwin") return () => {};
+  try {
+    const child = spawn("/usr/bin/caffeinate", ["-i", "-w", String(process.pid)], { stdio: "ignore" });
+    child.on("error", (e) => log(`caffeinate: ${e.message}`));
+    child.unref();
+    return () => {
+      try {
+        child.kill();
+      } catch {
+        /* already exited */
+      }
+    };
+  } catch (e) {
+    log(`caffeinate: ${e.message}`);
+    return () => {};
+  }
 }
 
 function isImage(path) {
@@ -244,6 +265,7 @@ async function main() {
   let blocked = null;
   let crash = null;
   let busy = Promise.resolve();
+  let agent = null;
   const started = Date.now();
 
   const pollImages = () => {
@@ -311,59 +333,67 @@ async function main() {
     agent.send(NUDGE);
   };
 
-  const agent = spawnAgyStream({
-    cwd: ws,
-    settingsPath,
-    logFile: join(meta, "agy.log"),
-    env: agyEnv(join(ws, ".tmp")),
-    model: RUN_MODELS.agent,
-    extraArgs: ["--print-timeout", `${LIMIT_MS / 1000}s`],
-    onEvent(ev) {
-      if (ev.event === "init" && ev.conversation_id) conversations.add(ev.conversation_id);
-      const s = ev.step_update;
-      if (s?.conversation_id) conversations.add(s.conversation_id);
-      for (const a of s?.subagent_info?.subagents || []) if (a.conversation_id) conversations.add(a.conversation_id);
-      transcript.event(ev);
-      // Each finished model call reports its usage once.
-      if (s?.step_type === "agent_response" && s.state === "DONE" && s.usage) {
-        for (const k of Object.keys(usage)) usage[k] += s.usage[k] || 0;
-        if (!overBudget && !timedOut && tokensUsed() > TOKEN_LIMIT) {
-          overBudget = true;
-          transcript.add("BUDGET", `${tokensUsed()} tokens used, over the ${TOKEN_LIMIT} limit; stopping agy`);
-          finish();
-          agent.kill("SIGTERM");
-        }
-      }
-      if (ev.event === "result") busy = busy.then(() => onTurnEnd(ev.result)).catch((e) => {
-        crash = `turn handling crashed: ${e.message}`;
-        finish();
-      });
-    },
-  });
-  const firstMessage = plan.task.prompt + "\n" + runNotes(ws, name, plan.deliverable);
-  transcript.add("USER", firstMessage);
-  agent.send(firstMessage);
-
-  const soft = setTimeout(() => {
-    if (overBudget) return;
-    timedOut = true;
-    transcript.add("TIMEOUT", "10 minutes are up; stopping agy");
-    finish();
-    agent.kill("SIGTERM");
-  }, LIMIT_MS);
-  const hard = setTimeout(() => agent.kill("SIGKILL"), KILL_MS);
-  const done = await agent.done;
-  await busy;
-  clearTimeout(soft);
-  clearTimeout(hard);
-  clearInterval(imageTimer);
+  const stopAwake = keepAwake();
+  let done;
+  let soft;
+  let hard;
   try {
-    pollImages();
-  } catch {
-    /* best effort */
+    agent = spawnAgyStream({
+      cwd: ws,
+      settingsPath,
+      logFile: join(meta, "agy.log"),
+      env: agyEnv(join(ws, ".tmp")),
+      model: RUN_MODELS.agent,
+      extraArgs: ["--print-timeout", `${LIMIT_MS / 1000}s`],
+      onEvent(ev) {
+        if (ev.event === "init" && ev.conversation_id) conversations.add(ev.conversation_id);
+        const s = ev.step_update;
+        if (s?.conversation_id) conversations.add(s.conversation_id);
+        for (const a of s?.subagent_info?.subagents || []) if (a.conversation_id) conversations.add(a.conversation_id);
+        transcript.event(ev);
+        // Each finished model call reports its usage once.
+        if (s?.step_type === "agent_response" && s.state === "DONE" && s.usage) {
+          for (const k of Object.keys(usage)) usage[k] += s.usage[k] || 0;
+          if (!overBudget && !timedOut && tokensUsed() > TOKEN_LIMIT) {
+            overBudget = true;
+            transcript.add("BUDGET", `${tokensUsed()} tokens used, over the ${TOKEN_LIMIT} limit; stopping agy`);
+            finish();
+            agent.kill("SIGTERM");
+          }
+        }
+        if (ev.event === "result") busy = busy.then(() => onTurnEnd(ev.result)).catch((e) => {
+          crash = `turn handling crashed: ${e.message}`;
+          finish();
+        });
+      },
+    });
+    const firstMessage = plan.task.prompt + "\n" + runNotes(ws, name, plan.deliverable);
+    transcript.add("USER", firstMessage);
+    agent.send(firstMessage);
+
+    soft = setTimeout(() => {
+      if (overBudget) return;
+      timedOut = true;
+      transcript.add("TIMEOUT", "10 minutes are up; stopping agy");
+      finish();
+      agent.kill("SIGTERM");
+    }, LIMIT_MS);
+    hard = setTimeout(() => agent.kill("SIGKILL"), KILL_MS);
+    done = await agent.done;
+    await busy;
+    try {
+      pollImages();
+    } catch {
+      /* best effort */
+    }
+  } finally {
+    clearTimeout(soft);
+    clearTimeout(hard);
+    clearInterval(imageTimer);
+    stopAwake();
+    // Kill any daemon agy left behind in its process group.
+    agent?.kill("SIGKILL");
   }
-  // Kill any daemon agy left behind in its process group.
-  agent.kill("SIGKILL");
 
   const duration = Math.round((Date.now() - started) / 1000);
   let agyLog = "";
