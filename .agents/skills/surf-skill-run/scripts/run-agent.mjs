@@ -11,7 +11,6 @@
 // Usage: node run-agent.mjs <card>
 // Last line: `ok: …` (exit 0), `failed: …` (exit 1) or `blocked: …` (exit 3).
 
-import { spawn } from "node:child_process";
 import { closeSync, copyFileSync, lstatSync, mkdirSync, openSync, readdirSync, readFileSync, readSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { COPY, RUN_MODELS, copyOut, selftestProblem } from "./run-lib.mjs";
@@ -54,26 +53,6 @@ const IMAGE_MAGIC = [
 function out(line, code) {
   process.stdout.write(line + "\n");
   process.exit(code);
-}
-
-/** Prevent macOS idle sleep while agy runs; returns a cleanup function. */
-function keepAwake() {
-  if (process.platform !== "darwin") return () => {};
-  try {
-    const child = spawn("/usr/bin/caffeinate", ["-i", "-w", String(process.pid)], { stdio: "ignore" });
-    child.on("error", (e) => log(`caffeinate: ${e.message}`));
-    child.unref();
-    return () => {
-      try {
-        child.kill();
-      } catch {
-        /* already exited */
-      }
-    };
-  } catch (e) {
-    log(`caffeinate: ${e.message}`);
-    return () => {};
-  }
 }
 
 function isImage(path) {
@@ -206,7 +185,8 @@ async function main() {
   const plan = readJSON(join(card, "plan.json"));
   const { data } = parseFrontmatter(readFileSync(join(card, "skill", "SKILL.md"), "utf8"));
   const name = data?.name;
-  if (!name || !/^[A-Za-z0-9._-]+$/.test(name)) out(`failed: skill/SKILL.md has no usable name`, EXIT.failed);
+  if (!name || !/^[A-Za-z0-9._:-]+$/.test(name)) out(`failed: skill/SKILL.md has no usable name`, EXIT.failed);
+  const skillDir = name.replace(/[^A-Za-z0-9._-]/g, "-");
 
   let version;
   try {
@@ -230,7 +210,7 @@ async function main() {
   const skillSrc = join(card, "skill");
   for (const f of listFiles(skillSrc)) {
     if (f.symlink) continue;
-    const to = join(ws, ".agents", "skills", name, f.rel);
+    const to = join(ws, ".agents", "skills", skillDir, f.rel);
     mkdirSync(join(to, ".."), { recursive: true });
     copyFileSync(f.abs, to);
   }
@@ -333,7 +313,6 @@ async function main() {
     agent.send(NUDGE);
   };
 
-  const stopAwake = keepAwake();
   let done;
   let soft;
   let hard;
@@ -367,7 +346,7 @@ async function main() {
         });
       },
     });
-    const firstMessage = plan.task.prompt + "\n" + runNotes(ws, name, plan.deliverable);
+    const firstMessage = plan.task.prompt + "\n" + runNotes(ws, skillDir, plan.deliverable);
     transcript.add("USER", firstMessage);
     agent.send(firstMessage);
 
@@ -390,7 +369,6 @@ async function main() {
     clearTimeout(soft);
     clearTimeout(hard);
     clearInterval(imageTimer);
-    stopAwake();
     // Kill any daemon agy left behind in its process group.
     agent?.kill("SIGKILL");
   }
