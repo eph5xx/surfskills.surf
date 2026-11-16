@@ -72,7 +72,8 @@ export function runChecks(card, plan) {
 
 function evidence(card, plan, name, agentInfo) {
   const lines = existsSync(join(card, "run.jsonl")) ? readFileSync(join(card, "run.jsonl"), "utf8").split("\n") : [];
-  const skillRe = new RegExp(`(?:^|[\\s/'"=])\\.agents/skills/${name.replace(/[.]/g, "\\.")}/([^\\s'"\`;|&><)]+)`, "g");
+  const skillDir = name.replace(/[^A-Za-z0-9._-]/g, "-");
+  const skillRe = new RegExp(`(?:^|[\\s/'"=])\\.agents/skills/${skillDir.replace(/[.]/g, "\\.")}/([^\\s'"\`;|&><)]+)`, "g");
   const read = new Set();
   const scripts = new Set();
   const commands = [];
